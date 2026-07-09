@@ -1,0 +1,16 @@
+/* Tokens por defecto (identidad SORSABSA institucional).
+   El BrandProvider los sobreescribe en runtime con la marca del producto.
+   Valores en tripletas RGB para soportar opacidades de Tailwind. */
+:root {
+  --brand-primary: 30 41 59;              /* slate profundo institucional */
+  --brand-primary-foreground: 255 255 255;
+  --brand-secondary: 100 116 139;
+  --brand-accent: 14 165 233;
+  --brand-surface: 255 255 255;
+  --brand-text: 15 23 42;
+  --brand-muted: 100 116 139;
+  --brand-border: 226 232 240;
+  --brand-destructive: 220 38 38;
+  --brand-radius: 0.5rem;
+  --brand-font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
