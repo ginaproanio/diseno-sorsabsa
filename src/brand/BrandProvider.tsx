@@ -17,7 +17,8 @@ export interface BrandColors {
   primaryForeground?: string;   // texto sobre primary (default blanco)
   secondary?: string;
   accent?: string;
-  surface?: string;
+  surface?: string;             // fondo de tarjetas/superficies
+  background?: string;          // fondo general de la página
   text?: string;
   muted?: string;
   border?: string;
@@ -29,11 +30,18 @@ export interface BrandConfig {
   name: string;
   displayName: string;
   logoUrl?: string;
+  /** Logotipo de texto de dos tonos: primera parte en accent, segunda en primary.
+   *  Ej. CondoManager = {first:'Condo', second:'Manager'}. Si falta, se usa displayName. */
+  wordmark?: { first: string; second: string };
   colors: BrandColors;
   /** Radio de esquinas, ej. '0.5rem' (CondoManager) o '0.75rem' */
   radius?: string;
-  /** Pila tipográfica CSS */
+  /** Pila tipográfica del CUERPO (texto normal) */
   fontFamily?: string;
+  /** Pila tipográfica de TITULARES y logotipo (ej. 'Fraunces' de CondoManager) */
+  headingFont?: string;
+  /** URL de Google Fonts (u otra) a cargar para las fuentes de la marca */
+  fontImport?: string;
 }
 
 const BrandContext = createContext<BrandConfig | null>(null);
@@ -61,18 +69,23 @@ export function hexToRgbTriplet(hex: string): string {
 /** Convierte la config de marca en variables CSS listas para inyectar. */
 export function brandToCssVars(brand: BrandConfig): CSSProperties {
   const c = brand.colors;
+  const cuerpo = brand.fontFamily ?? "system-ui, -apple-system, 'Segoe UI', sans-serif";
   const vars: Record<string, string> = {
     '--brand-primary': hexToRgbTriplet(c.primary),
     '--brand-primary-foreground': hexToRgbTriplet(c.primaryForeground ?? '#ffffff'),
     '--brand-secondary': hexToRgbTriplet(c.secondary ?? '#64748b'),
     '--brand-accent': hexToRgbTriplet(c.accent ?? c.primary),
     '--brand-surface': hexToRgbTriplet(c.surface ?? '#ffffff'),
+    '--brand-background': hexToRgbTriplet(c.background ?? c.surface ?? '#f8fafc'),
     '--brand-text': hexToRgbTriplet(c.text ?? '#0f172a'),
     '--brand-muted': hexToRgbTriplet(c.muted ?? '#64748b'),
     '--brand-border': hexToRgbTriplet(c.border ?? '#e2e8f0'),
     '--brand-destructive': hexToRgbTriplet(c.destructive ?? '#dc2626'),
     '--brand-radius': brand.radius ?? '0.5rem',
-    '--brand-font': brand.fontFamily ?? "system-ui, -apple-system, 'Segoe UI', sans-serif",
+    '--brand-font': cuerpo,
+    // Titulares y logotipo: la fuente de marca (Fraunces en CondoManager),
+    // con degradación elegante al cuerpo si no se define.
+    '--brand-heading-font': brand.headingFont ? `'${brand.headingFont}', ${cuerpo}` : cuerpo,
   };
   return vars as CSSProperties;
 }
@@ -89,6 +102,11 @@ export function BrandProvider({
   const style = useMemo(() => brandToCssVars(brand), [brand]);
   return (
     <BrandContext.Provider value={brand}>
+      {/* Carga la tipografía de la marca (Fraunces, etc.) donde se use */}
+      {brand.fontImport && (
+        // eslint-disable-next-line @next/next/no-page-custom-font
+        <link rel="stylesheet" href={brand.fontImport} />
+      )}
       <div data-brand={brand.name} style={style} className={className}>
         {children}
       </div>

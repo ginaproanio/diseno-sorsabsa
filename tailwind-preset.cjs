@@ -29,6 +29,7 @@ module.exports = {
         'brand-secondary': 'rgb(var(--brand-secondary) / <alpha-value>)',
         'brand-accent': 'rgb(var(--brand-accent) / <alpha-value>)',
         'brand-surface': 'rgb(var(--brand-surface) / <alpha-value>)',
+        'brand-background': 'rgb(var(--brand-background) / <alpha-value>)',
         'brand-text': 'rgb(var(--brand-text) / <alpha-value>)',
         'brand-muted': 'rgb(var(--brand-muted) / <alpha-value>)',
         'brand-border': 'rgb(var(--brand-border) / <alpha-value>)',
@@ -39,6 +40,7 @@ module.exports = {
       },
       fontFamily: {
         brand: 'var(--brand-font, system-ui, sans-serif)',
+        'brand-heading': 'var(--brand-heading-font, var(--brand-font, system-ui, sans-serif))',
       },
     },
   },

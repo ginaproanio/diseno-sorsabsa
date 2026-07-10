@@ -43,10 +43,11 @@ describe('Motor whitelabel (BrandProvider + Button)', () => {
     const { container } = renderConMarca(<Button>Entrar</Button>, BRANDS.condomanager!);
     const wrapper = container.querySelector('[data-brand="condomanager"]') as HTMLElement;
 
-    // Verde original de CondoManager (#16a34a → "22 163 74")
-    expect(wrapper.style.getPropertyValue('--brand-primary')).toBe(
-      hexToRgbTriplet('#16a34a'),
-    );
+    // Verde REAL de CondoManager: sage #4A6055 (extraído de su globals.css)
+    expect(wrapper.style.getPropertyValue('--brand-primary')).toBe(hexToRgbTriplet('#4A6055'));
+    // Y su oro real en el accent + tipografía Fraunces
+    expect(wrapper.style.getPropertyValue('--brand-accent')).toBe(hexToRgbTriplet('#D1A153'));
+    expect(wrapper.style.getPropertyValue('--brand-heading-font')).toContain('Fraunces');
   });
 
   it('maneja los estados: loading muestra spinner y deshabilita; disabled bloquea', () => {
