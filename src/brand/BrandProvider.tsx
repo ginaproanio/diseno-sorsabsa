@@ -102,14 +102,19 @@ export function BrandProvider({
   const style = useMemo(() => brandToCssVars(brand), [brand]);
   return (
     <BrandContext.Provider value={brand}>
-      {/* Carga la tipografía de la marca (Fraunces, etc.) donde se use */}
-      {brand.fontImport && (
-        // eslint-disable-next-line @next/next/no-page-custom-font
-        <link rel="stylesheet" href={brand.fontImport} />
-      )}
       <div data-brand={brand.name} style={style} className={className}>
         {children}
       </div>
     </BrandContext.Provider>
   );
 }
+
+/**
+ * URLs de fuentes de todas las marcas del ecosistema. Cada app las importa
+ * ESTÁTICAMENTE en su globals.css (`@import`) — cargar `<link>` dinámicos
+ * dentro del árbol de React 19 rompe la hidratación. Aquí solo se listan
+ * como referencia; el navegador solo descarga la que la marca activa use.
+ */
+export const BRAND_FONT_IMPORTS: string[] = [
+  "@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap');",
+];
