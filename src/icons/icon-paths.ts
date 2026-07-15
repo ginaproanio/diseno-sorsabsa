@@ -52,6 +52,8 @@ export const ICON_PATHS = {
   landmark: 'M3 21h18M4 21V10M20 21V10M2 10l10-6 10 6M8 10v11M12 10v11M16 10v11',
   qrCode: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM15 15h2v2h-2zM19 15h1v1h-1zM15 19h1v1h-1zM19 19h1v1h-1z',
   save: 'M5 4h11l3 3v13H5zM8 4v5h7V4M8 14h8v6H8z',
+  lock: 'M6 11V7a6 6 0 0 1 12 0v4M5 11h14v10H5zM12 15v3',
+  keyRound: 'M8 14a4 4 0 1 0 0-8 4 4 0 1 0 0 8zM10.5 11.5L20 21M17 18l2-2M14 15l2-2',
 } as const;
 
 export type IconName = keyof typeof ICON_PATHS;
