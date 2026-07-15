@@ -12,7 +12,9 @@ import { ICON_PATHS, type IconName } from './icon-paths';
 
 export interface IconProps extends Omit<SVGAttributes<SVGSVGElement>, 'name'> {
   name: IconName;
-  size?: 20 | 24;
+  /** 20/24 son los tamaños de uso más común (nav, botones); cualquier otro
+   *  número también es válido (ej. iconos grandes de estado vacío). */
+  size?: number;
   strokeWidth?: number;
 }
 

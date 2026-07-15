@@ -26,6 +26,9 @@ export const ICON_PATHS = {
   clock: 'M12 4a8 8 0 1 0 0 16 8 8 0 1 0 0-16zM12 8v4l3 2',
   menu: 'M4 7h16M4 12h16M4 17h16',
   close: 'M6 6l12 12M18 6L6 18',
+  bed: 'M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 18v2M21 18v2M3 12V7a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3M13 10h6',
+  bath: 'M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4zM7 12V5a2 2 0 0 1 3.5-1.3M6 19v2M18 19v2',
+  ruler: 'M4 15l5-10 11 5.5-5 10zM8.5 6.7l1 2M7 9.6l1 2M5.4 12.5l1 2M11 4.9l1 2',
 } as const;
 
 export type IconName = keyof typeof ICON_PATHS;
