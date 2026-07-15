@@ -3,23 +3,23 @@
 /**
  * Input — el campo de texto estándar del ecosistema.
  * Replica el patrón visual de los formularios de CondoManager (borde limpio,
- * ring primario al enfocar) con: label integrado, ícono Lucide opcional,
- * mensaje de error estético y accesibilidad completa (aria-invalid,
- * aria-describedby).
+ * ring primario al enfocar) con: label integrado, ícono opcional (catálogo
+ * propio, no lucide-react), mensaje de error estético y accesibilidad
+ * completa (aria-invalid, aria-describedby).
  */
 
 import { forwardRef, useId, type InputHTMLAttributes } from 'react';
-import type { LucideIcon } from 'lucide-react';
+import { Icon, type IconName } from '../icons/Icon';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  icon?: LucideIcon;
+  icon?: IconName;
   error?: string;
   hint?: string;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { label, icon: Icon, error, hint, className = '', id, ...rest },
+  { label, icon, error, hint, className = '', id, ...rest },
   ref,
 ) {
   const autoId = useId();
@@ -34,10 +34,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         </label>
       )}
       <div className="relative">
-        {Icon && (
+        {icon && (
           <Icon
-            aria-hidden
-            className={`pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 ${
+            name={icon}
+            size={16}
+            className={`pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 ${
               error ? 'text-brand-destructive' : 'text-brand-muted'
             }`}
           />
@@ -49,7 +50,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           aria-describedby={error || hint ? messageId : undefined}
           className={`w-full rounded-brand border bg-brand-surface px-3 py-2 text-brand-text ` +
             `placeholder:text-brand-muted/70 transition-colors focus:outline-none focus:ring-2 ` +
-            `${Icon ? 'pl-9 ' : ''}` +
+            `${icon ? 'pl-9 ' : ''}` +
             `${
               error
                 ? 'border-brand-destructive focus:ring-brand-destructive/30'
