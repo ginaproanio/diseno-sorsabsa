@@ -54,6 +54,7 @@ export const ICON_PATHS = {
   save: 'M5 4h11l3 3v13H5zM8 4v5h7V4M8 14h8v6H8z',
   lock: 'M6 11V7a6 6 0 0 1 12 0v4M5 11h14v10H5zM12 15v3',
   keyRound: 'M8 14a4 4 0 1 0 0-8 4 4 0 1 0 0 8zM10.5 11.5L20 21M17 18l2-2M14 15l2-2',
+  logIn: 'M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M15 16l4-4-4-4M19 12H9',
 } as const;
 
 export type IconName = keyof typeof ICON_PATHS;
