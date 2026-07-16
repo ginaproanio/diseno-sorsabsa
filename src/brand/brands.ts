@@ -54,9 +54,9 @@ export const BRANDS: Record<string, BrandConfig> = {
   agente24siete: {
     name: 'agente24siete',
     displayName: 'Agente24Siete',
-    // Logotipo fiel al original: minúsculas, mono, y SOLO el "24" en color
-    // (ocre = primary). "agente" y "siete" van en el color del texto.
-    wordmark: { first: 'agente', second: '24', third: 'siete', tones: ['text', 'primary', 'text'] },
+    // Logotipo (definido por Gina, 16 jul 2026): "agente" y "siete" en VERDE
+    // petróleo (accent), SOLO el "24" en ocre (primary). Minúsculas, mono.
+    wordmark: { first: 'agente', second: '24', third: 'siete', tones: ['accent', 'primary', 'accent'] },
     // Identidad REAL (16 jul 2026), extraída de la landing original aprobada
     // (index.html, tema claro): ocre para acciones/resaltados, verde petróleo
     // para estados/identidad, titulares en monospace. Deja de ser provisional.
