@@ -47,7 +47,7 @@ export const BRANDS: Record<string, BrandConfig> = {
       muted: '#5b6472',
       border: '#dbe3ef',
     },
-    radius: '0.75rem',
+    radius: '0.25rem',
     // DomusCRM usa la UI sans del sistema; sin fuente especial que cargar.
   },
 
