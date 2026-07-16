@@ -23,6 +23,7 @@ export const ICON_PATHS = {
   calendar: 'M3 5h18v16H3zM8 3v4M16 3v4M3 10h18',
   messageCircle: 'M4 12a8 8 0 1 1 3.5 6.6L4 20l1.2-3.6A8 8 0 0 1 4 12z',
   send: 'M4 11l16-7-6 16-3-6-7-3z',
+  triangleAlert: 'm21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 20h16a2 2 0 0 0 1.73-2ZM12 9v4M12 17h.01',
   clock: 'M12 4a8 8 0 1 0 0 16 8 8 0 1 0 0-16zM12 8v4l3 2',
   menu: 'M4 7h16M4 12h16M4 17h16',
   close: 'M6 6l12 12M18 6L6 18',

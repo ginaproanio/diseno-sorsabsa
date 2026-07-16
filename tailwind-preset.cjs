@@ -34,6 +34,9 @@ module.exports = {
         'brand-muted': 'rgb(var(--brand-muted) / <alpha-value>)',
         'brand-border': 'rgb(var(--brand-border) / <alpha-value>)',
         'brand-destructive': 'rgb(var(--brand-destructive) / <alpha-value>)',
+        // Semáforo de estados (StatusBadge): verde/ámbar semánticos, no de marca
+        'brand-success': 'rgb(var(--brand-success) / <alpha-value>)',
+        'brand-warning': 'rgb(var(--brand-warning) / <alpha-value>)',
       },
       borderRadius: {
         brand: 'var(--brand-radius, 0.5rem)',
