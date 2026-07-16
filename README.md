@@ -74,6 +74,12 @@ export default function App({ children }) {
 <Input label="Correo" icon="mail" error={errores.email} />
 <Icon name="trash" size={16} />
 <Card variant="glass" interactive>…</Card>
+
+// Componentes del 16 jul 2026:
+<StatusBadge tone="success" size="lg">Activa</StatusBadge>  // semáforo SVG — JAMÁS emojis
+<StatusBadge tone="warning" icon="clock">Período de prueba</StatusBadge>
+<TypingDots />                                              // "está escribiendo…" del chat
+<Wordmark />                                                // logo por partes con tonos por marca
 ```
 
 `icon` en `Input` recibe un `IconName` (string del catálogo propio, ej.
