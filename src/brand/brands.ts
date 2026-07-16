@@ -19,11 +19,14 @@ export const BRANDS: Record<string, BrandConfig> = {
       secondary: '#E3EAE6',          // sage claro
       surface: '#FFFFFF',
       background: '#F4F6F4',          // fondo gris-verde
-      text: '#2A342E',
+      text: '#222925',                // gris carbón real de globals.css (no #2A342E)
       muted: '#627269',
-      border: '#DCE4DF',
+      border: '#D2DDD7',              // borde suave real de globals.css (no #DCE4DF)
     },
     radius: '0.75rem',
+    // Cuerpo REAL de CondoManager: Satoshi (Fontshare) — resguardado 16 jul
+    // 2026 al hacerlo consumidor; antes solo estaba Fraunces (titulares).
+    fontFamily: "'Satoshi', system-ui, -apple-system, 'Segoe UI', sans-serif",
     headingFont: 'Fraunces',
     fontImport:
       'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap',
