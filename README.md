@@ -27,6 +27,36 @@ module.exports = {
 
 En el CSS global del producto: `@import '@sorsabsa/ui/tokens.css';`
 
+## ⚠️ Checklist del consumidor — Tailwind v3 vs v4 (incidente real, 16 jul 2026)
+
+Si el producto no escanea el CÓDIGO FUENTE de este paquete, las clases que
+viven dentro de los componentes (elevación de `Card interactive`, lift de
+`Button`…) aparecen en el HTML pero su CSS **nunca se genera** — todo se ve
+plano sin ningún error. Le pasó a agente24siete en producción.
+
+- **Tailwind v3** (webs de DomusCRM, auth-sorsabsa): el `content` del
+  `tailwind.config` DEBE incluir
+  `'./node_modules/@sorsabsa/ui/src/**/*.{ts,tsx}'` (ejemplo arriba).
+- **Tailwind v4** (agente24siete): v4 **ignora node_modules por defecto**.
+  Obligatorio en el CSS global, además del `@config` del preset:
+
+  ```css
+  @source "../node_modules/@sorsabsa/ui/src";
+  ```
+
+- **Fuentes de marca** (Fraunces, JetBrains Mono): via `<link>` estático en
+  el layout — NUNCA `@import` en el CSS global (el bundler lo reordena y el
+  navegador lo ignora en silencio; incidente Fraunces).
+
+**Estado de los consumidores (16 jul 2026):** webs ✓ v3 bien configurado ·
+auth-sorsabsa ✓ v3 bien configurado · agente24siete ✓ v4 con `@source` ·
+CondoManager **aún no consume este paquete** (el sistema se extrajo de él,
+pero nunca se volvió consumidor — migración pendiente de aprobación).
+
+**¿Unificar versión de Tailwind?** Sí, a v4 a mediano plazo (v3 quedó en
+mantenimiento), como migración planificada producto por producto — no de
+golpe. Mientras convivan, este checklist es el contrato.
+
 ## Vestir la app con su marca
 
 ```tsx
