@@ -1,6 +1,6 @@
 {
   "name": "@sorsabsa/ui",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Sistema de diseño whitelabel de SORSABSA — extraído de CondoManager, consumido por todos los productos",
   "license": "UNLICENSED",
   "private": false,
@@ -12,7 +12,11 @@
     "./preset": "./tailwind-preset.cjs",
     "./tokens.css": "./src/tokens.css"
   },
-  "files": ["src", "tailwind-preset.cjs", "README.md"],
+  "files": [
+    "src",
+    "tailwind-preset.cjs",
+    "README.md"
+  ],
   "scripts": {
     "test": "jest",
     "typecheck": "tsc --noEmit"
