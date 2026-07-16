@@ -1,0 +1,2 @@
+# Los hooks corren con sh: CRLF los rompe en clones Linux/Mac.
+.githooks/* text eol=lf

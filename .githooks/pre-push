@@ -1,0 +1,45 @@
+#!/bin/sh
+# Bloquea el push si cambió código consumible (src/ o package.json) sin subir
+# la versión y crear su tag. Automatiza la regla del incidente real del
+# 16 jul 2026: Vercel cachea node_modules por VERSIÓN — si la versión no
+# cambia, los consumidores siguen sirviendo la build vieja aunque el commit
+# pineado sea el correcto. Ver README § "Publicar una versión".
+#
+# Activación (una sola vez por clon):  git config core.hooksPath .githooks
+
+version=$(node -p "require('./package.json').version" 2>/dev/null)
+[ -z "$version" ] && exit 0
+
+last_tag=$(git describe --tags --abbrev=0 2>/dev/null)
+[ -z "$last_tag" ] && exit 0
+
+# Si no cambió nada consumible desde el último tag (solo docs, hooks, etc.),
+# no hay nada que exigir.
+if git diff --quiet "$last_tag" HEAD -- src package.json; then
+  exit 0
+fi
+
+tag_version=$(git show "$last_tag:package.json" 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync(0,'utf8')).version" 2>/dev/null)
+
+if [ "$version" = "$tag_version" ]; then
+  echo ""
+  echo "✖ PUSH BLOQUEADO — cambiaste src/ o package.json desde $last_tag"
+  echo "  pero la versión sigue siendo $version. Los consumidores con"
+  echo "  #semver:^$version NUNCA verán este cambio (caché por versión)."
+  echo ""
+  echo "  Solución:  npm version patch    (crea commit + tag v X.Y.Z solo)"
+  echo "  y luego:   git push --follow-tags"
+  echo ""
+  exit 1
+fi
+
+# La versión sí cambió: exige que el tag exista para que viaje con el push.
+if ! git rev-parse -q --verify "refs/tags/v$version" >/dev/null 2>&1; then
+  echo ""
+  echo "✖ PUSH BLOQUEADO — package.json dice $version pero no existe el tag v$version."
+  echo "  Solución:  git tag v$version && git push --follow-tags"
+  echo ""
+  exit 1
+fi
+
+exit 0

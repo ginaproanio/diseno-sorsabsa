@@ -125,3 +125,21 @@ npm update @sorsabsa/ui   # y commitear package-lock.json
 Sin registry de npm de por medio (gratis, sin cuenta extra) y sin
 copiar hashes de 40 caracteres a mano. **La etiqueta `vX.Y.Z` debe
 coincidir con la `version` del package.json de ese commit.**
+
+> Atajo: `npm version patch` hace las tres cosas (bump + commit + tag)
+> en un solo comando; después solo `git push --follow-tags`.
+
+## La regla ya NO depende de la memoria: hook pre-push
+
+Desde el 16 jul 2026 existe [.githooks/pre-push](.githooks/pre-push):
+si cambiaste `src/` o `package.json` desde el último tag y la versión
+sigue igual (o falta el tag `vX.Y.Z`), **el push se bloquea** con el
+mensaje de qué comando correr. Un push de solo documentación pasa sin
+exigir nada.
+
+Activación — una sola vez por clon (ya está activo en el clon de la
+máquina principal):
+
+```bash
+git config core.hooksPath .githooks
+```
