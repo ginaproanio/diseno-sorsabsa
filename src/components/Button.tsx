@@ -19,7 +19,7 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
 
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    'bg-brand-primary text-brand-primary-foreground hover:bg-brand-primary/90 shadow-sm',
+    'bg-brand-primary text-brand-primary-foreground hover:bg-brand-primary/90 shadow-sm hover:shadow-md',
   secondary:
     'bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/15 border border-brand-border',
   destructive:
@@ -33,9 +33,12 @@ const SIZES: Record<ButtonSize, string> = {
   lg: 'px-6 py-3 text-lg',
 };
 
+// El "lift" al hover (subir 1px + sombra) viene de la landing original de
+// agente24siete y se adopta como micro-movimiento estándar del ecosistema.
 const BASE =
   'inline-flex items-center justify-center gap-2 rounded-brand font-bold font-brand ' +
-  'transition-colors focus-visible:outline-none focus-visible:ring-2 ' +
+  'transition-all duration-150 hover:-translate-y-px active:translate-y-0 ' +
+  'focus-visible:outline-none focus-visible:ring-2 ' +
   'focus-visible:ring-brand-primary/50 disabled:opacity-50 disabled:cursor-not-allowed';
 
 interface CommonProps {

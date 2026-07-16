@@ -30,9 +30,18 @@ export interface BrandConfig {
   name: string;
   displayName: string;
   logoUrl?: string;
-  /** Logotipo de texto de dos tonos: primera parte en accent, segunda en primary.
-   *  Ej. CondoManager = {first:'Condo', second:'Manager'}. Si falta, se usa displayName. */
-  wordmark?: { first: string; second: string };
+  /** Logotipo de texto por partes. Por defecto dos tonos: primera parte en
+   *  accent, segunda en primary (ej. CondoManager = {first:'Condo',
+   *  second:'Manager'}). `third` permite un segmento final y `tones` otro
+   *  mapeo de color por parte ('text' = color de texto normal) — ej.
+   *  agente24siete = "agente"+"24"+"siete" donde SOLO "24" lleva color.
+   *  Si falta `wordmark`, se usa displayName en un solo tono. */
+  wordmark?: {
+    first: string;
+    second: string;
+    third?: string;
+    tones?: WordmarkTone[];
+  };
   colors: BrandColors;
   /** Radio de esquinas, ej. '0.5rem' (CondoManager) o '0.75rem' */
   radius?: string;
@@ -43,6 +52,9 @@ export interface BrandConfig {
   /** URL de Google Fonts (u otra) a cargar para las fuentes de la marca */
   fontImport?: string;
 }
+
+/** Tonos disponibles para cada parte del wordmark. */
+export type WordmarkTone = 'text' | 'primary' | 'accent';
 
 const BrandContext = createContext<BrandConfig | null>(null);
 

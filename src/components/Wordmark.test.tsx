@@ -25,4 +25,11 @@ describe('Wordmark (logotipo con la identidad real de la marca)', () => {
     expect(screen.getByText('Domus')).toBeInTheDocument();
     expect(screen.getByText('CRM')).toBeInTheDocument();
   });
+
+  it('agente24siete: "agente"+"siete" en color de texto y SOLO "24" en primary (ocre)', () => {
+    render(<BrandProvider brand={BRANDS.agente24siete!}><Wordmark /></BrandProvider>);
+    expect(screen.getByText('agente').className).toContain('text-brand-text');
+    expect(screen.getByText('24').className).toContain('text-brand-primary');
+    expect(screen.getByText('siete').className).toContain('text-brand-text');
+  });
 });

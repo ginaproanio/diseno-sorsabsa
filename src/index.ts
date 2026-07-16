@@ -11,6 +11,7 @@ export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from '.
 export { Input, type InputProps } from './components/Input';
 export { Card, CardHeader, CardTitle, CardContent, type CardProps } from './components/Card';
 export { Wordmark } from './components/Wordmark';
+export { TypingDots } from './components/TypingDots';
 export { MobileNav, type MobileNavItem, type MobileNavProps } from './components/MobileNav';
 export { PropertyListingCard, type PropertyListingCardProps } from './components/PropertyListingCard';
 export { Icon, ICON_PATHS, type IconName, type IconProps } from './icons/Icon';

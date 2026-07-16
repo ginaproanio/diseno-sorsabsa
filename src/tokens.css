@@ -14,3 +14,17 @@
   --brand-radius: 0.5rem;
   --brand-font: system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
+
+/* Indicador de escritura (TypingDots): el rebote escalonado del chat,
+   extraído de la landing original de agente24siete. Respeta la preferencia
+   de movimiento reducido. */
+@keyframes sorsabsa-typing {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+.sorsabsa-typing-dot {
+  animation: sorsabsa-typing 1.2s infinite ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sorsabsa-typing-dot { animation: none; opacity: 0.9; }
+}
