@@ -100,3 +100,28 @@ trae el valor nuevo, y luego confirmado en producción tras el deploy.
 `0.1.6` → `0.1.7`, etc. Es la señal más simple para que las cachés de
 dependencias git (que no tienen un registry real detrás) sepan que hay
 contenido nuevo.
+
+## Publicar una versión (flujo desde 16 jul 2026 — sin copiar hashes)
+
+Los productos ya no pinnean por hash de commit sino por etiqueta semver:
+
+```json
+"@sorsabsa/ui": "github:ginaproanio/diseno-sorsabsa#semver:^0.1.6"
+```
+
+npm resuelve contra las **etiquetas git** del repo y el lockfile del
+producto guarda el commit exacto (build reproducible). Publicar un
+cambio queda en dos pasos:
+
+```bash
+# 1 · Aquí (diseno-sorsabsa): bump + tag + push
+#    (editar "version" en package.json, ej. 0.1.6 -> 0.1.7)
+git commit -am "..." && git tag v0.1.7 && git push origin main --tags
+
+# 2 · En cada producto que deba recibirlo:
+npm update @sorsabsa/ui   # y commitear package-lock.json
+```
+
+Sin registry de npm de por medio (gratis, sin cuenta extra) y sin
+copiar hashes de 40 caracteres a mano. **La etiqueta `vX.Y.Z` debe
+coincidir con la `version` del package.json de ese commit.**
