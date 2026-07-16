@@ -55,15 +55,25 @@ export const BRANDS: Record<string, BrandConfig> = {
     name: 'agente24siete',
     displayName: 'Agente24Siete',
     wordmark: { first: 'Agente', second: '24Siete' },
+    // Identidad REAL (16 jul 2026), extraída de la landing original aprobada
+    // (index.html, tema claro): ocre para acciones/resaltados, verde petróleo
+    // para estados/identidad, titulares en monospace. Deja de ser provisional.
     colors: {
-      primary: '#ea580c',            // provisional — ajustar al definir la marca
-      accent: '#f97316',
+      primary: '#c1701b',            // ocre — CTAs y palabras resaltadas
+      primaryForeground: '#17120a',  // texto casi negro sobre el ocre (original)
+      accent: '#1f6f5c',             // verde petróleo — estados, chips, wordmark
       surface: '#FFFFFF',
-      text: '#1c1917',
-      muted: '#78716c',
-      border: '#e7e5e4',
+      background: '#f4f6f9',
+      text: '#191d24',
+      muted: '#566072',
+      border: '#dde2e9',
     },
-    radius: '0.5rem',
+    radius: '0.625rem',              // --radius: 10px del original
+    // Titulares/logotipo en mono (el original usaba la pila ui-monospace del
+    // sistema; se fija JetBrains Mono para que se vea IGUAL en toda máquina).
+    headingFont: 'JetBrains Mono',
+    fontImport:
+      'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap',
   },
 
   sorsabsa: {
