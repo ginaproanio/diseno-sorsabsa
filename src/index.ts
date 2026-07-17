@@ -16,3 +16,29 @@ export { StatusBadge, type StatusBadgeProps, type StatusTone } from './component
 export { MobileNav, type MobileNavItem, type MobileNavProps } from './components/MobileNav';
 export { PropertyListingCard, type PropertyListingCardProps } from './components/PropertyListingCard';
 export { Icon, ICON_PATHS, type IconName, type IconProps } from './icons/Icon';
+export {
+  Table,
+  TableHeader,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableEmpty,
+  type TableSize,
+  type TableAlign,
+  type ResponsiveBreakpoint,
+  type TableProps,
+  type TableHeaderProps,
+  type TableHeadProps,
+  type TableBodyProps,
+  type TableRowProps,
+  type TableCellProps,
+  type TableEmptyProps,
+  Tabla,
+  TablaEncabezado,
+  TablaTh,
+  TablaCuerpo,
+  TablaFila,
+  TablaTd,
+  TablaVacia,
+} from './components/Table';

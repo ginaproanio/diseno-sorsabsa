@@ -9,6 +9,7 @@ import { CardStatusDemo } from './components/CardStatusDemo';
 import { TypingDotsDemo } from './components/TypingDotsDemo';
 import { FormDemo } from './components/FormDemo';
 import { IconCatalog } from './components/IconCatalog';
+import { TableDemo } from './components/TableDemo';
 import { SpacingScale } from './components/SpacingScale';
 import { TokenAudit } from './components/TokenAudit';
 
@@ -99,6 +100,10 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
 
         <Section title="Catálogo de íconos (Icon)">
           <IconCatalog shadowStyle={shadowStyle} />
+        </Section>
+
+        <Section title="Tabla (Table)">
+          <TableDemo />
         </Section>
 
         <Section title="Escala de espaciado">
