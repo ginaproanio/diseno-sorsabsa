@@ -101,6 +101,27 @@ export const BRANDS: Record<string, BrandConfig> = {
     },
     radius: '0.5rem',
   },
+
+  // EcoInmobiliaria — empresa ALIADA que consume DomusCRM (no es producto
+  // propio de SORSABSA), su identidad vive aquí porque es la carta de
+  // presentación de lo que vendemos con DomusCRM.
+  // Extraído del isotipo y portada oficiales (PNG), 17 jul 2026.
+  ecoinmobiliaria: {
+    name: 'ecoinmobiliaria',
+    displayName: 'EcoInmobiliaria',
+    wordmark: { first: 'ECO', second: 'INMOBILIARIA', tones: ['accent', 'primary'] },
+    colors: {
+      primary: '#0075BE',      // azul del isotipo (casa)
+      accent: '#EF8C12',       // naranja ("ECO" + ondas wifi)
+      secondary: '#1669B2',    // azul del wordmark "INMOBILIARIA" (tono distinto al del isotipo)
+      surface: '#FFFFFF',
+      background: '#F5F9FC',  // AJUSTAR si tienen un fondo de marca definido — no viene del logo
+      text: '#0B1F33',         // AJUSTAR — no viene del logo, es una aproximación oscura sobre el azul primario
+      muted: '#5B7690',        // AJUSTAR — mismo caso
+      border: '#DCE7F0',       // AJUSTAR — mismo caso
+    },
+    radius: '0.75rem',         // AJUSTAR según su manual de marca si difiere
+  },
 };
 
 /** Marca por parámetro (?app=…) con fallback institucional (nunca falla). */
