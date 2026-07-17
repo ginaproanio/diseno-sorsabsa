@@ -2,7 +2,7 @@
    TypingDots (@keyframes sorsabsa-typing). Sin este import, TypingDots
    renderizaría 3 puntos estáticos — el keyframe solo vive en este archivo,
    no está inlineado en el componente. */
-@import '../../src/tokens.css';
+@import '@tokens';
 
 @tailwind base;
 @tailwind components;

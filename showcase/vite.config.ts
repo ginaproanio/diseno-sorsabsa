@@ -35,6 +35,7 @@ export default defineConfig({
     alias: {
       react: path.resolve(__dirname, 'node_modules/react'),
       'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
+      '@tokens': path.resolve(__dirname, '../src/tokens.css'),
     },
     dedupe: ['react', 'react-dom'],
   },
