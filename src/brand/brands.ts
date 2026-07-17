@@ -81,16 +81,23 @@ export const BRANDS: Record<string, BrandConfig> = {
       'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap',
   },
 
+  // Extraído del logo oficial SORSABSA (PNG), 17 jul 2026 — ver conversación
+  // con Claude sobre corrección de identidad. El logo es un ícono "S" en
+  // verde y gris carbón/antracita con acabado metálico (nada de azul
+  // institucional: los valores previos #1e293b/#0ea5e9 eran inventados).
+  // text/muted/border derivados del mismo tono casi neutro del primary
+  // (H≈276°, S≈4%) en vez de la escala azulada anterior, siguiendo la misma
+  // lógica de escala tonal que condomanager y agente24siete.
   sorsabsa: {
     name: 'sorsabsa',
     displayName: 'SORSABSA',
     colors: {
-      primary: '#1e293b',            // institucional
-      accent: '#0ea5e9',
+      primary: '#423F44',            // gris carbón/antracita del logo
+      accent: '#70C051',             // verde del logo
       surface: '#FFFFFF',
-      text: '#0f172a',
-      muted: '#64748b',
-      border: '#e2e8f0',
+      text: '#212022',
+      muted: '#67626A',
+      border: '#DEDDDF',
     },
     radius: '0.5rem',
   },
