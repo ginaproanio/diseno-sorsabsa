@@ -1,6 +1,0 @@
-{
-  "framework": "vite",
-  "installCommand": "cd showcase && npm install",
-  "buildCommand": "cd showcase && npm run build",
-  "outputDirectory": "showcase/dist"
-}
