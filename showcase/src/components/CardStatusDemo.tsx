@@ -1,11 +1,21 @@
 import { Card, CardHeader, CardTitle, CardContent, StatusBadge, type StatusTone } from '../lib';
 
-// Los 4 tonos SÍ existen en el componente real (StatusBadge.tsx).
 const TONES: StatusTone[] = ['success', 'warning', 'danger', 'neutral'];
 
-export function CardStatusDemo() {
+const SHADOW = {
+  flat: '0 1px 2px rgba(0,0,0,0.08)',
+  soft: '',
+};
+
+export function CardStatusDemo({ shadowStyle }: { shadowStyle: 'flat' | 'soft' }) {
+  const shadow = SHADOW[shadowStyle];
   return (
-    <Card variant="glass" interactive className="max-w-md">
+    <Card
+      variant="glass"
+      interactive
+      className="max-w-md"
+      style={shadow ? { boxShadow: shadow } : undefined}
+    >
       <CardHeader>
         <CardTitle>Card variant=&quot;glass&quot; interactive</CardTitle>
       </CardHeader>

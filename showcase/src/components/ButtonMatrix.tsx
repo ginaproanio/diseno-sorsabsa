@@ -1,11 +1,14 @@
 import { Button, type ButtonVariant } from '../lib';
 
-// Las 4 variantes SÍ existen en el componente real (Button.tsx: primary,
-// secondary, destructive, ghost) — se muestran todas, sin condicional
-// "si existe" porque ninguna falta.
 const VARIANTS: ButtonVariant[] = ['primary', 'secondary', 'destructive', 'ghost'];
 
-export function ButtonMatrix() {
+const SHADOW = {
+  flat: '0 1px 2px rgba(0,0,0,0.08)',
+  soft: '',
+};
+
+export function ButtonMatrix({ shadowStyle }: { shadowStyle: 'flat' | 'soft' }) {
+  const shadow = SHADOW[shadowStyle];
   return (
     <div className="space-y-3">
       <p className="font-mono text-[11px] text-zinc-500">
@@ -15,13 +18,27 @@ export function ButtonMatrix() {
         {VARIANTS.map((v) => (
           <div key={v} className="space-y-2 rounded border border-zinc-800 p-3">
             <div className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">{v}</div>
-            <Button variant={v} className="w-full">
+            <Button
+              variant={v}
+              className="w-full"
+              style={shadow ? { boxShadow: shadow } : undefined}
+            >
               Normal
             </Button>
-            <Button variant={v} loading className="w-full">
+            <Button
+              variant={v}
+              loading
+              className="w-full"
+              style={shadow ? { boxShadow: shadow } : undefined}
+            >
               Cargando
             </Button>
-            <Button variant={v} disabled className="w-full">
+            <Button
+              variant={v}
+              disabled
+              className="w-full"
+              style={shadow ? { boxShadow: shadow } : undefined}
+            >
               Deshabilitado
             </Button>
           </div>

@@ -1,10 +1,14 @@
 import { Icon, ICON_PATHS, type IconName } from '../lib';
 
-// Leído en vivo de ICON_PATHS (no una lista copiada a mano): si mañana se
-// agrega o quita un ícono del catálogo real, esta grilla cambia sola.
 const NAMES = Object.keys(ICON_PATHS) as IconName[];
 
-export function IconCatalog() {
+const SHADOW = {
+  flat: '0 1px 2px rgba(0,0,0,0.08)',
+  soft: '',
+};
+
+export function IconCatalog({ shadowStyle }: { shadowStyle: 'flat' | 'soft' }) {
+  const shadow = SHADOW[shadowStyle];
   return (
     <div>
       <p className="mb-3 font-mono text-[11px] text-zinc-500">
@@ -14,7 +18,8 @@ export function IconCatalog() {
         {NAMES.map((name) => (
           <div
             key={name}
-            className="flex flex-col items-center gap-1 rounded border border-zinc-800 p-2 text-brand-primary"
+            className="flex flex-col items-center gap-1 rounded border border-zinc-800 p-2 text-brand-primary transition-all hover:translate-y-[-2px]"
+            style={shadow ? { boxShadow: shadow, borderColor: 'rgba(255,255,255,0.12)' } : undefined}
           >
             <Icon name={name} size={20} />
             <span className="max-w-full truncate font-mono text-[9px] text-zinc-500">{name}</span>

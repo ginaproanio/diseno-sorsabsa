@@ -3,3 +3,5 @@ node_modules/
 
 # Grafos de graphify: se regeneran gratis con el hook post-commit (AST)
 graphify-out/
+
+.vercel

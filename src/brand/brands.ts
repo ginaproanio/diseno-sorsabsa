@@ -122,6 +122,52 @@ export const BRANDS: Record<string, BrandConfig> = {
     },
     radius: '0.75rem',         // AJUSTAR según su manual de marca si difiere
   },
+
+  // Pagos SORSABSA — producto propio de pagos/transacciones.
+  // Identidad provisional 17 jul 2026: verde éxito + dorado para acciones.
+  pagos: {
+    name: 'pagos',
+    displayName: 'Pagos SORSABSA',
+    wordmark: { first: 'Pagos', second: 'SORSABSA', tones: ['accent', 'primary'] },
+    colors: {
+      primary: '#16a34a',            // verde éxito transaccional
+      accent: '#D1A153',             // dorado suave para CTAs y resaltados
+      secondary: '#E3EAE6',          // sage claro
+      surface: '#FFFFFF',
+      background: '#F4F6F4',
+      text: '#222925',
+      muted: '#627269',
+      border: '#D2DDD7',
+    },
+    radius: '0.75rem',
+    fontFamily: "'Satoshi', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    headingFont: 'Fraunces',
+    fontImport:
+      'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Satoshi:wght@400;500;600;700&display=swap',
+  },
+
+  // Notificaciones SORSABSA — producto propio de alertas/notificaciones.
+  // Identidad provisional 17 jul 2026: amber/ámbar para alertas + slate.
+  notificaciones: {
+    name: 'notificaciones',
+    displayName: 'Notificaciones SORSABSA',
+    wordmark: { first: 'Noti', second: 'SORSABSA', tones: ['accent', 'primary'] },
+    colors: {
+      primary: '#423F44',            // slate/antracita institucional
+      accent: '#f59e0b',             // amber para alertas y CTAs
+      secondary: '#D1D5DB',          // gris claro
+      surface: '#FFFFFF',
+      background: '#F9FAFB',
+      text: '#212022',
+      muted: '#67626A',
+      border: '#DEDDDF',
+    },
+    radius: '0.5rem',
+    fontFamily: "'Satoshi', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    headingFont: 'JetBrains Mono',
+    fontImport:
+      'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Satoshi:wght@400;500;600;700&display=swap',
+  },
 };
 
 /** Marca por parámetro (?app=…) con fallback institucional (nunca falla). */

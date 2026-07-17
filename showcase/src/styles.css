@@ -23,3 +23,67 @@ body {
 #root {
   font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 }
+
+/* Hero del showcase (shell neutro, no marca) */
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-family: 'Fraunces', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.hero-body {
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #a1a1aa;
+}
+
+/* Toggle de sombras (flat / soft) */
+.shadow-toggle {
+  display: inline-flex;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #27272a;
+}
+
+.shadow-toggle button {
+  padding: 6px 12px;
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 12px;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.shadow-toggle button[aria-pressed="true"] {
+  background-color: #fafafa;
+  color: #18181b;
+}
+
+.shadow-toggle button[aria-pressed="false"] {
+  background-color: #18181b;
+  color: #a1a1aa;
+}
+
+.shadow-toggle button[aria-pressed="false"]:hover {
+  background-color: #27272a;
+  color: #e4e4e7;
+}
+
+.shadow-label {
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 10px;
+  line-height: 1;
+  color: #71717a;
+}
