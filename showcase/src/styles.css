@@ -1,0 +1,25 @@
+/* tokens.css REAL de la librería: valores por defecto + la animación de
+   TypingDots (@keyframes sorsabsa-typing). Sin este import, TypingDots
+   renderizaría 3 puntos estáticos — el keyframe solo vive en este archivo,
+   no está inlineado en el componente. */
+@import '../../src/tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+}
+
+/* Chrome del showcase (fuera de cualquier <BrandProvider>): SIEMPRE
+   JetBrains Mono. Se carga como <link> ESTÁTICO en index.html — nunca
+   @import de fuente remota aquí (ver README raíz, incidente Fraunces: el
+   bundler reordena @import y el navegador lo ignora en silencio). */
+#root {
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}

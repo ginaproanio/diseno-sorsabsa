@@ -93,6 +93,27 @@ catálogo completo.
 2. **`BrandProvider`** convierte la config de marca (hex) a tripletas RGB y las inyecta como variables en su subárbol (`--brand-primary: 22 163 74`). Las tripletas permiten opacidades Tailwind (`bg-brand-primary/10`).
 3. **`BRANDS`** es la única fuente de verdad de identidades del ecosistema — el SSO (`auth-sorsabsa`) la reutiliza para el `?app=`.
 
+## Showcase — auditoría visual en vivo de cada marca
+
+`showcase/` es una app aparte (Vite + React, package.json propio) que
+renderiza los componentes REALES (Button, Card, Input, Icon, StatusBadge,
+Wordmark, TypingDots) de cada marca de `BRANDS` — paleta, contraste WCAG
+calculado (no puesto a mano), tipografía, estados de Button, etc. Importa
+`@sorsabsa/ui` desde `../src` (el código fuente, nunca desde npm): cambiar
+un token en `brands.ts` se refleja ahí sin tocar la app del showcase ni
+bumpear versión. Lo que NO existe todavía en la librería (ej. una escala
+de espaciado) se marca "No implementado" en vez de disimularse.
+
+```bash
+cd showcase
+npm install   # una sola vez
+npm run dev
+```
+
+Deploy en Vercel como proyecto propio (Root Directory `showcase/`, o
+`vercel --cwd showcase`) — no requiere bump de versión del paquete porque
+no toca `src/` ni `package.json` de la librería.
+
 ## Pruebas
 
 ```bash

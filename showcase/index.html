@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>SORSABSA · Showcase de marcas</title>
+    <!--
+      JetBrains Mono del SHELL (labels/hex/specs) — <link> ESTÁTICO, nunca
+      @import en un CSS que pasa por el bundler: el bundler reordena
+      @import y el navegador lo ignora en silencio (ver README raíz de
+      diseno-sorsabsa, sección "Fuentes de marca" / incidente Fraunces).
+      Las fuentes de CADA marca (fontImport) se cargan aparte, en runtime,
+      inyectando un <link> real vía JS — ver src/components/TypographyDemo.tsx.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
