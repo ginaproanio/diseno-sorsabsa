@@ -13,6 +13,7 @@ import { TableDemo } from './components/TableDemo';
 import { SpacingScale } from './components/SpacingScale';
 import { TokenAudit } from './components/TokenAudit';
 import { NotificationDemo } from './components/NotificationDemo';
+import { PropertyCarouselDemo } from './components/PropertyCarouselDemo';
 
 const BRAND_KEYS = Object.keys(BRANDS);
 
@@ -102,6 +103,12 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
         <div className="brand-section" id="notificaciones">
           <Section title="Notificaciones">
             <NotificationDemo />
+          </Section>
+        </div>
+
+        <div className="brand-section">
+          <Section title="Catálogo de propiedades">
+            <PropertyCarouselDemo />
           </Section>
         </div>
 

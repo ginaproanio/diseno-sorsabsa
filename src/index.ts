@@ -17,6 +17,7 @@ export { TypingDots } from './components/TypingDots';
 export { StatusBadge, type StatusBadgeProps, type StatusTone } from './components/StatusBadge';
 export { MobileNav, type MobileNavItem, type MobileNavProps } from './components/MobileNav';
 export { PropertyListingCard, type PropertyListingCardProps } from './components/PropertyListingCard';
+export { PropertyCarousel, type PropertyCarouselProps } from './components/PropertyCarousel';
 export { Icon, ICON_PATHS, type IconName, type IconProps } from './icons/Icon';
 export {
   Table,

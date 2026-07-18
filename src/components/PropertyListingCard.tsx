@@ -15,6 +15,7 @@
 
 import type { ReactNode } from 'react';
 import { motion } from 'framer-motion';
+import { Heart } from 'lucide-react';
 import { Icon } from '../icons/Icon';
 import { Card } from './Card';
 
@@ -34,6 +35,11 @@ export interface PropertyListingCardProps {
   bedrooms?: number | null;
   bathrooms?: number | null;
   areaM2?: number | null;
+  /** Estado de favorito. Omitido: el botón de favorito no se muestra. */
+  isFavorite?: boolean;
+  /** El consumidor persiste el estado; el componente solo emite la intención. */
+  onToggleFavorite?: () => void;
+  favoriteLabel?: string;
   className?: string;
 }
 
@@ -66,6 +72,9 @@ export function PropertyListingCard({
   bedrooms,
   bathrooms,
   areaM2,
+  isFavorite,
+  onToggleFavorite,
+  favoriteLabel = 'Favorita',
   className = '',
 }: PropertyListingCardProps) {
   return (
@@ -95,6 +104,26 @@ export function PropertyListingCard({
               </span>
             )}
           </div>
+          {onToggleFavorite && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onToggleFavorite();
+              }}
+              aria-pressed={isFavorite}
+              aria-label={favoriteLabel}
+              title={favoriteLabel}
+              className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-brand-text backdrop-blur-sm transition-colors hover:text-brand-destructive"
+            >
+              <Heart
+                size={16}
+                fill={isFavorite ? 'currentColor' : 'none'}
+                className={isFavorite ? 'text-brand-destructive' : ''}
+              />
+            </button>
+          )}
         </div>
 
         <div className="space-y-1.5 p-4">
