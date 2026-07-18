@@ -1,22 +1,22 @@
 # Graph Report - diseno-sorsabsa  (2026-07-18)
 
 ## Corpus Check
-- 54 files · ~14,056 words
+- 55 files · ~14,766 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 327 nodes · 511 edges · 20 communities (18 shown, 2 thin omitted)
+- 337 nodes · 520 edges · 21 communities (19 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b97c9a49`
+- Built from commit: `e3cc2e7c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- index.ts
 - App.tsx
+- index.ts
 - devDependencies
 - BrandProvider.tsx
 - compilerOptions
@@ -25,9 +25,10 @@
 - package.json
 - Icon.tsx
 - devDependencies
+- CardStatusDemo.tsx
 - @sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA
 - Button.tsx
-- NotificationBell.tsx
+- Grafo de conocimiento (graphify) generado por CI
 - vercel.json
 - pre-push
 - vite.config.ts
@@ -39,10 +40,10 @@
 4. `BrandConfig` - 10 edges
 5. `IconName` - 10 edges
 6. `resolveEffectiveColors()` - 9 edges
-7. `Icon` - 8 edges
-8. `useBrand()` - 6 edges
-9. `brandToCssVars()` - 6 edges
-10. `BrandProvider()` - 6 edges
+7. `Grafo de conocimiento (graphify) generado por CI` - 9 edges
+8. `Icon` - 8 edges
+9. `useBrand()` - 6 edges
+10. `brandToCssVars()` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `resolveEffectiveColors()` --calls--> `brandToCssVars()`  [EXTRACTED]
@@ -59,15 +60,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (20 total, 2 thin omitted)
+## Communities (21 total, 2 thin omitted)
 
-### Community 0 - "index.ts"
-Cohesion: 0.08
-Nodes (39): CardStatusDemo(), SHADOW, TONES, DATA, TableDemo(), Card(), CardContent(), CardHeader() (+31 more)
-
-### Community 1 - "App.tsx"
+### Community 0 - "App.tsx"
 Cohesion: 0.09
 Nodes (26): App(), BRAND_KEYS, ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented(), MOCK_PROPERTIES (+18 more)
+
+### Community 1 - "index.ts"
+Cohesion: 0.09
+Nodes (35): MOCK, NotificationDemo(), DATA, TableDemo(), Notificacion, NotificationBell(), NotificationBellProps, TYPE_COLOR (+27 more)
 
 ### Community 2 - "devDependencies"
 Cohesion: 0.07
@@ -94,31 +95,35 @@ Cohesion: 0.09
 Nodes (21): dependencies, framer-motion, lucide-react, motion, react, react-dom, description, framer-motion (+13 more)
 
 ### Community 8 - "Icon.tsx"
-Cohesion: 0.17
-Nodes (14): IconCatalog(), NAMES, SHADOW, InputProps, MobileNav(), MobileNavItem, MobileNavProps, StatusBadgeProps (+6 more)
+Cohesion: 0.16
+Nodes (15): IconCatalog(), NAMES, SHADOW, InputProps, MobileNav(), MobileNavItem, MobileNavProps, StatusBadge() (+7 more)
 
 ### Community 9 - "devDependencies"
 Cohesion: 0.12
 Nodes (17): autoprefixer, postcss, devDependencies, autoprefixer, postcss, tailwindcss, @types/react, @types/react-dom (+9 more)
 
-### Community 10 - "@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA"
+### Community 10 - "CardStatusDemo.tsx"
+Cohesion: 0.16
+Nodes (11): CardStatusDemo(), SHADOW, TONES, Card(), CardContent(), CardHeader(), CardProps, CardTitle() (+3 more)
+
+### Community 11 - "@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA"
 Cohesion: 0.17
 Nodes (11): ⚠️ Bumpear la versión en cada cambio real (16 jul 2026, incidente real), ⚠️ Checklist del consumidor — Tailwind v3 vs v4 (incidente real, 16 jul 2026), Cómo funciona (la arquitectura de tokens), Instalación en un producto, La regla ya NO depende de la memoria: hook pre-push, Pruebas, Publicar una versión (flujo desde 16 jul 2026 — sin copiar hashes), Reglas de la librería (+3 more)
 
-### Community 11 - "Button.tsx"
+### Community 12 - "Button.tsx"
 Cohesion: 0.18
 Nodes (10): ButtonMatrix(), SHADOW, VARIANTS, Button, ButtonProps, ButtonSize, ButtonVariant, CommonProps (+2 more)
 
-### Community 12 - "NotificationBell.tsx"
-Cohesion: 0.24
-Nodes (8): MOCK, NotificationDemo(), Notificacion, NotificationBell(), NotificationBellProps, TYPE_COLOR, TYPE_ICON, useOnClickOutside()
+### Community 13 - "Grafo de conocimiento (graphify) generado por CI"
+Cohesion: 0.20
+Nodes (9): Añadir Pages a un repo privado (opcional, requiere GitHub Pro), Bugs resueltos durante el piloto (lecciones), Convención de `.gitignore`, Cómo funciona, Cómo ver el grafo, Estado por repo, Grafo de conocimiento (graphify) generado por CI, Por qué CI y no un hook local (+1 more)
 
-### Community 13 - "vercel.json"
+### Community 14 - "vercel.json"
 Cohesion: 0.40
 Nodes (4): buildCommand, framework, installCommand, outputDirectory
 
 ## Knowledge Gaps
-- **125 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+120 more)
+- **133 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+128 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -126,16 +131,16 @@ Nodes (4): buildCommand, framework, installCommand, outputDirectory
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `BrandConfig` connect `App.tsx` to `index.ts`, `BrandProvider.tsx`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
-  _High betweenness centrality (0.009) - this node is a cross-community bridge._
+  _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _125 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.07653061224489796 - nodes in this community are weakly interconnected._
+  _133 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.08985200845665962 - nodes in this community are weakly interconnected._
+- **Should `index.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.08748615725359911 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.06854838709677419 - nodes in this community are weakly interconnected._
