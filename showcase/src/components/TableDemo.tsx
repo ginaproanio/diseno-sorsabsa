@@ -9,8 +9,8 @@ const DATA = [
 
 export function TableDemo() {
   return (
-    <div className="space-y-5">
-      <p className="section-desc">
+    <div className="space-y-4">
+      <p className="font-mono text-[11px] text-zinc-500">
         Componente &lt;Table&gt; de @sorsabsa/ui — compound component, tokens de marca, responsive con hideOn, alineación y tamaños.
       </p>
 

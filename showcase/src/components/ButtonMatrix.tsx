@@ -10,13 +10,13 @@ const SHADOW = {
 export function ButtonMatrix({ shadowStyle }: { shadowStyle: 'flat' | 'soft' }) {
   const shadow = SHADOW[shadowStyle];
   return (
-    <div className="space-y-4">
-      <p className="section-desc">
+    <div className="space-y-3">
+      <p className="font-mono text-[11px] text-zinc-500">
         Componente real &lt;Button&gt; — pase el cursor sobre cualquiera para ver su :hover real (CSS del componente, no una captura).
       </p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {VARIANTS.map((v) => (
-          <div key={v} className="space-y-2 rounded-xl border border-zinc-800/70 bg-zinc-900/30 p-4">
+          <div key={v} className="space-y-2 rounded border border-zinc-800 p-3">
             <div className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">{v}</div>
             <Button
               variant={v}
