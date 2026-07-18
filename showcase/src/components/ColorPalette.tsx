@@ -10,17 +10,21 @@ const TOKEN_ORDER = ['primary', 'accent', 'secondary', 'background', 'surface', 
 export function ColorPalette({ brand }: { brand: BrandConfig }) {
   const resolved = resolveEffectiveColors(brand);
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div className="flex flex-wrap items-end gap-4">
       {TOKEN_ORDER.map((key) => {
         const raw = brand.colors[key];
         const hex = resolved[key];
         return (
-          <div key={key} className="overflow-hidden rounded border border-zinc-800">
-            <div className="h-16 w-full" style={{ background: hex }} />
-            <div className="space-y-0.5 bg-zinc-900 px-2 py-1.5 font-mono text-[11px]">
-              <div className="text-zinc-300">{key}</div>
-              <div className="text-zinc-500">{hex.toUpperCase()}</div>
-              {!raw && <div className="text-amber-500">no definido (fallback)</div>}
+          <div key={key} className="flex flex-col items-center gap-1.5">
+            <div
+              className="h-8 w-8 rounded-full border border-zinc-700 shadow-sm"
+              style={{ background: hex }}
+              title={hex.toUpperCase()}
+            />
+            <div className="text-center font-mono text-[10px] leading-tight">
+              <div className="text-zinc-500">{key}</div>
+              <div className="text-zinc-400">{hex.toUpperCase()}</div>
+              {!raw && <div className="text-amber-500">no definido</div>}
             </div>
           </div>
         );
