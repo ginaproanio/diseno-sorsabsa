@@ -22,39 +22,22 @@ export function TypographyDemo({ brand }: { brand: BrandConfig }) {
     };
   }, [brand.fontImport, brand.name]);
 
+  const headingFont = brand.headingFont || brand.fontFamily || 'inherit';
+  const bodyFont = brand.fontFamily || 'system-ui, sans-serif';
+
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <div>
-        <div className="mb-1 font-mono text-[11px] text-zinc-500">
-          fontFamily:{' '}
-          {brand.fontFamily ? (
-            <span className="text-zinc-300">{brand.fontFamily}</span>
-          ) : (
-            <span className="text-amber-500">no definido (usa system-ui, -apple-system, 'Segoe UI', sans-serif)</span>
-          )}
-        </div>
-        <p className="font-brand text-lg text-brand-text">
-          Cuerpo de texto real — {brand.displayName} — abcdefghij ABCDEFGHIJ 0123456789
+        <div className="mb-1 text-[11px] text-zinc-500">Titulares</div>
+        <p className="text-2xl font-semibold leading-tight" style={{ fontFamily: `'${headingFont}', system-ui, sans-serif` }}>
+          {brand.displayName} — abcdefghij ABCDEFGHIJ 0123456789
         </p>
       </div>
       <div>
-        <div className="mb-1 font-mono text-[11px] text-zinc-500">
-          headingFont:{' '}
-          {brand.headingFont ? (
-            <span className="text-zinc-300">{brand.headingFont}</span>
-          ) : (
-            <span className="text-amber-500">no definido (usa fontFamily / system-ui)</span>
-          )}
-        </div>
-        <p className="font-brand-heading text-3xl font-bold text-brand-text">Titular real — {brand.displayName}</p>
-      </div>
-      <div className="font-mono text-[11px] text-zinc-500">
-        fontImport:{' '}
-        {brand.fontImport ? (
-          <span className="break-all text-zinc-300">{brand.fontImport}</span>
-        ) : (
-          <span className="text-amber-500">no definido — sin fuente externa que cargar</span>
-        )}
+        <div className="mb-1 text-[11px] text-zinc-500">Cuerpo</div>
+        <p className="text-base leading-relaxed" style={{ fontFamily: bodyFont }}>
+          Cuerpo de texto real — {brand.displayName} — abcdefghij ABCDEFGHIJ 0123456789
+        </p>
       </div>
     </div>
   );

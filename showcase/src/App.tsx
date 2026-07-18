@@ -23,8 +23,8 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
 }) {
   return (
     <BrandProvider brand={brand}>
-      <div className="rounded-lg bg-brand-background p-6 text-brand-text sm:p-8">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="rounded-lg bg-white p-5 text-zinc-900 sm:p-6 border border-zinc-200 shadow-sm">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           <Section title="Identidad" description="Wordmark y tipografía de la marca.">
             <div className="space-y-4">
               <Wordmark className="text-4xl" />
@@ -103,7 +103,7 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
           </Section>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
           <Section
             title="Contraste WCAG"
             description="Métrica técnica: razón de contraste real sobre colores efectivos."
@@ -129,12 +129,12 @@ export default function App() {
   const [shadowStyle, setShadowStyle] = useState<'flat' | 'soft'>('soft');
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-200">
-      <header className="sticky top-0 z-10 border-b border-zinc-800 bg-zinc-950/95 px-6 py-4 backdrop-blur">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="min-h-screen bg-white text-zinc-900">
+      <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/90 px-6 py-3 backdrop-blur">
+        <div className="mx-auto max-w-[1200px] flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">SORSABSA</div>
-            <h1 className="font-mono text-sm font-bold text-zinc-100">Showcase de marcas — @sorsabsa/ui</h1>
+            <h1 className="font-mono text-sm font-bold text-zinc-900">Showcase de marcas — @sorsabsa/ui</h1>
           </div>
           <nav className="flex flex-wrap gap-1" aria-label="Marcas">
             {BRAND_KEYS.map((key) => (
@@ -145,8 +145,8 @@ export default function App() {
                 aria-pressed={key === active}
                 className={`rounded px-3 py-1.5 font-mono text-xs transition-colors ${
                   key === active
-                    ? 'bg-zinc-100 text-zinc-950'
-                    : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                    ? 'bg-zinc-900 text-white'
+                    : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900'
                 }`}
               >
                 {BRANDS[key]!.displayName}
@@ -156,7 +156,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             <a
               href="#notificaciones"
-              className="relative p-2 rounded-lg text-zinc-400 hover:text-zinc-100 transition-colors"
+              className="relative p-2 rounded-lg text-zinc-500 hover:text-zinc-900 transition-colors"
               aria-label="Ir a sección de notificaciones"
               title="Notificaciones"
             >
@@ -167,14 +167,14 @@ export default function App() {
         </div>
       </header>
 
-      <main className="p-6">
-        <div className="mx-auto max-w-[1180px]">
-          <div className="mb-6 flex flex-col gap-2">
-            <span className="font-mono text-[11px] uppercase tracking-widest text-brand-accent">
-              @sorsabsa/ui — auditoría del sistema de diseño
+      <main className="p-4 sm:p-6">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="mb-6 flex flex-col gap-1">
+            <span className="font-mono text-[11px] uppercase tracking-widest text-zinc-500">
+              @sorsabsa/ui — manual de marca
             </span>
-            <h1 className="font-['Fraunces'] text-2xl font-semibold leading-tight text-zinc-100 sm:text-3xl">
-              Más consistente. Accesible. Con más carácter.
+            <h1 className="font-['Fraunces'] text-xl font-semibold leading-tight text-zinc-900 sm:text-2xl">
+              {brand.displayName}
             </h1>
           </div>
 
