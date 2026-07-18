@@ -57,7 +57,7 @@ export function NotificationDemo() {
   return (
     <div className="space-y-4">
       <p className="section-desc">
-        Componente &lt;NotificationBell&gt; de @sorsabsa/ui — dropdown expandible con animación, badge de no leídas, ícono por tipo y acciones de marcar leída.
+        Componente <span className="shell-accent">&lt;NotificationBell&gt;</span> de @sorsabsa/ui — dropdown expandible con animación, badge de no leídas, ícono por tipo y acciones de marcar leída.
       </p>
 
       <div className="flex flex-wrap items-center gap-6">

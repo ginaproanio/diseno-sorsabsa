@@ -14,6 +14,8 @@
 
 body {
   margin: 0;
+  background: #0d0e12;
+  color: #e5e7eb;
 }
 
 /* Chrome del showcase (fuera de cualquier <BrandProvider>): SIEMPRE
@@ -24,68 +26,97 @@ body {
   font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 }
 
-/* Hero del showcase (shell neutro, no marca) */
-.hero-eyebrow {
-  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+/* ===== Auditoría técnica de diseño ===== */
+
+.shell-accent {
+  color: #a3e635;
 }
 
-.hero-title {
-  font-family: 'Fraunces', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+.shell-accent-dim {
+  color: #84cc16;
+}
+
+.section-title {
+  font-size: 1.125rem;
+  line-height: 1.4;
   font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+  color: #f3f4f6;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
 }
 
-.hero-body {
-  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  font-size: 14px;
-  line-height: 1.65;
-  color: #a1a1aa;
+.section-desc {
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: #9ca3af;
+  margin-bottom: 1rem;
+  max-width: 40rem;
 }
 
-/* Toggle de sombras (flat / soft) */
-.shadow-toggle {
-  display: inline-flex;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid #27272a;
+.brand-panel-wrapper {
+  background: #111318;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 1.5rem;
 }
 
-.shadow-toggle button {
-  padding: 6px 12px;
-  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  font-size: 12px;
-  line-height: 1;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+.brand-section {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid #1f2937;
 }
 
-.shadow-toggle button[aria-pressed="true"] {
-  background-color: #fafafa;
-  color: #18181b;
+.brand-section:last-child {
+  border-bottom: none;
 }
 
-.shadow-toggle button[aria-pressed="false"] {
-  background-color: #18181b;
-  color: #a1a1aa;
+/* Tabs de marca con más presencia */
+.brand-tab {
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.15s ease;
+  color: #9ca3af;
+  background: transparent;
 }
 
-.shadow-toggle button[aria-pressed="false"]:hover {
-  background-color: #27272a;
-  color: #e4e4e7;
+.brand-tab:hover {
+  color: #e5e7eb;
+  background: #1f2937;
 }
 
-.shadow-label {
-  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  font-size: 10px;
-  line-height: 1;
-  color: #71717a;
+.brand-tab[aria-pressed="true"] {
+  color: #0d0e12;
+  background: #a3e635;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(163, 230, 53, 0.25);
+}
+
+/* Swatches grandes para auditoría */
+.swatch-block {
+  min-width: 120px;
+  min-height: 80px;
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.swatch-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+}
+
+.swatch-hex {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  opacity: 0.85;
+  font-variant-numeric: tabular-nums;
 }
 
 .line-clamp-2 {

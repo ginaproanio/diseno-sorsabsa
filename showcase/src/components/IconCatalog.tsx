@@ -11,14 +11,14 @@ export function IconCatalog({ shadowStyle }: { shadowStyle: 'flat' | 'soft' }) {
   const shadow = SHADOW[shadowStyle];
   return (
     <div>
-      <p className="mb-3 font-mono text-[11px] text-zinc-500">
-        {NAMES.length} íconos disponibles en el catálogo propio (stroke 1.75px, currentColor — hereda el color de marca).
+      <p className="mb-3 font-mono text-xs text-zinc-400">
+        <span className="shell-accent">{NAMES.length}</span> íconos disponibles en el catálogo propio <span className="text-zinc-500">(stroke 1.75px, currentColor)</span>.
       </p>
       <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8">
         {NAMES.map((name) => (
           <div
             key={name}
-            className="flex flex-col items-center gap-1 rounded border border-zinc-800 p-2 text-brand-primary transition-all hover:translate-y-[-2px]"
+            className="flex flex-col items-center gap-1 rounded border border-zinc-800 bg-zinc-900/40 p-2 text-brand-primary transition-all hover:translate-y-[-2px]"
             style={shadow ? { boxShadow: shadow, borderColor: 'rgba(255,255,255,0.12)' } : undefined}
           >
             <Icon name={name} size={20} />

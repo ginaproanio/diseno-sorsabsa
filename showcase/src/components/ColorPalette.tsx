@@ -3,29 +3,36 @@ import { resolveEffectiveColors } from '../resolveColors';
 
 const TOKEN_ORDER = ['primary', 'accent', 'secondary', 'background', 'surface', 'text', 'muted', 'border'] as const;
 
-/** Paleta leída en vivo de BRANDS[...].colors — el swatch pinta el valor
- * EFECTIVO (con el mismo fallback que aplica BrandProvider en runtime);
- * si el campo no está definido en brands.ts, queda marcado "no definido"
- * en vez de disimularse como si fuera un valor real de la marca. */
 export function ColorPalette({ brand }: { brand: BrandConfig }) {
   const resolved = resolveEffectiveColors(brand);
+
+  const textColorFor = (hex: string) => {
+    const c = hex.replace('#', '');
+    const full = c.length === 3 ? c.split('').map((ch) => ch + ch).join('') : c;
+    const n = parseInt(full, 16);
+    if (full.length !== 6 || Number.isNaN(n)) return '#000000';
+    const r = (n >> 16) & 255;
+    const g = (n >> 8) & 255;
+    const b = n & 255;
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.65 ? '#000000' : '#ffffff';
+  };
+
   return (
-    <div className="flex flex-wrap items-center gap-4">
+    <div className="flex flex-wrap gap-3">
       {TOKEN_ORDER.map((key) => {
         const raw = brand.colors[key];
         const hex = resolved[key];
+        const text = textColorFor(hex);
         return (
-          <div key={key} className="flex flex-col items-center gap-1.5">
-            <div
-              className="h-8 w-8 rounded-full border border-zinc-200 shadow-sm"
-              style={{ background: hex }}
-              title={hex.toUpperCase()}
-            />
-            <div className="text-center font-mono text-[10px] leading-tight">
-              <div className="text-zinc-500">{key}</div>
-              <div className="text-zinc-600">{hex.toUpperCase()}</div>
-              {!raw && <div className="text-amber-600">no definido</div>}
-            </div>
+          <div
+            key={key}
+            className="swatch-block"
+            style={{ background: hex, color: text }}
+            title={hex.toUpperCase()}
+          >
+            <div className="swatch-label">{key}</div>
+            <div className="swatch-hex">{hex.toUpperCase()}</div>
           </div>
         );
       })}

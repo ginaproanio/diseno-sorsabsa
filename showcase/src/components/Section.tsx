@@ -10,12 +10,12 @@ export function Section({
   children: ReactNode;
 }) {
   return (
-    <section className="mb-6 last:mb-0">
-      <h3 className="mb-1 text-sm font-semibold text-zinc-900 tracking-tight">
+    <section className="mb-10 last:mb-0">
+      <h3 className="text-xl font-semibold text-zinc-100 tracking-tight">
         {title}
       </h3>
-      {description && <p className="mb-2 text-xs text-zinc-500 max-w-2xl">{description}</p>}
-      <div>{children}</div>
+      {description && <p className="mt-1 text-xs text-zinc-400 max-w-2xl">{description}</p>}
+      <div className="mt-4">{children}</div>
     </section>
   );
 }

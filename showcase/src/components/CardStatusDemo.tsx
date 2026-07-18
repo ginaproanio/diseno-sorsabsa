@@ -21,8 +21,8 @@ export function CardStatusDemo({ shadowStyle }: { shadowStyle: 'flat' | 'soft' }
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <div className="mb-1.5 font-mono text-[10px] uppercase tracking-wider text-brand-muted">
-            StatusBadge size=&quot;sm&quot;
+          <div className="mb-1.5 font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+            StatusBadge size="sm"
           </div>
           <div className="flex flex-wrap gap-2">
             {TONES.map((t) => (
@@ -33,8 +33,8 @@ export function CardStatusDemo({ shadowStyle }: { shadowStyle: 'flat' | 'soft' }
           </div>
         </div>
         <div>
-          <div className="mb-1.5 font-mono text-[10px] uppercase tracking-wider text-brand-muted">
-            StatusBadge size=&quot;lg&quot;
+          <div className="mb-1.5 font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+            StatusBadge size="lg"
           </div>
           <div className="flex flex-wrap items-center gap-4">
             {TONES.map((t) => (

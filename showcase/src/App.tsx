@@ -23,23 +23,27 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
 }) {
   return (
     <BrandProvider brand={brand}>
-      <div className="rounded-lg bg-white p-5 text-zinc-900 sm:p-6 border border-zinc-200 shadow-sm">
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-          <Section title="Identidad" description="Wordmark y tipografía de la marca.">
+      <div className="brand-panel-wrapper">
+        <div className="brand-section">
+          <Section title="Identidad">
             <div className="space-y-4">
               <Wordmark className="text-4xl" />
               <TypographyDemo brand={brand} />
             </div>
           </Section>
+        </div>
 
-          <Section title="Paleta" description="Colores oficiales de la marca.">
+        <div className="brand-section">
+          <Section title="Paleta">
             <ColorPalette brand={brand} />
           </Section>
+        </div>
 
-          <Section title="Tokens" description="Radio, sombras y espaciado.">
+        <div className="brand-section">
+          <Section title="Tokens">
             <div className="space-y-4">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="font-mono text-[11px] text-zinc-500">Sombra:</span>
+                <span className="font-mono text-xs text-zinc-500">Sombra:</span>
                 <div className="flex rounded border border-zinc-800 overflow-hidden">
                   <button
                     type="button"
@@ -69,54 +73,74 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
               </div>
             </div>
           </Section>
+        </div>
 
+        <div className="brand-section">
           <Section title="Botones">
             <ButtonMatrix shadowStyle={shadowStyle} />
           </Section>
+        </div>
 
+        <div className="brand-section">
           <Section title="Cards y status">
             <CardStatusDemo shadowStyle={shadowStyle} />
           </Section>
+        </div>
 
+        <div className="brand-section">
           <Section title="Feedback">
             <TypingDotsDemo />
           </Section>
+        </div>
 
+        <div className="brand-section">
           <Section title="Formulario">
             <FormDemo />
           </Section>
+        </div>
 
-          <Section title="Notificaciones" id="notificaciones">
+        <div className="brand-section" id="notificaciones">
+          <Section title="Notificaciones">
             <NotificationDemo />
           </Section>
+        </div>
 
+        <div className="brand-section">
           <Section title="Íconos">
             <IconCatalog shadowStyle={shadowStyle} />
           </Section>
+        </div>
 
+        <div className="brand-section">
           <Section title="Tabla">
             <TableDemo />
           </Section>
+        </div>
 
+        <div className="brand-section">
           <Section title="Espaciado">
             <SpacingScale />
           </Section>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
-          <Section
-            title="Contraste WCAG"
-            description="Métrica técnica: razón de contraste real sobre colores efectivos."
-          >
-            <ContrastReport brand={brand} />
-          </Section>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="brand-section">
+            <Section
+              title="Contraste WCAG"
+              description="Métrica técnica: razón de contraste real sobre colores efectivos."
+            >
+              <ContrastReport brand={brand} />
+            </Section>
+          </div>
 
-          <Section
-            title="Auditoría de tokens"
-            description="Tokens planeados. Valores actuales en gris si aún no existen."
-          >
-            <TokenAudit brand={brand} />
-          </Section>
+          <div className="brand-section">
+            <Section
+              title="Auditoría de tokens"
+              description="Tokens planeados. Valores actuales en gris si aún no existen."
+            >
+              <TokenAudit brand={brand} />
+            </Section>
+          </div>
         </div>
       </div>
     </BrandProvider>
@@ -129,25 +153,25 @@ export default function App() {
   const [shadowStyle, setShadowStyle] = useState<'flat' | 'soft'>('soft');
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900">
-      <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/90 px-6 py-3 backdrop-blur">
+    <div className="min-h-screen bg-[#0d0e12] text-zinc-200">
+      <header className="sticky top-0 z-10 border-b border-zinc-800 bg-[#0d0e12]/95 px-6 py-4 backdrop-blur">
         <div className="mx-auto max-w-[1200px] flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">SORSABSA</div>
-            <h1 className="font-mono text-sm font-bold text-zinc-900">Showcase de marcas — @sorsabsa/ui</h1>
+            <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">
+              SORSABSA <span className="shell-accent">/</span> auditoría
+            </div>
+            <h1 className="font-mono text-sm font-bold text-zinc-100">
+              {brand.displayName}
+            </h1>
           </div>
-          <nav className="flex flex-wrap gap-1" aria-label="Marcas">
+          <nav className="flex flex-wrap gap-1.5" aria-label="Marcas">
             {BRAND_KEYS.map((key) => (
               <button
                 key={key}
                 type="button"
                 onClick={() => setActive(key)}
                 aria-pressed={key === active}
-                className={`rounded px-3 py-1.5 font-mono text-xs transition-colors ${
-                  key === active
-                    ? 'bg-zinc-900 text-white'
-                    : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900'
-                }`}
+                className={`brand-tab`}
               >
                 {BRANDS[key]!.displayName}
               </button>
@@ -156,7 +180,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             <a
               href="#notificaciones"
-              className="relative p-2 rounded-lg text-zinc-500 hover:text-zinc-900 transition-colors"
+              className="relative p-2 rounded-lg text-zinc-400 hover:text-zinc-100 transition-colors"
               aria-label="Ir a sección de notificaciones"
               title="Notificaciones"
             >
@@ -171,9 +195,9 @@ export default function App() {
         <div className="mx-auto max-w-[1200px]">
           <div className="mb-6 flex flex-col gap-1">
             <span className="font-mono text-[11px] uppercase tracking-widest text-zinc-500">
-              @sorsabsa/ui — manual de marca
+              @sorsabsa/ui <span className="shell-accent">/</span> manual de marca
             </span>
-            <h1 className="font-['Fraunces'] text-xl font-semibold leading-tight text-zinc-900 sm:text-2xl">
+            <h1 className="font-['Fraunces'] text-xl font-semibold leading-tight text-zinc-100 sm:text-2xl">
               {brand.displayName}
             </h1>
           </div>
