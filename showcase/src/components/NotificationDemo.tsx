@@ -57,12 +57,12 @@ export function NotificationDemo() {
   return (
     <div className="space-y-4">
       <p className="section-desc">
-        Componente <span className="shell-accent">&lt;NotificationBell&gt;</span> de @sorsabsa/ui — dropdown expandible con animación, badge de no leídas, ícono por tipo y acciones de marcar leída.
+        Componente <span className="font-semibold text-brand-primary">&lt;NotificationBell&gt;</span> de @sorsabsa/ui — dropdown expandible con animación, badge de no leídas, ícono por tipo y acciones de marcar leída.
       </p>
 
       <div className="flex flex-wrap items-center gap-6">
         <div className="flex flex-col items-center gap-3">
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-6">
+          <div className="rounded-xl border border-zinc-200 bg-white p-6">
             <NotificationBell
               notificaciones={notifications}
               unreadCount={unreadCount}
@@ -79,31 +79,31 @@ export function NotificationDemo() {
             <button
               type="button"
               onClick={() => setNotifications((prev) => prev.map((n) => ({ ...n, leida: true })))}
-              className="rounded-lg border border-zinc-800 bg-zinc-900/40 px-3 py-2 font-mono text-xs text-zinc-300 hover:bg-zinc-800 transition-colors"
+              className="rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-xs text-zinc-700 hover:bg-zinc-100 transition-colors"
             >
               Marcar todas como leídas
             </button>
             <button
               type="button"
               onClick={() => setNotifications(MOCK)}
-              className="rounded-lg border border-zinc-800 bg-zinc-900/40 px-3 py-2 font-mono text-xs text-zinc-300 hover:bg-zinc-800 transition-colors"
+              className="rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-xs text-zinc-700 hover:bg-zinc-100 transition-colors"
             >
               Restablecer ejemplo
             </button>
           </div>
 
           <div className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 mt-4">Estado actual</div>
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-4 space-y-2">
+          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-zinc-400">Total</span>
-              <span className="font-mono text-sm font-semibold text-zinc-200">{notifications.length}</span>
+              <span className="font-mono text-xs text-zinc-600">Total</span>
+              <span className="font-mono text-sm font-semibold text-zinc-900">{notifications.length}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-zinc-400">Sin leer</span>
+              <span className="font-mono text-xs text-zinc-600">Sin leer</span>
               <span className="font-mono text-sm font-semibold text-brand-accent">{unreadCount}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-zinc-400">Leídas</span>
+              <span className="font-mono text-xs text-zinc-600">Leídas</span>
               <span className="font-mono text-sm font-semibold text-zinc-500">{notifications.length - unreadCount}</span>
             </div>
           </div>

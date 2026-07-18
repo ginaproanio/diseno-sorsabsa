@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { BRANDS, BrandProvider, Wordmark, type BrandConfig } from './lib';
+import { resolveEffectiveColors } from './resolveColors';
 import { Section } from './components/Section';
+import { SummaryCards } from './components/SummaryCards';
 import { ColorPalette } from './components/ColorPalette';
 import { ContrastReport } from './components/ContrastReport';
 import { TypographyDemo } from './components/TypographyDemo';
@@ -45,15 +47,15 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
             <div className="space-y-4">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="font-mono text-xs text-zinc-500">Sombra:</span>
-                <div className="flex rounded border border-zinc-800 overflow-hidden">
+                <div className="flex rounded border border-zinc-300 overflow-hidden">
                   <button
                     type="button"
                     onClick={() => onShadowStyleChange('flat')}
                     aria-pressed={shadowStyle === 'flat'}
                     className={`px-3 py-1.5 font-mono text-xs transition-colors ${
                       shadowStyle === 'flat'
-                        ? 'bg-zinc-100 text-zinc-950'
-                        : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                        ? 'bg-zinc-900 text-white'
+                        : 'bg-white text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900'
                     }`}
                   >
                     Plano
@@ -62,10 +64,10 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
                     type="button"
                     onClick={() => onShadowStyleChange('soft')}
                     aria-pressed={shadowStyle === 'soft'}
-                    className={`px-3 py-1.5 font-mono text-xs transition-colors border-l border-zinc-800 ${
+                    className={`px-3 py-1.5 font-mono text-xs transition-colors border-l border-zinc-300 ${
                       shadowStyle === 'soft'
-                        ? 'bg-zinc-100 text-zinc-950'
-                        : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                        ? 'bg-zinc-900 text-white'
+                        : 'bg-white text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900'
                     }`}
                   >
                     Suave
@@ -145,7 +147,7 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
               title="Auditoría de tokens"
               description="Tokens planeados. Valores actuales en gris si aún no existen."
             >
-              <TokenAudit brand={brand} />
+              <TokenAudit />
             </Section>
           </div>
         </div>
@@ -160,54 +162,62 @@ export default function App() {
   const [shadowStyle, setShadowStyle] = useState<'flat' | 'soft'>('soft');
 
   return (
-    <div className="min-h-screen bg-[#0d0e12] text-zinc-200">
-      <header className="sticky top-0 z-10 border-b border-zinc-800 bg-[#0d0e12]/95 px-6 py-4 backdrop-blur">
-        <div className="mx-auto max-w-[1200px] flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">
-              SORSABSA <span className="shell-accent">/</span> auditoría
-            </div>
-            <h1 className="font-mono text-sm font-bold text-zinc-100">
-              {brand.displayName}
-            </h1>
-          </div>
+    <div className="min-h-screen bg-[#fafafa] text-zinc-900">
+      <div className="mx-auto max-w-[1200px] px-4 pb-6 pt-12 sm:px-6">
+        <p className="font-mono text-xs uppercase tracking-widest text-zinc-500">
+          SORSABSA/UI — AUDITORÍA DEL SISTEMA DE DISEÑO
+        </p>
+        <h1 className="mt-3 font-['Fraunces'] text-4xl font-bold leading-[1.1] tracking-tight text-zinc-900 sm:text-5xl">
+          Más consistente. Accesible.
+          <br />
+          Con más carácter.
+        </h1>
+        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-zinc-600">
+          Cada componente de @sorsabsa/ui auditado en vivo contra los tokens reales de marca: paleta,
+          tipografía, contraste WCAG y profundidad — sin mockups, sin datos inventados.
+        </p>
+      </div>
+
+      <div className="sticky top-0 z-10 border-y border-zinc-200 bg-[#fafafa]/95 backdrop-blur">
+        <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <nav className="flex flex-wrap gap-1.5" aria-label="Marcas">
-            {BRAND_KEYS.map((key) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setActive(key)}
-                aria-pressed={key === active}
-                className={`brand-tab`}
-              >
-                {BRANDS[key]!.displayName}
-              </button>
-            ))}
+            {BRAND_KEYS.map((key) => {
+              const b = BRANDS[key]!;
+              const isActive = key === active;
+              const resolved = resolveEffectiveColors(b);
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setActive(key)}
+                  aria-pressed={isActive}
+                  className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                    isActive
+                      ? ''
+                      : 'border border-zinc-300 text-zinc-600 hover:border-zinc-400 hover:text-zinc-900'
+                  }`}
+                  style={isActive ? { background: resolved.primary, color: resolved.primaryForeground } : undefined}
+                >
+                  {b.displayName}
+                </button>
+              );
+            })}
           </nav>
-          <div className="flex items-center gap-3">
-            <a
-              href="#notificaciones"
-              className="relative p-2 rounded-lg text-zinc-400 hover:text-zinc-100 transition-colors"
-              aria-label="Ir a sección de notificaciones"
-              title="Notificaciones"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-bell"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-              <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 flex items-center justify-center text-[10px] font-bold rounded-full bg-red-500 text-white">3</span>
-            </a>
-          </div>
+          <a
+            href="#notificaciones"
+            className="relative shrink-0 rounded-lg p-2 text-zinc-500 transition-colors hover:text-zinc-900"
+            aria-label="Ir a sección de notificaciones"
+            title="Notificaciones"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span className="absolute -top-1 -right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">3</span>
+          </a>
         </div>
-      </header>
+      </div>
 
       <main className="p-4 sm:p-6">
         <div className="mx-auto max-w-[1200px]">
-          <div className="mb-6 flex flex-col gap-1">
-            <span className="font-mono text-[11px] uppercase tracking-widest text-zinc-500">
-              @sorsabsa/ui <span className="shell-accent">/</span> manual de marca
-            </span>
-            <h1 className="font-['Fraunces'] text-xl font-semibold leading-tight text-zinc-100 sm:text-2xl">
-              {brand.displayName}
-            </h1>
-          </div>
+          <SummaryCards brand={brand} shadowStyle={shadowStyle} />
 
           <BrandPanel key={active} brand={brand} shadowStyle={shadowStyle} onShadowStyleChange={setShadowStyle} />
         </div>

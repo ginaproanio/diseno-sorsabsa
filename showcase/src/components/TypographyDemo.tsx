@@ -20,13 +20,13 @@ export function TypographyDemo({ brand }: { brand: BrandConfig }) {
   return (
     <div className="space-y-4">
       <div>
-        <div className="mb-1 text-xs text-zinc-500">Titulares</div>
+        <div className="mb-1 text-xs text-zinc-600">Titulares</div>
         <p className="text-2xl font-semibold leading-tight" style={{ fontFamily: `'${headingFont}', system-ui, sans-serif` }}>
           {brand.displayName} — abcdefghij ABCDEFGHIJ 0123456789
         </p>
       </div>
       <div>
-        <div className="mb-1 text-xs text-zinc-500">Cuerpo</div>
+        <div className="mb-1 text-xs text-zinc-600">Cuerpo</div>
         <p className="text-base leading-relaxed" style={{ fontFamily: bodyFont }}>
           Cuerpo de texto real — {brand.displayName} — abcdefghij ABCDEFGHIJ 0123456789
         </p>

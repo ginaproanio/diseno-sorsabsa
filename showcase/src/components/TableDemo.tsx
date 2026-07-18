@@ -10,8 +10,8 @@ const DATA = [
 export function TableDemo() {
   return (
     <div className="space-y-5">
-      <p className="font-mono text-xs text-zinc-400">
-        Componente <span className="shell-accent">&lt;Table&gt;</span> de @sorsabsa/ui — compound component, tokens de marca, responsive con <span className="text-zinc-300">hideOn</span>, alineación y tamaños.
+      <p className="font-mono text-xs text-zinc-600">
+        Componente <span className="font-semibold text-brand-primary">&lt;Table&gt;</span> de @sorsabsa/ui — compound component, tokens de marca, responsive con <span className="text-zinc-800">hideOn</span>, alineación y tamaños.
       </p>
 
       <div className="space-y-6">

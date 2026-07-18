@@ -107,12 +107,12 @@ export function PropertyCarouselDemo() {
   return (
     <div className="space-y-4" id="propiedades-demo">
       <p className="section-desc">
-        Componente <span className="shell-accent">&lt;PropertyCarousel&gt;</span> de @sorsabsa/ui — fila de{' '}
-        <span className="shell-accent">&lt;PropertyListingCard&gt;</span> con scroll horizontal nativo
+        Componente <span className="font-semibold text-brand-primary">&lt;PropertyCarousel&gt;</span> de @sorsabsa/ui — fila de{' '}
+        <span className="font-semibold text-brand-primary">&lt;PropertyListingCard&gt;</span> con scroll horizontal nativo
         (scroll-snap), flechas de navegación y favoritos.
       </p>
 
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-6">
+      <div className="rounded-xl border border-zinc-200 bg-white p-6">
         <PropertyCarousel title="Propiedades destacadas" viewAllHref="#propiedades-demo">
           {MOCK_PROPERTIES.map((p) => (
             <PropertyListingCard

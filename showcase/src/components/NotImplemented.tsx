@@ -8,7 +8,7 @@ import { Icon } from '../lib';
  */
 export function NotImplemented({ feature }: { feature: string }) {
   return (
-    <div className="flex items-start gap-2 rounded border border-dashed border-amber-700/50 bg-amber-950/30 px-3 py-2 font-mono text-xs text-amber-400">
+    <div className="flex items-start gap-2 rounded border border-dashed border-amber-300 bg-amber-50 px-3 py-2 font-mono text-xs text-amber-800">
       <Icon name="triangleAlert" size={14} className="mt-0.5 shrink-0" />
       <span>
         No implementado en @sorsabsa/ui — <strong>{feature}</strong>

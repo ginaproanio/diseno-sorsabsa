@@ -30,28 +30,28 @@ export function TokenAudit() {
           <div
             key={t.key}
             className={`rounded border p-3 ${
-              t.exists ? 'border-zinc-700 bg-zinc-900/50' : 'border-zinc-800 bg-zinc-900/30'
+              t.exists ? 'border-zinc-300 bg-white' : 'border-zinc-200 bg-zinc-50'
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-zinc-300">{t.key}</span>
+              <span className="font-mono text-xs text-zinc-700">{t.key}</span>
               <span
                 className={`font-mono text-[10px] uppercase tracking-wider ${
-                  t.exists ? 'text-emerald-400' : 'text-zinc-600'
+                  t.exists ? 'text-emerald-700' : 'text-zinc-500'
                 }`}
               >
                 {t.exists ? 'Listo' : 'Pendiente'}
               </span>
             </div>
-            <div className="mt-1 font-mono text-sm text-zinc-100">{t.value}</div>
+            <div className="mt-1 font-mono text-sm text-zinc-900">{t.value}</div>
             <div className="mt-1 font-mono text-[11px] text-zinc-500">{t.label}</div>
           </div>
         ))}
       </div>
 
-      <div className="rounded border border-zinc-800 bg-zinc-900/30 p-4">
-        <div className="mb-2 font-mono text-xs uppercase tracking-wider text-zinc-400">:root planificado</div>
-        <pre className="overflow-x-auto font-mono text-xs leading-relaxed text-zinc-300">
+      <div className="rounded border border-zinc-200 bg-zinc-50 p-4">
+        <div className="mb-2 font-mono text-xs uppercase tracking-wider text-zinc-600">:root planificado</div>
+        <pre className="overflow-x-auto font-mono text-xs leading-relaxed text-zinc-700">
 {`:root {
   --brand-primary: ${rgbTriplet(brand.colors.primary)};
   --brand-accent: ${rgbTriplet(brand.colors.accent)};
