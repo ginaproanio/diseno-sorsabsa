@@ -1,7 +1,12 @@
 node_modules/
 *.tsbuildinfo
 
-# Grafos de graphify: se regeneran gratis con el hook post-commit (AST)
-graphify-out/
+# Grafo de graphify: lo genera y publica CI (.github/workflows/graphify.yml),
+# NO tu máquina. Se versiona graph.json + GRAPH_REPORT.md (datos + reporte);
+# la viz interactiva (graph.html) se publica a GitHub Pages; el resto —caché,
+# manifest, backups y rutas de máquina .graphify_*— se ignora.
+graphify-out/*
+!graphify-out/graph.json
+!graphify-out/GRAPH_REPORT.md
 
 .vercel

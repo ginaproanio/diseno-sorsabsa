@@ -1,0 +1,76 @@
+name: graphify
+
+# Reconstruye el grafo de conocimiento en la NUBE (no en tu máquina) en cada
+# push a main: instala graphify desde PyPI, re-extrae el AST del repo, commitea
+# graph.json + GRAPH_REPORT.md de vuelta, y publica la viz interactiva
+# (graph.html) a GitHub Pages. Si algo se rompe, GitHub lo marca en rojo y avisa
+# por correo — se acabó el "grafo dormido sin que nadie se entere".
+
+on:
+  push:
+    branches: [main]
+
+# Una sola corrida por rama a la vez; cancela la anterior si llega un push nuevo.
+concurrency:
+  group: graphify-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write   # commitear graph.json + GRAPH_REPORT.md de vuelta
+  pages: write      # publicar la viz a GitHub Pages
+  id-token: write   # requerido por actions/deploy-pages
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar graphify (PyPI)
+        run: pip install graphifyy
+
+      - name: Reconstruir el grafo (AST, sin LLM)
+        env:
+          PYTHONHASHSEED: '0'   # clustering determinista → grafo reproducible
+        run: python -m graphify update .
+
+      - name: Commitear graph.json + reporte de vuelta al repo
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add graphify-out/graph.json graphify-out/GRAPH_REPORT.md
+          if git diff --cached --quiet; then
+            echo "Grafo sin cambios — nada que commitear."
+          else
+            git commit -m "chore(graphify): actualizar grafo de conocimiento [skip ci]"
+            git push
+          fi
+
+      - name: Preparar viz para Pages
+        run: |
+          mkdir -p _site
+          cp graphify-out/graph.html _site/index.html
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
