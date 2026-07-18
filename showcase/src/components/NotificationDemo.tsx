@@ -60,25 +60,45 @@ export function NotificationDemo() {
         Componente &lt;NotificationBell&gt; de @sorsabsa/ui — dropdown expandible con animación, badge de no leídas, ícono por tipo y acciones de marcar leída.
       </p>
 
-      <div className="flex flex-wrap items-start gap-6">
-        <div className="flex flex-col items-center gap-2">
-          <NotificationBell
-            notificaciones={notifications}
-            unreadCount={unreadCount}
-            onMarkRead={handleMarkRead}
-            onMarkAllRead={handleMarkAllRead}
-          />
-          <span className="font-mono text-[10px] text-zinc-500">Click para abrir</span>
+      <div className="flex flex-wrap items-center gap-6">
+        <div className="flex flex-col items-center gap-3">
+          <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-6">
+            <NotificationBell
+              notificaciones={notifications}
+              unreadCount={unreadCount}
+              onMarkRead={handleMarkRead}
+              onMarkAllRead={handleMarkAllRead}
+            />
+          </div>
+          <span className="font-mono text-[10px] text-zinc-500">Haga click en la campana</span>
         </div>
 
-        <div className="flex-1 min-w-[240px] space-y-3">
-          <div className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Estado actual</div>
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-4">
-            <div className="flex items-center justify-between mb-2">
+        <div className="flex-1 min-w-[220px] space-y-3">
+          <div className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">Controles</div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setNotifications((prev) => prev.map((n) => ({ ...n, leida: true })))}
+              className="rounded-lg border border-zinc-800 bg-zinc-900/40 px-3 py-2 font-mono text-xs text-zinc-300 hover:bg-zinc-800 transition-colors"
+            >
+              Marcar todas como leídas
+            </button>
+            <button
+              type="button"
+              onClick={() => setNotifications(MOCK)}
+              className="rounded-lg border border-zinc-800 bg-zinc-900/40 px-3 py-2 font-mono text-xs text-zinc-300 hover:bg-zinc-800 transition-colors"
+            >
+              Restablecer ejemplo
+            </button>
+          </div>
+
+          <div className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 mt-4">Estado actual</div>
+          <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-4 space-y-2">
+            <div className="flex items-center justify-between">
               <span className="font-mono text-xs text-zinc-400">Total</span>
               <span className="font-mono text-sm font-semibold text-zinc-200">{notifications.length}</span>
             </div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between">
               <span className="font-mono text-xs text-zinc-400">Sin leer</span>
               <span className="font-mono text-sm font-semibold text-brand-accent">{unreadCount}</span>
             </div>

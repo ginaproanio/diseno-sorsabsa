@@ -68,11 +68,11 @@ export function NotificationBell({
         aria-expanded={isOpen}
         aria-label={`Notificaciones${unreadCount > 0 ? ` (${unreadCount} sin leer)` : ''}`}
         title="Notificaciones"
-        className="relative p-2 rounded-xl text-brand-muted hover:text-brand-text transition-colors"
+        className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-zinc-200 hover:border-zinc-500 hover:text-white transition-colors"
       >
-        <Bell className="w-5 h-5" />
+        <Bell className="h-5 w-5" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold rounded-full bg-brand-destructive text-white">
+          <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold rounded-full bg-red-500 text-white border-2 border-zinc-900">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -85,10 +85,10 @@ export function NotificationBell({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-brand-surface border border-brand-border rounded-2xl shadow-lg shadow-black/5 overflow-hidden z-50"
+            className="absolute right-0 top-full mt-3 w-80 sm:w-96 rounded-2xl border border-zinc-700 bg-zinc-900 shadow-2xl shadow-black/60 overflow-hidden z-50"
           >
-            <div className="flex items-center justify-between px-4 py-3 border-b border-brand-border">
-              <span className="font-mono text-xs font-semibold uppercase tracking-wider text-brand-text">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
+              <span className="font-mono text-xs font-semibold uppercase tracking-wider text-white">
                 Notificaciones
               </span>
               {unreadCount > 0 && onMarkAllRead && (
@@ -98,9 +98,9 @@ export function NotificationBell({
                     e.stopPropagation();
                     onMarkAllRead();
                   }}
-                  className="flex items-center gap-1 font-mono text-[11px] text-brand-accent hover:underline"
+                  className="flex items-center gap-1 font-mono text-[11px] text-emerald-400 hover:underline"
                 >
-                  <CheckCheck className="w-3.5 h-.5" />
+                  <CheckCheck className="h-3.5 w-3.5" />
                   Marcar todas como leídas
                 </button>
               )}
@@ -108,14 +108,14 @@ export function NotificationBell({
 
             <div className="max-h-[320px] overflow-y-auto">
               {notificaciones.length === 0 ? (
-                <div className="px-4 py-8 text-center font-mono text-xs text-brand-muted">
+                <div className="px-4 py-8 text-center font-mono text-xs text-zinc-400">
                   {emptyText}
                 </div>
               ) : (
                 <div className="py-1">
                   {notificaciones.map((notif) => {
                     const IconComponent = TYPE_ICON[notif.tipo] || Bell;
-                    const iconColor = TYPE_COLOR[notif.tipo] || 'text-brand-muted';
+                    const iconColor = TYPE_COLOR[notif.tipo] || 'text-zinc-400';
 
                     return (
                       <button
@@ -124,25 +124,25 @@ export function NotificationBell({
                         onClick={() => handleItemClick(notif)}
                         className={`w-full text-left px-4 py-3 transition-colors ${
                           !notif.leida
-                            ? 'bg-brand-primary/5 hover:bg-brand-primary/10'
-                            : 'hover:bg-brand-muted/10'
+                            ? 'bg-zinc-800/80 hover:bg-zinc-800'
+                            : 'hover:bg-zinc-800/50'
                         }`}
                       >
                         <div className="flex items-start gap-3">
-                          <div className={`p-1.5 rounded-lg bg-brand-muted/10 ${iconColor}`}>
-                            <IconComponent className="w-4 h-4" />
+                          <div className={`p-1.5 rounded-lg bg-zinc-800 ${iconColor}`}>
+                            <IconComponent className="h-4 w-4" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-mono text-[11px] font-semibold text-brand-text">
+                              <span className="font-mono text-[11px] font-semibold text-zinc-100">
                                 {notif.tipo.replace(/_/g, ' ')}
                               </span>
                               {!notif.leida && (
-                                <span className="font-mono text-[10px] px-1.5 py-0.5 rounded-full bg-brand-primary/15 text-brand-primary font-medium">
+                                <span className="font-mono text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-medium">
                                   Nueva
                                 </span>
                               )}
-                              <span className="font-mono text-[10px] text-brand-muted ml-auto">
+                              <span className="font-mono text-[10px] text-zinc-500 ml-auto">
                                 {new Date(notif.created_at).toLocaleDateString('es-ES', {
                                   day: '2-digit',
                                   month: 'short',
@@ -151,7 +151,7 @@ export function NotificationBell({
                                 })}
                               </span>
                             </div>
-                            <p className="mt-1 text-xs leading-relaxed text-brand-text/80 line-clamp-2">
+                            <p className="mt-1 text-xs leading-relaxed text-zinc-300 line-clamp-2">
                               {notif.mensaje}
                             </p>
                           </div>
