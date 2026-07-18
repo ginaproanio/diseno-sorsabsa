@@ -22,7 +22,7 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
 }) {
   return (
     <BrandProvider brand={brand}>
-      <div className="rounded-lg bg-brand-background p-6 text-brand-text sm:p-8">
+      <div className="brand-panel-wrapper animate-fade-in-up">
         <Section title="Wordmark">
           <Wordmark className="text-4xl" />
         </Section>
@@ -47,17 +47,12 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
 
         <Section title="Estilos de sombra">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="font-mono text-[11px] text-zinc-500">Sombra aplicada a cards y botones:</span>
-            <div className="flex rounded border border-zinc-800 overflow-hidden">
+            <span className="shadow-label">Sombra aplicada a cards y botones:</span>
+            <div className="shadow-toggle">
               <button
                 type="button"
                 onClick={() => onShadowStyleChange('flat')}
                 aria-pressed={shadowStyle === 'flat'}
-                className={`px-3 py-1.5 font-mono text-xs transition-colors ${
-                  shadowStyle === 'flat'
-                    ? 'bg-zinc-100 text-zinc-950'
-                    : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
-                }`}
               >
                 Plano (antes)
               </button>
@@ -65,16 +60,11 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
                 type="button"
                 onClick={() => onShadowStyleChange('soft')}
                 aria-pressed={shadowStyle === 'soft'}
-                className={`px-3 py-1.5 font-mono text-xs transition-colors border-l border-zinc-800 ${
-                  shadowStyle === 'soft'
-                    ? 'bg-zinc-100 text-zinc-950'
-                    : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
-                }`}
               >
                 Suave (ahora)
               </button>
             </div>
-            <span className="font-mono text-[10px] text-zinc-600">
+            <span className="shadow-label">
               {shadowStyle === 'flat'
                 ? 'shadow: 0 1px 2px rgba(0,0,0,0.08)'
                 : 'shadow: capa base + elevación al hover'}
@@ -127,24 +117,26 @@ export default function App() {
   const [shadowStyle, setShadowStyle] = useState<'flat' | 'soft'>('soft');
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-200">
-      <header className="sticky top-0 z-10 border-b border-zinc-800 bg-zinc-950/95 px-6 py-4 backdrop-blur">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="min-h-screen bg-[#05060a] text-zinc-200">
+      <header className="sticky top-0 z-20 border-b border-zinc-800/60 bg-[#05060a]/80 px-6 py-5 backdrop-blur-md">
+        <div className="mx-auto max-w-[1200px] flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">SORSABSA</div>
-            <h1 className="font-mono text-sm font-bold text-zinc-100">Showcase de marcas — @sorsabsa/ui</h1>
+            <div className="hero-eyebrow">SORSABSA</div>
+            <h1 className="font-['Fraunces'] text-base font-semibold text-zinc-100 tracking-tight">
+              Showcase de marcas — <span className="text-zinc-400">@sorsabsa/ui</span>
+            </h1>
           </div>
-          <nav className="flex flex-wrap gap-1" aria-label="Marcas">
+          <nav className="flex flex-wrap gap-1.5" aria-label="Marcas">
             {BRAND_KEYS.map((key) => (
               <button
                 key={key}
                 type="button"
                 onClick={() => setActive(key)}
                 aria-pressed={key === active}
-                className={`rounded px-3 py-1.5 font-mono text-xs transition-colors ${
+                className={`rounded-lg px-3.5 py-2 font-mono text-[11px] transition-all duration-200 ${
                   key === active
-                    ? 'bg-zinc-100 text-zinc-950'
-                    : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                    ? 'bg-zinc-100 text-zinc-950 shadow-lg shadow-zinc-900/50'
+                    : 'bg-zinc-900/60 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 border border-zinc-800'
                 }`}
               >
                 {BRANDS[key]!.displayName}
@@ -154,18 +146,17 @@ export default function App() {
         </div>
       </header>
 
-      <main className="p-6">
-        <div className="mx-auto max-w-[1180px]">
-          <div className="mb-10 flex flex-col gap-3">
-            <span className="font-mono text-[11px] uppercase tracking-widest text-brand-accent">
-              @sorsabsa/ui — auditoría del sistema de diseño
-            </span>
-            <h1 className="font-['Fraunces'] text-3xl font-semibold leading-tight text-zinc-100 sm:text-4xl">
-              Más consistente. Accesible.<br className="hidden sm:block" />Con más carácter.
+      <main className="px-6 py-10">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="mb-12 flex flex-col gap-4 animate-fade-in-up">
+            <span className="hero-eyebrow">@sorsabsa/ui — auditoría del sistema de diseño</span>
+            <h1 className="hero-title">
+              Más consistente.<br />Accesible.<br />Con más carácter.
             </h1>
-            <p className="max-w-2xl font-mono text-sm leading-relaxed text-zinc-400">
+            <p className="hero-body">
               Unificamos la escala de espaciado y los pesos tipográficos, y corregimos cada combinación de color que fallaba el contraste WCAG AA — sin perder la identidad de marca de cada producto. Encima, evolucionamos el lenguaje visual: sombras en capas, microinteracciones sutiles y una jerarquía tipográfica más dinámica.
             </p>
+            <div className="hero-divider" />
           </div>
 
           <BrandPanel key={active} brand={brand} shadowStyle={shadowStyle} onShadowStyleChange={setShadowStyle} />
