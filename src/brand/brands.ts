@@ -168,6 +168,33 @@ export const BRANDS: Record<string, BrandConfig> = {
     fontImport:
       'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Satoshi:wght@400;500;600;700&display=swap',
   },
+
+  // LegalConnect Ecuador — plataforma que conecta ciudadanos con abogados
+  // verificados (consume @sorsabsa/ui). Identidad extraída de sus PROPIOS
+  // tokens (src/index.css: --legal-blue, --legal-gold) el 18 jul 2026, no
+  // inventada: azul corporativo (confianza/derecho) + oro (justicia/premium),
+  // tipografía Inter, escala neutra slate. En GitHub el repo se llama
+  // 'legaltech'.
+  legalconnect: {
+    name: 'legalconnect',
+    displayName: 'LegalConnect',
+    wordmark: { first: 'Legal', second: 'Connect' }, // Legal=accent(oro), Connect=primary(azul)
+    colors: {
+      primary: '#0D47BA',            // --legal-blue (hsl 220 87% 39%)
+      accent: '#E7B008',             // --legal-gold (hsl 45 93% 47%)
+      secondary: '#F1F5F9',          // slate-100
+      surface: '#FFFFFF',
+      background: '#F8FAFC',         // slate-50
+      text: '#020817',               // foreground (near-black navy)
+      muted: '#64748B',              // slate-500
+      border: '#E2E8F0',             // slate-200
+    },
+    radius: '0.5rem',
+    fontFamily: "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    headingFont: 'Inter',
+    fontImport:
+      'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
+  },
 };
 
 /** Marca por parámetro (?app=…) con fallback institucional (nunca falla). */
