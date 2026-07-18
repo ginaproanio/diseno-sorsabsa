@@ -9,6 +9,7 @@ import { CardStatusDemo } from './components/CardStatusDemo';
 import { TypingDotsDemo } from './components/TypingDotsDemo';
 import { FormDemo } from './components/FormDemo';
 import { IconCatalog } from './components/IconCatalog';
+import { NotificationDemo } from './components/NotificationDemo';
 import { TableDemo } from './components/TableDemo';
 import { SpacingScale } from './components/SpacingScale';
 import { TokenAudit } from './components/TokenAudit';
@@ -96,6 +97,10 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
 
         <Section title="Formulario (Input)">
           <FormDemo />
+        </Section>
+
+        <Section title="Notificaciones (NotificationBell)">
+          <NotificationDemo />
         </Section>
 
         <Section title="Catálogo de íconos (Icon)">

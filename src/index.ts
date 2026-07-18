@@ -42,3 +42,5 @@ export {
   TablaTd,
   TablaVacia,
 } from './components/Table';
+export { NotificationBell, type Notificacion, type NotificationBellProps } from './components/NotificationBell';
+export { useOnClickOutside } from './hooks/useOnClickOutside';
