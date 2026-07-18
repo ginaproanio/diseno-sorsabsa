@@ -2259,7 +2259,7 @@
       "label": "getBrand()",
       "file_type": "code",
       "source_file": "src/brand/brands.ts",
-      "source_location": "L174",
+      "source_location": "L201",
       "_origin": "ast",
       "id": "src_brand_brands_getbrand",
       "community": 3,
@@ -7298,7 +7298,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/brand/brands.ts",
-      "source_location": "L174",
+      "source_location": "L201",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_brand_brands",
@@ -9723,5 +9723,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e3cc2e7cbba25a6768e7e5f29d32e66a3d5fa352"
+  "built_at_commit": "dfd048f80ff02fd54575678d74cd9bf7a483853d"
 }
