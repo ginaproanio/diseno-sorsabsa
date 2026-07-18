@@ -117,13 +117,13 @@ export default function App() {
   const [shadowStyle, setShadowStyle] = useState<'flat' | 'soft'>('soft');
 
   return (
-    <div className="min-h-screen bg-[#05060a] text-zinc-200">
-      <header className="sticky top-0 z-20 border-b border-zinc-800/60 bg-[#05060a]/80 px-6 py-5 backdrop-blur-md">
+    <div className="min-h-screen bg-[#fafafa] text-zinc-900">
+      <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/80 px-6 py-5 backdrop-blur-md">
         <div className="mx-auto max-w-[1200px] flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="hero-eyebrow">SORSABSA</div>
-            <h1 className="font-['Fraunces'] text-base font-semibold text-zinc-100 tracking-tight">
-              Showcase de marcas — <span className="text-zinc-400">@sorsabsa/ui</span>
+            <h1 className="font-['Fraunces'] text-base font-medium text-zinc-900 tracking-tight">
+              Showcase de marcas — <span className="text-zinc-500">@sorsabsa/ui</span>
             </h1>
           </div>
           <nav className="flex flex-wrap gap-1.5" aria-label="Marcas">
@@ -135,8 +135,8 @@ export default function App() {
                 aria-pressed={key === active}
                 className={`rounded-lg px-3.5 py-2 font-mono text-[11px] transition-all duration-200 ${
                   key === active
-                    ? 'bg-zinc-100 text-zinc-950 shadow-lg shadow-zinc-900/50'
-                    : 'bg-zinc-900/60 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 border border-zinc-800'
+                    ? 'bg-zinc-900 text-white shadow-md shadow-zinc-900/10'
+                    : 'bg-white text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 border border-zinc-200'
                 }`}
               >
                 {BRANDS[key]!.displayName}
