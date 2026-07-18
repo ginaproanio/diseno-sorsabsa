@@ -29,8 +29,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  *    que existe en un deploy de Vercel con Root Directory = showcase, donde
  *    no hay node_modules de la raíz del repo).
  *
- * 3. resolve.alias de framer-motion/lucide-react — ../src/components/* los
- *    importa normalmente; fuera del root de showcase, Rollup no puede
+ * 3. resolve.alias de framer-motion/motion/lucide-react — ../src/components/*
+ *    los importa normalmente; fuera del root de showcase, Rollup no puede
  *    resolverlos desde showcase/node_modules salvo que se los alisee
  *    explícitamente.
  */
@@ -41,10 +41,11 @@ export default defineConfig({
       react: path.resolve(__dirname, 'node_modules/react'),
       'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
       'framer-motion': path.resolve(__dirname, 'node_modules/framer-motion'),
+      motion: path.resolve(__dirname, 'node_modules/motion'),
       'lucide-react': path.resolve(__dirname, 'node_modules/lucide-react'),
       '@tokens': path.resolve(__dirname, '../src/tokens.css'),
     },
-    dedupe: ['react', 'react-dom', 'framer-motion', 'lucide-react'],
+    dedupe: ['react', 'react-dom', 'framer-motion', 'motion', 'lucide-react'],
   },
   server: {
     fs: {
