@@ -35,12 +35,14 @@ export interface BrandConfig {
    *  second:'Manager'}). `third` permite un segmento final y `tones` otro
    *  mapeo de color por parte ('text' = color de texto normal) — ej.
    *  agente24siete = "agente"+"24"+"siete" donde SOLO "24" lleva color.
-   *  Si falta `wordmark`, se usa displayName en un solo tono. */
+   *  `animated` permite animar partes específicas una sola vez al entrar
+   *  en pantalla, sin loop. */
   wordmark?: {
     first: string;
     second: string;
     third?: string;
     tones?: WordmarkTone[];
+    animated?: WordmarkAnimation[];
   };
   colors: BrandColors;
   /** Radio de esquinas, ej. '0.5rem' (CondoManager) o '0.75rem' */
@@ -55,6 +57,9 @@ export interface BrandConfig {
 
 /** Tonos disponibles para cada parte del wordmark. */
 export type WordmarkTone = 'text' | 'primary' | 'accent';
+
+/** Variantes de animación disponibles para partes del wordmark. */
+export type WordmarkAnimation = 'none' | 'spring-sweep' | 'fade-slide';
 
 const BrandContext = createContext<BrandConfig | null>(null);
 

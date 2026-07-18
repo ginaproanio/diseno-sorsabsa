@@ -59,7 +59,7 @@ export const BRANDS: Record<string, BrandConfig> = {
     displayName: 'Agente24Siete',
     // Logotipo (definido por Gina, 16 jul 2026): "agente" y "siete" en VERDE
     // petróleo (accent), SOLO el "24" en ocre (primary). Minúsculas, mono.
-    wordmark: { first: 'agente', second: '24', third: 'siete', tones: ['accent', 'primary', 'accent'] },
+    wordmark: { first: 'agente', second: '24', third: 'siete', tones: ['accent', 'primary', 'accent'], animated: ['none', 'spring-sweep', 'none'] },
     // Identidad REAL (16 jul 2026), extraída de la landing original aprobada
     // (index.html, tema claro): ocre para acciones/resaltados, verde petróleo
     // para estados/identidad, titulares en monospace. Deja de ser provisional.
@@ -109,7 +109,7 @@ export const BRANDS: Record<string, BrandConfig> = {
   ecoinmobiliaria: {
     name: 'ecoinmobiliaria',
     displayName: 'EcoInmobiliaria',
-    wordmark: { first: 'ECO', second: 'INMOBILIARIA', tones: ['accent', 'primary'] },
+    wordmark: { first: 'ECO', second: 'INMOBILIARIA', tones: ['accent', 'primary'], animated: ['none', 'fade-slide'] },
     colors: {
       primary: '#0075BE',      // azul del isotipo (casa)
       accent: '#EF8C12',       // naranja ("ECO" + ondas wifi)

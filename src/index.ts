@@ -5,6 +5,8 @@ export {
   hexToRgbTriplet,
   type BrandConfig,
   type BrandColors,
+  type WordmarkTone,
+  type WordmarkAnimation,
 } from './brand/BrandProvider';
 export { BRANDS, getBrand } from './brand/brands';
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from './components/Button';
