@@ -39,7 +39,15 @@ jobs:
       - name: Reconstruir el grafo (AST, sin LLM)
         env:
           PYTHONHASHSEED: '0'   # clustering determinista → grafo reproducible
-        run: python -m graphify update .
+        run: |
+          # Fuerza generación COMPLETA de salidas. graph.html está gitignored
+          # (va a Pages, no al repo), así que en un checkout limpio no existe; y
+          # si graph.json ya coincide, graphify se salta la escritura ("outputs
+          # left untouched") dejando graph.html ausente. Borrarlo antes obliga a
+          # regenerar todo, incluido graph.html.
+          rm -f graphify-out/graph.json graphify-out/graph.html
+          python -m graphify update .
+          test -f graphify-out/graph.html  # falla ruidoso si no se generó la viz
 
       - name: Commitear graph.json + reporte de vuelta al repo
         run: |
