@@ -169,19 +169,19 @@ export const BRANDS: Record<string, BrandConfig> = {
       'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Satoshi:wght@400;500;600;700&display=swap',
   },
 
-  // LegalConnect Ecuador — plataforma que conecta ciudadanos con abogados
-  // verificados (consume @sorsabsa/ui). Identidad extraída de sus PROPIOS
-  // tokens (src/index.css: --legal-blue, --legal-gold) el 18 jul 2026, no
-  // inventada: azul corporativo (confianza/derecho) + oro (justicia/premium),
-  // tipografía Inter, escala neutra slate. En GitHub el repo se llama
-  // 'legaltech'.
-  legalconnect: {
-    name: 'legalconnect',
-    displayName: 'LegalConnect',
-    wordmark: { first: 'Legal', second: 'Connect' }, // Legal=accent(oro), Connect=primary(azul)
+  // JustiRed — "Red de Justicia": plataforma que conecta ciudadanos con
+  // abogados verificados en Ecuador (consume @sorsabsa/ui). Antes se llamaba
+  // "LegalConnect"; renombrada a JustiRed el 18 jul 2026. Identidad extraída
+  // de los tokens del proyecto (--legal-blue/--legal-gold) el 18 jul 2026:
+  // azul corporativo (confianza/derecho) + oro (justicia), tipografía Inter,
+  // escala neutra slate. En GitHub el repo aún se llama 'legaltech'.
+  justired: {
+    name: 'justired',
+    displayName: 'JustiRed',
+    wordmark: { first: 'Justi', second: 'Red' }, // Justi=accent(oro), Red=primary(azul)
     colors: {
-      primary: '#0D47BA',            // --legal-blue (hsl 220 87% 39%)
-      accent: '#E7B008',             // --legal-gold (hsl 45 93% 47%)
+      primary: '#0D47BA',            // azul corporativo (hsl 220 87% 39%)
+      accent: '#E7B008',             // oro (hsl 45 93% 47%)
       secondary: '#F1F5F9',          // slate-100
       surface: '#FFFFFF',
       background: '#F8FAFC',         // slate-50
