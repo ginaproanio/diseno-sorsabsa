@@ -25,8 +25,7 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
   onShadowStyleChange: (style: 'flat' | 'soft') => void;
 }) {
   return (
-    <BrandProvider brand={brand}>
-      <div className="brand-panel-wrapper">
+    <div className="brand-panel-wrapper">
         <div className="brand-section">
           <Section title="Identidad">
             <div className="space-y-4">
@@ -152,7 +151,6 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
           </div>
         </div>
       </div>
-    </BrandProvider>
   );
 }
 
@@ -162,12 +160,15 @@ export default function App() {
   const [shadowStyle, setShadowStyle] = useState<'flat' | 'soft'>('soft');
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-zinc-900">
+    <BrandProvider brand={brand} className="min-h-screen bg-[#fafafa] text-zinc-900">
       <div className="mx-auto max-w-[1200px] px-4 pb-6 pt-12 sm:px-6">
         <p className="font-mono text-xs uppercase tracking-widest text-zinc-500">
           SORSABSA/UI — AUDITORÍA DEL SISTEMA DE DISEÑO
         </p>
-        <h1 className="mt-3 font-['Fraunces'] text-4xl font-bold leading-[1.1] tracking-tight text-zinc-900 sm:text-5xl">
+        <h1
+          className="font-brand-heading mt-3 text-4xl font-bold leading-[1.1] tracking-tight text-zinc-900 sm:text-5xl"
+          style={{ fontFamily: 'var(--brand-heading-font)' }}
+        >
           Más consistente. Accesible.
           <br />
           Con más carácter.
@@ -222,6 +223,6 @@ export default function App() {
           <BrandPanel key={active} brand={brand} shadowStyle={shadowStyle} onShadowStyleChange={setShadowStyle} />
         </div>
       </main>
-    </div>
+    </BrandProvider>
   );
 }
