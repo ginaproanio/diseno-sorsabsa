@@ -9,6 +9,7 @@ name: graphify
 on:
   push:
     branches: [main]
+  workflow_dispatch:   # permite re-disparar a mano desde la pestaña Actions
 
 # Una sola corrida por rama a la vez; cancela la anterior si llega un push nuevo.
 concurrency:
@@ -47,10 +48,20 @@ jobs:
           git add graphify-out/graph.json graphify-out/GRAPH_REPORT.md
           if git diff --cached --quiet; then
             echo "Grafo sin cambios — nada que commitear."
-          else
-            git commit -m "chore(graphify): actualizar grafo de conocimiento [skip ci]"
-            git push
+            exit 0
           fi
+          git commit -m "chore(graphify): actualizar grafo de conocimiento [skip ci]"
+          # Reintenta reconciliando si main avanzó (pushes concurrentes): el
+          # grafo recién regenerado es canónico, así que 'ours' gana el rebase.
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              echo "push ok"; exit 0
+            fi
+            echo "push rechazado (intento $attempt) — reconciliando con origin/main"
+            git fetch origin main
+            git rebase -X ours origin/main || exit 1
+          done
+          echo "no se pudo pushear tras 3 intentos"; exit 1
 
       - name: Preparar viz para Pages
         run: |
