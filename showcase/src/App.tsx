@@ -25,90 +25,90 @@ export function BrandPanel({ brand, shadowStyle, onShadowStyleChange }: {
     <BrandProvider brand={brand}>
       <div className="rounded-lg bg-brand-background p-6 text-brand-text sm:p-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <Section title="Wordmark">
-            <Wordmark className="text-4xl" />
+          <Section title="Identidad" description="Wordmark y tipografía de la marca.">
+            <div className="space-y-4">
+              <Wordmark className="text-4xl" />
+              <TypographyDemo brand={brand} />
+            </div>
           </Section>
 
-          <Section
-            title="Paleta de colores"
-            description="Leída en vivo de BRANDS[...].colors — hex efectivo."
-          >
+          <Section title="Paleta" description="Colores oficiales de la marca.">
             <ColorPalette brand={brand} />
           </Section>
 
-          <Section
-            title="Contraste WCAG"
-            description="Razón de contraste real (luminancia relativa WCAG)."
-          >
-            <ContrastReport brand={brand} />
-          </Section>
-
-          <Section title="Tipografía">
-            <TypographyDemo brand={brand} />
-          </Section>
-
-          <Section title="Estilos de sombra">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="font-mono text-[11px] text-zinc-500">Sombra:</span>
-              <div className="flex rounded border border-zinc-800 overflow-hidden">
-                <button
-                  type="button"
-                  onClick={() => onShadowStyleChange('flat')}
-                  aria-pressed={shadowStyle === 'flat'}
-                  className={`px-3 py-1.5 font-mono text-xs transition-colors ${
-                    shadowStyle === 'flat'
-                      ? 'bg-zinc-100 text-zinc-950'
-                      : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
-                  }`}
-                >
-                  Plano
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onShadowStyleChange('soft')}
-                  aria-pressed={shadowStyle === 'soft'}
-                  className={`px-3 py-1.5 font-mono text-xs transition-colors border-l border-zinc-800 ${
-                    shadowStyle === 'soft'
-                      ? 'bg-zinc-100 text-zinc-950'
-                      : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
-                  }`}
-                >
-                  Suave
-                </button>
+          <Section title="Tokens" description="Radio, sombras y espaciado.">
+            <div className="space-y-4">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="font-mono text-[11px] text-zinc-500">Sombra:</span>
+                <div className="flex rounded border border-zinc-800 overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => onShadowStyleChange('flat')}
+                    aria-pressed={shadowStyle === 'flat'}
+                    className={`px-3 py-1.5 font-mono text-xs transition-colors ${
+                      shadowStyle === 'flat'
+                        ? 'bg-zinc-100 text-zinc-950'
+                        : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                    }`}
+                  >
+                    Plano
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onShadowStyleChange('soft')}
+                    aria-pressed={shadowStyle === 'soft'}
+                    className={`px-3 py-1.5 font-mono text-xs transition-colors border-l border-zinc-800 ${
+                      shadowStyle === 'soft'
+                        ? 'bg-zinc-100 text-zinc-950'
+                        : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                    }`}
+                  >
+                    Suave
+                  </button>
+                </div>
               </div>
             </div>
           </Section>
 
-          <Section title="Estados de Button">
+          <Section title="Botones">
             <ButtonMatrix shadowStyle={shadowStyle} />
           </Section>
 
-          <Section title="Card + StatusBadge">
+          <Section title="Cards y status">
             <CardStatusDemo shadowStyle={shadowStyle} />
           </Section>
 
-          <Section title="TypingDots">
+          <Section title="Feedback">
             <TypingDotsDemo />
           </Section>
 
-          <Section title="Formulario (Input)">
+          <Section title="Formulario">
             <FormDemo />
           </Section>
 
-          <Section title="Notificaciones (NotificationBell)" id="notificaciones">
+          <Section title="Notificaciones" id="notificaciones">
             <NotificationDemo />
           </Section>
 
-          <Section title="Catálogo de íconos (Icon)">
+          <Section title="Íconos">
             <IconCatalog shadowStyle={shadowStyle} />
           </Section>
 
-          <Section title="Tabla (Table)">
+          <Section title="Tabla">
             <TableDemo />
           </Section>
 
-          <Section title="Escala de espaciado">
+          <Section title="Espaciado">
             <SpacingScale />
+          </Section>
+        </div>
+
+        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <Section
+            title="Contraste WCAG"
+            description="Métrica técnica: razón de contraste real sobre colores efectivos."
+          >
+            <ContrastReport brand={brand} />
           </Section>
 
           <Section
