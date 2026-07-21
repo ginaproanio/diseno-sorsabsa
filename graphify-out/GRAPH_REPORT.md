@@ -1,7 +1,7 @@
-# Graph Report - diseno-sorsabsa  (2026-07-18)
+# Graph Report - diseno-sorsabsa  (2026-07-21)
 
 ## Corpus Check
-- 55 files · ~14,904 words
+- 55 files · ~14,984 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `395325f5`
+- Built from commit: `9b553b89`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -22,7 +22,7 @@
 - compilerOptions
 - compilerOptions
 - package.json
-- package.json
+- showcase/package.json
 - Icon.tsx
 - devDependencies
 - CardStatusDemo.tsx
@@ -90,7 +90,7 @@ Nodes (20): jest, @testing-library/jest-dom, compilerOptions, esModuleInterop, f
 Cohesion: 0.09
 Nodes (21): dependencies, motion, description, exports, ./preset, ./tokens.css, files, motion (+13 more)
 
-### Community 7 - "package.json"
+### Community 7 - "showcase/package.json"
 Cohesion: 0.09
 Nodes (21): dependencies, framer-motion, lucide-react, motion, react, react-dom, description, framer-motion (+13 more)
 
@@ -134,7 +134,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
   _High betweenness centrality (0.017) - this node is a cross-community bridge._
-- **Why does `devDependencies` connect `devDependencies` to `package.json`?**
+- **Why does `devDependencies` connect `devDependencies` to `showcase/package.json`?**
   _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
   _133 weakly-connected nodes found - possible documentation gaps or missing edges._

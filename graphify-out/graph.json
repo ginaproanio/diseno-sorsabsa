@@ -650,15 +650,15 @@
       "norm_label": "motion"
     },
     {
-      "label": "package.json",
+      "label": "showcase/package.json",
       "file_type": "code",
       "source_file": "showcase/package.json",
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_package",
       "community": 7,
-      "community_name": "package.json",
-      "norm_label": "package.json"
+      "community_name": "showcase/package.json",
+      "norm_label": "showcase/package.json"
     },
     {
       "label": "name",
@@ -668,7 +668,7 @@
       "_origin": "ast",
       "id": "showcase_package_name",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "name"
     },
     {
@@ -679,7 +679,7 @@
       "_origin": "ast",
       "id": "showcase_package_private",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "private"
     },
     {
@@ -690,7 +690,7 @@
       "_origin": "ast",
       "id": "showcase_package_version",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "version"
     },
     {
@@ -701,7 +701,7 @@
       "_origin": "ast",
       "id": "showcase_package_type",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "type"
     },
     {
@@ -712,7 +712,7 @@
       "_origin": "ast",
       "id": "showcase_package_description",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "description"
     },
     {
@@ -723,7 +723,7 @@
       "_origin": "ast",
       "id": "showcase_package_scripts",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "scripts"
     },
     {
@@ -734,7 +734,7 @@
       "_origin": "ast",
       "id": "showcase_package_scripts_dev",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "dev"
     },
     {
@@ -745,7 +745,7 @@
       "_origin": "ast",
       "id": "showcase_package_scripts_build",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "build"
     },
     {
@@ -756,7 +756,7 @@
       "_origin": "ast",
       "id": "showcase_package_scripts_preview",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "preview"
     },
     {
@@ -767,7 +767,7 @@
       "_origin": "ast",
       "id": "showcase_package_scripts_typecheck",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "typecheck"
     },
     {
@@ -778,7 +778,7 @@
       "_origin": "ast",
       "id": "showcase_package_dependencies",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "dependencies"
     },
     {
@@ -789,7 +789,7 @@
       "_origin": "ast",
       "id": "showcase_package_dependencies_framer_motion",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "framer-motion"
     },
     {
@@ -800,7 +800,7 @@
       "_origin": "ast",
       "id": "showcase_package_json_framer_motion",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "framer-motion"
     },
     {
@@ -811,7 +811,7 @@
       "_origin": "ast",
       "id": "showcase_package_dependencies_lucide_react",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "lucide-react"
     },
     {
@@ -822,7 +822,7 @@
       "_origin": "ast",
       "id": "showcase_package_json_lucide_react",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "lucide-react"
     },
     {
@@ -833,7 +833,7 @@
       "_origin": "ast",
       "id": "showcase_package_dependencies_motion",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "motion"
     },
     {
@@ -844,7 +844,7 @@
       "_origin": "ast",
       "id": "showcase_package_json_motion",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "motion"
     },
     {
@@ -855,7 +855,7 @@
       "_origin": "ast",
       "id": "showcase_package_dependencies_react",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "react"
     },
     {
@@ -866,7 +866,7 @@
       "_origin": "ast",
       "id": "showcase_package_json_react",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "react"
     },
     {
@@ -877,7 +877,7 @@
       "_origin": "ast",
       "id": "showcase_package_dependencies_react_dom",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "react-dom"
     },
     {
@@ -888,7 +888,7 @@
       "_origin": "ast",
       "id": "showcase_package_json_react_dom",
       "community": 7,
-      "community_name": "package.json",
+      "community_name": "showcase/package.json",
       "norm_label": "react-dom"
     },
     {
@@ -1783,7 +1783,7 @@
       "norm_label": "tailwind.config.cjs"
     },
     {
-      "label": "tsconfig.json",
+      "label": "showcase/tsconfig.json",
       "file_type": "code",
       "source_file": "showcase/tsconfig.json",
       "source_location": "L1",
@@ -1791,7 +1791,7 @@
       "id": "showcase_tsconfig",
       "community": 4,
       "community_name": "compilerOptions",
-      "norm_label": "tsconfig.json"
+      "norm_label": "showcase/tsconfig.json"
     },
     {
       "label": "compilerOptions",
@@ -2259,7 +2259,7 @@
       "label": "getBrand()",
       "file_type": "code",
       "source_file": "src/brand/brands.ts",
-      "source_location": "L201",
+      "source_location": "L224",
       "_origin": "ast",
       "id": "src_brand_brands_getbrand",
       "community": 3,
@@ -7298,7 +7298,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/brand/brands.ts",
-      "source_location": "L201",
+      "source_location": "L224",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_brand_brands",
@@ -9723,5 +9723,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "395325f5b283d38fb692acae1239142d9e1f6f15"
+  "built_at_commit": "9b553b894da13e3e5e16dae649c161227063df2c"
 }
