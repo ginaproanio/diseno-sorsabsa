@@ -38,8 +38,8 @@ export const BRANDS: Record<string, BrandConfig> = {
     displayName: 'DomusCRM',
     wordmark: { first: 'Domus', second: 'CRM' },
     colors: {
-      primary: '#1d4ed8',
-      accent: '#1d4ed8',
+      primary: '#0f172a',            // azul marino oscuro — navbar, textos, fondos principales
+      accent: '#3b82f6',             // azul brillante — CTAs, highlights, acciones principales
       secondary: '#e0edff',
       surface: '#FFFFFF',
       background: '#f6f8fc',
