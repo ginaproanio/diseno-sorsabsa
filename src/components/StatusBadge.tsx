@@ -17,13 +17,14 @@
 import type { ReactNode } from 'react';
 import { Icon, type IconName } from '../icons/Icon';
 
-export type StatusTone = 'success' | 'warning' | 'danger' | 'neutral';
+export type StatusTone = 'success' | 'warning' | 'danger' | 'neutral' | 'info';
 
 const TONE_CLASS: Record<StatusTone, string> = {
   success: 'bg-brand-success/10 text-brand-success',
   warning: 'bg-brand-warning/10 text-brand-warning',
   danger: 'bg-brand-destructive/10 text-brand-destructive',
   neutral: 'bg-brand-muted/10 text-brand-muted',
+  info: 'bg-brand-primary/10 text-brand-primary',
 };
 
 const TONE_ICON: Record<StatusTone, IconName> = {
@@ -31,6 +32,7 @@ const TONE_ICON: Record<StatusTone, IconName> = {
   warning: 'triangleAlert',
   danger: 'close',
   neutral: 'info',
+  info: 'info',
 };
 
 export interface StatusBadgeProps {
