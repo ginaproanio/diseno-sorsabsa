@@ -13,6 +13,9 @@
   --brand-destructive: 220 38 38;
   --brand-success: 22 163 74;             /* semáforo verde */
   --brand-warning: 202 138 4;             /* semáforo ámbar */
+  --brand-overlay: 0 0 0;                 /* velos oscuros sobre imágenes/modales (usar con opacidad) */
+  --brand-glass: 255 255 255;             /* superficies glassmorphism claras (usar con opacidad) */
+  --brand-whatsapp: 37 211 102;           /* verde institucional de WhatsApp (#25d366) */
   --brand-radius: 0.5rem;
   --brand-font: system-ui, -apple-system, 'Segoe UI', sans-serif;
 }

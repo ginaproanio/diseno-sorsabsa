@@ -36,6 +36,12 @@ module.exports = {
         'brand-destructive': 'rgb(var(--brand-destructive) / <alpha-value>)',
         'brand-success': 'rgb(var(--brand-success) / <alpha-value>)',
         'brand-warning': 'rgb(var(--brand-warning) / <alpha-value>)',
+        // Utilitarios brand-agnósticos (como success/warning): centralizan los
+        // velos oscuros, el glassmorphism y el verde de WhatsApp que antes cada
+        // producto hardcodeaba. Usar con opacidad: bg-brand-overlay/60, bg-brand-glass/90.
+        'brand-overlay': 'rgb(var(--brand-overlay) / <alpha-value>)',
+        'brand-glass': 'rgb(var(--brand-glass) / <alpha-value>)',
+        'brand-whatsapp': 'rgb(var(--brand-whatsapp) / <alpha-value>)',
       },
       spacing: {
         'brand-1': 'var(--brand-space-1, 0.25rem)',
