@@ -133,7 +133,7 @@ export function brandToCssVars(brand: BrandConfig): CSSProperties {
     '--brand-shadow-md': shadowMap[brand.shadowPreset ?? 'soft'],
     '--brand-shadow-lg': shadowMap[brand.shadowPreset ?? 'dramatic'] ?? shadowMap['soft'],
     '--brand-border-light-alpha': borderMap[brand.borderPreset ?? 'soft'],
-    '--brand-elevated': c.surfaceElevated ?? c.surface ?? '#ffffff',
+    '--brand-elevated': brand.surfaceElevated ?? c.surface ?? '#ffffff',
     '--brand-space-1': '0.25rem',
     '--brand-space-2': '0.5rem',
     '--brand-space-3': '0.75rem',
