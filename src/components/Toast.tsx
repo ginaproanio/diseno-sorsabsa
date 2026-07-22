@@ -4,7 +4,7 @@
 
 import type { HTMLAttributes, ReactNode } from 'react';
 
-export interface ToastProps extends HTMLAttributes<HTMLDivElement> {
+export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   tone?: 'info' | 'success' | 'warning' | 'danger';
   title?: ReactNode;
 }

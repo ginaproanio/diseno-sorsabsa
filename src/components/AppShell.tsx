@@ -7,7 +7,7 @@ import { Tag } from './Tag';
 import { Avatar } from './Avatar';
 import { Toast } from './Toast';
 
-export interface AppShellProps extends HTMLAttributes<HTMLDivElement> {
+export interface AppShellProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   brand: { name: string };
   title?: ReactNode;
   primaryAction?: ReactNode;
