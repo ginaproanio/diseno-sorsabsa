@@ -48,9 +48,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           id={inputId}
           aria-invalid={error ? true : undefined}
           aria-describedby={error || hint ? messageId : undefined}
-          className={`w-full rounded-brand border bg-brand-surface px-3 py-2 text-brand-text ` +
+          className={`w-full rounded-brand border bg-brand-surface py-2 text-brand-text ` +
             `placeholder:text-brand-muted/70 transition-colors focus:outline-none focus:ring-2 ` +
-            `${icon ? 'pl-9 ' : ''}` +
+            // Con ícono: pl-9 (deja sitio al ícono) + pr-3. Sin ícono: px-3.
+            // Antes `px-3 ... pl-9` juntos → Tailwind hacía ganar a px-3 y el
+            // ícono pisaba el texto (bug visible en todos los inputs con ícono).
+            `${icon ? 'pl-9 pr-3 ' : 'px-3 '}` +
             `${
               error
                 ? 'border-brand-destructive focus:ring-brand-destructive/30'

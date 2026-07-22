@@ -34,6 +34,7 @@ module.exports = {
         'brand-muted': 'rgb(var(--brand-muted) / <alpha-value>)',
         'brand-border': 'rgb(var(--brand-border) / <alpha-value>)',
         'brand-destructive': 'rgb(var(--brand-destructive) / <alpha-value>)',
+        'brand-sidebar': 'rgb(var(--brand-sidebar) / <alpha-value>)',
         'brand-success': 'rgb(var(--brand-success) / <alpha-value>)',
         'brand-warning': 'rgb(var(--brand-warning) / <alpha-value>)',
         // Utilitarios brand-agnósticos (como success/warning): centralizan los

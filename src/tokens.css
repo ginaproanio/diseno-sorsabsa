@@ -11,6 +11,7 @@
   --brand-muted: 100 116 139;
   --brand-border: 226 232 240;
   --brand-destructive: 220 38 38;
+  --brand-sidebar: 30 41 59;              /* fondo de menús laterales (default = primary institucional) */
   --brand-success: 22 163 74;             /* semáforo verde */
   --brand-warning: 202 138 4;             /* semáforo ámbar */
   --brand-overlay: 0 0 0;                 /* velos oscuros sobre imágenes/modales (usar con opacidad) */

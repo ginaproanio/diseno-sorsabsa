@@ -23,6 +23,9 @@ export interface BrandColors {
   muted?: string;
   border?: string;
   destructive?: string;
+  /** Fondo de menús laterales oscuros (default: primary). Permite un navy
+   *  profundo para el sidebar sin oscurecer botones/acciones (primary). */
+  sidebar?: string;
 }
 
 export interface BrandConfig {
@@ -126,6 +129,7 @@ export function brandToCssVars(brand: BrandConfig): CSSProperties {
     '--brand-muted': hexToRgbTriplet(c.muted ?? '#64748b'),
     '--brand-border': hexToRgbTriplet(c.border ?? '#e2e8f0'),
     '--brand-destructive': hexToRgbTriplet(c.destructive ?? '#dc2626'),
+    '--brand-sidebar': hexToRgbTriplet(c.sidebar ?? c.primary),
     '--brand-radius': brand.radius ?? '0.5rem',
     '--brand-font': cuerpo,
     '--brand-heading-font': brand.headingFont ? `'${brand.headingFont}', ${cuerpo}` : cuerpo,
