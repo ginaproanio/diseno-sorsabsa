@@ -46,4 +46,9 @@ export {
   TablaVacia,
 } from './components/Table';
 export { NotificationBell, type Notificacion, type NotificationBellProps } from './components/NotificationBell';
+export { Tag, type TagProps } from './components/Tag';
+export { Avatar, type AvatarProps } from './components/Avatar';
+export { SectionHeader, type SectionHeaderProps } from './components/SectionHeader';
+export { Toast, type ToastProps } from './components/Toast';
+export { AppShell, type AppShellProps } from './components/AppShell';
 export { useOnClickOutside } from './hooks/useOnClickOutside';

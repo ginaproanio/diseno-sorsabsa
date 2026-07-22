@@ -16,6 +16,8 @@ import { SpacingScale } from './components/SpacingScale';
 import { TokenAudit } from './components/TokenAudit';
 import { NotificationDemo } from './components/NotificationDemo';
 import { PropertyCarouselDemo } from './components/PropertyCarouselDemo';
+import { DomusLanding } from './components/DomusLanding';
+import { AtomShowcase } from './components/AtomShowcase';
 
 const BRAND_KEYS = Object.keys(BRANDS);
 
@@ -221,6 +223,8 @@ export default function App() {
           <SummaryCards brand={brand} shadowStyle={shadowStyle} />
 
           <BrandPanel key={active} brand={brand} shadowStyle={shadowStyle} onShadowStyleChange={setShadowStyle} />
+
+          <DomusLanding />
         </div>
       </main>
     </BrandProvider>

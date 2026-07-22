@@ -53,6 +53,21 @@ export interface BrandConfig {
   headingFont?: string;
   /** URL de Google Fonts (u otra) a cargar para las fuentes de la marca */
   fontImport?: string;
+  spacingScale?: readonly [string, string, string, string, string, string, string, string, string, string, string, string, string];
+  shadowPreset?: 'flat' | 'soft' | 'dramatic';
+  borderPreset?: 'soft' | 'medium' | 'hard';
+  surfaceElevated?: string;
+  typographyScale?: {
+    xs?: string;
+    sm?: string;
+    base?: string;
+    lg?: string;
+    xl?: string;
+    '2xl'?: string;
+    display?: string;
+  };
+  leadingPreset?: 'tight' | 'normal' | 'relaxed';
+  trackingPreset?: 'tight' | 'normal' | 'wide';
 }
 
 /** Tonos disponibles para cada parte del wordmark. */
@@ -87,6 +102,19 @@ export function hexToRgbTriplet(hex: string): string {
 export function brandToCssVars(brand: BrandConfig): CSSProperties {
   const c = brand.colors;
   const cuerpo = brand.fontFamily ?? "system-ui, -apple-system, 'Segoe UI', sans-serif";
+  const shadowMap: Record<string, string> = {
+    flat: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+    soft: '0 4px 12px -2px rgb(0 0 0 / 0.08), 0 2px 6px -2px rgb(0 0 0 / 0.06)',
+    dramatic: '0 12px 40px -8px rgb(0 0 0 / 0.18), 0 4px 16px -4px rgb(0 0 0 / 0.12)',
+  };
+  const borderMap: Record<string, string> = {
+    soft: '13%',
+    medium: '22%',
+    hard: '0%',
+  };
+  const scale = brand.typographyScale ?? {};
+  const leadingMap: Record<string, string> = { tight: '1.25', normal: '1.5', relaxed: '1.75' };
+  const trackingMap: Record<string, string> = { tight: '-0.02em', normal: '0', wide: '0.02em' };
   const vars: Record<string, string> = {
     '--brand-primary': hexToRgbTriplet(c.primary),
     '--brand-primary-foreground': hexToRgbTriplet(c.primaryForeground ?? '#ffffff'),
@@ -100,9 +128,31 @@ export function brandToCssVars(brand: BrandConfig): CSSProperties {
     '--brand-destructive': hexToRgbTriplet(c.destructive ?? '#dc2626'),
     '--brand-radius': brand.radius ?? '0.5rem',
     '--brand-font': cuerpo,
-    // Titulares y logotipo: la fuente de marca (Fraunces en CondoManager),
-    // con degradación elegante al cuerpo si no se define.
     '--brand-heading-font': brand.headingFont ? `'${brand.headingFont}', ${cuerpo}` : cuerpo,
+    '--brand-shadow-sm': shadowMap[brand.shadowPreset ?? 'flat'],
+    '--brand-shadow-md': shadowMap[brand.shadowPreset ?? 'soft'],
+    '--brand-shadow-lg': shadowMap[brand.shadowPreset ?? 'dramatic'] ?? shadowMap['soft'],
+    '--brand-border-light-alpha': borderMap[brand.borderPreset ?? 'soft'],
+    '--brand-elevated': c.surfaceElevated ?? c.surface ?? '#ffffff',
+    '--brand-space-1': '0.25rem',
+    '--brand-space-2': '0.5rem',
+    '--brand-space-3': '0.75rem',
+    '--brand-space-4': '1rem',
+    '--brand-space-5': '1.25rem',
+    '--brand-space-6': '1.5rem',
+    '--brand-space-8': '2rem',
+    '--brand-space-10': '2.5rem',
+    '--brand-space-12': '3rem',
+    '--brand-space-16': '4rem',
+    '--brand-text-xs': scale.xs ?? '0.75rem',
+    '--brand-text-sm': scale.sm ?? '0.875rem',
+    '--brand-text-base': scale.base ?? '1rem',
+    '--brand-text-lg': scale.lg ?? '1.125rem',
+    '--brand-text-xl': scale.xl ?? '1.25rem',
+    '--brand-text-2xl': scale['2xl'] ?? '1.5rem',
+    '--brand-text-display': scale.display ?? '1.875rem',
+    '--brand-leading-body': leadingMap[brand.leadingPreset ?? 'normal'],
+    '--brand-tracking-display': trackingMap[brand.trackingPreset ?? 'tight'],
   };
   return vars as CSSProperties;
 }

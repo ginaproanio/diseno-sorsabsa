@@ -34,9 +34,25 @@ module.exports = {
         'brand-muted': 'rgb(var(--brand-muted) / <alpha-value>)',
         'brand-border': 'rgb(var(--brand-border) / <alpha-value>)',
         'brand-destructive': 'rgb(var(--brand-destructive) / <alpha-value>)',
-        // Semáforo de estados (StatusBadge): verde/ámbar semánticos, no de marca
         'brand-success': 'rgb(var(--brand-success) / <alpha-value>)',
         'brand-warning': 'rgb(var(--brand-warning) / <alpha-value>)',
+      },
+      spacing: {
+        'brand-1': 'var(--brand-space-1, 0.25rem)',
+        'brand-2': 'var(--brand-space-2, 0.5rem)',
+        'brand-3': 'var(--brand-space-3, 0.75rem)',
+        'brand-4': 'var(--brand-space-4, 1rem)',
+        'brand-5': 'var(--brand-space-5, 1.25rem)',
+        'brand-6': 'var(--brand-space-6, 1.5rem)',
+        'brand-8': 'var(--brand-space-8, 2rem)',
+        'brand-10': 'var(--brand-space-10, 2.5rem)',
+        'brand-12': 'var(--brand-space-12, 3rem)',
+        'brand-16': 'var(--brand-space-16, 4rem)',
+      },
+      boxShadow: {
+        'brand-sm': 'var(--brand-shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05))',
+        'brand-md': 'var(--brand-shadow-md, 0 4px 12px -2px rgb(0 0 0 / 0.08))',
+        'brand-lg': 'var(--brand-shadow-lg, 0 12px 40px -8px rgb(0 0 0 / 0.18))',
       },
       borderRadius: {
         brand: 'var(--brand-radius, 0.5rem)',

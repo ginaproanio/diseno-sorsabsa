@@ -38,11 +38,8 @@ export const BRANDS: Record<string, BrandConfig> = {
     displayName: 'DomusCRM',
     wordmark: { first: 'Domus', second: 'CRM' },
     colors: {
-      primary: '#1d4ed8',            // azul corporativo
-      accent: '#1d4ed8',             // mismo tono que primary — un solo
-                                      // color sobrio (antes cián #22d3ee de
-                                      // los degradados, retirado por pedido
-                                      // explícito de la clienta)
+      primary: '#1d4ed8',
+      accent: '#1d4ed8',
       secondary: '#e0edff',
       surface: '#FFFFFF',
       background: '#f6f8fc',
@@ -51,7 +48,11 @@ export const BRANDS: Record<string, BrandConfig> = {
       border: '#dbe3ef',
     },
     radius: '0.25rem',
-    // DomusCRM usa la UI sans del sistema; sin fuente especial que cargar.
+    shadowPreset: 'flat',
+    borderPreset: 'soft',
+    typographyScale: { base: '0.95rem', lg: '1.05rem', xl: '1.25rem', display: '2.25rem' },
+    leadingPreset: 'tight',
+    trackingPreset: 'tight',
   },
 
   agente24siete: {
