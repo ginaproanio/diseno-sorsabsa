@@ -40,13 +40,13 @@ export function Card({
 }
 
 export function CardHeader({ className = '', ...rest }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={`border-b border-brand-border px-5 py-4 ${className}`} {...rest} />;
+  return <div className={`border-b border-brand-border px-6 py-5 ${className}`} {...rest} />;
 }
 
 export function CardTitle({ className = '', children }: { className?: string; children: ReactNode }) {
-  return <h3 className={`text-sm font-semibold text-brand-text ${className}`}>{children}</h3>;
+  return <h3 className={`text-base font-semibold text-brand-text ${className}`}>{children}</h3>;
 }
 
 export function CardContent({ className = '', ...rest }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={`px-5 py-4 ${className}`} {...rest} />;
+  return <div className={`px-6 py-5 ${className}`} {...rest} />;
 }
