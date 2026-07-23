@@ -39,13 +39,25 @@ export function Card({
   );
 }
 
-export function CardHeader({ className = '', ...rest }: HTMLAttributes<HTMLDivElement>) {
-  // py-3 (compacto): la franja del título no debe comerse el espacio de trabajo.
-  return <div className={`border-b border-brand-border px-6 py-3 ${className}`} {...rest} />;
+export interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
+  /** 'default' = header sobrio con borde inferior (texto oscuro).
+   *  'primary'  = franja de color SÓLIDA (fondo primary + texto claro). */
+  tone?: 'default' | 'primary';
 }
 
+export function CardHeader({ className = '', tone = 'default', ...rest }: CardHeaderProps) {
+  // Compacto (py-3), layout ícono+título integrado, y el TONO define fondo y
+  // color de texto — el consumidor no fuerza clases ni usa `!important`.
+  const toneCls =
+    tone === 'primary'
+      ? 'bg-brand-primary text-brand-primary-foreground'
+      : 'border-b border-brand-border';
+  return <div className={`flex items-center gap-2 px-6 py-3 ${toneCls} ${className}`} {...rest} />;
+}
+
+// Sin color propio: hereda el del header (oscuro en 'default', claro en 'primary').
 export function CardTitle({ className = '', children }: { className?: string; children: ReactNode }) {
-  return <h3 className={`text-sm font-semibold text-brand-text ${className}`}>{children}</h3>;
+  return <h3 className={`text-sm font-semibold ${className}`}>{children}</h3>;
 }
 
 export function CardContent({ className = '', ...rest }: HTMLAttributes<HTMLDivElement>) {
