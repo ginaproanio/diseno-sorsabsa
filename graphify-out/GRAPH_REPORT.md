@@ -1,16 +1,16 @@
 # Graph Report - diseno-sorsabsa  (2026-07-23)
 
 ## Corpus Check
-- 62 files · ~16,823 words
+- 63 files · ~16,971 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 368 nodes · 583 edges · 22 communities (20 shown, 2 thin omitted)
+- 372 nodes · 590 edges · 22 communities (20 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `69d9ed31`
+- Built from commit: `46185a1e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -47,10 +47,10 @@
 10. `BrandProvider()` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `TokenAudit()` --calls--> `useBrand()`  [EXTRACTED]
-  showcase/src/components/TokenAudit.tsx → src/brand/BrandProvider.tsx
 - `resolveEffectiveColors()` --calls--> `brandToCssVars()`  [EXTRACTED]
   showcase/src/resolveColors.ts → src/brand/BrandProvider.tsx
+- `TokenAudit()` --calls--> `useBrand()`  [EXTRACTED]
+  showcase/src/components/TokenAudit.tsx → src/brand/BrandProvider.tsx
 - `App()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
   showcase/src/App.tsx → showcase/src/resolveColors.ts
 - `ColorPalette()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
@@ -65,15 +65,15 @@
 
 ### Community 0 - "index.ts"
 Cohesion: 0.07
-Nodes (42): DATA, TableDemo(), AppShell(), AppShellProps, Avatar(), AvatarProps, getInitials(), SIZE (+34 more)
+Nodes (45): DATA, TableDemo(), AppShell(), AppShellProps, Avatar(), AvatarProps, getInitials(), SIZE (+37 more)
 
 ### Community 1 - "App.tsx"
-Cohesion: 0.08
-Nodes (29): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented() (+21 more)
+Cohesion: 0.09
+Nodes (27): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented() (+19 more)
 
 ### Community 2 - "DomusLanding.tsx"
-Cohesion: 0.10
-Nodes (21): DomusLanding(), FEATURES, SOCIAL, BRAND_FONT_IMPORTS, BrandColors, BrandContext, BrandProvider(), brandToCssVars() (+13 more)
+Cohesion: 0.09
+Nodes (23): DomusLanding(), FEATURES, SOCIAL, TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandContext (+15 more)
 
 ### Community 3 - "devDependencies"
 Cohesion: 0.07
@@ -96,16 +96,16 @@ Cohesion: 0.09
 Nodes (21): dependencies, framer-motion, lucide-react, motion, react, react-dom, description, framer-motion (+13 more)
 
 ### Community 8 - "Icon.tsx"
-Cohesion: 0.16
-Nodes (15): IconCatalog(), NAMES, SHADOW, InputProps, MobileNav(), MobileNavItem, MobileNavProps, StatusBadge() (+7 more)
+Cohesion: 0.15
+Nodes (16): IconCatalog(), NAMES, SHADOW, InputProps, MobileNav(), MobileNavItem, MobileNavProps, StatusBadge() (+8 more)
 
 ### Community 9 - "devDependencies"
 Cohesion: 0.12
 Nodes (17): autoprefixer, postcss, devDependencies, autoprefixer, postcss, tailwindcss, @types/react, @types/react-dom (+9 more)
 
 ### Community 10 - "CardStatusDemo.tsx"
-Cohesion: 0.16
-Nodes (11): CardStatusDemo(), SHADOW, TONES, Card(), CardContent(), CardHeader(), CardProps, CardTitle() (+3 more)
+Cohesion: 0.17
+Nodes (10): CardStatusDemo(), SHADOW, TONES, Card(), CardContent(), CardHeader(), CardProps, CardTitle() (+2 more)
 
 ### Community 11 - "@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA"
 Cohesion: 0.17
@@ -144,8 +144,8 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `name`, `version`, `description` to the rest of the system?**
   _139 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.07315233785822021 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06753246753246753 - nodes in this community are weakly interconnected._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.07908163265306123 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08502415458937199 - nodes in this community are weakly interconnected._
 - **Should `DomusLanding.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.0962566844919786 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08708708708708708 - nodes in this community are weakly interconnected._

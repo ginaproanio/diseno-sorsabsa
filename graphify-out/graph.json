@@ -1690,8 +1690,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_tokenaudit",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 2,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "tokenaudit.tsx"
     },
     {
@@ -1701,8 +1701,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_src_components_tokenaudit_tokens",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 2,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "tokens"
     },
     {
@@ -1712,8 +1712,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "showcase_src_components_tokenaudit_tokenaudit",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 2,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "tokenaudit()"
     },
     {
@@ -2938,6 +2938,50 @@
       "norm_label": "sectionheader()"
     },
     {
+      "label": "SegmentedControl.tsx",
+      "file_type": "code",
+      "source_file": "src/components/SegmentedControl.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_segmentedcontrol",
+      "community": 0,
+      "community_name": "index.ts",
+      "norm_label": "segmentedcontrol.tsx"
+    },
+    {
+      "label": "SegmentedOption",
+      "file_type": "code",
+      "source_file": "src/components/SegmentedControl.tsx",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "src_components_segmentedcontrol_segmentedoption",
+      "community": 0,
+      "community_name": "index.ts",
+      "norm_label": "segmentedoption"
+    },
+    {
+      "label": "SegmentedControlProps",
+      "file_type": "code",
+      "source_file": "src/components/SegmentedControl.tsx",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "src_components_segmentedcontrol_segmentedcontrolprops",
+      "community": 0,
+      "community_name": "index.ts",
+      "norm_label": "segmentedcontrolprops"
+    },
+    {
+      "label": "SegmentedControl()",
+      "file_type": "code",
+      "source_file": "src/components/SegmentedControl.tsx",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "src_components_segmentedcontrol_segmentedcontrol",
+      "community": 0,
+      "community_name": "index.ts",
+      "norm_label": "segmentedcontrol()"
+    },
+    {
       "label": "StatusBadge.tsx",
       "file_type": "code",
       "source_file": "src/components/StatusBadge.tsx",
@@ -2955,8 +2999,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_components_statusbadge_statustone",
-      "community": 10,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 8,
+      "community_name": "Icon.tsx",
       "norm_label": "statustone"
     },
     {
@@ -8144,7 +8188,7 @@
       "context": "export",
       "confidence": "EXTRACTED",
       "source_file": "src/index.ts",
-      "source_location": "L53",
+      "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_index",
@@ -8156,7 +8200,7 @@
       "context": "re-export",
       "confidence": "EXTRACTED",
       "source_file": "src/index.ts",
-      "source_location": "L53",
+      "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_index",
@@ -8168,7 +8212,7 @@
       "context": "re-export",
       "confidence": "EXTRACTED",
       "source_file": "src/index.ts",
-      "source_location": "L53",
+      "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_index",
@@ -9209,6 +9253,87 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/components/SegmentedControl.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_segmentedcontrol",
+      "target": "src_components_segmentedcontrol_segmentedcontrol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/SegmentedControl.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_segmentedcontrol",
+      "target": "src_components_segmentedcontrol_segmentedcontrolprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/SegmentedControl.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_segmentedcontrol",
+      "target": "src_components_segmentedcontrol_segmentedoption",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/index.ts",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_index",
+      "target": "src_components_segmentedcontrol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/index.ts",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_index",
+      "target": "src_components_segmentedcontrol_segmentedoption",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/index.ts",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_index",
+      "target": "src_components_segmentedcontrol_segmentedcontrolprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/index.ts",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_index",
+      "target": "src_components_segmentedcontrol_segmentedcontrol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/components/StatusBadge.tsx",
       "source_location": "L47",
       "weight": 1.0,
@@ -10201,7 +10326,7 @@
       "context": "export",
       "confidence": "EXTRACTED",
       "source_file": "src/index.ts",
-      "source_location": "L54",
+      "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_index",
@@ -10213,7 +10338,7 @@
       "context": "re-export",
       "confidence": "EXTRACTED",
       "source_file": "src/index.ts",
-      "source_location": "L54",
+      "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_index",
@@ -10796,5 +10921,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "69d9ed315d1e6a926bf45b410122a8c4860a4d47"
+  "built_at_commit": "46185a1e877f9651f51548edb2bda7e9f95e4c32"
 }
