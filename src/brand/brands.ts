@@ -38,9 +38,9 @@ export const BRANDS: Record<string, BrandConfig> = {
     displayName: 'DomusCRM',
     wordmark: { first: 'Domus', second: 'CRM', tones: ['primary', 'accent'] },
     colors: {
-      primary: '#1746A2',            // azul DomusCRM (visible) — botones, franjas, precios, "Domus"
+      primary: '#1746A2',            // azul DomusCRM — menú, botones, franjas, precios, "Domus"
       accent: '#1db4a5',             // turquesa DomusCRM — íconos, "CRM", highlights
-      sidebar: '#000047',            // azul marino profundo — SOLO el fondo del menú lateral
+      // (sin `sidebar`: el menú hereda `primary` → menú y franjas del MISMO color)
       secondary: '#e0edff',
       surface: '#FFFFFF',
       background: '#f6f8fc',
