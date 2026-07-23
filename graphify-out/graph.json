@@ -2655,7 +2655,7 @@
       "label": "CardTitle()",
       "file_type": "code",
       "source_file": "src/components/Card.tsx",
-      "source_location": "L46",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "src_components_card_cardtitle",
       "community": 10,
@@ -2666,7 +2666,7 @@
       "label": "CardContent()",
       "file_type": "code",
       "source_file": "src/components/Card.tsx",
-      "source_location": "L50",
+      "source_location": "L51",
       "_origin": "ast",
       "id": "src_components_card_cardcontent",
       "community": 10,
@@ -8465,7 +8465,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/Card.tsx",
-      "source_location": "L50",
+      "source_location": "L51",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_card",
@@ -8498,7 +8498,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/Card.tsx",
-      "source_location": "L46",
+      "source_location": "L47",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_card",
@@ -10796,5 +10796,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8208241c8d063e4df80c24d3478f7920f073e95c"
+  "built_at_commit": "69d9ed315d1e6a926bf45b410122a8c4860a4d47"
 }
