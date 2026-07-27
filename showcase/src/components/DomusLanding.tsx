@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BRANDS, BrandProvider, Wordmark, Card, Button, StatusBadge, Icon, Input } from '../lib';
+import { BRANDS, BrandProvider, Wordmark, Card, Button, StatusBadge, Icon, Input, type IconName } from '../lib';
 
 function DomusNav() {
   return (

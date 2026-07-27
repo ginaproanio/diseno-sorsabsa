@@ -20,10 +20,13 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
     'bg-brand-primary text-brand-primary-foreground hover:bg-brand-primary/90 shadow-sm hover:shadow-md',
+  // `primary-text` y `accent-foreground` en vez de `primary` y
+  // `primary-foreground`: el color de marca crudo no garantiza 4.5:1 como
+  // texto y estas dos variantes lo pintan sobre fondo claro.
   secondary:
-    'bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/15 border border-brand-border',
+    'bg-brand-primary/10 text-brand-primary-text hover:bg-brand-primary/15 border border-brand-border',
   accent:
-    'bg-brand-accent text-brand-primary-foreground hover:bg-brand-accent/90 shadow-sm hover:shadow-md',
+    'bg-brand-accent text-brand-accent-foreground hover:bg-brand-accent/90 shadow-sm hover:shadow-md',
   destructive:
     'bg-brand-destructive text-white hover:bg-brand-destructive/90',
   ghost: 'text-brand-text hover:bg-brand-muted/10',

@@ -101,15 +101,93 @@ export function hexToRgbTriplet(hex: string): string {
   return `${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255}`;
 }
 
+/** '#c1701b' → [193, 112, 27] */
+function hexToRgb(hex: string): [number, number, number] {
+  const t = hexToRgbTriplet(hex).split(' ').map(Number);
+  return [t[0]!, t[1]!, t[2]!];
+}
+
+/** Luminancia relativa WCAG 2.1 de un color RGB 0-255. */
+function relativeLuminance([r, g, b]: [number, number, number]): number {
+  const ch = (c: number) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * ch(r) + 0.7152 * ch(g) + 0.0722 * ch(b);
+}
+
+/** Razón de contraste WCAG entre dos colores. */
+function contrastRatio(a: [number, number, number], b: [number, number, number]): number {
+  const la = relativeLuminance(a);
+  const lb = relativeLuminance(b);
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+
+function toHex([r, g, b]: [number, number, number]): string {
+  return '#' + [r, g, b].map((c) => Math.round(c).toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * Oscurece `color` lo mínimo necesario para alcanzar `target` de contraste
+ * contra `bg`. Devuelve el color intacto si ya cumple.
+ *
+ * Existe porque varios primaries del ecosistema son legibles como FONDO pero
+ * no como TEXTO: el ocre de Agente24Siete (#c1701b) rinde 3.46:1 y el turquesa
+ * de DomusCRM 2.43:1. Los componentes que pintan el color de marca sobre claro
+ * (p. ej. Button `secondary`) heredaban ese fallo en todos los productos.
+ */
+function darkenToContrast(color: string, bg: string, target: number): string {
+  const rgb = hexToRgb(color);
+  const bgRgb = hexToRgb(bg);
+  if (contrastRatio(rgb, bgRgb) >= target) return color;
+  for (let k = 0.98; k >= 0; k -= 0.02) {
+    const probe: [number, number, number] = [rgb[0] * k, rgb[1] * k, rgb[2] * k];
+    if (contrastRatio(probe, bgRgb) >= target) return toHex(probe);
+  }
+  return '#000000';
+}
+
+/** Blanco o casi-negro, el que mejor contraste dé sobre `bg`. */
+function readableOn(bg: string): string {
+  const bgRgb = hexToRgb(bg);
+  const blanco = contrastRatio([255, 255, 255], bgRgb);
+  const oscuro = contrastRatio([17, 17, 17], bgRgb);
+  return blanco >= oscuro ? '#ffffff' : '#111111';
+}
+
 /** Convierte la config de marca en variables CSS listas para inyectar. */
 export function brandToCssVars(brand: BrandConfig): CSSProperties {
   const c = brand.colors;
   const cuerpo = brand.fontFamily ?? "system-ui, -apple-system, 'Segoe UI', sans-serif";
-  const shadowMap: Record<string, string> = {
-    flat: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-    soft: '0 4px 12px -2px rgb(0 0 0 / 0.08), 0 2px 6px -2px rgb(0 0 0 / 0.06)',
-    dramatic: '0 12px 40px -8px rgb(0 0 0 / 0.18), 0 4px 16px -4px rgb(0 0 0 / 0.12)',
+  /**
+   * Cada preset es una RAMPA de tres pasos (sm → md → lg), no un valor único.
+   *
+   * Antes había un solo valor por preset y los tres tokens se resolvían con
+   * `shadowMap[brand.shadowPreset ?? '<otro default>']`: el `??` solo actúa
+   * cuando el preset es undefined, así que en cuanto una marca lo declaraba
+   * los tres colapsaban al MISMO valor y la escala de elevación desaparecía.
+   *
+   * La rampa `soft` reproduce exactamente los tres valores que se obtenían sin
+   * preset, así que las marcas que no lo declaran no cambian de aspecto.
+   */
+  const shadowRamps: Record<string, readonly [string, string, string]> = {
+    flat: [
+      '0 1px 2px 0 rgb(0 0 0 / 0.04)',
+      '0 1px 3px 0 rgb(0 0 0 / 0.07)',
+      '0 2px 6px -1px rgb(0 0 0 / 0.10)',
+    ],
+    soft: [
+      '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+      '0 4px 12px -2px rgb(0 0 0 / 0.08), 0 2px 6px -2px rgb(0 0 0 / 0.06)',
+      '0 12px 40px -8px rgb(0 0 0 / 0.18), 0 4px 16px -4px rgb(0 0 0 / 0.12)',
+    ],
+    dramatic: [
+      '0 2px 4px 0 rgb(0 0 0 / 0.08)',
+      '0 8px 20px -4px rgb(0 0 0 / 0.14)',
+      '0 24px 60px -12px rgb(0 0 0 / 0.28), 0 8px 24px -8px rgb(0 0 0 / 0.18)',
+    ],
   };
+  const ramp = shadowRamps[brand.shadowPreset ?? 'soft'] ?? shadowRamps['soft']!;
   const borderMap: Record<string, string> = {
     soft: '13%',
     medium: '22%',
@@ -121,6 +199,15 @@ export function brandToCssVars(brand: BrandConfig): CSSProperties {
   const vars: Record<string, string> = {
     '--brand-primary': hexToRgbTriplet(c.primary),
     '--brand-primary-foreground': hexToRgbTriplet(c.primaryForeground ?? '#ffffff'),
+    // Variante del primary garantizada legible como TEXTO sobre el fondo de la
+    // marca (AA 4.5:1). Si el primary ya cumple, es el mismo color.
+    '--brand-primary-text': hexToRgbTriplet(
+      darkenToContrast(c.primary, c.background ?? c.surface ?? '#ffffff', 4.5),
+    ),
+    // Foreground del acento calculado, no asumido: `accent` usaba
+    // primaryForeground (blanco por defecto), que sobre acentos claros como el
+    // turquesa de DomusCRM daba 2.58:1.
+    '--brand-accent-foreground': hexToRgbTriplet(readableOn(c.accent ?? c.primary)),
     '--brand-secondary': hexToRgbTriplet(c.secondary ?? '#64748b'),
     '--brand-accent': hexToRgbTriplet(c.accent ?? c.primary),
     '--brand-surface': hexToRgbTriplet(c.surface ?? '#ffffff'),
@@ -133,10 +220,10 @@ export function brandToCssVars(brand: BrandConfig): CSSProperties {
     '--brand-radius': brand.radius ?? '0.5rem',
     '--brand-font': cuerpo,
     '--brand-heading-font': brand.headingFont ? `'${brand.headingFont}', ${cuerpo}` : cuerpo,
-    '--brand-shadow-sm': shadowMap[brand.shadowPreset ?? 'flat'],
-    '--brand-shadow-md': shadowMap[brand.shadowPreset ?? 'soft'],
-    '--brand-shadow-lg': shadowMap[brand.shadowPreset ?? 'dramatic'] ?? shadowMap['soft'],
-    '--brand-border-light-alpha': borderMap[brand.borderPreset ?? 'soft'],
+    '--brand-shadow-sm': ramp[0],
+    '--brand-shadow-md': ramp[1],
+    '--brand-shadow-lg': ramp[2],
+    '--brand-border-light-alpha': borderMap[brand.borderPreset ?? 'soft'] ?? borderMap['soft']!,
     '--brand-elevated': brand.surfaceElevated ?? c.surface ?? '#ffffff',
     '--brand-space-1': '0.25rem',
     '--brand-space-2': '0.5rem',
@@ -155,8 +242,9 @@ export function brandToCssVars(brand: BrandConfig): CSSProperties {
     '--brand-text-xl': scale.xl ?? '1.25rem',
     '--brand-text-2xl': scale['2xl'] ?? '1.5rem',
     '--brand-text-display': scale.display ?? '1.875rem',
-    '--brand-leading-body': leadingMap[brand.leadingPreset ?? 'normal'],
-    '--brand-tracking-display': trackingMap[brand.trackingPreset ?? 'tight'],
+    '--brand-leading-body': leadingMap[brand.leadingPreset ?? 'normal'] ?? leadingMap['normal']!,
+    '--brand-tracking-display':
+      trackingMap[brand.trackingPreset ?? 'tight'] ?? trackingMap['tight']!,
   };
   return vars as CSSProperties;
 }

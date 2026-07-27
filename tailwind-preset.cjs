@@ -26,6 +26,9 @@ module.exports = {
       colors: {
         'brand-primary': 'rgb(var(--brand-primary) / <alpha-value>)',
         'brand-primary-foreground': 'rgb(var(--brand-primary-foreground) / <alpha-value>)',
+        // Primary legible como texto sobre fondo claro (ver darkenToContrast).
+        'brand-primary-text': 'rgb(var(--brand-primary-text) / <alpha-value>)',
+        'brand-accent-foreground': 'rgb(var(--brand-accent-foreground) / <alpha-value>)',
         'brand-secondary': 'rgb(var(--brand-secondary) / <alpha-value>)',
         'brand-accent': 'rgb(var(--brand-accent) / <alpha-value>)',
         'brand-surface': 'rgb(var(--brand-surface) / <alpha-value>)',
