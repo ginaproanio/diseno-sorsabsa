@@ -898,7 +898,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "showcase_package_devdependencies",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "devdependencies"
     },
@@ -909,7 +909,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_types_react",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "@types/react"
     },
@@ -920,7 +920,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "showcase_package_json_types_react",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "@types/react"
     },
@@ -931,7 +931,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_types_react_dom",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "@types/react-dom"
     },
@@ -942,7 +942,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "showcase_package_json_types_react_dom",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "@types/react-dom"
     },
@@ -953,7 +953,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_vitejs_plugin_react",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "@vitejs/plugin-react"
     },
@@ -964,7 +964,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "vitejs_plugin_react",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "@vitejs/plugin-react"
     },
@@ -975,7 +975,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_autoprefixer",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "autoprefixer"
     },
@@ -986,7 +986,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "autoprefixer",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "autoprefixer"
     },
@@ -997,7 +997,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_postcss",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "postcss"
     },
@@ -1008,7 +1008,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "postcss",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "postcss"
     },
@@ -1019,7 +1019,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_tailwindcss",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "tailwindcss"
     },
@@ -1030,7 +1030,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "tailwindcss",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "tailwindcss"
     },
@@ -1041,7 +1041,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_typescript",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "typescript"
     },
@@ -1052,7 +1052,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "showcase_package_json_typescript",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "typescript"
     },
@@ -1063,7 +1063,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_vite",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "vite"
     },
@@ -1074,7 +1074,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "vite",
-      "community": 9,
+      "community": 10,
       "community_name": "devDependencies",
       "norm_label": "vite"
     },
@@ -2306,8 +2306,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_brand_brandprovider_brandconfig",
-      "community": 2,
-      "community_name": "BrandProvider.tsx",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "brandconfig"
     },
     {
@@ -3120,8 +3120,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_components_statusbadge_statustone",
-      "community": 4,
-      "community_name": "DomusLanding.tsx",
+      "community": 11,
+      "community_name": "CardStatusDemo.tsx",
       "norm_label": "statustone"
     },
     {
@@ -4121,7 +4121,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "arquitectura-ecosistema.md"
     },
@@ -4132,7 +4132,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_arquitectura_del_ecosistema_sorsabsa",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "arquitectura del ecosistema sorsabsa"
     },
@@ -4143,7 +4143,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_1_inventario",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "1. inventario"
     },
@@ -4154,7 +4154,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_productos_lo_que_un_cliente_compra",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "productos (lo que un cliente compra)"
     },
@@ -4165,7 +4165,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_servicios_compartidos_no_se_venden_solos",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "servicios compartidos (no se venden solos)"
     },
@@ -4176,7 +4176,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_2_los_dos_planos",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "2. los dos planos"
     },
@@ -4187,7 +4187,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_plano_web_vercel_correcto",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "plano web \u2014 vercel \u2705 correcto"
     },
@@ -4198,7 +4198,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_plano_de_proceso_no_existe",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "plano de proceso \u2014 no existe \u274c"
     },
@@ -4209,7 +4209,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_3_mapa_de_bases_de_datos_la_trampa",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "3. mapa de bases de datos \u2014 la trampa"
     },
@@ -4220,7 +4220,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_acoplamiento_cr\u00edtico",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "\u26a0\ufe0f acoplamiento critico"
     },
@@ -4231,7 +4231,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_l\u00edmite_de_2_proyectos_activos",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "limite de 2 proyectos activos"
     },
@@ -4242,7 +4242,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_4_almacenamiento",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "4. almacenamiento"
     },
@@ -4253,7 +4253,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_defectos_verificados",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "defectos verificados"
     },
@@ -4264,7 +4264,7 @@
       "source_location": "L131",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_5_roturas_verificadas_el_2026_07_26",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "5. roturas verificadas el 2026-07-26"
     },
@@ -4275,7 +4275,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_pendientes_conocidos",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "pendientes conocidos"
     },
@@ -4286,9 +4286,64 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_6_lo_que_no_est\u00e1_verificado",
-      "community": 10,
+      "community": 9,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "6. lo que no esta verificado"
+    },
+    {
+      "label": "7. Decisi\u00f3n de arquitectura (2026-07-26)",
+      "file_type": "document",
+      "source_file": "docs/ARQUITECTURA-ECOSISTEMA.md",
+      "source_location": "L174",
+      "_origin": "ast",
+      "id": "docs_arquitectura_ecosistema_7_decisi\u00f3n_de_arquitectura_2026_07_26",
+      "community": 9,
+      "community_name": "Arquitectura del ecosistema SORSABSA",
+      "norm_label": "7. decision de arquitectura (2026-07-26)"
+    },
+    {
+      "label": "Se elimina",
+      "file_type": "document",
+      "source_file": "docs/ARQUITECTURA-ECOSISTEMA.md",
+      "source_location": "L190",
+      "_origin": "ast",
+      "id": "docs_arquitectura_ecosistema_se_elimina",
+      "community": 9,
+      "community_name": "Arquitectura del ecosistema SORSABSA",
+      "norm_label": "se elimina"
+    },
+    {
+      "label": "Por qu\u00e9 R2 y dos cubos",
+      "file_type": "document",
+      "source_file": "docs/ARQUITECTURA-ECOSISTEMA.md",
+      "source_location": "L198",
+      "_origin": "ast",
+      "id": "docs_arquitectura_ecosistema_por_qu\u00e9_r2_y_dos_cubos",
+      "community": 9,
+      "community_name": "Arquitectura del ecosistema SORSABSA",
+      "norm_label": "por que r2 y dos cubos"
+    },
+    {
+      "label": "Orden de migraci\u00f3n, por urgencia",
+      "file_type": "document",
+      "source_file": "docs/ARQUITECTURA-ECOSISTEMA.md",
+      "source_location": "L210",
+      "_origin": "ast",
+      "id": "docs_arquitectura_ecosistema_orden_de_migraci\u00f3n_por_urgencia",
+      "community": 9,
+      "community_name": "Arquitectura del ecosistema SORSABSA",
+      "norm_label": "orden de migracion, por urgencia"
+    },
+    {
+      "label": "Riesgos aceptados",
+      "file_type": "document",
+      "source_file": "docs/ARQUITECTURA-ECOSISTEMA.md",
+      "source_location": "L218",
+      "_origin": "ast",
+      "id": "docs_arquitectura_ecosistema_riesgos_aceptados",
+      "community": 9,
+      "community_name": "Arquitectura del ecosistema SORSABSA",
+      "norm_label": "riesgos aceptados"
     },
     {
       "label": "graphify-ci.md",
@@ -11500,6 +11555,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/ARQUITECTURA-ECOSISTEMA.md",
+      "source_location": "L174",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_arquitectura_ecosistema_arquitectura_del_ecosistema_sorsabsa",
+      "target": "docs_arquitectura_ecosistema_7_decisi\u00f3n_de_arquitectura_2026_07_26",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARQUITECTURA-ECOSISTEMA.md",
       "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
@@ -11582,6 +11648,50 @@
       "_origin": "ast",
       "source": "docs_arquitectura_ecosistema_5_roturas_verificadas_el_2026_07_26",
       "target": "docs_arquitectura_ecosistema_pendientes_conocidos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARQUITECTURA-ECOSISTEMA.md",
+      "source_location": "L210",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_arquitectura_ecosistema_7_decisi\u00f3n_de_arquitectura_2026_07_26",
+      "target": "docs_arquitectura_ecosistema_orden_de_migraci\u00f3n_por_urgencia",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARQUITECTURA-ECOSISTEMA.md",
+      "source_location": "L198",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_arquitectura_ecosistema_7_decisi\u00f3n_de_arquitectura_2026_07_26",
+      "target": "docs_arquitectura_ecosistema_por_qu\u00e9_r2_y_dos_cubos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARQUITECTURA-ECOSISTEMA.md",
+      "source_location": "L218",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_arquitectura_ecosistema_7_decisi\u00f3n_de_arquitectura_2026_07_26",
+      "target": "docs_arquitectura_ecosistema_riesgos_aceptados",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARQUITECTURA-ECOSISTEMA.md",
+      "source_location": "L190",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_arquitectura_ecosistema_7_decisi\u00f3n_de_arquitectura_2026_07_26",
+      "target": "docs_arquitectura_ecosistema_se_elimina",
       "confidence_score": 1.0
     },
     {
@@ -11685,5 +11795,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "db0301d12b9b7b052b84e14ecf76e9c9ceb9e7bc"
+  "built_at_commit": "caf3d162f924e520a0054fa49341e199620884d7"
 }
