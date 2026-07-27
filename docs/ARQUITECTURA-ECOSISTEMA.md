@@ -168,3 +168,58 @@ no lo está:
   comprobó que cobren ni que autentiquen de verdad.** Un despliegue verde solo
   dice que compiló.
 - notificaciones-sorsabsa, geo-sorsabsa, SORSABSA Forensic: sin revisar.
+
+---
+
+## 7. Decisión de arquitectura (2026-07-26)
+
+Cuatro piezas. El objetivo es dejar de pagar planes que además imponen los
+límites que hoy rompen el ecosistema.
+
+```
+Vercel          →  los 5 frontends
+1 Supabase      →  SOLO identidad (el SSO que ya funciona)
+1 VPS ~€5/mes   →  Postgres (5 bases separadas)
+                   + Convertidor (Tesseract, EasyOCR)
+                   + scraper de JustiRed (Playwright)
+                   + procesamiento pericial e IoT
+Cloudflare R2   →  cubo PÚBLICO: fotos de inmuebles
+                   cubo PRIVADO: peritajes, cédulas, contratos, firmas
+```
+
+### Se elimina
+
+- **Railway**: es un VPS con envoltorio; pagar los dos es pagar dos veces.
+- **Supabase Storage**: lo reemplaza R2.
+- **4 de los 5 proyectos Supabase**: sus bases bajan al Postgres del VPS.
+- **Amazon S3**: descartado. Cobra egress, y el modelo de negocio es gente
+  mirando fotos repetidamente en sitios públicos. R2 no cobra egress.
+
+### Por qué R2 y dos cubos
+
+Los objetos no son homogéneos y no pueden compartir cubo:
+
+- **Público**: fotos de listados. URL directa, cacheada, egress gratis.
+- **Privado**: expedientes periciales, documentos de identidad, contratos,
+  firmas. **Nunca URL pública** — enlaces firmados con caducidad. Un documento
+  de identidad con URL adivinable es una fuga de datos personales.
+
+Subir del navegador directo a R2 con enlace firmado elimina además el tope de
+4.5MB del cuerpo de las funciones de Vercel (§4).
+
+### Orden de migración, por urgencia
+
+1. **Convertidor al VPS.** Único con fecha: hoy solo existe en la máquina de
+   Gina, que está vendida. Salva el motor pericial y la biblioteca de JustiRed.
+2. **`pagos` fuera de CondoManager** a su propia base (§3).
+3. **Objetos a R2.**
+4. **El resto de bases**, un producto por vez.
+
+### Riesgos aceptados
+
+- La administración del VPS (actualizaciones, respaldos) pasa a ser propia.
+  Mitigación: `pg_dump` diario por cron hacia R2.
+- Punto único de fallo. Aceptable sin clientes; se revisa cuando los haya.
+- **Pericial**: si la cadena de custodia exige control físico de los originales
+  o jurisdicción concreta, es una decisión legal, no técnica. Sin resolver.
+- Los precios citados son de memoria y **están sin confirmar**.
