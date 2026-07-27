@@ -8,8 +8,12 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 const TONE: Record<string, string> = {
-  primary: 'bg-brand-primary/10 text-brand-primary border-brand-primary/20',
-  accent: 'bg-brand-accent/10 text-brand-accent border-brand-accent/20',
+  // Variantes legibles: el texto va sobre un tinte del 10%, o sea prácticamente
+  // sobre el fondo. Con el color crudo, el turquesa de DomusCRM daba 2.43:1 y
+  // el ocre de Agente24Siete 3.46:1. El borde y el relleno sí usan el color de
+  // marca real. Mismo criterio que Button.
+  primary: 'bg-brand-primary/10 text-brand-primary-text border-brand-primary/20',
+  accent: 'bg-brand-accent/10 text-brand-accent-text border-brand-accent/20',
   info: 'bg-sky-500/10 text-sky-700 border-sky-500/20',
   success: 'bg-emerald-500/10 text-emerald-700 border-emerald-500/20',
   warning: 'bg-amber-500/10 text-amber-700 border-amber-500/20',
