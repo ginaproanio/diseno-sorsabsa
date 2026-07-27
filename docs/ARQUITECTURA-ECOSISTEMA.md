@@ -178,22 +178,44 @@ límites que hoy rompen el ecosistema.
 
 ```
 Vercel          →  los 5 frontends
-1 Supabase      →  SOLO identidad (el SSO que ya funciona)
-1 VPS ~€5/mes   →  Postgres (5 bases separadas)
+Railway         →  Postgres gestionado
                    + Convertidor (Tesseract, EasyOCR)
                    + scraper de JustiRed (Playwright)
                    + procesamiento pericial e IoT
 Cloudflare R2   →  cubo PÚBLICO: fotos de inmuebles
                    cubo PRIVADO: peritajes, cédulas, contratos, firmas
+Supabase        →  SOLO identidad (el SSO que ya funciona)
 ```
+
+### Railway y no un VPS pelado
+
+La primera versión de esta decisión decía "VPS de ~€5/mes" y descartaba
+Railway por redundante. **Se revisó el mismo día**: optimizaba coste cuando la
+restricción real es otra.
+
+Con un VPS pelado, la administración es propia: parches del sistema,
+cortafuegos, TLS y su renovación, Docker, respaldos, vigilar el disco. Con cero
+clientes, vendiendo el equipo de trabajo y sin margen, esa carga no es
+asumible — y un servidor desatendido con expedientes periciales dentro es un
+riesgo, no un ahorro.
+
+Railway cuesta del orden del doble (~$10-20/mes frente a ~€7) y a cambio da
+contenedores **sin dar un servidor**: mismas imágenes Docker, mismos binarios,
+pero actualizaciones, seguridad y TLS son suyos, y se despliega con `git push`.
+
+Su **Postgres gestionado reemplaza las bases de Supabase**, con lo que
+desaparece el límite de 2 proyectos activos, se acaba el prender/apagar para
+trabajar, y `pagos` deja de vivir dentro de CondoManager (§3).
 
 ### Se elimina
 
-- **Railway**: es un VPS con envoltorio; pagar los dos es pagar dos veces.
+- **Supabase como base de datos de producto**: queda solo para identidad.
 - **Supabase Storage**: lo reemplaza R2.
-- **4 de los 5 proyectos Supabase**: sus bases bajan al Postgres del VPS.
 - **Amazon S3**: descartado. Cobra egress, y el modelo de negocio es gente
   mirando fotos repetidamente en sitios públicos. R2 no cobra egress.
+
+R2 sigue haciendo falta aunque haya Railway: los expedientes y las fotos no van
+en el disco de la aplicación.
 
 ### Por qué R2 y dos cubos
 
