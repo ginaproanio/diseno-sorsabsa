@@ -204,10 +204,12 @@ Son dos planos distintos y ambos están vivos: campana en la app, correo fuera.
 
 ### Limitaciones y minas
 
-- **Un solo dominio verificado en Resend.** Todo correo sale desde
-  `auth.sorsabsa.com`. Para que cada producto escriba desde el suyo hay que
-  verificar `agente24siete.app`, `domuscrm.app` y `condomanager.vip` — esos
-  registros van **en Cloudflare**, no en Hostinger.
+- **Un solo dominio verificado en Resend, y está bien así.** Todo sale desde
+  `auth.sorsabsa.com`, pero el SSO **marca el mensaje segun el producto**: un
+  reseteo en CondoManager llega como CondoManager, uno en DomusCRM como
+  DomusCRM (`auth-sorsabsa/lib/apps.ts` + `BRANDS`). Un dominio verificado con
+  N plantillas marcadas es mejor que N dominios con N juegos de DNS que
+  mantener. **No hay que verificar los dominios de producto.**
 - ⚠️ `auth.sorsabsa.com` es un CNAME. Resend puso SPF y MX en `send.auth`, un
   nombre aparte, precisamente por eso. **Poner un MX directamente sobre
   `auth.sorsabsa.com` rompería el SSO**: un CNAME no admite otros registros en
