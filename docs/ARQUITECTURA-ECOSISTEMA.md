@@ -173,6 +173,57 @@ no lo está:
 
 ---
 
+## 6-bis. Plano de DNS y correo ✅ verificado 2026-07-26
+
+Funciona y no hay que tocarlo. Se documenta porque no estaba en ninguna parte.
+
+```
+Hostinger   →  DNS de sorsabsa.com
+                 CNAME  auth          → cname.vercel-dns.com  (el SSO en Vercel)
+                 TXT    resend._domainkey.auth                (DKIM, verificado)
+                 MX/TXT send.auth      → feedback-smtp.sa-east-1.amazonses.com
+                                                               (SPF, verificado)
+Cloudflare  →  DNS de agente24siete.app, domuscrm.app, condomanager.vip
+                 + buzones de ENTRADA por negocio (contactenos@, notificaciones@)
+Resend      →  SALIDA de correo transaccional desde auth.sorsabsa.com
+                 región sa-east-1 (São Paulo). Receiving deshabilitado.
+```
+
+**Entrada por Cloudflare, salida por Resend.** División correcta, no se pisan.
+
+### Quién manda qué correo
+
+- **Resend NO lo usa `notificaciones-sorsabsa`.** Ese servicio es la campana
+  dentro de la app (`crear`, `listar`, `marcar-leida`); sus únicas variables
+  son `NOTIFICACIONES_API_KEY` y `DATABASE_URL`. No manda correo.
+- Resend está enganchado como **SMTP de Supabase Auth**. Por eso el remitente
+  es `auth.sorsabsa.com` y lo que sale son *"Restablece tu contraseña"* y
+  *"Confirma tu cuenta"*. Verificado: entrega real el 2026-07-23.
+
+Son dos planos distintos y ambos están vivos: campana en la app, correo fuera.
+
+### Limitaciones y minas
+
+- **Un solo dominio verificado en Resend.** Todo correo sale desde
+  `auth.sorsabsa.com`. Para que cada producto escriba desde el suyo hay que
+  verificar `agente24siete.app`, `domuscrm.app` y `condomanager.vip` — esos
+  registros van **en Cloudflare**, no en Hostinger.
+- ⚠️ `auth.sorsabsa.com` es un CNAME. Resend puso SPF y MX en `send.auth`, un
+  nombre aparte, precisamente por eso. **Poner un MX directamente sobre
+  `auth.sorsabsa.com` rompería el SSO**: un CNAME no admite otros registros en
+  el mismo nombre.
+- ✅ `agente24siete/pages/api/lead-web.js` avisa de los leads **por WhatsApp**
+  (`ADMIN_WHATSAPP_NUMBER`), canal baneado, y el fallo se traga con `.catch()`.
+  Un lead entra en `leads_web` y nadie se entera. Debe salir por correo.
+
+### Hostinger
+
+El plan compartido está pagado por un año y **sí cumple una función**: es la
+autoridad DNS de `sorsabsa.com`, o sea de la capa de identidad de la que
+dependen los cinco productos. No es un gasto muerto. Lo que no puede hacer es
+correr binarios ni servir Next.js con soltura — para eso está Railway (§7).
+
+
 ## 7. Decisión de arquitectura (2026-07-26)
 
 Cuatro piezas. El objetivo es dejar de pagar planes que además imponen los
