@@ -71,17 +71,19 @@ Supabase, organización `wzhfxbqvalgipuixcugg`.
 | Proyecto | Ref | Qué contiene |
 |---|---|---|
 | `agente24siete` | `nwcqaginlnzjlkgwifas` | ✅ `auth`, `public` (15 tablas), `storage`. Nada más |
-| `condomanager` | `twkuidnjwhopbjnrhnxp` | ✅ **además del suyo, el esquema `pagos` de pagos-sorsabsa** |
+| `condomanager` | `twkuidnjwhopbjnrhnxp` | ✅ **CUATRO esquemas: `public` (CondoManager), `domus` (DomusCRM), `pagos`, `notificaciones`** |
 | `domuscrm` | `owilvzdcdipmrzeaeznw` | ❓ |
 | `justired` | `jywrjkfamdtcoehlsiup` | ❓ |
 | `sorsabsa_ecosystem` | `tkkpqbelzwoenmeynjvw` | ❓ |
 
 ### ⚠️ Acoplamiento crítico
 
-`pagos-sorsabsa/README.md:9` — *"del proyecto Supabase consolidado
-(`twkuidnjwhopbjnrhnxp`)"*. Ese ref **es CondoManager**.
+`pagos-sorsabsa/README.md:9` y `notificaciones-sorsabsa/README.md:11` apuntan
+ambos al "proyecto consolidado" `twkuidnjwhopbjnrhnxp`. Ese ref **es
+CondoManager**, y dentro conviven cuatro esquemas de cuatro dueños distintos.
 
-**Pausar CondoManager apaga el cobro de los cuatro productos.** Ocurrió el
+**Pausar CondoManager apaga, de golpe: CondoManager, los datos de DomusCRM, el
+cobro de los cuatro productos y las notificaciones de todos.** Ocurrió el
 2026-07-26 y nadie lo notó: pagos-sorsabsa seguía marcando despliegues verdes
 porque el código compila igual — lo que estaba caído era su base.
 
