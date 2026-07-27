@@ -208,6 +208,13 @@ export function brandToCssVars(brand: BrandConfig): CSSProperties {
     // primaryForeground (blanco por defecto), que sobre acentos claros como el
     // turquesa de DomusCRM daba 2.58:1.
     '--brand-accent-foreground': hexToRgbTriplet(readableOn(c.accent ?? c.primary)),
+    // Simétrico de primary-text: el acento legible como TEXTO sobre el fondo.
+    // Permite conservar el color de marca real (el turquesa #1db4a5 de
+    // DomusCRM, el verde petróleo de Agente24Siete) en rellenos y bordes, sin
+    // que el wordmark ni los rótulos reprueben AA.
+    '--brand-accent-text': hexToRgbTriplet(
+      darkenToContrast(c.accent ?? c.primary, c.background ?? c.surface ?? '#ffffff', 4.5),
+    ),
     '--brand-secondary': hexToRgbTriplet(c.secondary ?? '#64748b'),
     '--brand-accent': hexToRgbTriplet(c.accent ?? c.primary),
     '--brand-surface': hexToRgbTriplet(c.surface ?? '#ffffff'),
