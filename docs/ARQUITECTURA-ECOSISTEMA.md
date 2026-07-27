@@ -300,3 +300,56 @@ Subir del navegador directo a R2 con enlace firmado elimina además el tope de
 - **Pericial**: si la cadena de custodia exige control físico de los originales
   o jurisdicción concreta, es una decisión legal, no técnica. Sin resolver.
 - Los precios citados son de memoria y **están sin confirmar**.
+
+---
+
+## 8. Por qué Vercel para la web y Railway para el resto
+
+Pregunta legítima y recurrente: *¿por qué no consolidar todo en Railway?* Se
+puede — Railway corre Next.js sin problema. La razón de no hacerlo es coste y
+encaje, no dogma:
+
+| | Vercel | Los 5 frontends en Railway |
+|---|---|---|
+| Coste | **$0** hoy | 5 contenedores encendidos, ~1GB RAM: +$10-20/mes |
+| Next.js | plataforma de referencia | funciona, pero sin CDN, sin optimización de imágenes, ISR a mano |
+| `*.domuscrm.app` | SSL comodín automático | configuración manual |
+| Sitios públicos de inmuebles | servidos desde el borde | desde una sola región |
+
+Los frontends son ligeros y de lectura: Vercel los sirve gratis y escala a
+cero. Railway cobraría por tenerlos encendidos para hacer lo mismo peor.
+
+**El argumento a favor de consolidar existe** —una factura, un panel, un modelo
+mental— y es legítimo si la dispersión pesa más que el coste. Pero conviene
+separar dos cosas: el daño real de este ecosistema no vino de usar dos
+plataformas, sino de **cuatro esquemas conviviendo en una base sin que nadie lo
+supiera** (§3). Eso lo arregla el Postgres de Railway, no mudar los frontends.
+
+---
+
+## 9. Pendientes, en orden
+
+1. **Convertidor a un contenedor.** Único con fecha: hoy solo existe en la
+   máquina vendida (§2). Desbloquea además la biblioteca legal de JustiRed.
+2. **Sacar `pagos` y `notificaciones` del proyecto de CondoManager** (§3). Es
+   el acoplamiento que dejó sin cobro a los cuatro productos el 2026-07-26.
+3. **Objetos a R2**, dos cubos (§7). Arregla de paso el tope de 4MB en las
+   fotos de inmuebles (§4).
+4. **Aviso de leads por correo.** `agente24siete/pages/api/lead-web.js` avisa
+   por WhatsApp, canal baneado, y el error se traga con `.catch()`: el lead se
+   guarda y nadie se entera. Resend ya está montado y el whitelabel por
+   producto funciona (§6-bis) — es reusar lo que hay.
+5. **Subir agente24siete de `^0.1.6` a la última.** Son más de 30 versiones de
+   deriva: merece rama y preview antes de main
+   (`agente24siete/docs/FLUJO-DE-TRABAJO.md`).
+6. **Quitar `typescript.ignoreBuildErrors: true`** de agente24siete cuando
+   compile limpio. Es lo que dejó pasar un build roto cinco días.
+7. **Unificar los dos portales de agente24siete** (§5). Sin prisa: el que
+   funciona con login real es el HTML, y el React sigue sin autenticación.
+
+### Reglas que ya no dependen de la memoria
+
+- `docs/COLOR-Y-CONTRASTE.md` — la identidad no se paga con accesibilidad.
+- `README.md` §Publicar — las etiquetas deben ser anotadas o no se suben.
+- `.githooks/pre-push` — bloquea publicar `src/` sin subir versión.
+- `agente24siete/docs/FLUJO-DE-TRABAJO.md` — previews antes de main.

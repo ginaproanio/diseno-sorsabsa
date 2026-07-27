@@ -186,6 +186,27 @@ coincidir con la `version` del package.json de ese commit.**
 > Atajo: `npm version patch` hace las tres cosas (bump + commit + tag)
 > en un solo comando; después solo `git push --follow-tags`.
 
+### ⚠️ La etiqueta tiene que ser ANOTADA
+
+`git push --follow-tags` **solo empuja etiquetas anotadas**. Si la creas a mano
+con `git tag v0.1.7` (ligera), el push dice que todo fue bien y la etiqueta se
+queda en tu máquina: el consumidor luego falla con
+`error: pathspec 'v0.1.7' did not match any file(s) known to git`.
+
+Pasó el 2026-07-26 con la v0.1.37 y la v0.1.38, sin ningún aviso.
+
+```bash
+git tag -a v0.1.7 -m "v0.1.7"   # anotada  ✅
+git tag v0.1.7                  # ligera   ❌ --follow-tags la ignora
+```
+
+`npm version patch` las crea anotadas, así que con el atajo no ocurre. Para
+comprobar qué hay publicado de verdad:
+
+```bash
+git ls-remote --tags origin | grep -oE "v[0-9.]+$" | sort -V | tail -3
+```
+
 ## La regla ya NO depende de la memoria: hook pre-push
 
 Desde el 16 jul 2026 existe [.githooks/pre-push](.githooks/pre-push):
