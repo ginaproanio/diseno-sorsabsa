@@ -77,21 +77,26 @@ describe('brandToCssVars — tokens de contraste calculados', () => {
   });
 });
 
-describe('brands — contraste del acento de DomusCRM', () => {
-  /** Luminancia relativa WCAG de un hex. */
-  function luminancia(hex: string): number {
-    const n = parseInt(hex.replace('#', ''), 16);
-    return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
-      .map((c) => {
+describe('brandToCssVars — la identidad de marca se conserva', () => {
+  it('los colores crudos son los OFICIALES, sin oscurecer por accesibilidad', () => {
+    // Regresión: el 26 jul 2026 se oscurecieron para arreglar contraste y hubo
+    // que revertirlos. El contraste lo resuelven los tokens *-text, no cambiar
+    // la marca.
+    expect(BRANDS.agente24siete!.colors.primary).toBe('#c1701b');
+    expect(BRANDS.domuscrm!.colors.accent).toBe('#1db4a5');
+  });
+
+  it('--brand-accent-text cumple AA sobre el fondo en TODAS las marcas', () => {
+    const lum = (t: string) =>
+      t.split(' ').map(Number).map((c) => {
         const s = c / 255;
         return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
-      })
-      .reduce((acc, c, i) => acc + [0.2126, 0.7152, 0.0722][i]! * c, 0);
-  }
-
-  it('el acento cumple AA (4.5:1) sobre blanco — el wordmark lo usa como texto', () => {
-    const l = luminancia(BRANDS.domuscrm!.colors.accent!);
-    const ratio = 1.05 / (l + 0.05);
-    expect(ratio).toBeGreaterThanOrEqual(4.5);
+      }).reduce((acc, c, i) => acc + [0.2126, 0.7152, 0.0722][i]! * c, 0);
+    for (const [nombre, marca] of Object.entries(BRANDS)) {
+      const v = brandToCssVars(marca) as Record<string, string>;
+      const [la, lb] = [lum(v['--brand-accent-text']!), lum(v['--brand-background']!)];
+      const ratio = (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+      expect(`${nombre}: ${ratio.toFixed(2)}`).toBe(`${nombre}: ${Math.max(ratio, 4.5).toFixed(2)}`);
+    }
   });
 });

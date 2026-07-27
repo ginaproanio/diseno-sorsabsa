@@ -39,11 +39,12 @@ export const BRANDS: Record<string, BrandConfig> = {
     wordmark: { first: 'Domus', second: 'CRM', tones: ['primary', 'accent'] },
     colors: {
       primary: '#1746A2',            // azul DomusCRM — menú, botones, franjas, precios, "Domus"
-      // Turquesa DomusCRM — íconos, "CRM", highlights. Oscurecido 26 jul 2026:
-      // el original #1db4a5 rendía 2.43:1 sobre fondo claro y reprobaba WCAG AA
-      // como texto en cualquier tamaño, incluido el "CRM" del propio wordmark.
-      // Este tono mantiene el matiz y sube a 5.01:1 sobre blanco.
-      accent: '#0d7d72',
+      // Turquesa OFICIAL DomusCRM — íconos, "CRM", highlights. NO cambiarlo por
+      // contraste: rinde 2.43:1 y reprueba AA como texto, pero eso lo resuelve
+      // `--brand-accent-text`, que lo oscurece solo donde se pinta como texto.
+      // (Se oscureció a #0d7d72 el 26 jul 2026 y se revirtió el mismo día: la
+      // identidad manda, la accesibilidad se resuelve con el token.)
+      accent: '#1db4a5',
       // (sin `sidebar`: el menú hereda `primary` → menú y franjas del MISMO color)
       secondary: '#e0edff',
       surface: '#FFFFFF',
@@ -70,11 +71,13 @@ export const BRANDS: Record<string, BrandConfig> = {
     // (index.html, tema claro): ocre para acciones/resaltados, verde petróleo
     // para estados/identidad, titulares en monospace. Deja de ser provisional.
     colors: {
-      // Ocre — CTAs y palabras resaltadas. Oscurecido 26 jul 2026: el original
-      // #c1701b rendía 3.46:1 sobre el fondo de marca y reprobaba AA en los
-      // rótulos de sección, los botones secundarios y el "24" del wordmark.
-      // Mismo matiz, ahora 4.82:1.
-      primary: '#a35a10',
+      // Ocre OFICIAL de la marca — CTAs y palabras resaltadas. NO cambiarlo por
+      // contraste: rinde 3.46:1 sobre el fondo y reprueba AA como texto, pero
+      // eso lo resuelve `--brand-primary-text`, que lo oscurece solo donde se
+      // pinta como texto y deja la marca intacta en fondos y rellenos.
+      // (Se oscureció a #a35a10 el 26 jul 2026 y se revirtió el mismo día: la
+      // identidad manda, la accesibilidad se resuelve con el token.)
+      primary: '#c1701b',
       primaryForeground: '#17120a',  // texto casi negro sobre el ocre (original)
       accent: '#1f6f5c',             // verde petróleo — estados, chips, wordmark
       surface: '#FFFFFF',

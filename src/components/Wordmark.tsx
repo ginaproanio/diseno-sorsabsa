@@ -23,8 +23,13 @@ import {
 
 const TONE_CLASS: Record<WordmarkTone, string> = {
   text: 'text-brand-text',
-  primary: 'text-brand-primary',
-  accent: 'text-brand-accent',
+  // Variantes legibles, no los colores crudos: el logotipo es TEXTO, y varios
+  // colores de marca reprueban AA en ese uso (el turquesa de DomusCRM daba
+  // 2.43:1 en el "CRM", el ocre de Agente24Siete 3.46:1 en el "24"). Los
+  // tokens *-text conservan el matiz y solo oscurecen lo justo; si el color ya
+  // cumple, son idénticos al original.
+  primary: 'text-brand-primary-text',
+  accent: 'text-brand-accent-text',
 };
 
 const TONOS_POR_DEFECTO: WordmarkTone[] = ['accent', 'primary', 'primary'];
