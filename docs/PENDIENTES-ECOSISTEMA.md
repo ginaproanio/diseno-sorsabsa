@@ -40,21 +40,28 @@ JustiRed (legaltech) tiene **login propio separado** en su propio proyecto
 (`jywrjk`), NO pasa por auth-sorsabsa. Viola el principio de arriba. Migrarlo al
 SSO para que sea single-sign-on de verdad.
 
-## 3. Terminar el cutover de pagos (fuera de Vercel)
+## 3. ✅ HECHO — cutover de pagos (fuera de Vercel)
 
-pagos-sorsabsa ya corre en Railway (SORSABSA-DATA) y está verificado. Falta:
-- Repuntar los 3 llamadores al URL de Railway
-  (`https://pagos-sorsabsa-production.up.railway.app`):
-  agente24siete, condomanager, domuscrm.
-- **Estandarizar la variable**: hoy son 3 nombres distintos para lo mismo
-  (`PAGOS_SERVICE_URL` en agente24siete, `PAGOS_API_URL` en condomanager/domuscrm).
-  Unificar a **`PAGOS_URL`** en todos. La llave ya es `PAGOS_API_KEY` en todos.
-- Quitar el proyecto pagos-sorsabsa de Vercel.
+pagos-sorsabsa corre en Railway (SORSABSA-DATA), verificado. Los 3 llamadores
+(agente24siete, condomanager, domuscrm) repuntados a
+`https://pagos-sorsabsa-production.up.railway.app`. Variable estandarizada a
+**`PAGOS_API_URL`** en todos (antes agente24siete usaba `PAGOS_SERVICE_URL`;
+condo/domus ya usaban `PAGOS_API_URL`). Proyecto pagos-sorsabsa borrado de Vercel.
 
-## 4. notificaciones-sorsabsa → Railway
+## 4. ✅ HECHO — notificaciones-sorsabsa → Railway
 
-Mismo patrón que pagos (Express wrapper + Dockerfile + servicio en SORSABSA-DATA
-+ repuntar llamadores). Es API de backend sin UI: no tiene que estar en Vercel.
+Mismo patrón que pagos. Corre en Railway, verificado (POST /api/listar → 200).
+Llamadores (condomanager, domuscrm) repuntados a
+`https://notificaciones-sorsabsa-production.up.railway.app` con `NOTIFICACIONES_API_URL`.
+Proyecto borrado de Vercel. (agente24siete todavía no llama a notificaciones —
+está en su TODO `alertarAdmin()`.)
+
+## 4-bis. Limpieza menor en agente24siete
+
+Al estandarizar, el fix quedó también en la rama `auditoria/ciclo-operativo`
+(commit duplicado 4bc591b) y hay un `git stash` sin aplicar en esa rama. main
+quedó correcto y desplegado. Revisar/limpiar la rama y el stash cuando se retome
+ese repo. El repo quedó con `main` checked out.
 
 ## 5. RLS en 2 tablas expuestas (seguridad)
 
