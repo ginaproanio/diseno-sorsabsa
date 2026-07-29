@@ -242,6 +242,91 @@ Cloudflare R2   →  cubo PÚBLICO: fotos de inmuebles
 Supabase        →  SOLO identidad (el SSO que ya funciona)
 ```
 
+### Verificado 2026-07-28: qué base va a Railway y qué se queda en Supabase
+
+El "Supabase = SOLO identidad" de arriba tiene un recorte que la evidencia
+obliga. Se clasificó cada componente por su acoplamiento a `auth.users` / RLS
+(leído del código, no de memoria):
+
+| Componente | Usos de RLS / `auth.uid()` / `auth.users` | Acceso a la base | Hogar |
+|---|---|---|---|
+| auth (identidad) | ES Supabase Auth | — | **Supabase** |
+| CondoManager | **89** (12 archivos con `supabase-js`) | supabase-js + RLS | **Supabase** |
+| pagos | 0 | Postgres crudo (`DATABASE_URL`) | **Railway** |
+| notificaciones | 0 | Postgres crudo (`DATABASE_URL`) | **Railway** |
+| JustiRed | 0 | — | **Railway** |
+| agente24siete | 1 (trivial) | Postgres crudo (psql pooler) | **Railway** |
+| DomusCRM | 3 (uno es doc, uno SQL) | leve | **Railway** |
+
+**Principio que gobierna:** lo que tiene llaves foráneas a `auth.users` o usa
+RLS con `auth.uid()` está casado con Supabase Auth y no puede salir sin
+reescribir su autorización. Lo que no las tiene, es libre y se muda a Railway
+cambiando su `DATABASE_URL`.
+
+**CORRECCIÓN 2026-07-28 (verificada en SQL):** una primera versión de esta
+sección dijo que auth estaba "soldado a CondoManager por RLS" y que debían
+quedar juntos. **Es falso.** El SQL de CondoManager tiene:
+
+```
+FK duras (REFERENCES auth.users):  0
+Referencias a la tabla auth.users:  0
+auth.uid()  [lee del JWT, no de la tabla]: 20
+```
+
+CondoManager NO tiene ninguna llave foránea a `auth.users`. Su RLS usa
+`auth.uid()`, que lee del **token JWT**, no de la tabla. Por lo tanto **auth NO
+tiene que vivir dentro de CondoManager y debe salir a su propio proyecto.**
+
+**Regla corregida — identidad es su propio proyecto aislado.** auth (el SSO de
+todo el ecosistema) va a un **proyecto de identidad propio**: no depende de
+ningún producto, y todos dependen de él. Que CondoManager —el producto— pegue o
+no, deja de tocar el login de nadie.
+
+Hoy todo está mal metido en `twkuidnjwhopbjnrhnxp`: auth + CondoManager + pagos
++ notificaciones + `domus` (DomusCRM). Deben separarse: **auth a su proyecto de
+identidad; pagos/notificaciones/domus fuera; CondoManager a su propio proyecto.**
+
+**Requisito único para separar auth (config, no reescritura):** CondoManager (y
+cualquier producto con RLS `auth.uid()`) debe **compartir el secreto del JWT**
+con el proyecto de identidad, para seguir validando los tokens que este emite.
+No hay FK que romper, así que no hay migración de esquema forzada — es alinear
+el secreto de firma.
+
+**Por qué importa con carga real (no es teoría):** entran ~600 lotes en 5
+condominios (Asociación Punta Blanca) a CondoManager, publicados en la aliada
+EcoInmobiliaria (DomusCRM). Con el cableado actual, pausar `condomanager` —que
+el plan gratuito OBLIGA a hacer— tumba a la vez el **cobro** (pagos), el
+**login** (auth) y los **avisos** (notificaciones) de los cuatro productos. Con
+clientes dentro, sería no poder operar. Sacar pagos+notificaciones de ese
+proyecto elimina la caída en cadena.
+
+### Objetivo de capacidad: ~3000 usuarios (no "por el momento")
+
+El requisito real no es que funcione hoy, sino que **resista ~3000 personas
+vendiendo sus lotes** en EcoInmobiliaria (DomusCRM), con Punta Blanca (~6000 de
+comunidad) gestionada en CondoManager. Esto NO es negociable a nivel de tier:
+
+1. **Base de datos de PAGO, obligatorio.** El plan gratuito (500MB, CPU
+   compartida, auto-pausa) no sostiene 3000 usuarios. No hay camino gratis a
+   esa escala — es la primera realidad de costo a asumir.
+2. **Pooler de conexiones obligatorio** (Supavisor en Supabase / PgBouncer en
+   Railway). 3000 usuarios sin pooler agotan las conexiones directas.
+3. **Fotos de lotes → R2 en subida DIRECTA del navegador** (enlace firmado),
+   nunca por una función de Vercel (tope 4.5MB rechaza fotos de celular). Con
+   3000 vendedores subiendo imágenes, este es el golpe de carga principal.
+4. **Frontends en Vercel**: escalan solos, sin cambio.
+5. **Validación por prueba de carga ANTES del lanzamiento.** Simular la
+   concurrencia esperada; si revienta, se ajusta antes de meter gente, no
+   después. Es la única forma de afirmar "resiste" sin adivinar.
+
+**Secuencia, menor riesgo primero:**
+1. `pagos` + `notificaciones` → Railway (cambiar `DATABASE_URL`). **Urgente**,
+   antes de que entre Punta Blanca. Mata el acoplamiento mortal.
+2. JustiRed, agente24siete, DomusCRM → Railway cuando toque.
+3. CondoManager + auth → se quedan en Supabase, intactos. Ese proyecto núcleo
+   debe estar **siempre activo**; cuando la carga de Punta Blanca lo justifique,
+   pasa a Supabase Pro (~$25/mes) — gasto por carga real, no antes.
+
 ### Railway y no un VPS pelado
 
 La primera versión de esta decisión decía "VPS de ~€5/mes" y descartaba
@@ -286,7 +371,7 @@ Subir del navegador directo a R2 con enlace firmado elimina además el tope de
 
 ### Orden de migración, por urgencia
 
-1. **Convertidor al VPS.** Único con fecha: hoy solo existe en la máquina de
+1. **Convertidor a Railway.** Único con fecha: hoy solo existe en la máquina de
    Gina, que está vendida. Salva el motor pericial y la biblioteca de JustiRed.
 2. **`pagos` fuera de CondoManager** a su propia base (§3).
 3. **Objetos a R2.**
@@ -294,8 +379,8 @@ Subir del navegador directo a R2 con enlace firmado elimina además el tope de
 
 ### Riesgos aceptados
 
-- La administración del VPS (actualizaciones, respaldos) pasa a ser propia.
-  Mitigación: `pg_dump` diario por cron hacia R2.
+- Los respaldos de datos siguen siendo propios (Railway cubre el sistema, no el
+  contenido). Mitigación: `pg_dump` diario por cron hacia R2.
 - Punto único de fallo. Aceptable sin clientes; se revisa cuando los haya.
 - **Pericial**: si la cadena de custodia exige control físico de los originales
   o jurisdicción concreta, es una decisión legal, no técnica. Sin resolver.
