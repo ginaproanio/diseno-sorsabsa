@@ -61,8 +61,8 @@ ya funciona.**
    - `PAGOS_API_KEY_JUSTIRED` = `justired_ea7252e2404150600aaf89ac19b6b1d77ab7b416c77b01c5`
      (debe COINCIDIR con la de Railway, ya seteada)
    - `INGESTA_LEGAL_TOKEN` = (cualquiera; también en el scraper — solo para poblar biblioteca)
-3. **Dar de baja el proyecto `jywrjk`** desde el dashboard (MCP no borra
-   proyectos). Está vacío; verificar antes que el login/biblioteca funcionan.
+3. ✅ **Proyecto `jywrjk` dado de baja** (29-jul-2026) — estaba vacío, borrado
+   del dashboard. Quedan solo los pasos 1 y 2.
 
 **Después (biblioteca legal, cuando se retome):** repuntar el scraper de JustiRed
 (Railway) a la URL de `ingesta-legal` del central + su `INGESTA_LEGAL_TOKEN`.
