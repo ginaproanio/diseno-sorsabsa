@@ -34,11 +34,38 @@ de TODO el ecosistema.** Pro resolvió el pausado, NO esto.
 toca settings del dashboard; es lo que peor quedaría a medio camino si se acaban
 los tokens. Se hace de principio a fin, no al final de una sesión larga.
 
-## 2. JustiRed al SSO central
+## 2. JustiRed al SSO central  🟡 casi hecho — faltan 3 pasos manuales
 
-JustiRed (legaltech) tiene **login propio separado** en su propio proyecto
-(`jywrjk`), NO pasa por auth-sorsabsa. Viola el principio de arriba. Migrarlo al
-SSO para que sea single-sign-on de verdad.
+**Hecho (29-jul-2026):** JustiRed se unificó al proyecto central
+`twkuidnjwhopbjnrhnxp` como schema `justired` (mismo patrón que domus). El
+frontend ya redirige al SSO (login propio eliminado) y apunta al central con
+`db.schema='justired'`. Se descubrió que jywrjk estaba **vacío** (0 filas, 0
+usuarios) y que las edge functions de notif/pago **ya eran proxies correctos** a
+los compartidos — no reimplementaban nada. Se recrearon en el central: schema +
+bucket `justired-legal-documents` (con RLS, el origen la tenía apagada), 4 edge
+functions proxy (3 notif → notificaciones-sorsabsa, 1 pago → pagos-sorsabsa) +
+`ingesta-legal`. pagos-sorsabsa acepta `PAGOS_API_KEY_JUSTIRED` (ya seteada en
+Railway). Frontend redesplegado en Vercel apuntando al central → **el login SSO
+ya funciona.**
+
+**Falta (manual — no se puede por MCP; JustiRed no está lanzado, sin urgencia):**
+
+1. **Exponer el schema `justired`** en la API del central: Supabase → central →
+   Settings → API → *Exposed schemas* → agregar `justired`. Sin esto, la
+   biblioteca legal y los planes no cargan (PostgREST no sirve el schema).
+2. **Secretos de las edge functions** (Supabase → central → Edge Functions →
+   *Manage secrets*):
+   - `NOTIFICACIONES_API_URL` = `https://notificaciones-sorsabsa-production.up.railway.app`
+   - `NOTIFICACIONES_API_KEY` = (copiar del servicio notificaciones-sorsabsa en Railway)
+   - `PAGOS_API_URL` = `https://pagos-sorsabsa-production.up.railway.app`
+   - `PAGOS_API_KEY_JUSTIRED` = `justired_ea7252e2404150600aaf89ac19b6b1d77ab7b416c77b01c5`
+     (debe COINCIDIR con la de Railway, ya seteada)
+   - `INGESTA_LEGAL_TOKEN` = (cualquiera; también en el scraper — solo para poblar biblioteca)
+3. **Dar de baja el proyecto `jywrjk`** desde el dashboard (MCP no borra
+   proyectos). Está vacío; verificar antes que el login/biblioteca funcionan.
+
+**Después (biblioteca legal, cuando se retome):** repuntar el scraper de JustiRed
+(Railway) a la URL de `ingesta-legal` del central + su `INGESTA_LEGAL_TOKEN`.
 
 ## 3. ✅ HECHO — cutover de pagos (fuera de Vercel)
 
