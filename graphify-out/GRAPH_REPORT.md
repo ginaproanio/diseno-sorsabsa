@@ -1,16 +1,16 @@
 # Graph Report - diseno-sorsabsa  (2026-07-29)
 
 ## Corpus Check
-- 67 files · ~22,921 words
+- 67 files · ~22,960 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 434 nodes · 664 edges · 25 communities (23 shown, 2 thin omitted)
+- 435 nodes · 665 edges · 25 communities (23 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6d43b2e7`
+- Built from commit: `5d0b1656`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -40,7 +40,7 @@
 ## God Nodes (most connected - your core abstractions)
 1. `compilerOptions` - 13 edges
 2. `compilerOptions` - 13 edges
-3. `Pendientes del ecosistema SORSABSA` - 12 edges
+3. `Pendientes del ecosistema SORSABSA` - 13 edges
 4. `BrandConfig` - 11 edges
 5. `IconName` - 11 edges
 6. `@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA` - 11 edges
@@ -71,12 +71,12 @@ Cohesion: 0.07
 Nodes (45): DATA, TableDemo(), AppShell(), AppShellProps, Avatar(), AvatarProps, getInitials(), SIZE (+37 more)
 
 ### Community 1 - "App.tsx"
-Cohesion: 0.09
-Nodes (27): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented() (+19 more)
+Cohesion: 0.08
+Nodes (26): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented() (+18 more)
 
 ### Community 2 - "BrandProvider.tsx"
 Cohesion: 0.10
-Nodes (27): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandContext, BrandProvider(), brandToCssVars(), contrastRatio() (+19 more)
+Nodes (28): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandConfig, BrandContext, BrandProvider(), brandToCssVars() (+20 more)
 
 ### Community 3 - "devDependencies"
 Cohesion: 0.07
@@ -115,8 +115,8 @@ Cohesion: 0.16
 Nodes (11): CardStatusDemo(), SHADOW, TONES, Card(), CardContent(), CardHeader(), CardHeaderProps, CardProps (+3 more)
 
 ### Community 12 - "Pendientes del ecosistema SORSABSA"
-Cohesion: 0.15
-Nodes (12): 1. Separar auth a su propio proyecto  ⚠️ #1 — sesión fresca, presupuesto completo, 2. JustiRed al SSO central, 3. Terminar el cutover de pagos (fuera de Vercel), 4. notificaciones-sorsabsa → Railway, 5. RLS en 2 tablas expuestas (seguridad), 6. Borrar proyecto Supabase huérfano, 7. SorsabsaForensic → Fase 0 antes de Railway, 8. Probar CondoManager end-to-end (Punta Blanca) (+4 more)
+Cohesion: 0.14
+Nodes (13): 1. Separar auth a su propio proyecto  ⚠️ #1 — sesión fresca, presupuesto completo, 2. JustiRed al SSO central, 3. ✅ HECHO — cutover de pagos (fuera de Vercel), 4-bis. Limpieza menor en agente24siete, 4. ✅ HECHO — notificaciones-sorsabsa → Railway, 5. RLS en 2 tablas expuestas (seguridad), 6. Borrar proyecto Supabase huérfano, 7. SorsabsaForensic → Fase 0 antes de Railway (+5 more)
 
 ### Community 13 - "@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA"
 Cohesion: 0.15
@@ -143,24 +143,24 @@ Cohesion: 0.40
 Nodes (4): buildCommand, framework, installCommand, outputDirectory
 
 ## Knowledge Gaps
-- **177 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+172 more)
+- **178 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+173 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `BrandConfig` connect `App.tsx` to `index.ts`, `BrandProvider.tsx`?**
+- **Why does `BrandConfig` connect `BrandProvider.tsx` to `index.ts`, `App.tsx`?**
   _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
   _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **Why does `Wordmark()` connect `BrandProvider.tsx` to `index.ts`, `App.tsx`, `DomusLanding.tsx`?**
   _High betweenness centrality (0.009) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _177 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _178 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.06753246753246753 - nodes in this community are weakly interconnected._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.08502415458937199 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08282828282828283 - nodes in this community are weakly interconnected._
 - **Should `BrandProvider.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.1021021021021021 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10241820768136557 - nodes in this community are weakly interconnected._

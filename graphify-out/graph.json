@@ -2295,8 +2295,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_brand_brandprovider_brandconfig",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 2,
+      "community_name": "BrandProvider.tsx",
       "norm_label": "brandconfig"
     },
     {
@@ -4588,32 +4588,43 @@
       "norm_label": "2. justired al sso central"
     },
     {
-      "label": "3. Terminar el cutover de pagos (fuera de Vercel)",
+      "label": "3. \u2705 HECHO \u2014 cutover de pagos (fuera de Vercel)",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
       "source_location": "L43",
       "_origin": "ast",
-      "id": "docs_pendientes_ecosistema_3_terminar_el_cutover_de_pagos_fuera_de_vercel",
+      "id": "docs_pendientes_ecosistema_3_hecho_cutover_de_pagos_fuera_de_vercel",
       "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
-      "norm_label": "3. terminar el cutover de pagos (fuera de vercel)"
+      "norm_label": "3. \u2705 hecho \u2014 cutover de pagos (fuera de vercel)"
     },
     {
-      "label": "4. notificaciones-sorsabsa \u2192 Railway",
+      "label": "4. \u2705 HECHO \u2014 notificaciones-sorsabsa \u2192 Railway",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L54",
+      "source_location": "L51",
       "_origin": "ast",
-      "id": "docs_pendientes_ecosistema_4_notificaciones_sorsabsa_railway",
+      "id": "docs_pendientes_ecosistema_4_hecho_notificaciones_sorsabsa_railway",
       "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
-      "norm_label": "4. notificaciones-sorsabsa \u2192 railway"
+      "norm_label": "4. \u2705 hecho \u2014 notificaciones-sorsabsa \u2192 railway"
+    },
+    {
+      "label": "4-bis. Limpieza menor en agente24siete",
+      "file_type": "document",
+      "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
+      "source_location": "L59",
+      "_origin": "ast",
+      "id": "docs_pendientes_ecosistema_4_bis_limpieza_menor_en_agente24siete",
+      "community": 12,
+      "community_name": "Pendientes del ecosistema SORSABSA",
+      "norm_label": "4-bis. limpieza menor en agente24siete"
     },
     {
       "label": "5. RLS en 2 tablas expuestas (seguridad)",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L59",
+      "source_location": "L66",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_5_rls_en_2_tablas_expuestas_seguridad",
       "community": 12,
@@ -4624,7 +4635,7 @@
       "label": "6. Borrar proyecto Supabase hu\u00e9rfano",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L65",
+      "source_location": "L72",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_6_borrar_proyecto_supabase_hu\u00e9rfano",
       "community": 12,
@@ -4635,7 +4646,7 @@
       "label": "7. SorsabsaForensic \u2192 Fase 0 antes de Railway",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L72",
+      "source_location": "L79",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_7_sorsabsaforensic_fase_0_antes_de_railway",
       "community": 12,
@@ -4646,7 +4657,7 @@
       "label": "8. Probar CondoManager end-to-end (Punta Blanca)",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L78",
+      "source_location": "L85",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_8_probar_condomanager_end_to_end_punta_blanca",
       "community": 12,
@@ -4657,7 +4668,7 @@
       "label": "9. Auditar reuso de sistemas compartidos (graphify)",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L85",
+      "source_location": "L92",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_9_auditar_reuso_de_sistemas_compartidos_graphify",
       "community": 12,
@@ -4668,7 +4679,7 @@
       "label": "Hecho (para no re-hacer)",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L93",
+      "source_location": "L100",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_hecho_para_no_re_hacer",
       "community": 12,
@@ -12241,18 +12252,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
-      "target": "docs_pendientes_ecosistema_3_terminar_el_cutover_de_pagos_fuera_de_vercel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L54",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
-      "target": "docs_pendientes_ecosistema_4_notificaciones_sorsabsa_railway",
+      "target": "docs_pendientes_ecosistema_3_hecho_cutover_de_pagos_fuera_de_vercel",
       "confidence_score": 1.0
     },
     {
@@ -12263,18 +12263,29 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
-      "target": "docs_pendientes_ecosistema_5_rls_en_2_tablas_expuestas_seguridad",
+      "target": "docs_pendientes_ecosistema_4_bis_limpieza_menor_en_agente24siete",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L65",
+      "source_location": "L51",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
-      "target": "docs_pendientes_ecosistema_6_borrar_proyecto_supabase_hu\u00e9rfano",
+      "target": "docs_pendientes_ecosistema_4_hecho_notificaciones_sorsabsa_railway",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
+      "target": "docs_pendientes_ecosistema_5_rls_en_2_tablas_expuestas_seguridad",
       "confidence_score": 1.0
     },
     {
@@ -12285,18 +12296,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
-      "target": "docs_pendientes_ecosistema_7_sorsabsaforensic_fase_0_antes_de_railway",
+      "target": "docs_pendientes_ecosistema_6_borrar_proyecto_supabase_hu\u00e9rfano",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L78",
+      "source_location": "L79",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
-      "target": "docs_pendientes_ecosistema_8_probar_condomanager_end_to_end_punta_blanca",
+      "target": "docs_pendientes_ecosistema_7_sorsabsaforensic_fase_0_antes_de_railway",
       "confidence_score": 1.0
     },
     {
@@ -12307,6 +12318,17 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
+      "target": "docs_pendientes_ecosistema_8_probar_condomanager_end_to_end_punta_blanca",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
+      "source_location": "L92",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
       "target": "docs_pendientes_ecosistema_9_auditar_reuso_de_sistemas_compartidos_graphify",
       "confidence_score": 1.0
     },
@@ -12314,7 +12336,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L93",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
@@ -12433,5 +12455,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6d43b2e786a17b7dec79c5d0a4bce7993cd7216e"
+  "built_at_commit": "5d0b1656bdde4704d24e193b63465a1d3a605f96"
 }
