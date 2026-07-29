@@ -1,16 +1,16 @@
 # Graph Report - diseno-sorsabsa  (2026-07-29)
 
 ## Corpus Check
-- 66 files · ~22,288 words
+- 67 files · ~22,921 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 421 nodes · 652 edges · 23 communities (21 shown, 2 thin omitted)
+- 434 nodes · 664 edges · 25 communities (23 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d3758233`
+- Built from commit: `6d43b2e7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -27,8 +27,10 @@
 - showcase/package.json
 - devDependencies
 - CardStatusDemo.tsx
+- Pendientes del ecosistema SORSABSA
 - @sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA
 - Button.tsx
+- NotificationBell.tsx
 - Grafo de conocimiento (graphify) generado por CI
 - Color de marca y contraste
 - vercel.json
@@ -38,14 +40,14 @@
 ## God Nodes (most connected - your core abstractions)
 1. `compilerOptions` - 13 edges
 2. `compilerOptions` - 13 edges
-3. `BrandConfig` - 11 edges
-4. `IconName` - 11 edges
-5. `@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA` - 11 edges
-6. `Arquitectura del ecosistema SORSABSA` - 11 edges
-7. `resolveEffectiveColors()` - 9 edges
-8. `brandToCssVars()` - 9 edges
-9. `Icon` - 9 edges
-10. `Grafo de conocimiento (graphify) generado por CI` - 9 edges
+3. `Pendientes del ecosistema SORSABSA` - 12 edges
+4. `BrandConfig` - 11 edges
+5. `IconName` - 11 edges
+6. `@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA` - 11 edges
+7. `Arquitectura del ecosistema SORSABSA` - 11 edges
+8. `resolveEffectiveColors()` - 9 edges
+9. `brandToCssVars()` - 9 edges
+10. `Icon` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `resolveEffectiveColors()` --calls--> `brandToCssVars()`  [EXTRACTED]
@@ -62,15 +64,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (23 total, 2 thin omitted)
+## Communities (25 total, 2 thin omitted)
 
 ### Community 0 - "index.ts"
-Cohesion: 0.06
-Nodes (50): DATA, TableDemo(), AppShell(), AppShellProps, Avatar(), AvatarProps, getInitials(), SIZE (+42 more)
+Cohesion: 0.07
+Nodes (45): DATA, TableDemo(), AppShell(), AppShellProps, Avatar(), AvatarProps, getInitials(), SIZE (+37 more)
 
 ### Community 1 - "App.tsx"
-Cohesion: 0.08
-Nodes (30): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), MOCK (+22 more)
+Cohesion: 0.09
+Nodes (27): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented() (+19 more)
 
 ### Community 2 - "BrandProvider.tsx"
 Cohesion: 0.10
@@ -112,28 +114,36 @@ Nodes (17): autoprefixer, postcss, devDependencies, autoprefixer, postcss, tailw
 Cohesion: 0.16
 Nodes (11): CardStatusDemo(), SHADOW, TONES, Card(), CardContent(), CardHeader(), CardHeaderProps, CardProps (+3 more)
 
-### Community 12 - "@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA"
+### Community 12 - "Pendientes del ecosistema SORSABSA"
+Cohesion: 0.15
+Nodes (12): 1. Separar auth a su propio proyecto  ⚠️ #1 — sesión fresca, presupuesto completo, 2. JustiRed al SSO central, 3. Terminar el cutover de pagos (fuera de Vercel), 4. notificaciones-sorsabsa → Railway, 5. RLS en 2 tablas expuestas (seguridad), 6. Borrar proyecto Supabase huérfano, 7. SorsabsaForensic → Fase 0 antes de Railway, 8. Probar CondoManager end-to-end (Punta Blanca) (+4 more)
+
+### Community 13 - "@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA"
 Cohesion: 0.15
 Nodes (12): ⚠️ Bumpear la versión en cada cambio real (16 jul 2026, incidente real), ⚠️ Checklist del consumidor — Tailwind v3 vs v4 (incidente real, 16 jul 2026), Cómo funciona (la arquitectura de tokens), Instalación en un producto, ⚠️ La etiqueta tiene que ser ANOTADA, La regla ya NO depende de la memoria: hook pre-push, Pruebas, Publicar una versión (flujo desde 16 jul 2026 — sin copiar hashes) (+4 more)
 
-### Community 13 - "Button.tsx"
+### Community 14 - "Button.tsx"
 Cohesion: 0.18
 Nodes (10): ButtonMatrix(), SHADOW, VARIANTS, Button, ButtonProps, ButtonSize, ButtonVariant, CommonProps (+2 more)
 
-### Community 14 - "Grafo de conocimiento (graphify) generado por CI"
+### Community 15 - "NotificationBell.tsx"
+Cohesion: 0.24
+Nodes (8): MOCK, NotificationDemo(), Notificacion, NotificationBell(), NotificationBellProps, TYPE_COLOR, TYPE_ICON, useOnClickOutside()
+
+### Community 16 - "Grafo de conocimiento (graphify) generado por CI"
 Cohesion: 0.20
 Nodes (9): Añadir Pages a un repo privado (opcional, requiere GitHub Pro), Bugs resueltos durante el piloto (lecciones), Convención de `.gitignore`, Cómo funciona, Cómo ver el grafo, Estado por repo, Grafo de conocimiento (graphify) generado por CI, Por qué CI y no un hook local (+1 more)
 
-### Community 15 - "Color de marca y contraste"
+### Community 17 - "Color de marca y contraste"
 Cohesion: 0.29
 Nodes (6): Color de marca y contraste, Componentes que ya lo aplican, Cuál usar, Cómo comprobarlo, La regla, Los cuatro tokens
 
-### Community 16 - "vercel.json"
+### Community 18 - "vercel.json"
 Cohesion: 0.40
 Nodes (4): buildCommand, framework, installCommand, outputDirectory
 
 ## Knowledge Gaps
-- **166 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+161 more)
+- **177 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+172 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -141,16 +151,16 @@ Nodes (4): buildCommand, framework, installCommand, outputDirectory
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `BrandConfig` connect `App.tsx` to `index.ts`, `BrandProvider.tsx`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
-  _High betweenness centrality (0.011) - this node is a cross-community bridge._
+  _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **Why does `Wordmark()` connect `BrandProvider.tsx` to `index.ts`, `App.tsx`, `DomusLanding.tsx`?**
   _High betweenness centrality (0.009) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _166 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _177 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.059907834101382486 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06753246753246753 - nodes in this community are weakly interconnected._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.07673469387755102 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08502415458937199 - nodes in this community are weakly interconnected._
 - **Should `BrandProvider.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.1021021021021021 - nodes in this community are weakly interconnected._
