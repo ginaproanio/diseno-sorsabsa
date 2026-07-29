@@ -1,16 +1,16 @@
-# Graph Report - diseno-sorsabsa  (2026-07-27)
+# Graph Report - diseno-sorsabsa  (2026-07-29)
 
 ## Corpus Check
-- 66 files · ~21,547 words
+- 66 files · ~22,288 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 419 nodes · 650 edges · 24 communities (22 shown, 2 thin omitted)
+- 421 nodes · 652 edges · 23 communities (21 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a8b6ca21`
+- Built from commit: `d3758233`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,8 +19,8 @@
 - App.tsx
 - BrandProvider.tsx
 - devDependencies
-- DomusLanding.tsx
 - Arquitectura del ecosistema SORSABSA
+- DomusLanding.tsx
 - compilerOptions
 - compilerOptions
 - package.json
@@ -29,7 +29,6 @@
 - CardStatusDemo.tsx
 - @sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA
 - Button.tsx
-- NotificationBell.tsx
 - Grafo de conocimiento (graphify) generado por CI
 - Color de marca y contraste
 - vercel.json
@@ -63,15 +62,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (24 total, 2 thin omitted)
+## Communities (23 total, 2 thin omitted)
 
 ### Community 0 - "index.ts"
-Cohesion: 0.07
-Nodes (45): DATA, TableDemo(), AppShell(), AppShellProps, Avatar(), AvatarProps, getInitials(), SIZE (+37 more)
+Cohesion: 0.06
+Nodes (50): DATA, TableDemo(), AppShell(), AppShellProps, Avatar(), AvatarProps, getInitials(), SIZE (+42 more)
 
 ### Community 1 - "App.tsx"
-Cohesion: 0.09
-Nodes (27): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented() (+19 more)
+Cohesion: 0.08
+Nodes (30): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), MOCK (+22 more)
 
 ### Community 2 - "BrandProvider.tsx"
 Cohesion: 0.10
@@ -81,13 +80,13 @@ Nodes (27): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandContext,
 Cohesion: 0.07
 Nodes (32): jest, jest-environment-jsdom, devDependencies, framer-motion, jest, jest-environment-jsdom, lucide-react, react (+24 more)
 
-### Community 4 - "DomusLanding.tsx"
+### Community 4 - "Arquitectura del ecosistema SORSABSA"
+Cohesion: 0.06
+Nodes (30): 1. Inventario, 2. Los dos planos, 3. Mapa de bases de datos — LA TRAMPA, 4. Almacenamiento, 5. Roturas verificadas el 2026-07-26, 6-bis. Plano de DNS y correo ✅ verificado 2026-07-26, 6. Lo que NO está verificado, 7. Decisión de arquitectura (2026-07-26) (+22 more)
+
+### Community 5 - "DomusLanding.tsx"
 Cohesion: 0.10
 Nodes (19): DomusLanding(), FEATURES, SOCIAL, IconCatalog(), NAMES, SHADOW, InputProps, MobileNav() (+11 more)
-
-### Community 5 - "Arquitectura del ecosistema SORSABSA"
-Cohesion: 0.07
-Nodes (28): 1. Inventario, 2. Los dos planos, 3. Mapa de bases de datos — LA TRAMPA, 4. Almacenamiento, 5. Roturas verificadas el 2026-07-26, 6-bis. Plano de DNS y correo ✅ verificado 2026-07-26, 6. Lo que NO está verificado, 7. Decisión de arquitectura (2026-07-26) (+20 more)
 
 ### Community 6 - "compilerOptions"
 Cohesion: 0.09
@@ -121,24 +120,20 @@ Nodes (12): ⚠️ Bumpear la versión en cada cambio real (16 jul 2026, inciden
 Cohesion: 0.18
 Nodes (10): ButtonMatrix(), SHADOW, VARIANTS, Button, ButtonProps, ButtonSize, ButtonVariant, CommonProps (+2 more)
 
-### Community 14 - "NotificationBell.tsx"
-Cohesion: 0.24
-Nodes (8): MOCK, NotificationDemo(), Notificacion, NotificationBell(), NotificationBellProps, TYPE_COLOR, TYPE_ICON, useOnClickOutside()
-
-### Community 15 - "Grafo de conocimiento (graphify) generado por CI"
+### Community 14 - "Grafo de conocimiento (graphify) generado por CI"
 Cohesion: 0.20
 Nodes (9): Añadir Pages a un repo privado (opcional, requiere GitHub Pro), Bugs resueltos durante el piloto (lecciones), Convención de `.gitignore`, Cómo funciona, Cómo ver el grafo, Estado por repo, Grafo de conocimiento (graphify) generado por CI, Por qué CI y no un hook local (+1 more)
 
-### Community 16 - "Color de marca y contraste"
+### Community 15 - "Color de marca y contraste"
 Cohesion: 0.29
 Nodes (6): Color de marca y contraste, Componentes que ya lo aplican, Cuál usar, Cómo comprobarlo, La regla, Los cuatro tokens
 
-### Community 17 - "vercel.json"
+### Community 16 - "vercel.json"
 Cohesion: 0.40
 Nodes (4): buildCommand, framework, installCommand, outputDirectory
 
 ## Knowledge Gaps
-- **164 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+159 more)
+- **166 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+161 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -150,12 +145,12 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
   _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **Why does `Wordmark()` connect `BrandProvider.tsx` to `index.ts`, `App.tsx`, `DomusLanding.tsx`?**
-  _High betweenness centrality (0.010) - this node is a cross-community bridge._
+  _High betweenness centrality (0.009) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _164 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _166 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.06753246753246753 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.059907834101382486 - nodes in this community are weakly interconnected._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.08502415458937199 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07673469387755102 - nodes in this community are weakly interconnected._
 - **Should `BrandProvider.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.1021021021021021 - nodes in this community are weakly interconnected._
