@@ -94,28 +94,11 @@ export const BRANDS: Record<string, BrandConfig> = {
       'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap',
   },
 
-  // Convertidor SORSABSA — servicio web de conversión documental PDF→MD/HTML/JSON.
-  // Identidad provisional 21 jul 2026: azul técnico + amber para acciones.
-  convertidor: {
-    name: 'convertidor',
-    displayName: 'Convertidor',
-    wordmark: { first: 'Converti', second: 'dor' },
-    colors: {
-      primary: '#1e40af',            // azul técnico profesional
-      accent: '#d97706',             // amber para CTAs y resaltados
-      secondary: '#dbeafe',          // blue-100
-      surface: '#FFFFFF',
-      background: '#f8fafc',
-      text: '#0f172a',
-      muted: '#64748b',
-      border: '#e2e8f0',
-    },
-    radius: '0.5rem',
-    fontFamily: "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif",
-    headingFont: 'Inter',
-    fontImport:
-      'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
-  },
+  // Convertidor: su identidad se retiró el 2026-07-30 al decidir que NO es
+  // producto hoy (herramienta forense interna; su front quedó aparcado — ver
+  // docs/ARQUITECTURA-ECOSISTEMA.md §1). Se saca de BRANDS para que no aparezca
+  // en el showcase. getBrand('convertidor') cae al institucional. Restaurable
+  // desde git si se revive el front.
 
   // Extraído del logo oficial SORSABSA (PNG), 17 jul 2026 — ver conversación
   // con Claude sobre corrección de identidad. El logo es un ícono "S" en

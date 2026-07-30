@@ -21,7 +21,19 @@ trabajo lo redescubría desde cero — a veces rompiendo algo en el intento.
 | DomusCRM | `crm_inmobiliario` (remoto: `domuscrm`) | Vercel | ⚠️ despliega; base pausada |
 | CondoManager | `condomanager` | Vercel | ❓ solo se revisó su landing |
 | JustiRed | `legaltech` | Vercel | ✅ SPA sano; su motor de OCR no vive aquí |
-| Convertidor | `convertidor` | Vercel (frontend) | ✅ backend NO desplegado, ver §4 |
+
+> **Convertidor — NO es producto hoy (decisión 2026-07-30).** Nació y sigue
+> siendo herramienta interna para el trabajo forense/pericial (OCR de evidencia
+> escaneada). Hay un frontend Next.js (tienda, plan Pro, pagos) construido con la
+> idea *futura* de exponerlo como web pública tipo iLovePDF para traer tráfico —
+> pero **falta mucho y hoy no se sostiene**. El proyecto Vercel `convertidor`
+> llevaba 10/10 despliegues en ERROR (nunca sirvió una página), así que se elimina
+> para no gastar cupo ni recibir correos de fallo. El código del front queda
+> **aparcado, no muerto**, en el repo `ginaproanio/convertidor`; cuando se retome
+> la idea se re-importa a Vercel apuntando a `frontend/` (y antes hay que sacar el
+> servicio `backend` del `vercel.json`, que es lo que rompía el build). Hoy queda
+> solo el backend OCR (§2), en contenedor (Railway) o local, invocado directo.
+> **No re-desplegar en Vercel por ahora.**
 
 ### Servicios compartidos (no se venden solos)
 
