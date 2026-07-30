@@ -59,6 +59,36 @@ notificaciones.
 
 Todo es petición → respuesta, sin binarios. Vercel es la herramienta adecuada.
 
+### Plano de proceso — YA EXISTE, parcialmente ✅ (corrección 2026-07-30)
+
+> **El Convertidor ya está en Railway y su OCR funciona.** Verificado el
+> 2026-07-30 con peticiones reales, no por lectura de repo:
+>
+> `https://convertidor-production-7ca8.up.railway.app`
+> · `GET /` → `200 {"status":"online","service":"convertidor","version":"1.2.0"}`
+> · `POST /convert` → `200 {markdown, pages, ocr_used, size}`
+> · `POST /convert?force_ocr=true` → `ocr_used: true` — **Tesseract instalado en
+> el contenedor**
+> · `GET /health` → `404`: ese endpoint no existe, comprobar con `GET /`
+>
+> Con esto, el pendiente nº 1 de §9 —el único con fecha, por estar solo en la
+> máquina vendida— **está cumplido**. El scraper de JustiRed sigue fuera de
+> Railway; lo que le impide funcionar ya no es infraestructura sino cuatro
+> defectos en su código, documentados en `legaltech/docs/biblioteca-legal.md`.
+>
+> **También están en Railway `pagos-sorsabsa` y `notificaciones-sorsabsa`**
+> (proyecto `SORSABSA-DATA`), verificado el 2026-07-30: los dos responden 200 y
+> comparten el Postgres del mismo proyecto. No fueron por binarios —son Node
+> puro— sino para vivir **junto a su base** y dejar de depender del proyecto
+> Supabase de CondoManager (§3).
+>
+> **Lección de método:** la primera versión de este análisis dedujo "no está
+> desplegado" de la ausencia de `railway.toml` en el repo local. Railway se
+> configura entero desde su panel, así que esa ausencia no prueba nada. **El
+> estado de un servicio se comprueba con una petición, no con un `grep`.**
+
+El resto de la sección describe el estado anterior a esa corrección:
+
 ### Plano de proceso — NO EXISTE ❌
 
 Necesita contenedores (Railway, VPS, Fly): binarios, procesos largos,
@@ -78,42 +108,103 @@ contenedor. No hay que mover la capa web: hay que **añadir** la segunda.
 
 ## 3. Mapa de bases de datos — LA TRAMPA
 
-Supabase, organización `wzhfxbqvalgipuixcugg`.
+Supabase, organización `SORSABSA_Corp` (`wzhfxbqvalgipuixcugg`), **plan Pro**
+✅ comprobado por API el 2026-07-30.
 
-| Proyecto | Ref | Qué contiene |
-|---|---|---|
-| `agente24siete` | `nwcqaginlnzjlkgwifas` | ✅ `auth`, `public` (15 tablas), `storage`. Nada más |
-| `condomanager` | `twkuidnjwhopbjnrhnxp` | ✅ **CUATRO esquemas: `public` (CondoManager), `domus` (DomusCRM), `pagos`, `notificaciones`** |
-| `domuscrm` | `owilvzdcdipmrzeaeznw` | ❓ |
-| `justired` | `jywrjkfamdtcoehlsiup` | ❓ |
-| `sorsabsa_ecosystem` | `tkkpqbelzwoenmeynjvw` | ❓ |
+### Estado ✅ verificado en SQL el 2026-07-30
 
-### ⚠️ Acoplamiento crítico
+| Proyecto | Ref | Estado | Qué contiene |
+|---|---|---|---|
+| `condomanager` | `twkuidnjwhopbjnrhnxp` | ACTIVO | **TRES esquemas de producto: `public` (40 tablas, CondoManager) · `domus` (27, DomusCRM) · `justired` (6, JustiRed)** + `auth` (23 tablas, **4 usuarios**) + `storage` |
+| `sorsabsa-identity` | `gyqgorgfstffbgazhbnb` | ACTIVO | **vacío**: `public` sin tablas, `auth` con **0 usuarios**. Creado el 2026-07-29 y nunca poblado |
+| `agente24siete` | `nwcqaginlnzjlkgwifas` | ACTIVO | ✅ `public` (15), `auth`, `storage`. Un solo dueño |
 
-`pagos-sorsabsa/README.md:9` y `notificaciones-sorsabsa/README.md:11` apuntan
-ambos al "proyecto consolidado" `twkuidnjwhopbjnrhnxp`. Ese ref **es
-CondoManager**, y dentro conviven cuatro esquemas de cuatro dueños distintos.
+**Son tres. No hay más.** Los proyectos `justired` (`jywrjkfamdtcoehlsiup`) y
+`sorsabsa_ecosystem` (`tkkpqbelzwoenmeynjvw`) que listaba la versión anterior de
+este documento ya no existen, y `domuscrm` (`owilvzdcdipmrzeaeznw`) **lo borró
+Gina el 2026-07-30** — confirmado por API después del borrado. Si algún
+documento, variable o memoria menciona alguno de esos tres refs, está viejo.
 
-**Pausar CondoManager apaga, de golpe: CondoManager, los datos de DomusCRM, el
-cobro de los cuatro productos y las notificaciones de todos.** Ocurrió el
-2026-07-26 y nadie lo notó: pagos-sorsabsa seguía marcando despliegues verdes
-porque el código compila igual — lo que estaba caído era su base.
+### Qué cambió desde el 2026-07-26
 
-Un servicio compartido por cuatro productos **no puede vivir dentro de uno de
-ellos**. La consolidación se hizo, con toda probabilidad, para caber en el
-límite de 2 proyectos activos del plan gratuito. Es un ahorro que compra un
-acoplamiento invisible.
+- ✅ **`pagos` y `notificaciones` salieron de aquí.** Contenedor y base están en
+  Railway (§7). Los esquemas que quedaban en Supabase se borraron el 2026-07-30
+  —migración `retirar_pagos_y_notificaciones_migrados_a_railway`— junto con los
+  roles `pagos_runtime` y `notificaciones_runtime`. **El acoplamiento que dejó
+  sin cobro ni avisos a los cuatro productos está roto.**
 
-**Arreglo estructural:** `pagos` en su propio proyecto. Cuesta una casilla más,
-o sea plan de pago.
+  > Comprobado antes de borrar: 0 FK entrantes, 0 vistas dependientes, 0
+  > objetos propiedad de esos roles y ningún repo consultando esos esquemas
+  > (los productos llaman por HTTP a `PAGOS_API_URL` / `NOTIFICACIONES_API_URL`).
+  > Eso es lo que importaba: que nada apunte ahí.
+  >
+  > **Regla de método al informar: las filas se cuentan con `COUNT(*)`.**
+  > `pg_stat_user_tables.n_live_tup` da **0 para todos los esquemas de esta
+  > base** —incluidos `domus`, que tiene 262 filas, y `public`, que tiene 133—
+  > porque autovacuum nunca corrió. Quien lo use va a decir "está vacío" de algo
+  > que no lo está. No es riesgo de datos (§3-bis): es riesgo de afirmar
+  > falsedades en un informe.
+- ✅ **Se borró el proyecto `domuscrm` (`owilvzdcdipmrzeaeznw`).** Era el
+  cascarón que DomusCRM dejó al migrar al schema `domus` del consolidado el
+  9-jul-2026 (`crm_inmobiliario/backend/sql/006_consolidacion_sorsabsa.md`).
+  Llevaba 21 días pausado, su host ni siquiera resolvía en DNS, y DomusCRM en
+  producción respondía normal sin él. Causaba una sola cosa: confusión sobre
+  cuál era la base viva. **La base viva de DomusCRM es el schema `domus` del
+  proyecto de CondoManager.**
+- ⚠️ **Entró `justired`.** JustiRed abandonó su proyecto propio y se consolidó
+  como schema dentro del proyecto de CondoManager — `legaltech/.env:1` apunta a
+  `twkuidnjwhopbjnrhnxp`. Se quitó un inquilino y se metió otro.
 
-### Límite de 2 proyectos activos
+### ⚠️ Acoplamiento que sigue vivo
 
-El plan gratuito permite 2 activos. Comprobado en vivo: activar agente24siete
-obligó a pausar CondoManager. Con 5 productos + 1 servicio compartido que
-necesita casilla, **tres estarán siempre apagados**.
+Dentro del proyecto de **CondoManager** conviven todavía tres productos
+(`public`, `domus`, `justired`) **y la identidad de todo el ecosistema**
+(`auth`, con los 4 usuarios). Pausar o romper ese proyecto tumba a la vez
+CondoManager, DomusCRM, JustiRed y **el login de todos**.
 
-No es deuda técnica. Es que la arquitectura no cabe en el plan contratado.
+Un servicio compartido por todos —la identidad— **no puede vivir dentro de un
+producto**. Y ya no hay razón de plataforma para que siga ahí (ver abajo).
+
+### 3-bis. NO HAY DATOS DE CLIENTES. Punto.
+
+**Regla dura, dictada por Gina el 2026-07-30 tras tener que repetirla:**
+
+> Ningún entorno del ecosistema tiene información de clientes. Lo que haya en
+> cualquier base —CondoManager, DomusCRM, JustiRed, pagos, notificaciones— es
+> **dato de prueba, dato basura**. Precisamente por eso se están haciendo ahora
+> las migraciones y los movimientos: **este es el momento en que mover cosas no
+> cuesta nada.**
+
+**Consecuencias operativas, para no volver a discutirlo:**
+
+- **No frenar una migración, un borrado de schema o el borrado de un proyecto
+  por miedo a perder datos.** No hay nada que perder.
+- **No proponer respaldos, restauraciones ni ventanas de retención** como paso
+  previo a mover o borrar. Sobra.
+- Lo que sí hay que verificar antes de borrar **no es el contenido, es el
+  cableado**: que ninguna variable de entorno, ningún `DATABASE_URL`, ningún
+  valor por defecto en el código y ninguna FK apunte a lo que se va a borrar.
+  Ese es el riesgo real — romper un despliegue, no perder un registro.
+- Esta regla caduca sola: **deja de valer el día que entre el primer cliente
+  real** (Punta Blanca en CondoManager, EcoInmobiliaria en DomusCRM). Ese día
+  hay que volver aquí y tacharla.
+
+### El límite de 2 proyectos ya no existe — y la separación sigue sin hacerse
+
+La consolidación original se hizo para caber en el límite de **2 proyectos
+activos del plan gratuito**: activar agente24siete obligaba a pausar
+CondoManager. Ese límite **ya no aplica**: la organización está en Pro.
+
+Lo que cuesta ahora es el cómputo de cada proyecto adicional: **$10/mes por
+proyecto nuevo** ✅ (cifra devuelta por la API de Supabase el 2026-07-30; el
+costo base de la suscripción Pro no se verificó aquí).
+
+**Pagar Pro no separa nada por sí solo.** Quita la restricción; mover cada
+schema a su proyecto es trabajo manual (crear proyecto, migrar schema,
+repuntar `DATABASE_URL`/llaves). Hoy la suscripción está pagada, el proyecto de
+identidad `sorsabsa-identity` está **creado y vacío**, y los 4 usuarios siguen
+dentro de CondoManager. **Se está pagando la capacidad de separar sin haber
+separado** — ese es el estado real, y el pendiente nº3 del §9.
 
 ---
 
@@ -122,12 +213,25 @@ No es deuda técnica. Es que la arquitectura no cabe en el plan contratado.
 Los tres productos con subida de archivos usan **Supabase Storage**, ninguno
 escribe en disco ✅ — correcto, en Vercel el sistema de archivos es efímero.
 
-- DomusCRM → bucket `property-media`
-- CondoManager → firmas
-- JustiRed → biblioteca legal
+Los cinco cubos ✅ contados el 2026-07-30, todos en el proyecto consolidado
+`twkuidnjwhopbjnrhnxp`:
 
-**Consecuencia del §3:** Storage vive DENTRO del proyecto. Pausar un producto
-apaga también sus fotos y sus firmas, no solo su base.
+| Cubo | Público | Objetos |
+|---|---|---|
+| `condomanager-certificados` | no | 1 |
+| `property-media` (DomusCRM) | sí | 0 |
+| `condomanager-firmas` | sí | 0 |
+| `condomanager-inmuebles` | sí | 0 |
+| `justired-legal-documents` | sí | 0 |
+
+**Consecuencia del §3:** Storage vive DENTRO del proyecto. Pausar el proyecto de
+CondoManager apaga las fotos y las firmas de los tres productos, no solo su base.
+
+⚠️ **Cuatro de los cinco cubos son públicos**, incluidos `condomanager-firmas`
+—firmas de directiva— y `justired-legal-documents`. Un cubo público sirve por
+URL directa y adivinable. Cuando entre contenido real, firmas y documentos de
+identidad tienen que estar en el cubo PRIVADO de R2 con enlace firmado (§7); hoy
+no hay fuga porque están vacíos, pero la configuración ya está mal puesta.
 
 ### Defectos verificados
 
@@ -332,12 +436,27 @@ comunidad) gestionada en CondoManager. Esto NO es negociable a nivel de tier:
    después. Es la única forma de afirmar "resiste" sin adivinar.
 
 **Secuencia, menor riesgo primero:**
-1. `pagos` + `notificaciones` → Railway (cambiar `DATABASE_URL`). **Urgente**,
-   antes de que entre Punta Blanca. Mata el acoplamiento mortal.
-2. JustiRed, agente24siete, DomusCRM → Railway cuando toque.
-3. CondoManager + auth → se quedan en Supabase, intactos. Ese proyecto núcleo
-   debe estar **siempre activo**; cuando la carga de Punta Blanca lo justifique,
-   pasa a Supabase Pro (~$25/mes) — gasto por carga real, no antes.
+1. ~~`pagos` + `notificaciones` → Railway~~ ✅ **HECHO** (verificado 2026-07-30):
+   ambos corren en el proyecto Railway `SORSABSA-DATA` contra su Postgres
+   (`tokaido.proxy.rlwy.net:31720`, base `railway`, `search_path` por servicio),
+   responden 200, y sus proyectos en Vercel **ya no existen**. Los esquemas
+   vacíos que quedaban en Supabase se borraron (§3). Acoplamiento mortal, muerto.
+2. JustiRed, agente24siete, DomusCRM → Railway cuando toque. **JustiRed va en
+   dirección contraria**: hoy es un schema dentro del proyecto de CondoManager.
+3. **auth → `sorsabsa-identity`, su propio proyecto.** El proyecto ya existe
+   (creado 2026-07-29) pero está **vacío**: los 4 usuarios siguen en el proyecto
+   de CondoManager. Requisito único: compartir el secreto del JWT (arriba).
+4. CondoManager → se queda en Supabase. Ese proyecto debe estar **siempre
+   activo**.
+
+> **Sobre el plan Pro.** El paso 3 ya no está bloqueado por plataforma: la
+> organización está en Pro ✅ (comprobado 2026-07-30) y el límite de 2 proyectos
+> activos desapareció. Un proyecto adicional cuesta **$10/mes** de cómputo ✅
+> (API de Supabase, 2026-07-30). La versión anterior de este documento decía
+> "pasa a Pro cuando la carga lo justifique, no antes": **Pro ya está pagado**,
+> así que lo que queda no es una decisión de gasto sino trabajo pendiente. Pagar
+> el plan no mueve ningún schema — mientras no se ejecute el paso 3, se paga la
+> capacidad de separar sin separar.
 
 ### Railway y no un VPS pelado
 
@@ -383,11 +502,17 @@ Subir del navegador directo a R2 con enlace firmado elimina además el tope de
 
 ### Orden de migración, por urgencia
 
-1. **Convertidor a Railway.** Único con fecha: hoy solo existe en la máquina de
-   Gina, que está vendida. Salva el motor pericial y la biblioteca de JustiRed.
-2. **`pagos` fuera de CondoManager** a su propia base (§3).
-3. **Objetos a R2.**
-4. **El resto de bases**, un producto por vez.
+1. ~~**Convertidor a Railway.**~~ ✅ **HECHO** (verificado 2026-07-30, §2):
+   `https://convertidor-production-7ca8.up.railway.app`, con Tesseract dentro.
+   Salvado el motor pericial. La biblioteca de JustiRed sigue sin llenarse, pero
+   ya no por esto → `legaltech/docs/biblioteca-legal.md`.
+2. ~~**`pagos` fuera de CondoManager** a su propia base (§3).~~ ✅ **HECHO**
+   (verificado 2026-07-30): `pagos` y `notificaciones` en el Postgres de
+   Railway; los esquemas vacíos de Supabase, borrados.
+3. **`auth` a `sorsabsa-identity`** — el proyecto está creado y vacío (§3).
+   Es el acoplamiento que queda, y el único que tumba el login de todos.
+4. **Objetos a R2.**
+5. **El resto de bases**, un producto por vez.
 
 ### Riesgos aceptados
 
@@ -426,22 +551,49 @@ supiera** (§3). Eso lo arregla el Postgres de Railway, no mudar los frontends.
 
 ## 9. Pendientes, en orden
 
-1. **Convertidor a un contenedor.** Único con fecha: hoy solo existe en la
-   máquina vendida (§2). Desbloquea además la biblioteca legal de JustiRed.
-2. **Sacar `pagos` y `notificaciones` del proyecto de CondoManager** (§3). Es
-   el acoplamiento que dejó sin cobro a los cuatro productos el 2026-07-26.
-3. **Objetos a R2**, dos cubos (§7). Arregla de paso el tope de 4MB en las
-   fotos de inmuebles (§4).
-4. **Aviso de leads por correo.** `agente24siete/pages/api/lead-web.js` avisa
+### Cerrados el 2026-07-30
+
+- ✅ **Convertidor a un contenedor** — en Railway con OCR funcionando (§2). Lo
+  que queda de la biblioteca legal de JustiRed son defectos de su scraper, no de
+  infraestructura: `legaltech/docs/biblioteca-legal.md`.
+- ✅ **`pagos` y `notificaciones` fuera del proyecto de CondoManager** (§3):
+  contenedor y base en Railway, esquemas borrados de Supabase, proyectos de
+  Vercel eliminados. Era el acoplamiento que dejó a los cuatro productos sin
+  cobro ni avisos el 2026-07-26.
+- ✅ **Proyecto Supabase `domuscrm` (`owilvzdcdipmrzeaeznw`) borrado** — cascarón
+  de la migración del 9-jul, solo generaba confusión sobre cuál era la base viva
+  de DomusCRM (§3).
+
+### Abiertos, en orden
+
+1. **Sacar `auth` a `sorsabsa-identity`** (§3, §7). El proyecto está creado
+   desde el 2026-07-29 y **vacío**; los 4 usuarios siguen dentro del proyecto
+   de CondoManager, así que romper CondoManager sigue tumbando el login de
+   todos. Ya no hay límite de plataforma que lo impida: la organización está
+   en Pro. Requisito: compartir el secreto del JWT, no hay FK que migrar.
+   **Es el acoplamiento más caro que queda y el más barato de arreglar hoy.**
+2. **Reponer el aislamiento por rol en el Postgres de Railway.** `pagos` y
+   `notificaciones` entran hoy como `postgres` (superusuario) y solo los separa
+   el `search_path`, que **no es una frontera de seguridad** — basta calificar
+   el nombre (`pagos.pagos`) para cruzarla. En Supabase tenían roles
+   `*_runtime` con permisos solo sobre su schema; eso se perdió en la
+   migración. ✅ verificado el 2026-07-30: `current_user = postgres` en ambos.
+3. **Decidir la casa de `justired`.** Se consolidó como schema dentro del
+   proyecto de CondoManager (`legaltech/.env:1`): un producto viviendo dentro de
+   otro, el mismo patrón que causó el problema de §3.
+4. **Objetos a R2**, dos cubos (§7). Arregla de paso el tope de 4MB en las
+   fotos de inmuebles y los **cuatro cubos públicos** que hoy incluyen firmas y
+   documentos legales (§4).
+5. **Aviso de leads por correo.** `agente24siete/pages/api/lead-web.js` avisa
    por WhatsApp, canal baneado, y el error se traga con `.catch()`: el lead se
    guarda y nadie se entera. Resend ya está montado y el whitelabel por
    producto funciona (§6-bis) — es reusar lo que hay.
-5. **Subir agente24siete de `^0.1.6` a la última.** Son más de 30 versiones de
+6. **Subir agente24siete de `^0.1.6` a la última.** Son más de 30 versiones de
    deriva: merece rama y preview antes de main
    (`agente24siete/docs/FLUJO-DE-TRABAJO.md`).
-6. **Quitar `typescript.ignoreBuildErrors: true`** de agente24siete cuando
+7. **Quitar `typescript.ignoreBuildErrors: true`** de agente24siete cuando
    compile limpio. Es lo que dejó pasar un build roto cinco días.
-7. **Unificar los dos portales de agente24siete** (§5). Sin prisa: el que
+8. **Unificar los dos portales de agente24siete** (§5). Sin prisa: el que
    funciona con login real es el HTML, y el React sigue sin autenticación.
 
 ### Reglas que ya no dependen de la memoria
