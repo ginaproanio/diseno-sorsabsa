@@ -15,24 +15,45 @@ usa el compartido.
 
 ---
 
-## 1. Separar auth a su propio proyecto  ⚠️ #1 — sesión fresca, presupuesto completo
+## 1. Separar auth a su propio proyecto  🟠 #1 — INTENTADO 29-jul, chocó un muro real
 
 Hoy `auth` (Supabase Auth) vive DENTRO del proyecto `condomanager`
-(`twkuidnjwhopbjnrhnxp`). Si ese proyecto se borra o corrompe, **se cae el login
-de TODO el ecosistema.** Pro resolvió el pausado, NO esto.
+(`twkuidnjwhopbjnrhnxp`). Si ese proyecto se borra, **se cae el login de TODO el
+ecosistema.** (El riesgo de PÉRDIDA está cubierto por backups Pro + solo 4
+usuarios basura: gina, puntablanca, eco.ec, andres-pa — NO migrarlos, los reales
+se registran frescos.)
 
-- Crear proyecto Supabase `sorsabsa-identity` (solo identidad).
-- Apuntar auth-sorsabsa ahí.
-- **Compartir el secreto del JWT con los TRES productos que usan el SSO:**
-  `condomanager`, `domuscrm`, `agente24siete` (verificado: agente24siete delega
-  en auth-sorsabsa, no firma JWT propios). Sin esto, su RLS `auth.uid()` deja de
-  validar los tokens → login roto.
-- Recrear los usuarios de prueba (hoy no hay usuarios reales → momento limpio).
-- Verificar login end-to-end en cada producto ANTES de dar por hecho.
+### Lo hecho el 29-jul
+- ✅ Creado proyecto **`sorsabsa-identity`** = `gyqgorgfstffbgazhbnb` (+$10/mes,
+  ACTIVE). **Aún NO está conectado a nada** — decidir si se usa o se borra.
 
-**Por qué en sesión aparte:** es cirugía del login de todo el ecosistema; parte
-toca settings del dashboard; es lo que peor quedaría a medio camino si se acaban
-los tokens. Se hace de principio a fin, no al final de una sesión larga.
+### 🧱 EL MURO (verificado empíricamente — no volver a intentarlo a ciegas)
+La idea era: identity firma los tokens, y condomanager confía en ellos SIN
+refactor (browser-RLS sigue igual). **No se puede por llave asimétrica compartida:**
+- Supabase **asigna el `kid` él mismo al importar una llave** y NO acepta un `kid`
+  propio (import falla). Dos proyectos que importan la MISMA llave reciben **kids
+  distintos**.
+- La validación de Supabase es **estricta por kid**: token firmado con el kid de
+  identity → condomanager responde **401 "No suitable key"** (probado minteando el
+  token y golpeando `/rest/v1`). Sin kid coincidente, no valida.
+- **Third-Party Auth NO sirve**: solo Firebase/Clerk/WorkOS/Auth0/Cognito, sin
+  opción "Custom"/OIDC genérico para un Supabase→Supabase.
+
+### Los dos caminos REALES (elegir con la usuaria)
+- **A) Secreto HS256 compartido** entre los dos proyectos: esquiva el kid (HS256
+  no usa kid), CondoManager NO se refactoriza, desuelda ya. **Pero** es el camino
+  **deprecado** por Supabase → puente temporal, no "de raíz".
+- **B) Verificación server-side** (patrón agente24siete: cada producto valida el
+  token contra el JWKS de identity en su backend). **Correcto, escalable, sin
+  deuda.** **Pero** exige refactorizar la capa de datos de CondoManager/DomusCRM
+  (hoy browser-RLS) → trabajo real, sesión aparte.
+
+### Estado y método
+- **NADA roto:** auth-sorsabsa sigue apuntando a condomanager; solo se
+  experimentó con llaves "standby" que se revirtieron. Login en vivo intacto.
+- **Regla dura:** el próximo intento se **verifica en aislado** (mintear tokens de
+  prueba + golpear las APIs) ANTES de tocar el dashboard en vivo. No más descubrir
+  la mecánica sobre la marcha en producción.
 
 ## 2. JustiRed al SSO central  🟡 casi hecho — faltan 3 pasos manuales
 
