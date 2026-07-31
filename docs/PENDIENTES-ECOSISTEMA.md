@@ -55,6 +55,52 @@ refactor (browser-RLS sigue igual). **No se puede por llave asimétrica comparti
   prueba + golpear las APIs) ANTES de tocar el dashboard en vivo. No más descubrir
   la mecánica sobre la marcha en producción.
 
+### Lo verificado el 30-jul — ticket con Supabase y estado medido
+
+**Se abrió ticket con el soporte de Supabase** (atiende Gabriel). Sus logs de la
+Management API confirman el muro con códigos exactos, y añaden un dato que no
+teníamos:
+
+- `POST /config/auth/signing-keys` → **201** (23:37:16Z): la llave importada
+  SIN `kid` entra bien; Supabase le asigna `b156c393-…`.
+- `POST` con el `kid` de identity forzado → **409** *"Failed to create new
+  signing key in standby status for project"*, repetido de 23:55:13Z a
+  00:09:03Z — **también después** de moverla a *previously used* (PATCH 200,
+  23:54:30Z) y **después de revocarla** (PATCH 200, 23:57:05Z).
+- `DELETE` → **422**: *"This signing key cannot be removed at this time. Try
+  again after 2026-08-28T23:57:02.736Z"*. ⚠️ **Una llave revocada queda
+  bloqueada 30 días.** Cada intento futuro deja residuo un mes: por eso el
+  próximo test va contra `sorsabsa-identity` (vacío), NO contra el proyecto que
+  sirve el login.
+
+❓ **Hipótesis, no dato:** que el 409 lo cause el `kid`. No se probó importar una
+llave con material NUEVO forzando `kid`, ni reimportar el mismo material sin
+`kid`. Podría ser material duplicado o una restricción temporal. Preguntado al
+soporte; hasta que respondan, no afirmarlo.
+
+**Estado medido el 30-jul (no recordado):**
+
+- JWKS de `condomanager`: **una sola llave**, `9e498800-…`, la de siempre. La
+  `b156c393` no aparece (revocada = fuera del JWKS). **Nada se desalineó**: el
+  material de firma quedó como estaba.
+- JWKS de `sorsabsa-identity`: dos llaves (`36d36a4a-…`, `3bb19761-…`).
+- Usuarios: **4 en condomanager, 0 en identity**. La migración nunca empezó.
+- API de condomanager, 24 h: **cero 401**. La llave `anon` legacy sigue activa
+  (`disabled: false`) → ninguna app perdió credencial.
+- ⚠️ **El login no está probado, solo no falla:** el último inicio de sesión real
+  fue el **23-jul**. "No hay errores" ≠ "funciona".
+- `auth.sorsabsa.com` pide el JWKS **de condomanager** (log de auth, 00:39Z).
+  Esa es la soldadura, visible en vivo.
+
+**Third-Party Auth — reconfirmado en la documentación oficial el 30-jul:** solo
+Clerk, Firebase Auth, Auth0, AWS Cognito y WorkOS. No hay OIDC genérico ni
+"Custom", así que **no hay Supabase→Supabase**. Además, la documentación de Clerk
+describe el patrón deprecado usando *"a configurable JWT secret"* — señal de que
+el camino A (HS256) existe, con los motivos de su deprecación escritos por
+Supabase: compartir el secreto con un tercero es mala práctica y rotarlo provoca
+caída. Sigue **sin verificar** si hoy se puede FIJAR ese secreto a un valor dado
+en dos proyectos.
+
 ## 2. JustiRed al SSO central  🟡 casi hecho — faltan 3 pasos manuales
 
 **Hecho (29-jul-2026):** JustiRed se unificó al proyecto central

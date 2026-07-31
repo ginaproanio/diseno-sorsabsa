@@ -409,44 +409,18 @@ se intentó (llave asimétrica compartida). Sigue siendo cierto que no hay FK qu
 romper ni migración de esquema forzada; lo que no es cierto es que baste alinear
 la firma.
 
-Lo que se intentó: importar la MISMA llave privada EC P-256 como *standby* en
-los dos proyectos, para que CondoManager siguiera validando los tokens que emite
-`sorsabsa-identity`. Comprobado en vivo el 2026-07-29/30:
+En una frase: **Supabase asigna el `kid` él mismo y valida estricto por `kid`**,
+así que dos proyectos no pueden compartir una llave asimétrica (probado: 401
+`No suitable key`), y Third-Party Auth solo admite Clerk/Firebase/Auth0/Cognito/
+WorkOS — no Supabase→Supabase. Quedan dos caminos: **HS256 compartido**
+(deprecado) o **verificación server-side** por producto (refactor).
 
-- ✅ Un token firmado por identity, presentado a la API de CondoManager, devuelve
-  **401 `No suitable key`**. La validación es **por `kid`**: cada proyecto solo
-  conoce los `kid` de sus propias llaves.
-- ✅ Al importar esa misma llave privada en CondoManager, Supabase **le asigna un
-  `kid` propio** (no el de identity). `POST /config/auth/signing-keys` → 201.
-- ✅ Al reimportarla forzando el `kid` de identity dentro del JWK, la API
-  responde **409 `Failed to create new signing key in standby status for
-  project`** — también después de mover la anterior a *previously used* y
-  después de revocarla. (Confirmado por los logs de la Management API que
-  entregó el soporte de Supabase, ticket abierto el 2026-07-30.)
-- ✅ Una llave revocada **no se puede borrar durante 30 días**: `DELETE` → 422
-  *"Try again after 2026-08-28T23:57:02.736Z"*. Queda listada como historial.
-  Es inofensiva —nunca firmó un token— pero no se va.
-- ✅ Nada de esto tocó el login en vivo: todo ocurrió sobre llaves *standby*,
-  que no firman hasta que se rotan. CondoManager sigue firmando con su llave
-  de siempre.
-
-❓ **Lo que NO está probado, y no debe afirmarse:** que el 409 lo cause el `kid`.
-No se probó importar una llave con material NUEVO forzando `kid`, ni reimportar
-el mismo material sin `kid`. El 409 puede ser por el `kid`, por material
-duplicado o por una restricción temporal tras revocar. Está preguntado al
-soporte de Supabase; hasta que respondan, es hipótesis.
-
-**Las dos salidas reales** (elegir antes de tocar nada):
-
-1. **Secreto HS256 compartido** (el legacy, que no usa `kid`). Esquiva el
-   problema y no exige refactorizar CondoManager, pero es el mecanismo que
-   Supabase está deprecando → puente temporal. ❓ Sin verificar si Supabase
-   permite hoy **fijar** el secreto legacy a un valor dado en dos proyectos.
-2. **Verificación server-side** (el patrón que ya usa agente24siete): el
-   producto valida el token contra el JWKS de identity en su propia capa de
-   servidor, y deja de depender de que PostgREST lo haga por él. Es la
-   arquitectura correcta y sin deuda, pero **exige refactorizar la capa de
-   datos de CondoManager** — es un proyecto aparte, no un cambio de config.
+📍 **El detalle vivo, la evidencia con códigos y timestamps, el estado medido y
+el método del próximo intento están en
+[`PENDIENTES-ECOSISTEMA.md`](PENDIENTES-ECOSISTEMA.md) § 1.** Ese es el documento
+que manda sobre este tema; aquí solo se corrige la frase que era falsa, para que
+nadie vuelva a planificar sobre ella. **No duplicar el detalle en este archivo:**
+dos copias divergen y esto ya costó una vez.
 
 **Por qué importa con carga real (no es teoría):** entran ~600 lotes en 5
 condominios (Asociación Punta Blanca) a CondoManager, publicados en la aliada
