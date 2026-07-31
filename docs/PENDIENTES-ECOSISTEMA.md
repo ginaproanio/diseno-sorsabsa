@@ -57,6 +57,11 @@ refactor (browser-RLS sigue igual). **No se puede por llave asimétrica comparti
 
 ### Lo verificado el 30-jul — ticket con Supabase y estado medido
 
+⏳ **TRABAJO EN PAUSA ESPERANDO A SUPABASE.** Lo que se les pidió, la carta
+íntegra y el **árbol de decisión según lo que respondan** están en
+[`supabase-ticket-jwt-signing-keys.md`](supabase-ticket-jwt-signing-keys.md).
+Al retomar, empezar por ahí.
+
 **Se abrió ticket con el soporte de Supabase** (atiende Gabriel). Sus logs de la
 Management API confirman el muro con códigos exactos, y añaden un dato que no
 teníamos:
