@@ -1,7 +1,8 @@
 # Ticket con Supabase — JWT Signing Keys congeladas en `twkuidnjwhopbjnrhnxp`
 
-**Abierto:** 30-jul-2026 · **Atiende:** Gabriel (Supabase Support) ·
-**Estado:** ⏳ esperando respuesta.
+**Abierto:** 30-jul-2026 · **Atiende:** Gabriel Claudino (Supabase Support) ·
+**Estado:** ✅ **RESPONDIDO el 31-jul-2026 — hay camino soportado.**
+Ver § "Respuesta de Supabase" al final.
 
 Contexto completo del intento y la evidencia:
 [`PENDIENTES-ECOSISTEMA.md`](PENDIENTES-ECOSISTEMA.md) § 1.
@@ -173,6 +174,79 @@ Pegar aquí abajo lo que respondan, con fecha, **antes de tocar nada**. Y
 recordar la regla dura de § 1: el próximo intento se verifica en aislado
 (mintear token + golpear la API) ANTES de pedir un clic en el dashboard en vivo.
 
-### Respuesta de Supabase
+### Respuesta de Supabase — 31-jul-2026 (Gabriel Claudino)
 
-_(pendiente al 30-jul-2026)_
+Reprodujo el 409 en proyectos desechables y lo consultó con ingeniería.
+
+**1. El 409 está explicado — y corrige lo que creíamos.** ⚠️ **Supabase NO
+siempre asigna el `kid`.** Si lo omites, él asigna uno; **si lo envías, se usa
+el tuyo**. Lo que falla es **reusar el mismo `kid` en otro proyecto**: el `kid`
+es único a nivel de plataforma, y por eso el import devolvió 409. Van a mejorar
+ese mensaje de error. → El plan "la misma llave con el mismo `kid` en los dos
+proyectos" es **imposible por diseño**, no por un error nuestro.
+
+**2. ✅ SÍ se puede: un proyecto Supabase puede emitir y otro confiar.** Pero
+**no compartiendo material de llave privada** —lo desaconseja expresamente:
+comprometer esa llave afectaría a los dos proyectos, la rotación y la revocación
+quedan acopladas, y se pierde la separación entre dominios de confianza.
+
+**El diseño correcto es el modelo de confianza OAuth/OIDC:**
+
+- el proyecto de identidad actúa como **issuer** de los JWT;
+- el proyecto del producto se configura para **confiar en ese issuer**.
+
+Docs que citó:
+- OAuth/OIDC issuer: <https://supabase.com/docs/guides/auth/oauth-server>
+- Alta de proveedor OIDC: <https://supabase.com/docs/guides/auth/custom-oauth-providers#oidc-provider>
+- Límites de third-party auth: <https://supabase.com/docs/guides/auth/third-party/overview#limitations>
+
+**3. ⛔ La llave revocada NO se puede liberar.** El bloqueo hasta
+`2026-08-28T23:57:02.736Z` lo impone la plataforma y **el soporte no puede
+saltárselo**. No insistir: se espera al 28-ago y punto.
+
+**4. HS256 compartido: existe, pero no lo recomienda** como diseño de largo
+plazo (compartir el secreto es mala práctica, rotarlo causa caída, añade
+complejidad y latencia). Sigue siendo usable "de manera no oficial" y con
+soporte limitado. → **Descartado como arquitectura.**
+
+## Lo verificado por nuestra cuenta el 31-jul (no por lectura)
+
+Los **dos** proyectos ya exponen el documento de descubrimiento OIDC:
+
+```
+https://gyqgorgfstffbgazhbnb.supabase.co/auth/v1/.well-known/openid-configuration
+  issuer                 https://gyqgorgfstffbgazhbnb.supabase.co/auth/v1
+  authorization_endpoint .../auth/v1/oauth/authorize
+  token_endpoint         .../auth/v1/oauth/token
+  jwks_uri               .../auth/v1/.well-known/jwks.json
+```
+
+Eso es justo lo que exige el alta de un proveedor OIDC (descubrimiento en
+`{issuer}/.well-known/openid-configuration`). ❓ Que el documento responda **no
+prueba** que el servidor OAuth 2.1 esté habilitado ni que haya un cliente
+registrado: eso es el primer paso a verificar.
+
+## Plan que sustituye al anterior
+
+`sorsabsa-identity` = **issuer OIDC**. Cada proyecto de producto lo registra como
+**proveedor OIDC personalizado** (`custom:…`) y la gente entra por ahí.
+**El RLS de los tres productos NO se toca** — cada proyecto sigue emitiendo sus
+propios tokens con su propio `kid`, que es lo que su PostgREST ya sabe validar.
+Eso era lo que hacía caro el camino B.
+
+Orden, y **todo lo verificable va contra el proyecto vacío primero**:
+
+1. En `sorsabsa-identity`: habilitar el servidor OAuth 2.1 y registrar el
+   cliente. Verificar con una petición real al `authorization_endpoint`.
+2. En el proyecto de producto: alta del proveedor OIDC `custom:` con el issuer
+   de identity (Pro = proveedores ilimitados; en Free el tope es 3).
+3. Reapuntar el login de `auth-sorsabsa` a ese proveedor.
+4. Los 4 usuarios actuales son de prueba: se recrean en identity, no se migran.
+
+⚠️ **Matiz que hay que decirle a Gina y no esconder:** con esto la fuente de
+verdad de las credenciales pasa a identity, pero el proyecto del producto sigue
+teniendo sus propias filas en `auth.users` (locales, federadas). El día que ese
+proyecto muera, **las cuentas ya no se pierden** —viven en identity— pero la
+separación total de productos sigue dependiendo de sacar cada producto a su
+proyecto. Esto resuelve la pérdida de identidad, no la convivencia de tres
+productos en una base.

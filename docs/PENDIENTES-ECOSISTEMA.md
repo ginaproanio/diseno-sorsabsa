@@ -57,10 +57,15 @@ refactor (browser-RLS sigue igual). **No se puede por llave asimétrica comparti
 
 ### Lo verificado el 30-jul — ticket con Supabase y estado medido
 
-⏳ **TRABAJO EN PAUSA ESPERANDO A SUPABASE.** Lo que se les pidió, la carta
-íntegra y el **árbol de decisión según lo que respondan** están en
+✅ **RESUELTO EL 31-jul-2026 — Supabase respondió y hay camino soportado.**
+El muro de abajo sigue siendo cierto (no se puede compartir llave ni `kid`),
+pero **sí se puede desoldar**: identity actúa como **issuer OIDC** y el producto
+lo registra como **proveedor OIDC personalizado**, sin tocar el RLS de los tres
+productos. La respuesta íntegra, la corrección de lo que creíamos sobre el
+`kid`, y el plan por pasos están en
 [`supabase-ticket-jwt-signing-keys.md`](supabase-ticket-jwt-signing-keys.md).
-Al retomar, empezar por ahí.
+**Empezar por ahí.** ⛔ La llave revocada NO se puede liberar: bloqueada hasta el
+28-ago-2026 y el soporte no puede saltarlo.
 
 **Se abrió ticket con el soporte de Supabase** (atiende Gabriel). Sus logs de la
 Management API confirman el muro con códigos exactos, y añaden un dato que no
