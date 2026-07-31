@@ -402,11 +402,51 @@ Hoy todo está mal metido en `twkuidnjwhopbjnrhnxp`: auth + CondoManager + pagos
 + notificaciones + `domus` (DomusCRM). Deben separarse: **auth a su proyecto de
 identidad; pagos/notificaciones/domus fuera; CondoManager a su propio proyecto.**
 
-**Requisito único para separar auth (config, no reescritura):** CondoManager (y
-cualquier producto con RLS `auth.uid()`) debe **compartir el secreto del JWT**
-con el proyecto de identidad, para seguir validando los tokens que este emite.
-No hay FK que romper, así que no hay migración de esquema forzada — es alinear
-el secreto de firma.
+**Requisito para separar auth — ⛔ CORREGIDO el 2026-07-30.** La versión
+anterior de este documento decía que el requisito único era *"compartir el
+secreto del JWT, es config y no reescritura"*. **Eso era falso** por la vía que
+se intentó (llave asimétrica compartida). Sigue siendo cierto que no hay FK que
+romper ni migración de esquema forzada; lo que no es cierto es que baste alinear
+la firma.
+
+Lo que se intentó: importar la MISMA llave privada EC P-256 como *standby* en
+los dos proyectos, para que CondoManager siguiera validando los tokens que emite
+`sorsabsa-identity`. Comprobado en vivo el 2026-07-29/30:
+
+- ✅ Un token firmado por identity, presentado a la API de CondoManager, devuelve
+  **401 `No suitable key`**. La validación es **por `kid`**: cada proyecto solo
+  conoce los `kid` de sus propias llaves.
+- ✅ Al importar esa misma llave privada en CondoManager, Supabase **le asigna un
+  `kid` propio** (no el de identity). `POST /config/auth/signing-keys` → 201.
+- ✅ Al reimportarla forzando el `kid` de identity dentro del JWK, la API
+  responde **409 `Failed to create new signing key in standby status for
+  project`** — también después de mover la anterior a *previously used* y
+  después de revocarla. (Confirmado por los logs de la Management API que
+  entregó el soporte de Supabase, ticket abierto el 2026-07-30.)
+- ✅ Una llave revocada **no se puede borrar durante 30 días**: `DELETE` → 422
+  *"Try again after 2026-08-28T23:57:02.736Z"*. Queda listada como historial.
+  Es inofensiva —nunca firmó un token— pero no se va.
+- ✅ Nada de esto tocó el login en vivo: todo ocurrió sobre llaves *standby*,
+  que no firman hasta que se rotan. CondoManager sigue firmando con su llave
+  de siempre.
+
+❓ **Lo que NO está probado, y no debe afirmarse:** que el 409 lo cause el `kid`.
+No se probó importar una llave con material NUEVO forzando `kid`, ni reimportar
+el mismo material sin `kid`. El 409 puede ser por el `kid`, por material
+duplicado o por una restricción temporal tras revocar. Está preguntado al
+soporte de Supabase; hasta que respondan, es hipótesis.
+
+**Las dos salidas reales** (elegir antes de tocar nada):
+
+1. **Secreto HS256 compartido** (el legacy, que no usa `kid`). Esquiva el
+   problema y no exige refactorizar CondoManager, pero es el mecanismo que
+   Supabase está deprecando → puente temporal. ❓ Sin verificar si Supabase
+   permite hoy **fijar** el secreto legacy a un valor dado en dos proyectos.
+2. **Verificación server-side** (el patrón que ya usa agente24siete): el
+   producto valida el token contra el JWKS de identity en su propia capa de
+   servidor, y deja de depender de que PostgREST lo haga por él. Es la
+   arquitectura correcta y sin deuda, pero **exige refactorizar la capa de
+   datos de CondoManager** — es un proyecto aparte, no un cambio de config.
 
 **Por qué importa con carga real (no es teoría):** entran ~600 lotes en 5
 condominios (Asociación Punta Blanca) a CondoManager, publicados en la aliada
@@ -570,8 +610,11 @@ supiera** (§3). Eso lo arregla el Postgres de Railway, no mudar los frontends.
    desde el 2026-07-29 y **vacío**; los 4 usuarios siguen dentro del proyecto
    de CondoManager, así que romper CondoManager sigue tumbando el login de
    todos. Ya no hay límite de plataforma que lo impida: la organización está
-   en Pro. Requisito: compartir el secreto del JWT, no hay FK que migrar.
-   **Es el acoplamiento más caro que queda y el más barato de arreglar hoy.**
+   en Pro, y no hay FK que migrar. ⛔ **Pero ya NO es "el más barato de
+   arreglar": la vía de la llave compartida está bloqueada** (§7, corrección
+   del 2026-07-30). Antes de mover un usuario hay que elegir entre el puente
+   HS256 y la verificación server-side, y esa segunda opción es un refactor de
+   CondoManager. **Bloqueado a la espera del soporte de Supabase.**
 2. **Reponer el aislamiento por rol en el Postgres de Railway.** `pagos` y
    `notificaciones` entran hoy como `postgres` (superusuario) y solo los separa
    el `search_path`, que **no es una frontera de seguridad** — basta calificar
