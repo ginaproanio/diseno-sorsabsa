@@ -57,6 +57,10 @@ refactor (browser-RLS sigue igual). **No se puede por llave asimétrica comparti
 
 ### Lo verificado el 30-jul — ticket con Supabase y estado medido
 
+📋 **EL PLAN, EN ORDEN, ESTÁ EN [`PLAN-DESOLDADO.md`](PLAN-DESOLDADO.md)** —
+con el criterio de "hecho" de cada paso y lo que está decidido no hacer.
+**Empezar por ahí.** El paso 0 (sacar el plano al repo) es bloqueante.
+
 ✅ **RESUELTO EL 31-jul-2026 — Supabase respondió y hay camino soportado.**
 El muro de abajo sigue siendo cierto (no se puede compartir llave ni `kid`),
 pero **sí se puede desoldar**: identity actúa como **issuer OIDC** y el producto
