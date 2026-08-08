@@ -164,9 +164,16 @@ Paso 1 de `PLAN-DESOLDADO.md`, no depende del Paso 3.
 **Por qué en identity y no en cada producto:** los dos proveedores se dan de
 alta UNA vez en `sorsabsa-identity` (el emisor OIDC único desde
 `PLAN-DESOLDADO.md` Pasos 1-2, cerrados) — no en condomanager ni en ningún
-proyecto de producto. Así alguien que entra por Google a CondoManager y por
-Google a DomusCRM es la misma cuenta si comparte el email, y no hay que
-repetir el alta en cada proyecto.
+proyecto de producto. Es una razón de arquitectura, no de negocio: como los
+6 productos ya confían en identity, el proveedor se hereda gratis en todos
+sin repetir el alta (Client ID + redirect URI) en cada proyecto Supabase por
+separado. **No implica cuentas compartidas entre productos** — un residente
+de CondoManager y un agente de DomusCRM no tienen relación, y cada producto
+sigue emitiendo su propio usuario local y separado al federar (igual que ya
+pasa hoy con email/contraseña, `PLAN-DESOLDADO.md` Paso 2). Corregido
+08-ago-2026: la primera versión de este párrafo decía lo contrario — que
+sería "la misma cuenta si comparte el email" entre CondoManager y DomusCRM,
+lo cual es falso y quedó anotado para no repetirlo.
 
 - ✅ **Código hecho** — `auth-sorsabsa` commit `af41efc`: `/oauth/consent`
   (la única pantalla de identity donde se escribe contraseña) ahora tiene
