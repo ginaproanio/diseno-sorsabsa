@@ -153,7 +153,7 @@ Ninguno de los tres reinventos fue intencional — cada uno se construyó por
 separado porque nadie tenía visibilidad de que el otro ya existía. Es
 justamente lo que este ejercicio estaba pensado para sacar a la luz.
 
-## 10. 🟡 Login social: Google funcionando en vivo — falta Facebook y confirmar publicación
+## 10. 🟡 Login social: Google ✅ cerrado — falta Facebook
 
 Ampliado 08-ago-2026 a partir de un punto de Gina: ya existe un proyecto de
 Google Cloud, `sorsabsaecosystem` (el mismo que tiene habilitada la Calendar
@@ -207,22 +207,29 @@ lo cual es falso y quedó anotado para no repetirlo.
     correcto de un SSO real: identity liga cuentas por email, así que el
     mismo correo resuelve al mismo perfil sin importar qué método de login
     se use para probarlo.
-  - ⏳ **Sin confirmar todavía: si la app quedó publicada** (Testing →
-    In production en Google Cloud Console). El login de Gina funciona igual
-    en Testing porque ella es la dueña del proyecto; un cliente real con su
-    propio Gmail necesita la app publicada. Confirmar antes de dar esto por
-    cerrado a nivel de clientes reales, no solo de Gina.
-- 🔲 **Facebook — sin empezar, falta Gina, developers.facebook.com (proyecto
-  NUEVO, no reusa nada de Google — son plataformas distintas):**
-  1. Crear app tipo "Consumidor" con el caso de uso **Facebook Login**.
-  2. Facebook Login → Configuración → Valid OAuth Redirect URIs = el mismo
-     callback de identity (`https://gyqgorgfstffbgazhbnb.supabase.co/auth/v1/callback`).
-  3. Obtener **App ID** y **App Secret**, pegarlos en Supabase Dashboard →
+  - ✅ **Confirmado publicada y probada con una cuenta ajena** (no la de
+    Gina): `sorsabsa@gmail.com` logueó bien contra identity y llegó hasta
+    CondoManager, que la rechazó con "Tu cuenta no pertenece a ningún
+    condominio" — la guardia correcta de CondoManager (sin perfil, sin
+    acceso), no un fallo del SSO. Cierra Google del todo: funciona para
+    cualquier cuenta Google, no solo la de Gina.
+- 🟡 **Facebook — a medias.** App nueva y separada creada en Meta for
+  Developers, **"Sorsabsa Identity"** (aislada, sin asociar al portafolio de
+  WhatsApp de agente24siete — decisión deliberada: una app "Business" con
+  WhatsApp habría ofrecido "Facebook Login for Business", un flujo distinto
+  pensado para activos de negocio, no para autenticar personas). App ID
+  `1851084815870458`. Caso de uso "Facebook Login" clásico configurado,
+  redirect URI = el callback de identity
+  (`https://gyqgorgfstffbgazhbnb.supabase.co/auth/v1/callback`). **Estado:
+  Publicada/Activa** — sin bloqueo de Verificación del Negocio (no hizo
+  falta para el alcance de solo-login, `email` + `public_profile` son
+  permisos estándar que no requieren Revisión de la app).
+  1. 🔲 **Pegar App ID/Secret en Supabase Dashboard** →
      `sorsabsa-identity` → Sign In/Providers → Facebook (sin MCP para ese
      paso — la API de administración de Supabase no expone configuración de
      proveedores OAuth).
-  4. Probar en vivo el botón "Continuar con Facebook", igual que se hizo con
-     Google.
+  2. 🔲 Probar en vivo el botón "Continuar con Facebook", igual que se hizo
+     con Google (incluida una cuenta que no sea la de Gina).
 
 ## 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado
 
