@@ -292,6 +292,20 @@ Orden sugerido, del más barato al más caro:
 2. **JustiRed al final** — es el único con contenido real (3.731 filas) y con
    tráfico de buscadores (Googlebot y Applebot indexan `/rest/v1/leyes`).
 
+**Aprovechar este paso para sacar los dos saltos visibles del login**
+(decidido 08-ago-2026, a raíz de que Gina los vio en el navegador real): hoy
+`auth-sorsabsa` hace de intermediario entre el botón "Iniciar" del producto y
+`identity` — de ahí las pantallas `/auth/login` ("Redirigiendo…") y
+`/auth/complete` ("Verificando…/Entrando…"), que no las pide OIDC, las metí
+yo para centralizar marca + chequeo de suscripción + redirect seguro en un
+solo lugar mientras los tres productos compartían un proyecto. Cuando cada
+producto tenga el suyo, que el propio botón "Iniciar" llame
+`signInWithOAuth('custom:sorsabsa-identity')` directo y aterrice directo en
+el callback del producto — la única pantalla ajena que queda es la de
+contraseña en identity (`/oauth/consent`), que es la parte no negociable de
+un SSO real. No se hace antes porque codificarlo hoy sería contra el
+proyecto compartido y se tira apenas cada producto tenga su propio proyecto.
+
 **Hecho cuando:** cada producto responde desde su propio proyecto y el viejo se
 puede pausar sin que nadie lo note.
 
