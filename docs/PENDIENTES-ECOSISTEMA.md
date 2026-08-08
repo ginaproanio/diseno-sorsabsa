@@ -130,7 +130,7 @@ Supabase: compartir el secreto con un tercero es mala práctica y rotarlo provoc
 caída. Sigue **sin verificar** si hoy se puede FIJAR ese secreto a un valor dado
 en dos proyectos.
 
-## 2. JustiRed al SSO central  🟡 casi hecho — faltan 3 pasos manuales
+## 2. ✅ HECHO — JustiRed al SSO central
 
 **Hecho (29-jul-2026):** JustiRed se unificó al proyecto central
 `twkuidnjwhopbjnrhnxp` como schema `justired` (mismo patrón que domus). El
@@ -140,28 +140,31 @@ usuarios) y que las edge functions de notif/pago **ya eran proxies correctos** a
 los compartidos — no reimplementaban nada. Se recrearon en el central: schema +
 bucket `justired-legal-documents` (con RLS, el origen la tenía apagada), 4 edge
 functions proxy (3 notif → notificaciones-sorsabsa, 1 pago → pagos-sorsabsa) +
-`ingesta-legal`. pagos-sorsabsa acepta `PAGOS_API_KEY_JUSTIRED` (ya seteada en
-Railway). Frontend redesplegado en Vercel apuntando al central → **el login SSO
-ya funciona.**
+`ingesta-legal`. Frontend redesplegado en Vercel apuntando al central → **el
+login SSO ya funciona.** Proyecto `jywrjk` dado de baja (vacío, borrado del
+dashboard).
 
-**Falta (manual — no se puede por MCP; JustiRed no está lanzado, sin urgencia):**
+**Cerrado 08-ago-2026 — los 2 pasos manuales que faltaban, hechos por Gina y
+verificados con peticiones reales (no por el check del dashboard):**
 
-1. **Exponer el schema `justired`** en la API del central: Supabase → central →
-   Settings → API → *Exposed schemas* → agregar `justired`. Sin esto, la
-   biblioteca legal y los planes no cargan (PostgREST no sirve el schema).
-2. **Secretos de las edge functions** (Supabase → central → Edge Functions →
-   *Manage secrets*):
-   - `NOTIFICACIONES_API_URL` = `https://notificaciones-sorsabsa-production.up.railway.app`
-   - `NOTIFICACIONES_API_KEY` = (copiar del servicio notificaciones-sorsabsa en Railway)
-   - `PAGOS_API_URL` = `https://pagos-sorsabsa-production.up.railway.app`
-   - `PAGOS_API_KEY_JUSTIRED` = `justired_ea7252e2404150600aaf89ac19b6b1d77ab7b416c77b01c5`
-     (debe COINCIDIR con la de Railway, ya seteada)
-   - `INGESTA_LEGAL_TOKEN` = (cualquiera; también en el scraper — solo para poblar biblioteca)
-3. ✅ **Proyecto `jywrjk` dado de baja** (29-jul-2026) — estaba vacío, borrado
-   del dashboard. Quedan solo los pasos 1 y 2.
+1. **Schema `justired` expuesto** en Settings → API → Exposed schemas.
+   Verificado: `GET /rest/v1/leyes` con `Accept-Profile: justired` → `200`
+   con datos reales; sin ese header → `404` (correcto, no existe en `public`).
+2. **Los 5 secrets de Edge Functions cargados.** Verificado sin tocar datos
+   reales (cada función revisa el secret ANTES de cualquier efecto):
+   - `INGESTA_LEGAL_TOKEN`: `500 not configured` → `401 Unauthorized`.
+   - `NOTIFICACIONES_API_URL`/`KEY`: pasó el chequeo de "no configurado" →
+     `401 token inválido` (esperado, se probó con la anon key, no una sesión
+     real).
+   - `PAGOS_API_URL`/`PAGOS_API_KEY_JUSTIRED`: pasó el chequeo de "no
+     configurado" → `400 faltan campos`.
 
-**Después (biblioteca legal, cuando se retome):** repuntar el scraper de JustiRed
-(Railway) a la URL de `ingesta-legal` del central + su `INGESTA_LEGAL_TOKEN`.
+**Nota para cuando se retome la biblioteca legal:** `scraper/scraper.py`
+(legaltech) escribe HOY directo con `SUPABASE_SERVICE_ROLE_KEY` al schema
+`justired` — **no llama a `ingesta-legal` ni usa `INGESTA_LEGAL_TOKEN`**.
+Repuntar el scraper a la edge function es trabajo aparte, sin empezar, sin
+urgencia (JustiRed no está lanzado). Hasta entonces, `INGESTA_LEGAL_TOKEN`
+no necesita coincidir con nada en Railway — no tiene consumidor todavía.
 
 ## 3. ✅ HECHO — cutover de pagos (fuera de Vercel)
 
