@@ -15,7 +15,17 @@ usa el compartido.
 
 ---
 
-## 1. Separar auth a su propio proyecto  🟠 #1 — INTENTADO 29-jul, chocó un muro real
+## 1. ✅ RESUELTO — separar auth a su propio proyecto (vía OIDC, no vía llave compartida)
+
+**08-ago-2026: cerrado por el camino B de abajo, ejecutado en `PLAN-DESOLDADO.md`
+Pasos 1 y 2 (ambos cerrados).** `sorsabsa-identity` es el emisor OIDC real;
+cada producto lo registra como proveedor personalizado y valida su propio
+token — sin compartir llave ni `kid`, como el muro de abajo ya anticipaba
+que no se podía. Queda el historial de cómo se llegó ahí (útil para no
+reabrir el camino A por error), pero **para el estado actual, ver
+`PLAN-DESOLDADO.md` Pasos 1-2 — no este ítem.**
+
+### Historial — INTENTADO 29-jul, chocó un muro real
 
 Hoy `auth` (Supabase Auth) vive DENTRO del proyecto `condomanager`
 (`twkuidnjwhopbjnrhnxp`). Si ese proyecto se borra, **se cae el login de TODO el
@@ -194,12 +204,11 @@ ALTER TABLE public.planes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.movimientos_saldo ENABLE ROW LEVEL SECURITY;
 ```
 
-## 6. Borrar proyecto Supabase huérfano
+## 6. ✅ HECHO — proyecto Supabase huérfano borrado
 
-`sorsabsa_ecosystem` (`tkkpqbelzwoenmeynjvw`, mayo 2026) — nada del código lo
-referencia; intento temprano del proyecto consolidado, anterior al núcleo real.
-Borrar desde el dashboard (Supabase → proyecto → Settings → General → Delete
-project). MCP no permite borrar proyectos.
+`sorsabsa_ecosystem` (`tkkpqbelzwoenmeynjvw`) — verificado 08-ago-2026 con
+`list_projects` real: ya no aparece. Los 3 proyectos del org `SORSABSA_Corp`
+son `condomanager`, `sorsabsa-identity`, `agente24siete`.
 
 ## 7. SorsabsaForensic → Fase 0 antes de Railway
 
