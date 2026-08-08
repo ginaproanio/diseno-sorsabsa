@@ -100,10 +100,9 @@ proyecto de prueba marcó exactamente las mismas dos tablas ya conocidas
 (`public.unidad_fotos`, `domus.invitations`, pendiente #5 de
 `PENDIENTES-ECOSISTEMA.md`) — ninguna sorpresa nueva ahí.
 
-⚠️ **El proyecto de prueba no se pudo pausar por MCP** ("Project is not
-free-tier") y el MCP no puede borrar proyectos — queda pendiente borrarlo a
-mano desde el dashboard (Settings → General → Delete project) para dejar de
-pagar los 10 USD/mes; ya cumplió su función.
+⚠️ El proyecto de prueba no se pudo pausar por MCP ("Project is not
+free-tier") y el MCP no puede borrar proyectos. **Borrado a mano por Gina el
+07-ago-2026** desde el dashboard — dejó de cobrar los 10 USD/mes.
 
 **Paso 0 cerrado de verdad: probado por una petición real, no por lectura
 de código — como pide el criterio de este documento.**
@@ -120,6 +119,35 @@ del ecosistema. Es el camino que confirmó Supabase el 31-jul.
 **Hecho cuando:** se completa un login de prueba de punta a punta contra
 identity y se verifica el token emitido — **sin haber tocado el proyecto de
 producto todavía**.
+
+### ✅ Cerrado el 07-ago-2026 — login OIDC real, de punta a punta, token verificado
+
+Sin tocar `twkuidnjwhopbjnrhnxp` en ningún momento:
+
+1. **Servidor OAuth 2.1 habilitado** en `sorsabsa-identity` (Dashboard →
+   Authentication → OAuth Server), con Site URL `http://localhost:3000`
+   (descartable, solo para esta prueba — identity todavía no tiene ninguna
+   app propia desplegada).
+2. **Cliente OAuth registrado**: `sorsabsa-paso1-test`
+   (`a637b245-6ecf-4d8e-9610-9c728aa5924c`), público, redirect
+   `http://localhost:3000/callback`.
+3. **Usuario de prueba** creado y confirmado vía Admin API
+   (`paso1-test@sorsabsa.local`) — **borrado al terminar**, identity vuelve a
+   quedar en 0 usuarios.
+4. **Script Node.js** (`@supabase/supabase-js` + PKCE manual + `jose` para
+   verificar firma) corrió el flujo completo real: login → `GET
+   /oauth/authorize` (302 al `authorization_path`) → `getAuthorizationDetails`
+   → `approveAuthorization` → canje del code por tokens en `/oauth/token` →
+   verificación del `id_token` contra el `jwks_uri` real.
+
+**Todos los checks en verde:** `authorization_id` presente, redirect exacto
+al `redirect_uri` registrado, `state` anti-CSRF intacto, `access_token` +
+`id_token` recibidos, firma `ES256` válida contra el JWKS real, `iss` =
+`https://gyqgorgfstffbgazhbnb.supabase.co/auth/v1`, `sub` = el usuario que
+inició sesión, `aud`/`client_id` = el cliente registrado.
+
+**Paso 1 cerrado de verdad: login de punta a punta probado, token emitido y
+verificado — sin haber tocado el proyecto de producto.**
 
 ## Paso 2 — El producto confía en identity
 
