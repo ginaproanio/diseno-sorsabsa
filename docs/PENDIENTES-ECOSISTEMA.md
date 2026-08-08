@@ -434,6 +434,31 @@ cualquier otro producto.
   `SUSANA_USER`/`SUSANA_PAS`/`ADMIN_USER`/`ADMIN_PAS` en Railway ya no los
   lee ningún código (confirmado por grep) — se pueden borrar del dashboard
   cuando convenga, no rompen nada si quedan.
+- **⚠️ Corrección 08-ago-2026, no volver a repetir el error:** `iot` NO
+  tiene su propio proyecto de Supabase — sus usuarios viven en el
+  proyecto de **CondoManager** (`twkuidnjwhopbjnrhnxp`), por el default
+  hardcodeado en `iot_system/app/auth_sso.py:33`
+  (`SUPABASE_URL = os.getenv("SUPABASE_URL", "https://twkuidnjwhopbjnrhnxp.supabase.co")`),
+  no en `sorsabsa-identity` (`gyqgorgfstffbgazhbnb`) como el resto del
+  patrón haría suponer. Confirmado en vivo con SQL real, no adivinado:
+  Patricio (`patricio.marmol@hotmail.com`) confirmó e inició sesión bien
+  (invitado 08-ago 15:11, `last_sign_in_at` con dato); Susi
+  (`susi.espinosa@hotmail.com`, invitada 08-ago 15:12) nunca confirmó
+  (`confirmed_at` null) — coincide con el enlace vencido que reportó. Para
+  administrar estos usuarios (reenviar invitación, etc.), el Dashboard
+  correcto es **condomanager**, no identity. Sin decidir todavía si esto
+  se deja así o si `iot` pasa a tener su propio proyecto — anotado para no
+  perderlo, no para resolverlo ahora.
+- ✅ **Dos bugs reales encontrados probando la invitación de Susi,
+  corregidos 08-ago-2026** (`auth-sorsabsa` commit `8952ce8`):
+  1. `src/app/page.tsx` no existía — cualquier `redirect_to` sin path
+     (como el de esta alta por Admin API) caía en 404 crudo al fallar el
+     enlace. Ahora esa ruta existe y muestra un mensaje entendible.
+  2. El correo de invitación mostraba solo la marca institucional
+     "SORSABSA" para apps sin marca propia (`iot`, `convertidor`) — Susi
+     no reconoció el nombre y se asustó. Ya se pasaba `config.welcome`
+     ("Acceso a IOT") a la pantalla de login pero no al correo; ahora
+     también se muestra ahí.
 
 ## 15. 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas
 
