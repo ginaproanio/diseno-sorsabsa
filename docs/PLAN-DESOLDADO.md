@@ -46,6 +46,38 @@ replicando solo lo que está en el repo, sin consultar la base viva.
 
 **Riesgo:** ninguno. Es lectura, no toca producción.
 
+### Estado — hecho el 07-ago-2026, con un pendiente real
+
+Los tres `pg_dump --schema-only` se corrieron de verdad contra
+`twkuidnjwhopbjnrhnxp` (no se leyó código, se conectó a la base) y los
+conteos coincidieron exacto con la tabla de arriba: `public`=40, `domus`=27,
+`justired`=6. Sin FKs cruzando esquemas — cada dump es autocontenido.
+
+- **`condomanager`** (commit `e5fa9b1`): las 26 migraciones incrementales se
+  archivaron en `supabase/migrations_archive/` (no se borraron) porque el
+  dump ya trae su efecto acumulado; dejarlas activas junto al baseline
+  rompía el replay (`CREATE POLICY` y `ALTER TABLE ADD CONSTRAINT` sin guard,
+  duplicados). El baseline (`00000000000000_baseline_schema.sql`) queda como
+  única migración activa.
+- **`crm_inmobiliario`** (commit `c8d5996`): no tenía ni carpeta `supabase/`
+  — se creó junto con el baseline de `domus`.
+- **`legaltech`** (commit `ddeb8d1`): hallazgo aparte — su
+  `supabase/config.toml` apuntaba a `jywrjkfamdtcoehlsiup`, un proyecto que
+  **ya no existe** en la cuenta (no aparece en `supabase projects list`), y
+  sus 6 migraciones creaban `public.leyes`/`public.subscription_plans` — ni
+  el proyecto ni el esquema correctos. Producción nunca se vio afectada: el
+  scraper en Railway lee `SUPABASE_URL` de sus variables de entorno, no de
+  ese archivo. Se corrigió el `project_id` a `twkuidnjwhopbjnrhnxp` y se
+  archivaron las 6 migraciones huérfanas.
+
+**⏳ Pendiente real, no cerrado:** el criterio de "hecho" de este paso pide
+probarlo en **un proyecto nuevo y vacío, por una petición real**. Se cotizó
+— crear ese proyecto de prueba en la organización `SORSABSA_Corp` cuesta
+**10 USD/mes**, no es gratis, así que no se hizo sin decisión de
+presupuesto. Hasta que se corra esa prueba, el Paso 0 está *hecho en el
+repo* (los tres baseline existen, se commitearon, los conteos cuadran) pero
+**no verificado end-to-end** como pide el propio criterio de este documento.
+
 ## Paso 1 — Identity como emisor OIDC
 
 `sorsabsa-identity` (`gyqgorgfstffbgazhbnb`) pasa a ser el emisor de identidad
