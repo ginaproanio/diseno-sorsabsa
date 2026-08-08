@@ -264,21 +264,34 @@ stash`). El punto crítico —que el `redirectTo` con `?app=&next=` sobreviva
 fragmento donde `/auth/complete` los espera— se probó con script contra las
 APIs reales. Las 3 páginas compilan y sirven con `next dev`.
 
-**⏳ NO probado — un clic real en navegador**, con hidratación de React y
-las llamadas `fetch` desde dentro de la página. No hay herramienta de
-browser automation en este entorno. La lógica es adaptación directa de lo ya
-probado en el resto del Paso 2 (script) y del código que corría en
-producción — pero el clic en sí no se vio correr.
+**✅ Probado con clic real en navegador — 3 bugs reales encontrados y
+arreglados**, ninguno lo iba a agarrar un script:
 
-**⛔ Pendiente para que esto funcione en producción:** agregar en Vercel
-(proyecto `auth-sorsabsa`) las variables `NEXT_PUBLIC_IDENTITY_SUPABASE_URL`
-y `NEXT_PUBLIC_IDENTITY_SUPABASE_ANON_KEY` (valores en `.env.example` del
-repo). **Sin esto, el próximo deploy rompe el login de todo el
-ecosistema** — el build no falla (son variables públicas con `?? ''` de
-respaldo), pero `/oauth/consent` intentaría hablar con una URL vacía.
+1. Commit `212f8b9` — variables `NEXT_PUBLIC_IDENTITY_SUPABASE_URL` y
+   `NEXT_PUBLIC_IDENTITY_SUPABASE_ANON_KEY` agregadas en Vercel
+   (`auth-sorsabsa`). Sin esto el deploy servía pero `/oauth/consent`
+   hablaba con una URL vacía.
+2. Commit `4f8eac1` — **"Application error"** al entrar a `/oauth/consent`:
+   `Wordmark` llama `useBrand()` y esa pantalla no tenía `<BrandProvider>`
+   alrededor, crash inmediato. Y **doble clic**: condomanager.vip → "Iniciar"
+   → auth-sorsabsa mostraba OTRO botón "Iniciar sesión" antes de recién ahí
+   ir a identity. Arreglado: `BrandProvider` agregado, y `/auth/login`
+   dispara el redirect solo al montar (un clic desde el producto alcanza).
+3. Commit `682425c` — **la marca cambiaba a mitad de camino**: entrar por
+   condomanager.vip abría un login verde/oro CondoManager que saltaba a la
+   marca genérica SORSABSA en `/oauth/consent`. Causa: identity solo
+   devuelve `?authorization_id=` a esa pantalla, ningún otro parámetro
+   sobrevive el salto. Arreglado con `sessionStorage` (mismo origen, mismo
+   tab) para que `/oauth/consent` sepa qué producto lo trajo.
 
-**Paso 2 cerrado: un solo portero, identity, de punta a punta — probado
-donde se pudo probar, honesto sobre lo que falta ver correr en vivo.**
+Gina probó cada ronda en el navegador real y confirmó — la señal es que
+después del tercer fix pasó directo a pedir *reducir* los saltos visuales
+del flujo, no a reportar un bug nuevo (esa mejora queda anotada para el
+Paso 3, ver más abajo).
+
+**Paso 2 cerrado — 08-ago-2026: un solo portero, identity, de punta a
+punta, probado con peticiones reales en cada tramo y con clic real en
+navegador en el tramo que faltaba.**
 
 ## Paso 3 — Cada producto a su propio proyecto
 

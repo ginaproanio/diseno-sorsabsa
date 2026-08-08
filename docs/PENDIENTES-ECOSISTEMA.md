@@ -220,6 +220,25 @@ Correr graphify sobre el ecosistema (merge de repos) para ver quién reusa
 auth/pagos/notificaciones/design-system y quién reinventó. Sostiene el principio
 de arriba con datos.
 
+## 10. Login con Google (mejora, no bloquea nada)  🔵 apuntado 08-ago-2026
+
+Agregar "Continuar con Google" como segundo método de acceso. Es una
+ampliación del Paso 1 de `PLAN-DESOLDADO.md` (identity ya es el emisor real
+con email/contraseña) — no depende del Paso 3 ni lo bloquea, se puede hacer
+en cualquier momento.
+
+Pasos:
+
+1. **Gina, en Google Cloud Console:** crear OAuth Client ("Web application"),
+   Redirect URI = `https://gyqgorgfstffbgazhbnb.supabase.co/auth/v1/callback`
+   (el de **identity**, uno solo para todo el ecosistema — no por producto).
+2. **Gina, en Supabase Dashboard** → proyecto `sorsabsa-identity` →
+   Authentication → Sign In/Providers → Google: cargar Client ID/Secret.
+3. **Código:** botón "Continuar con Google" en `auth-sorsabsa`
+   `/oauth/consent` (la única pantalla real de credenciales) →
+   `identityClient.auth.signInWithOAuth({provider: 'google'})`, mismo patrón
+   que ya usa `/auth/login` para federarse contra identity.
+
 ---
 
 ## Hecho (para no re-hacer)
