@@ -207,12 +207,18 @@ Es PyQt5 (app de escritorio), no un servicio. Antes de Railway: poblar
 `core/orchestrator.py` (vacío), sacar el renderizador de informe fuera de Qt,
 quitar rutas absolutas, Dockerfile. Ver `PLAN_MATERIALIZACION.md` §2.
 
-## 8. Probar CondoManager end-to-end (Punta Blanca)
+## 8. Probar CondoManager end-to-end (Punta Blanca)  🔴 SIGUIENTE — 08-ago-2026
 
 Nunca se verificó el flujo real: admin entra, crea condominio, carga residentes,
 emite alícuota, residente paga. El doc de arquitectura §6 lo marca sin probar.
 Esto es lo que convierte "plomería lista" en "producto que funciona para un
 cliente".
+
+**Se vuelve bloqueante para el Paso 3 de `PLAN-DESOLDADO.md`** (cada producto
+a su propio proyecto): Gina decidió no separar hasta probar esto — separar
+cuesta $20/mes reales y no hay apuro (`public`/`domus` sin filas operativas
+hoy), así que mejor encontrar bugs de producto en el entorno ya estable que
+mezclados con una migración recién hecha.
 
 ## 9. Auditar reuso de sistemas compartidos (graphify)
 

@@ -302,7 +302,31 @@ de este paso) — ver `PENDIENTES-ECOSISTEMA.md` #11.
 
 ## Paso 3 — Cada producto a su propio proyecto
 
-Recién aquí quedan **desoldados de verdad**: hoy los tres productos comparten
+**⏸️ EN PAUSA — decidido 08-ago-2026.** Gina: "no quiero separar hasta probar
+el sistema." Tiene razón y además no cuesta nada esperar — verificado con
+Supabase real (`get_organization`/`get_cost`/`list_projects`, no de memoria):
+
+- **Separar cuesta $20/mes extra, de verdad.** Org `SORSABSA_Corp` (Pro): hoy
+  3 proyectos activos (condomanager, identity, agente24siete) = $25 Pro +
+  3×$10 cómputo − $10 crédito = **$45/mes**. Terminado el Paso 3 (3 productos
+  nuevos + el viejo pausado, que no cobra) = 5 proyectos activos = **$65/mes**.
+  El org es Pro completo — no se puede dejar un proyecto nuevo en plan
+  gratis mientras no hay tráfico sin mezclar planes, que Supabase no permite.
+- **Ese costo no se activa hasta que se cree el proyecto nuevo** — esperar al
+  pendiente #8 (`PENDIENTES-ECOSISTEMA.md`, CondoManager end-to-end real con
+  Punta Blanca, nunca hecho) no cuesta nada.
+- **`public`/`domus` no tienen ni una fila operativa real hoy** — nada que
+  perder probando en el proyecto compartido tal cual está.
+- **Orden correcto: probar primero, separar después.** Si el test real
+  destapa que falta una tabla/columna, mejor encontrarlo antes de fijar el
+  baseline que Paso 3 va a replicar — y un bug de producto es más fácil de
+  diagnosticar en el entorno ya estable que mezclado con "¿esto lo rompió la
+  migración o es un bug real?" en un proyecto recién separado.
+
+**Retomar cuando el pendiente #8 esté cerrado.** Mientras tanto, todo lo de
+abajo queda escrito para cuando se retome, sin tocar.
+
+Recién ahí quedan **desoldados de verdad**: hoy los tres productos comparten
 una base, así que si esa base cae, caen los tres — aunque la identidad ya esté
 afuera, porque lo que se pierde son sus datos.
 
