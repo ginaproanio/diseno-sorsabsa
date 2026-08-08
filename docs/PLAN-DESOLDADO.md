@@ -293,6 +293,13 @@ Paso 3, ver más abajo).
 punta, probado con peticiones reales en cada tramo y con clic real en
 navegador en el tramo que faltaba.**
 
+**Extendido el mismo día a agente24siete** (no estaba en el criterio original
+de este paso, pero vive en el mismo proyecto consolidado): su `/admin`
+confirmado con el mismo portero, y de paso se limpió un login local muerto
+que una migración anterior había dejado sin desenchufar. Su `/portal` de
+cliente todavía no tiene login real (nunca se construyó, no es una regresión
+de este paso) — ver `PENDIENTES-ECOSISTEMA.md` #11.
+
 ## Paso 3 — Cada producto a su propio proyecto
 
 Recién aquí quedan **desoldados de verdad**: hoy los tres productos comparten

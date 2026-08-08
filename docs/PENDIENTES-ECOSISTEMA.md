@@ -239,6 +239,31 @@ Pasos:
    `identityClient.auth.signInWithOAuth({provider: 'google'})`, mismo patrón
    que ya usa `/auth/login` para federarse contra identity.
 
+## 11. agente24siete: /portal sin login real + cascarón viejo sin borrar  🟡 08-ago-2026
+
+Al re-verificar "un solo portero" (Paso 2 de `PLAN-DESOLDADO.md`) más allá de
+los 3 productos nombrados ahí, agente24siete quedó afuera del criterio
+original aunque vive en el mismo proyecto consolidado. Revisado con el mismo
+rigor — dos hallazgos, uno limpiado y uno pendiente de decidir:
+
+- ✅ **`/admin` — confirmado, mismo portero.** `LoginGate.tsx` →
+  `auth.sorsabsa.com/auth/login?app=agente24siete`, igual que los otros tres.
+- ✅ **Limpiado:** el login local muerto que la migración de Fase 3 (16-jul)
+  dejó sin desenchufar — `pages/api/admin/login.js` y
+  `pages/api/admin/cambiar-password.js` (borrados, commit `447b1bb` en
+  `agente24siete`).
+- 🟡 **`/portal` (panel de CLIENTE) no tiene login real.** Es un placeholder:
+  pide pegar a mano un access token de Supabase. El backend sí valida bien
+  (JWKS) — no es una brecha, solo que nunca se construyó el flujo. Falta el
+  mismo `LoginGate.tsx` que ya tiene `/admin`.
+- 🟡 **Sin decidir:** `pages/api/admin/index.js` y `pages/api/portal/index.js`
+  — la versión completa PRE-Fase-3 de ambos paneles (HTML+JS autocontenido,
+  ~950 y ~600 líneas), todavía servida en `/api/admin` y `/api/portal`. Ya
+  está efectivamente muerta (su login apuntaba a los dos archivos borrados
+  arriba, y usa una clave de `localStorage` distinta a la del panel nuevo),
+  pero es 10 veces más código que la limpieza ya hecha — se dejó sin tocar
+  hasta que Gina decida. Ver `agente24siete/README.md` y `todo.md` (Fase 3).
+
 ---
 
 ## Hecho (para no re-hacer)
