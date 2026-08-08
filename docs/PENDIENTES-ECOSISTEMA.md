@@ -508,9 +508,19 @@ cuándo se resuelva el baneo actual. Portafolio comercial ya verificado
 ("Sorsabsa Servicios" ✓), ícono/política de privacidad/categoría de
 "Configuración de la app" ya cargados (política de privacidad verificada
 en vivo: `sorsabsa.com/privacy-policy/`, existe y menciona explícitamente
-"Sorsabsa Asistente"). Quedan los pasos "Uso permitido", "Tratamiento de
-datos" e "Instrucciones para revisores" — mismo checklist que ya se hizo
-con éxito para la app de login (Sorsabsa Identity, pendiente #10).
+"Sorsabsa Asistente"). "Uso permitido" avanzado con llamadas de prueba
+reales por Graph API Explorer (`me/businesses`,
+`1771240747588175/phone_numbers`) — quedan videos de pantalla por subir en
+2 de los 4 permisos, después "Tratamiento de datos" e "Instrucciones para
+revisores" — mismo checklist que ya se hizo con éxito para la app de login
+(Sorsabsa Identity, pendiente #10).
+
+**🔍 Hallazgo suelto, sin resolver, no bloquea la revisión:** la llamada de
+prueba a `1771240747588175/phone_numbers` (número de CondoManager) mostró
+`webhook_configuration.application: "https://asistentepericial.vercel.app/api/webhook"`
+— un dominio que no es de agente24siete (suena a la línea pericial/forense).
+Revisar cuándo se destrabe el baneo; hoy no importa porque la cuenta no
+manda ni recibe nada de todos modos.
 
 ---
 
