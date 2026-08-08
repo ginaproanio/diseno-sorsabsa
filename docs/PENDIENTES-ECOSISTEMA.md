@@ -291,18 +291,34 @@ rigor — dos hallazgos, uno limpiado y uno pendiente de decidir:
   pero es 10 veces más código que la limpieza ya hecha — se dejó sin tocar
   hasta que Gina decida. Ver `agente24siete/README.md` y `todo.md` (Fase 3).
 
-## 12. CondoManager sube fotos a Supabase Storage, no a R2  🟡 08-ago-2026
+## 12. 🟡 Código listo — falta el bucket/credenciales reales de R2
 
-`ARQUITECTURA-ECOSISTEMA.md` dice R2 = objetos. Encontrado al escribir el RLS
-del pendiente #5: `app/(dashboard)/panel/residente/mis-unidades/page.tsx`
-(líneas 264-297) sube las fotos de unidad directo a
-`supabase.storage.from('condomanager-inmuebles')` y guarda la URL pública de
-Supabase en `unidad_fotos.url` — no pasa por R2.
+`ARQUITECTURA-ECOSISTEMA.md` dice R2 = objetos, y el patrón ya estaba probado
+(`legaltech/scraper/r2.py`, JustiRed) — CondoManager nunca se alineó:
+`mis-unidades/page.tsx` subía directo a
+`supabase.storage.from('condomanager-inmuebles')`.
 
-**Momento barato para corregirlo:** la tabla está vacía (0 filas reales hoy),
-así que no hay objetos que migrar, solo cambiar a dónde apunta el upload. El
-RLS del pendiente #5 sigue siendo correcto sin importar dónde viva el
-archivo — controla la fila de la tabla, no el storage.
+**Código corregido 08-ago-2026 (`condomanager` commit `232111e`)**, reusando
+el MISMO patrón que ya existe en TypeScript
+(`crm_inmobiliario/backend/src/lib/storage.ts`: URLs prefirmadas, el archivo
+va del navegador directo a R2) en vez de inventar uno nuevo — y los mismos
+nombres de variable `S3_*` de ese repo, para no sumar una tercera
+convención. `next build` compila limpio, las 2 rutas nuevas registradas.
+
+**Falta lo que solo se hace en Cloudflare (Gina):**
+
+1. R2 → crear el bucket `condomanager-inmuebles` (o el nombre que prefiera).
+2. Crear un token de API de R2 con acceso a ese bucket → da Account ID,
+   Access Key ID, Secret Access Key.
+3. Habilitar acceso público al bucket (dominio público r2.dev, o un dominio
+   propio) → esa URL es `S3_PUBLIC_BASE_URL`.
+4. Cargar en Vercel (proyecto `condomanager`) y en `.env.local`:
+   `S3_ENDPOINT` (`https://<account_id>.r2.cloudflarestorage.com`),
+   `S3_REGION=auto`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`,
+   `S3_PUBLIC_BASE_URL`.
+
+**No probado de punta a punta** — sin credenciales reales no hay forma de
+probarlo con una petición real, y no se prueba con "se ve bien" en pantalla.
 
 ---
 
