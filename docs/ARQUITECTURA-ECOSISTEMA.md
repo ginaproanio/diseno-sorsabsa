@@ -297,19 +297,84 @@ Places), que es la que se habilita y factura desde Cloud Console.
 `GOOGLE_MAPS_API_KEY`, `GEOCODING_API` ni `maps.googleapis.com` (el dominio de
 la API con clave; las URLs que usa son `google.com/maps/...`, sin `api`).
 
-### El proyecto de Google Cloud (`sorsabsaecosystem`)
+### El proyecto de Google Cloud (`sorsabsaecosystem`) — ✅ confirmado por Gina: Calendar de agente24siete
 
-Ningún código del ecosistema (10 repos revisados) referencia ese proyecto ni
-ninguna variable `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` — grep completo,
-cero resultados fuera de `fonts.googleapis.com` (tipografías, no una API).
+**Dos correcciones seguidas sobre este párrafo, ambas por especular en vez de
+encontrar el repo correcto primero — queda anotado para no repetirlo:** la
+primera versión decía que probablemente era para el login de Google
+(pendiente #10); la segunda, que era para la Static Maps API de `iot`.
+Las dos eran suposiciones. **Gina lo confirmó directo: es "Sorsabsa Bot -
+Calendar"** — la agenda de citas de agente24siete.
 
-**❓ No verificado desde aquí:** no hay acceso a Cloud Console para confirmar
-qué APIs están habilitadas dentro de ese proyecto. Lo más probable, por
-descarte, es que sea la preparación del pendiente #10 de
-`PENDIENTES-ECOSISTEMA.md` (Login con Google) — el primer paso de esa lista es
-exactamente crear un OAuth Client ahí. Si además hay una API de Maps/Geocoding
-habilitada y facturando, hoy no la usa ningún código: solo se ve entrando a la
-consola y revisando qué está activo.
+✅ Verificado en código después, no antes: `agente24siete/lib/calendar.js`
+usa el paquete `googleapis` contra **Google Calendar API v3**, autenticado
+por **cuenta de servicio** (`GOOGLE_SERVICE_ACCOUNT_JSON`, JWT — no OAuth de
+usuario) con scope `calendar`. Es lo que le permite a agente24siete agendar
+citas reales (horario comercial Ecuador UTC-5, `HORARIO_COMERCIAL` por día).
+Esto es lo que había detrás de "Sorsabsa Bot": el nombre de la cuenta de
+servicio.
+
+**Nota aparte, no relacionada con `sorsabsaecosystem`:** al buscar esto se
+encontró que `iot` (`c:/iot/iot`, producción Railway
+`iot-production-d29b.up.railway.app` — repo no listado antes en este
+documento) SÍ usa `GOOGLE_MAPS_API_KEY` contra la Static Maps API
+(`report_service.py`, confirmado configurado en Railway por `todo.md:25`).
+Puede ser el mismo proyecto de Cloud Console con dos APIs habilitadas, o uno
+distinto — **no verificado, no asumir**. Nombre engañoso: **"IOT" es
+"Inspección Ocular Técnica"**, un producto pericial, no dispositivos
+IoT/sensores (el §2 de este documento lo mencionaba junto a "conexiones
+persistentes" dando a entender lo segundo — corregir si se retoma esa
+sección).
+
+### Tres implementaciones de geo independientes, una de ellas duplicada dos veces
+
+Encontrado a partir de la pregunta de Gina de si el grafo cubría
+`geo-sorsabsa` y de si debía "estandarizarse en base a lo que SorsabsaForensic
+necesita, con los demás consumiéndolo" — y la evidencia le da la razón:
+
+1. **`@sorsabsa/geo`** — picker de mapa (Leaflet/OSM, sin clave). Consumido
+   por DomusCRM. Es un widget de UI, nada de cómputo geográfico.
+2. **SorsabsaForensic** (`core/processors/georeferencia/processor.py`) —
+   resuelve enlaces de Google Maps (cadena completa de redirecciones),
+   extrae coordenadas del lugar, calcula distancia+rumbo (haversine). Sin
+   clave, URLs públicas documentadas. El más completo y riguroso de los tres.
+3. **`iot`** (`report_service.py::_maps_replace`) — **repite la misma
+   extracción de coordenadas** que SorsabsaForensic (`regex @(-?\d+\.\d+),(-?\d+\.\d+)`
+   sobre un enlace de Google Maps), pero de forma más simple, sin la cadena de
+   redirecciones ni la distinción lugar-vs-encuadre que SorsabsaForensic sí
+   hace (y que su propio código explica que importa: un error de decenas de
+   metros). Escrita de forma independiente — cero código compartido con
+   SorsabsaForensic pese a resolver el mismo problema.
+
+**Por qué esto es un riesgo real, no solo duplicación:** SorsabsaForensic y
+`iot` son los dos productos periciales — sus informes sostienen afirmaciones
+ante un tribunal (`processor.py` cita una causa real, 096-2026-TCE). Si sus
+dos extracciones de coordenadas divergen para el mismo enlace, dos informes
+sobre el mismo caso podrían reportar ubicaciones distintas. Eso no es un
+defecto de estilo, es un riesgo de que un informe sea impugnable.
+
+**Por qué la solución no puede ser un paquete npm más (como `@sorsabsa/ui`):**
+SorsabsaForensic e `iot` son Python; `@sorsabsa/geo` es React/TypeScript. Un
+paquete de código fuente compartido (el patrón de `@sorsabsa/ui`/`@sorsabsa/geo`)
+no cruza esa frontera de lenguaje. El patrón que sí lo resuelve ya existe en
+el ecosistema: **un servicio HTTP en Railway** (el mismo molde de
+`pagos-sorsabsa`/`notificaciones-sorsabsa`) — cualquier lenguaje lo llama por
+HTTP. Propuesta, sin empezar a implementar todavía:
+
+- Extraer de SorsabsaForensic (la versión más rigurosa) la resolución de
+  enlaces + extracción de coordenadas + distancia/rumbo a un servicio
+  `geo-sorsabsa` en Railway.
+- SorsabsaForensic e `iot` pasan a LLAMARLO en vez de tener su propia copia —
+  `iot` deja de repetir una versión más débil de la misma lógica.
+- `@sorsabsa/geo` (el paquete npm) sigue existiendo tal cual, sin tocar: es
+  un widget de UI, un problema distinto, no necesita este servicio.
+- Si conviene, el mismo servicio puede centralizar la llave de
+  `GOOGLE_MAPS_API_KEY` (hoy solo en `iot`) para que no quede repetida si
+  algún otro producto también necesita imagen estática de mapa.
+
+**Sin empezar** — SorsabsaForensic tiene código pericial delicado (afecta
+informes reales) y esto toca dos repos. Pendiente de decisión de Gina sobre
+alcance y orden.
 
 ### R2: quién ya migró y quién no
 
