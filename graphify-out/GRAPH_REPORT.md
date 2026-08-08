@@ -1,23 +1,23 @@
 # Graph Report - diseno-sorsabsa  (2026-08-08)
 
 ## Corpus Check
-- 69 files · ~33,896 words
+- 69 files · ~34,539 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 475 nodes · 708 edges · 25 communities (23 shown, 2 thin omitted)
+- 476 nodes · 709 edges · 25 communities (23 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8bdec5f1`
+- Built from commit: `fb79eb2e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - index.ts
-- App.tsx
 - Arquitectura del ecosistema SORSABSA
+- App.tsx
 - BrandProvider.tsx
 - devDependencies
 - DomusLanding.tsx
@@ -50,10 +50,10 @@
 10. `Icon` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `TokenAudit()` --calls--> `useBrand()`  [EXTRACTED]
-  showcase/src/components/TokenAudit.tsx → src/brand/BrandProvider.tsx
 - `resolveEffectiveColors()` --calls--> `brandToCssVars()`  [EXTRACTED]
   showcase/src/resolveColors.ts → src/brand/BrandProvider.tsx
+- `TokenAudit()` --calls--> `useBrand()`  [EXTRACTED]
+  showcase/src/components/TokenAudit.tsx → src/brand/BrandProvider.tsx
 - `App()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
   showcase/src/App.tsx → showcase/src/resolveColors.ts
 - `ColorPalette()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
@@ -70,17 +70,17 @@
 Cohesion: 0.05
 Nodes (55): ButtonMatrix(), SHADOW, VARIANTS, DATA, TableDemo(), AppShell(), AppShellProps, Avatar() (+47 more)
 
-### Community 1 - "App.tsx"
-Cohesion: 0.09
-Nodes (27): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented() (+19 more)
-
-### Community 2 - "Arquitectura del ecosistema SORSABSA"
+### Community 1 - "Arquitectura del ecosistema SORSABSA"
 Cohesion: 0.05
-Nodes (43): 1. Inventario, 2. Los dos planos, 3-bis. NO HAY DATOS DE CLIENTES. Punto., 3. Mapa de bases de datos — LA TRAMPA, 4. Almacenamiento, 4-bis. Georreferenciación y R2 — estado real (verificado 2026-08-08), 5. Roturas verificadas el 2026-07-26, 6-bis. Plano de DNS y correo ✅ verificado 2026-07-26 (+35 more)
+Nodes (44): 1. Inventario, 2. Los dos planos, 3-bis. NO HAY DATOS DE CLIENTES. Punto., 3. Mapa de bases de datos — LA TRAMPA, 4. Almacenamiento, 4-bis. Georreferenciación y R2 — estado real (verificado 2026-08-08), 5. Roturas verificadas el 2026-07-26, 6-bis. Plano de DNS y correo ✅ verificado 2026-07-26 (+36 more)
+
+### Community 2 - "App.tsx"
+Cohesion: 0.09
+Nodes (25): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented() (+17 more)
 
 ### Community 3 - "BrandProvider.tsx"
 Cohesion: 0.10
-Nodes (26): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandContext, BrandProvider(), contrastRatio(), darkenToContrast() (+18 more)
+Nodes (28): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandConfig, BrandContext, BrandProvider(), brandToCssVars() (+20 more)
 
 ### Community 4 - "devDependencies"
 Cohesion: 0.07
@@ -92,7 +92,7 @@ Nodes (20): DomusLanding(), FEATURES, SOCIAL, IconCatalog(), NAMES, SHADOW, Inpu
 
 ### Community 6 - "Pendientes del ecosistema SORSABSA"
 Cohesion: 0.07
-Nodes (25): 10. Login con Google (mejora, no bloquea nada)  🔵 apuntado 08-ago-2026, 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado, 12. 🟡 R2 desplegado y verificado — falta el clic real de un residente, 13. ✅ HECHO — geo-sorsabsa/service desplegado, verificado y consumido por los dos periciales, 14. ✅ HECHO — iot consume el portero central (auth-sorsabsa), 1. ✅ RESUELTO — separar auth a su propio proyecto (vía OIDC), 2. ✅ HECHO — JustiRed al SSO central, 3. ✅ HECHO — cutover de pagos (fuera de Vercel) (+17 more)
+Nodes (25): 10. 🟡 Login social: Google + Facebook — código listo, falta la parte de Gina, 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado, 12. 🟡 R2 desplegado y verificado — falta el clic real de un residente, 13. ✅ HECHO — geo-sorsabsa/service desplegado, verificado y consumido por los dos periciales, 14. ✅ HECHO — iot consume el portero central (auth-sorsabsa), 1. ✅ RESUELTO — separar auth a su propio proyecto (vía OIDC), 2. ✅ HECHO — JustiRed al SSO central, 3. ✅ HECHO — cutover de pagos (fuera de Vercel) (+17 more)
 
 ### Community 7 - "compilerOptions"
 Cohesion: 0.09
@@ -143,7 +143,7 @@ Cohesion: 0.40
 Nodes (4): buildCommand, framework, installCommand, outputDirectory
 
 ## Knowledge Gaps
-- **209 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+204 more)
+- **210 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+205 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -152,15 +152,15 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Arquitectura del ecosistema SORSABSA` connect `Arquitectura del ecosistema SORSABSA` to `Pendientes del ecosistema SORSABSA`?**
   _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **Why does `BrandConfig` connect `App.tsx` to `index.ts`, `BrandProvider.tsx`?**
+- **Why does `BrandConfig` connect `BrandProvider.tsx` to `index.ts`, `App.tsx`?**
   _High betweenness centrality (0.014) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _209 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _210 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.053994732221246705 - nodes in this community are weakly interconnected._
-- **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.08695652173913043 - nodes in this community are weakly interconnected._
 - **Should `Arquitectura del ecosistema SORSABSA` be split into smaller, more focused modules?**
-  _Cohesion score 0.046511627906976744 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
+- **Should `App.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.08668076109936575 - nodes in this community are weakly interconnected._
 - **Should `BrandProvider.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.09841269841269841 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10241820768136557 - nodes in this community are weakly interconnected._
