@@ -54,10 +54,16 @@ es el origen de que lo pericial nunca haya salido a producción.
 
 ### Plano web — Vercel ✅ correcto
 
-Agente24Siete · DomusCRM · CondoManager · SPA de JustiRed · auth · pagos ·
-notificaciones.
+Agente24Siete · DomusCRM · CondoManager · SPA de JustiRed · auth.
 
 Todo es petición → respuesta, sin binarios. Vercel es la herramienta adecuada.
+
+> **Corregido el 2026-08-07:** esta lista traía `pagos` y `notificaciones`,
+> desactualizado desde el cutover del 30-jul (§7): ambos se movieron **por
+> completo** a Railway —API y base— y sus proyectos en Vercel ya no existen.
+> No quedan en el plano web. `auth` sí sigue acá: su API (`auth-sorsabsa`) es
+> Vercel, la base de identidad es Supabase — no tiene nada que ver con
+> Railway (ver §9 pendiente y `PLAN-DESOLDADO.md`).
 
 ### Plano de proceso — YA EXISTE, parcialmente ✅ (corrección 2026-07-30)
 
