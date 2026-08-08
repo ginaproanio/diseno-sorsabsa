@@ -389,13 +389,22 @@ HTTP. Propuesta, sin empezar a implementar todavía:
   `UnicodeEncodeError` — no estaba en el original, y no se portó de vuelta a
   SorsabsaForensic todavía (decisión aparte, ese repo no se tocó).
 
+**✅ Desplegado y verificado en vivo, 08-ago-2026** —
+`https://geo-sorsabsa-production.up.railway.app` (proyecto Railway
+`passionate-grace`, root directory `service/`). `/`, `/distancia` y
+`/resolver` responden bien en producción, incluido el caso real con tilde
+sin codificar. Tropiezo real en el despliegue: el puerto indicado al
+generar el dominio público (`8010`, el de la Dockerfile) no coincidía con
+el `$PORT` real que Railway asigna en runtime (`8080`, que el código sí lee
+bien vía `os.getenv`) — 502 hasta corregirlo. Diagnosticado con
+`railway logs` (CLI instalada y con sesión iniciada).
+
 **Sin hacer:**
-1. Desplegar a Railway — necesita el dashboard de Gina (no hay tool para
-   crear proyectos Railway desde acá), mismo patrón que Convertidor/`iot`.
-2. Repuntar SorsabsaForensic e `iot` para que llamen al servicio en vez de
+1. Repuntar SorsabsaForensic e `iot` para que llamen al servicio en vez de
    su lógica inline — sin empezar, deliberadamente: los dos tocan código
-   pericial que afecta informes reales, se hace después de que el servicio
-   esté desplegado y accesible, no antes.
+   pericial que afecta informes reales. Ya no hay razón de infraestructura
+   para seguir esperando (el servicio está vivo); es una decisión de orden
+   y alcance de Gina.
 
 ### R2: quién ya migró y quién no
 

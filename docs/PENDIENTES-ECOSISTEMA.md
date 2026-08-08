@@ -167,7 +167,7 @@ de punta a punta.** Variables en Vercel producción, redeploy hecho y `READY`.
 **⏳ Sin probar: el clic real de un residente subiendo una foto por la UI** —
 no se fabricó esa prueba tocando cuentas reales sin permiso.
 
-## 13. 🟡 geo-sorsabsa/service arrancado — Railway ya creado, falta repuntar consumidores
+## 13. 🟡 geo-sorsabsa/service desplegado y verificado — falta repuntar consumidores
 
 Arrancado 08-ago-2026 a partir de un punto real de Gina: SorsabsaForensic e
 `iot` (Inspección Ocular Técnica, no dispositivos IoT — nombre engañoso,
@@ -179,9 +179,17 @@ dos generan informes que sostienen afirmaciones ante tribunal. Detalle en
 - ✅ `geo-sorsabsa/service/` — FastAPI, porta de SorsabsaForensic la
   resolución de enlaces + extracción de coordenadas + distancia/rumbo.
   Commit `09cf93d`. Probado: 8/8 unitarios + en vivo contra Google real.
-- ✅ Railway creado por Gina, root directory `service/` — 08-ago-2026.
-  **⏳ Sin verificar en vivo**: falta la URL de producción para confirmar
-  que responde (mismo `GET /` de salud que Convertidor/`iot`).
+- ✅ Railway creado por Gina, root directory `service/`, proyecto
+  `passionate-grace` — 08-ago-2026. **Verificado en vivo**:
+  `https://geo-sorsabsa-production.up.railway.app` — `/`, `/distancia` y
+  `/resolver` responden bien, incluido el caso real con tilde sin codificar
+  (el bug de arriba, confirmado arreglado en producción, no solo en local).
+  Hubo un tropiezo real en el camino: dije que pusiera el puerto `8010`
+  (el de la Dockerfile) en el dominio público de Railway — el contenedor en
+  realidad escuchaba en `8080` (el `$PORT` real que asigna Railway, que el
+  código sí lee bien vía `os.getenv`), y hasta corregir el puerto del
+  dominio el servicio daba 502. Diagnosticado con `railway logs` (CLI ya
+  instalada y con sesión iniciada — no hubo que pedir logs a mano).
 - 🔴 **Bug real encontrado, arreglado en el servicio nuevo, NO portado de
   vuelta a SorsabsaForensic:** `UnicodeEncodeError` en la resolución de
   enlaces cuando la URL trae una tilde o ñ sin percent-encoding (copiar la
