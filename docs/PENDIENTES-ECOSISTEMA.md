@@ -186,16 +186,20 @@ lo cual es falso y quedó anotado para no repetirlo.
   mismo `useEffect` que ya existía la detecta y aprueba sola — cero cambios
   en el resto del flujo (`/auth/login`, `/auth/complete`). `typecheck` y
   `next build` limpios.
-- 🔲 **Google — falta Gina, Google Cloud Console, proyecto `sorsabsaecosystem`
-  (reusar, no crear uno nuevo):**
-  1. OAuth consent screen (si no está configurado): tipo **Externo** — van a
-     entrar cuentas Gmail de clientes, no solo del equipo.
-  2. Credenciales → Crear credenciales → **ID de cliente de OAuth** → tipo
-     **Aplicación web**. Redirect URI = `https://gyqgorgfstffbgazhbnb.supabase.co/auth/v1/callback`
-     (el callback de **identity**, uno solo para todo el ecosistema — no es
-     el dominio de ningún producto).
-  3. No hace falta habilitar ninguna API nueva en la Biblioteca — el login
-     con Google no usa Calendar ni Maps, solo el ID de cliente OAuth.
+- 🟡 **Google — a medias.** Gina creó el cliente OAuth en
+  `sorsabsaecosystem` (Google Auth Platform → Clientes →
+  `sorsabsa_consola_google`, tipo **Aplicación web**, 08-ago-2026). Client
+  ID/Secret existen (no se guardan acá — van directo al paso de Supabase de
+  abajo, nunca a un repo). Quedan dos cosas:
+  1. 🔲 **Publicar la app.** Quedó en **Testing** — el aviso "acceso
+     restringido a los usuarios de prueba" lo confirma. En Testing SOLO
+     entran los emails que se agreguen a mano a la lista de test users (tope
+     100) — un cliente real con su Gmail choca con un error de acceso. OAuth
+     consent screen → completar lo básico (nombre, correo de soporte, correo
+     de contacto) → **Publish App**, pasar a **In production**. Como el login
+     solo pide scopes básicos (email, perfil), esto no debería requerir
+     revisión de Google.
+  2. 🔲 **Pegar Client ID/Secret en Supabase** (ver paso de abajo).
 - 🔲 **Facebook — falta Gina, developers.facebook.com (proyecto NUEVO, no
   reusa nada de Google — son plataformas distintas):**
   1. Crear app tipo "Consumidor" con el caso de uso **Facebook Login**.
