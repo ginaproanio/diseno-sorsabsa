@@ -4989,21 +4989,21 @@
       "norm_label": "11. agente24siete: /portal sin login real + cascaron viejo sin borrar  \ud83d\udfe1 08-ago-2026"
     },
     {
-      "label": "12. CondoManager sube fotos a Supabase Storage, no a R2  \ud83d\udfe1 08-ago-2026",
+      "label": "12. \ud83d\udfe1 C\u00f3digo listo \u2014 falta el bucket/credenciales reales de R2",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
       "source_location": "L294",
       "_origin": "ast",
-      "id": "docs_pendientes_ecosistema_12_condomanager_sube_fotos_a_supabase_storage_no_a_r2_08_ago_2026",
+      "id": "docs_pendientes_ecosistema_12_c\u00f3digo_listo_falta_el_bucket_credenciales_reales_de_r2",
       "community": 7,
       "community_name": "Pendientes del ecosistema SORSABSA",
-      "norm_label": "12. condomanager sube fotos a supabase storage, no a r2  \ud83d\udfe1 08-ago-2026"
+      "norm_label": "12. \ud83d\udfe1 codigo listo \u2014 falta el bucket/credenciales reales de r2"
     },
     {
       "label": "Hecho (para no re-hacer)",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L309",
+      "source_location": "L325",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_hecho_para_no_re_hacer",
       "community": 7,
@@ -12940,7 +12940,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
-      "target": "docs_pendientes_ecosistema_12_condomanager_sube_fotos_a_supabase_storage_no_a_r2_08_ago_2026",
+      "target": "docs_pendientes_ecosistema_12_c\u00f3digo_listo_falta_el_bucket_credenciales_reales_de_r2",
       "confidence_score": 1.0
     },
     {
@@ -13057,7 +13057,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L309",
+      "source_location": "L325",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
@@ -13484,5 +13484,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "daca15c461187ef5c78bdf41bed59200f1a2ff18"
+  "built_at_commit": "2e1a70549d8d870b015d21c960a8da3f597bcf25"
 }

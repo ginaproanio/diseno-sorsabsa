@@ -1,7 +1,7 @@
 # Graph Report - diseno-sorsabsa  (2026-08-08)
 
 ## Corpus Check
-- 69 files · ~31,789 words
+- 69 files · ~31,888 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `daca15c4`
+- Built from commit: `2e1a7054`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -101,7 +101,7 @@ Nodes (22): ../src/**/*.test.ts, ../src/**/*.test.tsx, vite.config.ts, compilerO
 
 ### Community 7 - "Pendientes del ecosistema SORSABSA"
 Cohesion: 0.09
-Nodes (22): 10. Login con Google (mejora, no bloquea nada)  🔵 apuntado 08-ago-2026, 11. agente24siete: /portal sin login real + cascarón viejo sin borrar  🟡 08-ago-2026, 12. CondoManager sube fotos a Supabase Storage, no a R2  🟡 08-ago-2026, 1. ✅ RESUELTO — separar auth a su propio proyecto (vía OIDC, no vía llave compartida), 2. ✅ HECHO — JustiRed al SSO central, 3. ✅ HECHO — cutover de pagos (fuera de Vercel), 4-bis. Limpieza menor en agente24siete, 4. ✅ HECHO — notificaciones-sorsabsa → Railway (+14 more)
+Nodes (22): 10. Login con Google (mejora, no bloquea nada)  🔵 apuntado 08-ago-2026, 11. agente24siete: /portal sin login real + cascarón viejo sin borrar  🟡 08-ago-2026, 12. 🟡 Código listo — falta el bucket/credenciales reales de R2, 1. ✅ RESUELTO — separar auth a su propio proyecto (vía OIDC, no vía llave compartida), 2. ✅ HECHO — JustiRed al SSO central, 3. ✅ HECHO — cutover de pagos (fuera de Vercel), 4-bis. Limpieza menor en agente24siete, 4. ✅ HECHO — notificaciones-sorsabsa → Railway (+14 more)
 
 ### Community 8 - "compilerOptions"
 Cohesion: 0.09
