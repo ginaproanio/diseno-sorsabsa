@@ -226,6 +226,47 @@ dos generan informes que sostienen afirmaciones ante tribunal. Detalle en
     `https://geo-sorsabsa-production.up.railway.app` real, no mocks.
     `python -m py_compile` limpio en ambos.
 
+## 14. ✅ HECHO — iot consume el portero central (auth-sorsabsa)
+
+Cerrado 08-ago-2026, a partir de un punto de Gina revisando el pendiente 9
+(reuso de compartidos): "iot debería consumir también el portero de
+sorsabsa". `iot` tenía su propio login (HTTP Basic Auth, credenciales por
+variable de entorno `PATRICIO_USER`/`SUSANA_USER`) — el único producto que
+no usaba el SSO.
+
+**Corrección de rumbo en el camino:** la primera propuesta era abrir una
+sesión de Flask del lado del servidor para "adaptar" el flujo a un stack
+sin cliente JS pesado. Gina: *"¿no quedamos en que se estandarice el
+consumo de los compartidos? porque tenemos que adaptarnos en vez de
+desarrollar como corresponde?"* — tenía razón: eso introducía un modelo de
+seguridad distinto al resto del ecosistema. Lo estándar (verificado en
+`agente24siete/lib/adminAuth.js`) es **verificación JWKS stateless en cada
+request, sin sesión de servidor**. `iot/iot_system/app/auth_sso.py` porta
+exactamente eso — la única diferencia real es de transporte (una
+navegación de página no puede mandar `Authorization: Bearer`, así que el
+token viaja en una cookie httponly en vez de un header), no de modelo de
+seguridad: se reverifica la firma por JWKS en cada petición igual que en
+cualquier otro producto.
+
+- `iot` commit `b6a01d5` (repo `ginaproanio/iot`): `requires_auth` (Basic
+  Auth) reemplazado, `/auth/callback` nuevo, `/logout` ahora borra la
+  cookie de verdad (con Basic Auth ni eso se podía). "Un usuario por
+  persona" se mantiene — la identidad ya no sale de comparar credenciales,
+  sale de `user_metadata.identidad_iot` del usuario de Supabase.
+- `auth-sorsabsa` commit `263531d`: `iot` registrado en el allowlist
+  (`BRANDS.sorsabsa`, sin marca propia — mismo criterio que `convertidor`).
+- **Cuentas reales creadas** (Admin API, invite por email vía Resend):
+  `patricio.marmol@hotmail.com`, `susi.espinosa@hotmail.com`. Deben entrar
+  a su correo y fijar contraseña antes del primer login real.
+- Probado de punta a punta con un token REAL (magic link redimido vía
+  Admin API, no un mock): sin cookie → redirect al portero; callback →
+  verifica y guarda cookie; con cookie → acceso; ruta `fetch()` sin cookie
+  → 401 JSON, no redirect (rompería el `fetch`); logout → borra la cookie.
+- ⏳ **Pendiente, no urgente**: `PATRICIO_USER`/`PATRICIO_PAS`/
+  `SUSANA_USER`/`SUSANA_PAS`/`ADMIN_USER`/`ADMIN_PAS` en Railway ya no los
+  lee ningún código (confirmado por grep) — se pueden borrar del dashboard
+  cuando convenga, no rompen nada si quedan.
+
 ---
 
 ## Hecho (para no re-hacer)

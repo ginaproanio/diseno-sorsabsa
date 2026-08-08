@@ -40,7 +40,7 @@ trabajo lo redescubría desde cero — a veces rompiendo algo en el intento.
 | Servicio | Repo | Estado |
 |---|---|---|
 | Pagos | `pagos-sorsabsa` | ⚠️ 20/20 despliegues verdes; su base depende de CondoManager (§3) |
-| SSO | `auth-sorsabsa` | ⚠️ 16/16 verdes; 5 apps registradas |
+| SSO | `auth-sorsabsa` | ⚠️ 16/16 verdes; 6 apps registradas (domuscrm, condomanager, agente24siete, justired, convertidor, `iot` — este último desde 08-ago-2026, ver PENDIENTES-ECOSISTEMA.md #14) |
 | Notificaciones | `notificaciones-sorsabsa` | ❓ |
 | Geo | `geo-sorsabsa` (`@sorsabsa/geo`) | ✅ v0.1.0, Leaflet + OpenStreetMap, sin API key — ver §4-bis |
 | Design system | `diseno-sorsabsa` (`@sorsabsa/ui`) | ✅ v0.1.36 |
