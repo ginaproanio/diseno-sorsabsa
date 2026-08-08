@@ -130,19 +130,27 @@ Agregar "Continuar con Google" a identity — ampliación del Paso 1 de
 3. **Código:** botón en `auth-sorsabsa` `/oauth/consent` →
    `identityClient.auth.signInWithOAuth({provider: 'google'})`.
 
-## 11. agente24siete: /portal sin login real + cascarón viejo sin borrar  🟡
+## 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado
 
-`/admin` confirmado con el mismo portero que el resto del ecosistema, y
-limpiado el login local muerto (`pages/api/admin/login.js` +
-`cambiar-password.js`, commit `447b1bb`). Quedan dos sin resolver:
+Cerrado 08-ago-2026, `agente24siete` commit `82b66e4`. `/admin` ya estaba con
+el mismo portero que el resto del ecosistema (login local muerto limpiado
+antes, commit `447b1bb`). Los dos puntos que quedaban:
 
-- 🟡 `/portal` (panel de CLIENTE) no tiene login real — pide pegar un access
-  token a mano. El backend sí valida bien (JWKS); falta el `LoginGate.tsx`
-  que ya tiene `/admin`.
-- 🟡 `pages/api/admin/index.js` y `pages/api/portal/index.js` — panel viejo
-  PRE-Fase-3 completo (~1500 líneas), ya efectivamente muerto pero no
-  borrado — decisión pendiente de Gina. Ver `agente24siete/README.md` y
-  `todo.md` (Fase 3).
+- **`/portal` (panel de CLIENTE) ya tiene login real.** Creado
+  `app/portal/LoginGate.tsx` (mismo patrón que `/admin`) y conectado en
+  `app/portal/layout.tsx`. Al conectarlo apareció un bug real: `/auth/callback`
+  escribía siempre `a24_admin_token` sin mirar `next` — `/admin` y `/portal`
+  comparten una sola entrada `agente24siete` en el allowlist de auth-sorsabsa
+  (sin `app=` distinto por rol), así que un login que volvía a `/portal`
+  quedaba con el token en la llave equivocada. Corregido: decide por el
+  prefijo de `next`. El backend ya validaba bien por JWKS — nunca fue un
+  agujero de seguridad, solo faltaba el flujo del navegador.
+- **`pages/api/admin/index.js` y `pages/api/portal/index.js`** (~1500 líneas,
+  panel viejo PRE-Fase-3 en HTML+JS autocontenido) — confirmado sin
+  referencias en todo el repo, Gina decidió borrarlos. Hecho.
+
+`next build` verificado en cada paso. Detalle en `agente24siete/README.md` y
+`todo.md` (Fase 3).
 
 ## 12. 🟡 R2 desplegado y verificado — falta el clic real de un residente
 
