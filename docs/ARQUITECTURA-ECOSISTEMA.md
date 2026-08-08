@@ -372,9 +372,30 @@ HTTP. Propuesta, sin empezar a implementar todavía:
   `GOOGLE_MAPS_API_KEY` (hoy solo en `iot`) para que no quede repetida si
   algún otro producto también necesita imagen estática de mapa.
 
-**Sin empezar** — SorsabsaForensic tiene código pericial delicado (afecta
-informes reales) y esto toca dos repos. Pendiente de decisión de Gina sobre
-alcance y orden.
+**✅ Arrancado 08-ago-2026** — `geo-sorsabsa` commit `09cf93d`
+(`geo-sorsabsa/service/`). Escrito, probado, sin desplegar todavía:
+
+- `geo_core.py` porta `resolver_enlace` + `datos_del_enlace` +
+  `distancia_y_rumbo` de SorsabsaForensic (no la captura con Playwright ni
+  la resolución en navegador de enlaces por CID — gaps documentados en el
+  README del servicio, no silenciosos).
+- FastAPI, mismo molde que `convertidor/backend` (Dockerfile + `serve.py`
+  con `$PORT`).
+- Probado: 8/8 tests unitarios sin red + en vivo contra Google real
+  (extracción de coordenadas correcta sobre una URL real, cadena de
+  redirecciones de 2 saltos real). **Bug real encontrado y arreglado en el
+  camino**: una URL con tilde/ñ sin percent-encoding (copiar la barra de
+  direcciones directo, plausible en Ecuador) tumbaba `urllib` con
+  `UnicodeEncodeError` — no estaba en el original, y no se portó de vuelta a
+  SorsabsaForensic todavía (decisión aparte, ese repo no se tocó).
+
+**Sin hacer:**
+1. Desplegar a Railway — necesita el dashboard de Gina (no hay tool para
+   crear proyectos Railway desde acá), mismo patrón que Convertidor/`iot`.
+2. Repuntar SorsabsaForensic e `iot` para que llamen al servicio en vez de
+   su lógica inline — sin empezar, deliberadamente: los dos tocan código
+   pericial que afecta informes reales, se hace después de que el servicio
+   esté desplegado y accesible, no antes.
 
 ### R2: quién ya migró y quién no
 
