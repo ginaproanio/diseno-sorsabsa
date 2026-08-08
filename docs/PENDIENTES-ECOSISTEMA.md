@@ -153,7 +153,7 @@ Ninguno de los tres reinventos fue intencional — cada uno se construyó por
 separado porque nadie tenía visibilidad de que el otro ya existía. Es
 justamente lo que este ejercicio estaba pensado para sacar a la luz.
 
-## 10. 🟡 Login social: Google ✅ y Facebook ✅ funcionando — falta Revisión de Meta para público general
+## 10. 🟡 Login social: Google ✅ cerrado — Facebook ✅ funciona, Revisión de Meta enviada (~20 días)
 
 Ampliado 08-ago-2026 a partir de un punto de Gina: ya existe un proyecto de
 Google Cloud, `sorsabsaecosystem` (el mismo que tiene habilitada la Calendar
@@ -264,16 +264,39 @@ lo cual es falso y quedó anotado para no repetirlo.
     CondoManager, que la rechazó con "Tu cuenta no pertenece a ningún
     condominio" — mismo patrón exacto que el cierre de Google: el login
     funciona, CondoManager filtra por su regla propia.
-  - 🔵 **Sin urgencia — Revisión de Meta para público general.** A
+  - 🟡 **Revisión de Meta — ENVIADA, 08-ago-2026, ~20 días de espera.** A
     diferencia de Google (que no la pidió), Facebook exige **Revisión de
-    la app** para que `email` funcione con cualquier usuario. Mientras no
-    esté aprobada, funciona igual para administradores/desarrolladores/
-    testers de la app (así se probó arriba) — un cliente real y ajeno a
-    Meta for Developers quedaría bloqueado hasta que se apruebe. No
-    bloquea nada del ecosistema; retomar cuando haga falta login público
-    real: Casos de uso → Revisar → completar "Uso permitido", "Tratamiento
-    de datos" e "Instrucciones para revisores", enviar y esperar la
-    aprobación de Meta (días, no minutos).
+    la app** para que `email` funcione con cualquier usuario ajeno a la
+    app. Mientras no esté aprobada, sigue funcionando igual para
+    administradores/desarrolladores/testers (así se probó arriba, con
+    `gina.proanio@hotmail.com`) — no bloquea nada del ecosistema.
+    - "Uso permitido" y "Tratamiento de datos" completados. En este
+      último, corregido en el camino: el encargado del tratamiento
+      declarado inicialmente era solo Gina — se agregó **Supabase, Inc.**
+      como segundo encargado (categoría "Alojamiento en la nube"), porque
+      el email que llega de Facebook queda guardado en la base de
+      `sorsabsa-identity`, no solo procesado por Gina. Las preguntas sobre
+      solicitudes de datos a autoridades por seguridad nacional: "No" (es
+      la realidad — nunca pasó) y "Ninguna de las anteriores" en políticas
+      relacionadas (no hay un proceso formal escrito a esta escala).
+    - 🐛 **Confusión real en el camino, corregida:** "Dominios de la app"
+      y "URL del sitio" (plataforma Sitio web) quedaron desincronizados
+      dos veces — una vez por mi propia instrucción ambigua (mezclé el
+      campo "¿Dónde podemos encontrar la app?" del popup de instrucciones
+      de prueba, que sí va `condomanager.vip`, con "URL del sitio" de la
+      plataforma, que va `auth.sorsabsa.com`), y otra vez porque Gina
+      recibió una sugerencia de otra herramienta con datos desactualizados
+      (decía borrar el dominio de Supabase, lo que habría reproducido el
+      primer error). Estado final correcto: "Dominios de la app" =
+      `auth.sorsabsa.com` + `gyqgorgfstffbgazhbnb.supabase.co` (los dos,
+      sin `https://`); "URL del sitio" = `https://auth.sorsabsa.com`.
+    - Enviado a Revisión de Meta. Resultado esperado en ~20 días — revisar
+      "Acciones requeridas" en el panel de Meta for Developers cuando
+      llegue la respuesta.
+- ✅ **UI — botones de Google/Facebook lado a lado, no apilados.** Pedido
+  de Gina 08-ago-2026 (con los dos uno debajo del otro el formulario
+  quedaba largo). `auth-sorsabsa` commit `afa4ee6`. `typecheck`/`next
+  build` limpios.
 
 ## 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado
 
