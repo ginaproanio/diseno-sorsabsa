@@ -42,8 +42,9 @@ trabajo lo redescubría desde cero — a veces rompiendo algo en el intento.
 | Pagos | `pagos-sorsabsa` | ⚠️ 20/20 despliegues verdes; su base depende de CondoManager (§3) |
 | SSO | `auth-sorsabsa` | ⚠️ 16/16 verdes; 5 apps registradas |
 | Notificaciones | `notificaciones-sorsabsa` | ❓ |
-| Geo | `geo-sorsabsa` | ❓ |
+| Geo | `geo-sorsabsa` (`@sorsabsa/geo`) | ✅ v0.1.0, Leaflet + OpenStreetMap, sin API key — ver §4-bis |
 | Design system | `diseno-sorsabsa` (`@sorsabsa/ui`) | ✅ v0.1.36 |
+| Generador de contenido (Facebook + YouTube) | `ginaproanio/news` (local: `sorsabsa-content`, en unidad `D:\` con poco espacio — no asumir que existe local, todo lo que importa ya está en el repo) | ✅ desplegado en Railway, proyecto `contenido-sorsabsa`. `ANTHROPIC_API_KEY` sigue pendiente de configurar en Railway (la del `.env` local está inválida y ese archivo no está en git a propósito). **Detalle de fases y estrategia en `docs/plan.md` y `docs/youtube.md` DENTRO del repo** (se movieron ahí el 2026-08-06 porque solo vivían en la unidad local sin respaldo). Banco de casos reales verificados por categoría de CPM (Finanzas/Gaming/Tecnología/Negocios/Cripto/Lujo) ya implementado en `main.py` (`HISTORIAS_BANCO`), con regla dura de no reclamar autoría de casos ajenos a SORSABSA. Pendiente: subida automática a YouTube (Fase 3, YouTube Data API v3 sin construir — hoy todo se sube manual), pipeline de video real con Motion (marca/logo ya preparados, esperando acreditación de pago), y persistencia/analítica de qué guion tuvo mejor rendimiento por categoría (no existe todavía, cada guion se genera al vuelo y no se guarda). |
 
 ---
 
@@ -252,6 +253,85 @@ no hay fuga porque están vacíos, pero la configuración ya está mal puesta.
 
 ---
 
+## 4-bis. Georreferenciación y R2 — estado real (verificado 2026-08-08)
+
+Gina preguntó por qué esto no estaba documentado, viendo abierto en el
+navegador `console.cloud.google.com/apis/library?project=sorsabsaecosystem`.
+Se revisó código, no se adivinó — esto es lo que hay:
+
+### Geo: NO usa la API de Google Maps (la que factura)
+
+`@sorsabsa/geo` (`geo-sorsabsa`) es el paquete compartido de mapas — mismo
+patrón de publicación que `@sorsabsa/ui` (source `.tsx` crudo, consumido por
+tag de GitHub). ✅ Verificado leyendo su código: usa **Leaflet +
+OpenStreetMap**, explícito en su propio README (`<LocationPicker>`, *"sin API
+key, sin facturación"*).
+
+**Quién lo consume hoy:** solo `crm_inmobiliario/webs` (DomusCRM, ubicación de
+inmuebles en la web pública) tiene `@sorsabsa/geo` en su `package.json`.
+CondoManager **no** lo consume todavía.
+
+### SorsabsaForensic SÍ usa Google Maps — pero no la API pagada, y es un módulo aparte
+
+Repo real: `ginaproanio/sorsabsaforensic`, local en `c:/sorsabsa/SorsabsaForensic`
+(no confundir con la carpeta `Sorsabsa2`, que está vacía y ni es un repo git —
+error propio en esta misma sesión, corregido antes de escribir esto).
+
+`core/processors/georeferencia/processor.py` (✅ leído completo) es un módulo
+de georreferenciación forense real y sofisticado: resuelve enlaces cortos de
+Google Maps registrando CADA salto de redirección, extrae coordenadas del
+lugar (no del encuadre — distinción deliberada, con caso real citado en el
+código), captura con Playwright las vistas de mapa/satélite/calle con hash
+SHA-256 de cada una, y mide distancia+rumbo entre puntos (haversine, radio
+declarado) para sostener afirmaciones de proximidad en un informe pericial.
+
+Es **independiente de `@sorsabsa/geo`** — no podría ser de otra forma:
+`@sorsabsa/geo` es un paquete React/TypeScript (`import` de npm) y
+SorsabsaForensic es Python/PyQt5, no puede consumirlo directo. Y usa las URLs
+**públicas y documentadas** de Google Maps (`developers.google.com/maps/documentation/urls`),
+sin clave — el propio código lo declara: *"para que cualquiera pueda
+reconstruirlas"*. No pasa por la API de pago (Maps JavaScript / Geocoding /
+Places), que es la que se habilita y factura desde Cloud Console.
+
+✅ Comprobado con grep en todo `SorsabsaForensic`: cero referencias a
+`GOOGLE_MAPS_API_KEY`, `GEOCODING_API` ni `maps.googleapis.com` (el dominio de
+la API con clave; las URLs que usa son `google.com/maps/...`, sin `api`).
+
+### El proyecto de Google Cloud (`sorsabsaecosystem`)
+
+Ningún código del ecosistema (10 repos revisados) referencia ese proyecto ni
+ninguna variable `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` — grep completo,
+cero resultados fuera de `fonts.googleapis.com` (tipografías, no una API).
+
+**❓ No verificado desde aquí:** no hay acceso a Cloud Console para confirmar
+qué APIs están habilitadas dentro de ese proyecto. Lo más probable, por
+descarte, es que sea la preparación del pendiente #10 de
+`PENDIENTES-ECOSISTEMA.md` (Login con Google) — el primer paso de esa lista es
+exactamente crear un OAuth Client ahí. Si además hay una API de Maps/Geocoding
+habilitada y facturando, hoy no la usa ningún código: solo se ve entrando a la
+consola y revisando qué está activo.
+
+### R2: quién ya migró y quién no
+
+El §7 documenta la DECISIÓN (R2 reemplaza Supabase Storage). Esto es el
+ESTADO REAL producto por producto, que la tabla de cubos del §4 no cuenta
+porque solo lista los cubos de Supabase:
+
+| Producto | Qué sube | Dónde vive HOY |
+|---|---|---|
+| CondoManager, `unidad_fotos` | fotos de unidad (residente) | ✅ **R2**, cubo `condomanager-inmuebles` — migrado 08-ago-2026 (pendiente #12), presign+PUT directo del navegador |
+| CondoManager, certificados/firmas | `condomanager-certificados`, `condomanager-firmas` | Supabase Storage, sin migrar |
+| DomusCRM, `webs/api/upload` | fotos de inmueble (público) | Supabase Storage (`property-media`) — sigue con el tope de 4MB del §4; el patrón R2 existe en `backend/src/lib/storage.ts` pero ese backend no sirve tráfico real todavía |
+| JustiRed, scraper | PDFs de leyes | ✅ **R2** directo (`legaltech/scraper/r2.py`, boto3) — esto NO es nuevo de hoy, ya funcionaba antes de este documento. El cubo Supabase `justired-legal-documents` (§4, 0 objetos) parece un cascarón sin usar |
+| SorsabsaForensic | expedientes periciales (1.5GB, 2296 archivos) | ✅ **R2 privado**, respaldados e íntegros (`PENDIENTES-ECOSISTEMA.md`, "Hecho") |
+
+**Conclusión:** R2 no es "un plan futuro sin empezar" — tres de cinco flujos
+ya corren ahí. Lo que falta es DomusCRM (el de mayor volumen esperado, ~3000
+usuarios subiendo fotos de lotes — objetivo del §7) y los dos cubos de
+CondoManager que quedaron atrás.
+
+---
+
 ## 5. Roturas verificadas el 2026-07-26
 
 | Dónde | Qué | Estado |
@@ -291,7 +371,11 @@ no lo está:
 - pagos-sorsabsa y auth-sorsabsa: solo historial de despliegues. **Nunca se
   comprobó que cobren ni que autentiquen de verdad.** Un despliegue verde solo
   dice que compiló.
-- notificaciones-sorsabsa, geo-sorsabsa, SORSABSA Forensic: sin revisar.
+- notificaciones-sorsabsa: sin revisar.
+- geo-sorsabsa: ✅ revisado 2026-08-08, ver §4-bis.
+- SORSABSA Forensic: solo se revisó su módulo de georreferenciación (§4-bis).
+  El resto (`core/orchestrator.py`, procesadores de imagen/video/redes) sigue
+  sin revisar.
 
 ---
 
