@@ -167,6 +167,70 @@ existiendo dentro del proyecto de producto con copias locales federadas
 —Supabase no deja apagar su Auth—. Lo que cambia es que **deja de ser el
 dueño**. Si ese proyecto muere, las cuentas ya no se pierden.
 
+### Estado — 07-ago-2026: la federación funciona; el criterio de "hecho" hay que leerlo con matices
+
+**Hecho, probado con una petición real (no una pantalla que "se ve bien"):**
+
+- Proveedor OIDC `custom:sorsabsa-identity` dado de alta en `condomanager`
+  (Sign In / Providers → Custom Providers), issuer =
+  `https://gyqgorgfstffbgazhbnb.supabase.co/auth/v1`.
+- `condomanager` registrado como cliente **confidential** en `sorsabsa-identity`
+  → OAuth Apps (`7523b9d0-01ca-492b-b852-8282890221d0`), Redirect URI = el
+  Callback URL que Supabase generó (`.../auth/v1/callback`).
+- 🐛 **Bug real encontrado y corregido:** el campo Scopes del proveedor
+  mostraba `openid, email, profile` en gris — era el placeholder del
+  formulario, no un valor guardado. Lo que había quedado grabado era
+  `["openid", ""]`. Sin `email` en el scope, identity nunca lo devuelve y
+  condomanager no puede crear el usuario federado (`email_optional=false`).
+  Corregido escribiendo el valor real.
+- **Login encadenado de punta a punta, con script**, igual que el Paso 1 pero
+  a través de dos Supabase Auth: login en identity → `condomanager` inicia
+  `signInWithOAuth('custom:sorsabsa-identity')` → identity pide consentimiento
+  → aprobado → `condomanager` canjea el code con identity **del lado del
+  servidor** (con el `client_secret`) → **condomanager emite su PROPIO
+  token**, firmado con **su propio `kid`** (`9e498800-…`, el real de
+  producción — no el de identity). `sub` es un usuario nuevo y local, federado
+  (`7add8517-…`), distinto del `sub` de identity (`5f99d320-…`, que queda en
+  `user_metadata` para trazabilidad).
+- **`public` (CondoManager): verificado de verdad.** La política de
+  `perfiles_select` usa `user_id = auth.uid()` — no es de lectura pública. La
+  consulta con el token federado devolvió `200` y vacío (correcto: usuario
+  nuevo, sin perfil todavía). Esto **sí prueba** que `auth.uid()` resuelve
+  bien de punta a punta.
+
+**Lo que el criterio original pedía y no se puede probar tal como está escrito:**
+
+- **`justired`:** ninguna de sus 6 tablas tiene una política basada en
+  `auth.uid()` — `leyes`/`articulos` son de lectura pública (`USING (true)`,
+  para cualquiera, logueado o no) y el resto tiene RLS activado con **cero
+  políticas** (bloqueo total). El `200` que devolvió la prueba habría salido
+  igual con un token inválido: no hay nada ahí que dependa de quién sos, así
+  que no hay forma de probar la federación con una consulta a este esquema
+  hoy. No es una falla de este paso — es que justired todavía no tiene
+  ningún dato ligado a un usuario.
+- **`domus`:** esto no es una consulta que falló, es que **DomusCRM corre un
+  sistema de autenticación completamente aparte, no conectado a Supabase
+  Auth.** Su backend (`crm_inmobiliario/backend`) no usa `supabase-js` ni
+  PostgREST — usa `@fastify/jwt` con su propio `JWT_SECRET`, que según su
+  `.env.example` es el **secreto legacy HS256** del proyecto, no las llaves
+  asimétricas (`ES256`) que emite hoy el login estándar de Supabase. El
+  aislamiento de `domus` lo hace `set_config('app.current_company_id', ...)`
+  por transacción (ver `backend/src/db/pool.ts`), no `auth.uid()`/RLS de
+  PostgREST. **Ningún token que emita esta federación —tenga el `kid` que
+  tenga— es algo que el backend de DomusCRM sepa validar hoy.** Esto es
+  anterior a este plan y no lo resuelve; conectar DomusCRM a identity es
+  trabajo aparte, no una consulta de verificación.
+
+**Lectura honesta:** el Paso 2 está probado y funciona donde el producto
+realmente usa `auth.uid()`/RLS de Supabase (CondoManager, `public`). Para
+`justired` el criterio no es probable con el diseño actual del esquema. Para
+`domus` el criterio no aplica todavía: hace falta decidir aparte si/cuándo
+DomusCRM migra su autenticación a este esquema, antes de que "el producto
+confía en identity" signifique algo ahí.
+
+**No se tocó** `auth-sorsabsa` (el login real) — sigue siendo el ítem 2 de
+este paso, deliberadamente pendiente.
+
 ## Paso 3 — Cada producto a su propio proyecto
 
 Recién aquí quedan **desoldados de verdad**: hoy los tres productos comparten
