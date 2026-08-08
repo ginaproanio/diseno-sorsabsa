@@ -1,7 +1,7 @@
 # Graph Report - diseno-sorsabsa  (2026-08-08)
 
 ## Corpus Check
-- 69 files · ~34,668 words
+- 69 files · ~34,765 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b431666c`
+- Built from commit: `82bc2c7b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -92,7 +92,7 @@ Nodes (20): DomusLanding(), FEATURES, SOCIAL, IconCatalog(), NAMES, SHADOW, Inpu
 
 ### Community 6 - "Pendientes del ecosistema SORSABSA"
 Cohesion: 0.07
-Nodes (25): 10. 🟡 Login social: Google + Facebook — código listo, falta la parte de Gina, 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado, 12. 🟡 R2 desplegado y verificado — falta el clic real de un residente, 13. ✅ HECHO — geo-sorsabsa/service desplegado, verificado y consumido por los dos periciales, 14. ✅ HECHO — iot consume el portero central (auth-sorsabsa), 1. ✅ RESUELTO — separar auth a su propio proyecto (vía OIDC), 2. ✅ HECHO — JustiRed al SSO central, 3. ✅ HECHO — cutover de pagos (fuera de Vercel) (+17 more)
+Nodes (25): 10. 🟡 Login social: Google funcionando en vivo — falta Facebook y confirmar publicación, 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado, 12. 🟡 R2 desplegado y verificado — falta el clic real de un residente, 13. ✅ HECHO — geo-sorsabsa/service desplegado, verificado y consumido por los dos periciales, 14. ✅ HECHO — iot consume el portero central (auth-sorsabsa), 1. ✅ RESUELTO — separar auth a su propio proyecto (vía OIDC), 2. ✅ HECHO — JustiRed al SSO central, 3. ✅ HECHO — cutover de pagos (fuera de Vercel) (+17 more)
 
 ### Community 7 - "compilerOptions"
 Cohesion: 0.09
