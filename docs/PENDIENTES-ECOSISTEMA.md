@@ -435,6 +435,83 @@ cualquier otro producto.
   lee ningún código (confirmado por grep) — se pueden borrar del dashboard
   cuando convenga, no rompen nada si quedan.
 
+## 15. 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas
+
+Abierto 08-ago-2026. **No volver a preguntar esto — está todo acá.**
+
+**Hecho confirmado (pantalla, no interpretación):** en Business Settings →
+Cuentas de WhatsApp del portafolio comercial **"Sorsabsa Servicios"**
+(verificado ✓), TODAS las cuentas están **"Desactivada"** con el mismo
+motivo: *"Esta cuenta se inhabilitó porque no cumple la Política de comercio
+de WhatsApp Business."* — agente24siete, CondoManager, PuntaBlanca,
+EcoInmobiliaria, Sorsabsa (x2), y hasta la de prueba. Confirmado también
+desde WhatsApp Manager (no solo el resumen de Business Settings). El número
+de CondoManager (+593 99 321 7356) y el de agente24siete (+593 99 321 9056)
+muestran además "No verificado" — consecuencia del baneo de la cuenta, no un
+fallo de Gina en el paso de verificación por código (ese sí lo completó).
+
+**Causa real, según relato directo de Gina:** registró varias líneas
+celulares en 2-3 días seguidos; la última (agente24siete) se quedó sin
+batería a mitad de la verificación por código, la completó recién al día
+siguiente — y ese mismo día se desactivaron TODAS de golpe, **antes de que
+ninguna mandara un solo mensaje real**. Encaja con el patrón conocido de
+Meta de marcar como riesgo el **alta masiva de números en poco tiempo**
+dentro de un mismo Business Manager — no con el contenido de los mensajes
+(no puede ser spam algo que nunca se usó).
+
+**Gina ya agotó la vía de autoservicio, repetidas veces, sin éxito** —
+esto no es un intento nuevo.
+
+**Segundo problema, más grande, enredado con el primero:** los activos
+comerciales (incl. estas cuentas de WhatsApp) quedaron atrapados en un
+perfil personal de Facebook viejo, `gina.proanio.3`, al que Gina perdió
+acceso porque el 2FA estaba atado a una línea corporativa de un trabajo
+anterior que ya devolvió. El perfil actual, `gsproanio`, es donde opera
+hoy. Meta trata la operación desde dos identidades distintas sobre los
+mismos activos como señal de riesgo — lo que traba también la apelación
+del baneo de arriba. Gina ya escribió un "Resumen de Hechos" ordenado para
+posible asesoría legal (vive en su disco local, no en el repo).
+
+**🚨 Advertencia real, no descartar:** en el camino, otra IA/bot (no esta
+sesión) le dio "diagnósticos técnicos" con tablas y IDs de aspecto oficial
+(ej. "Heurística de seguridad (Duplicidad)", "Access Block [Spam]") y un
+link de soporte que se verificó como **404, no existe**. Ningún bot de
+soporte puede consultar en vivo los sistemas internos de Meta — eso es
+contenido inventado con formato de autoridad, no un hallazgo real. Peor:
+recomendó declarar la cuenta como **"hackeada"** (`facebook.com/hacked` →
+"Alguien más entró en mi cuenta") para forzar atención humana, **aunque no
+fue un hackeo** — es pérdida de acceso a 2FA. Gina ya identificó por qué
+eso es un error (distorsiona la realidad del caso, puede jugar en contra
+si se descubre). **No seguir ese consejo. No declarar un hackeo que no
+ocurrió.**
+
+**Decisión — dos pistas independientes, una no bloquea la otra:**
+
+1. **Recuperación de identidad/activos (`gina.proanio.3` + baneo de las
+   WABA)** — estancada por autoservicio. Probablemente necesite Soporte de
+   empresas de Meta **pagado**, o asesoría legal real. Sin dueño ni fecha
+   todavía.
+2. **Que WhatsApp vuelva a funcionar para agente24siete, en paralelo, sin
+   depender de que (1) se resuelva** — camino más corto: registrar el canal
+   vía **Twilio** (ya integrado en agente24siete para voz,
+   `docs/twilio.md`), que es Proveedor de Soluciones oficial de WhatsApp
+   Business (BSP) — puede tener una vía de escalamiento con Meta que un
+   desarrollador individual no tiene. No es garantía, vale explorarlo
+   cuando se retome.
+
+**En curso, 08-ago-2026 — Revisión de la app "Sorsabsa Asistente" en Meta
+for Developers:** **esto es independiente de (1) y (2)** — pedir acceso
+avanzado a los permisos (`whatsapp_business_messaging`,
+`whatsapp_business_management`, `business_management`, `public_profile`)
+es un prerrequisito para operar en vivo con cualquier número, más allá de
+cuándo se resuelva el baneo actual. Portafolio comercial ya verificado
+("Sorsabsa Servicios" ✓), ícono/política de privacidad/categoría de
+"Configuración de la app" ya cargados (política de privacidad verificada
+en vivo: `sorsabsa.com/privacy-policy/`, existe y menciona explícitamente
+"Sorsabsa Asistente"). Quedan los pasos "Uso permitido", "Tratamiento de
+datos" e "Instrucciones para revisores" — mismo checklist que ya se hizo
+con éxito para la app de login (Sorsabsa Identity, pendiente #10).
+
 ---
 
 ## Hecho (para no re-hacer)
