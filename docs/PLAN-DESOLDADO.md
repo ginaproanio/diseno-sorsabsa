@@ -208,25 +208,39 @@ dueño**. Si ese proyecto muere, las cuentas ya no se pierden.
   que no hay forma de probar la federación con una consulta a este esquema
   hoy. No es una falla de este paso — es que justired todavía no tiene
   ningún dato ligado a un usuario.
-- **`domus`:** esto no es una consulta que falló, es que **DomusCRM corre un
-  sistema de autenticación completamente aparte, no conectado a Supabase
-  Auth.** Su backend (`crm_inmobiliario/backend`) no usa `supabase-js` ni
-  PostgREST — usa `@fastify/jwt` con su propio `JWT_SECRET`, que según su
-  `.env.example` es el **secreto legacy HS256** del proyecto, no las llaves
-  asimétricas (`ES256`) que emite hoy el login estándar de Supabase. El
-  aislamiento de `domus` lo hace `set_config('app.current_company_id', ...)`
-  por transacción (ver `backend/src/db/pool.ts`), no `auth.uid()`/RLS de
-  PostgREST. **Ningún token que emita esta federación —tenga el `kid` que
-  tenga— es algo que el backend de DomusCRM sepa validar hoy.** Esto es
-  anterior a este plan y no lo resuelve; conectar DomusCRM a identity es
-  trabajo aparte, no una consulta de verificación.
+- **`domus`, primera lectura (corregida abajo):** `crm_inmobiliario/backend`
+  (servicio `crm-inmobiliario-api`) no usa `supabase-js` ni PostgREST — usa
+  `@fastify/jwt` con su propio `JWT_SECRET`, y aísla por
+  `set_config('app.current_company_id', ...)` en vez de `auth.uid()`/RLS.
+  Parecía un segundo sistema de identidad, aparte de todo este plan.
 
-**Lectura honesta:** el Paso 2 está probado y funciona donde el producto
-realmente usa `auth.uid()`/RLS de Supabase (CondoManager, `public`). Para
-`justired` el criterio no es probable con el diseño actual del esquema. Para
-`domus` el criterio no aplica todavía: hace falta decidir aparte si/cuándo
-DomusCRM migra su autenticación a este esquema, antes de que "el producto
-confía en identity" signifique algo ahí.
+**✅ Pero el producto real no pasa por ahí — verificado, no supuesto.** El
+panel de DomusCRM que corre en Vercel (`crm_inmobiliario/webs`, lo que usan
+los agentes) tiene su propia guardia en
+[`webs/src/lib/auth-guard.ts`](../../crm_inmobiliario/webs/src/lib/auth-guard.ts):
+valida la sesión llamando `GET {condomanager}/auth/v1/user` y después
+chequea membresía en `domus.company_users`. **Ese es el mecanismo real**, y
+usa a condomanager — el mismo proyecto que ya confía en identity. Se probó
+con un script: login en identity → condomanager → token federado → `GET
+/auth/v1/user` contra condomanager con ese token → `200`, usuario resuelto.
+**El panel real hereda la confianza en identity sin tocar una línea de
+código.**
+
+`backend/` (`crm-inmobiliario-api`) queda aparte: sin `Dockerfile` ni config
+de Railway en el repo, y **nada en todo el repo firma un JWT con la forma
+que espera** (`company_id`/`role` como claims directos — hubiera necesitado
+un Auth Hook de Supabase que nunca se configuró). Confirmado con Gina: no
+está sirviendo tráfico real. No es un segundo portero en producción — es
+código incompleto o abandonado. Pendiente de decisión aparte (completarlo,
+conectarlo a identity igual que `webs/`, o borrarlo), no bloquea este plan.
+
+**Lectura honesta:** el Paso 2 está probado y funciona en todo lo que
+importa hoy — CondoManager (`public`, verificado con una política RLS real)
+y el panel real de DomusCRM (heredado, verificado con `GET /auth/v1/user`).
+Un solo portero: identity. Para `justired` el criterio de "consulta con
+RLS real" no es probable todavía porque el esquema no tiene ninguna política
+basada en `auth.uid()` — no es una falla, es que no hay nada ahí que
+dependa de quién sos.
 
 **No se tocó** `auth-sorsabsa` (el login real) — sigue siendo el ítem 2 de
 este paso, deliberadamente pendiente.
