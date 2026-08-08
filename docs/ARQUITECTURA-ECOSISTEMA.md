@@ -327,6 +327,14 @@ IoT/sensores (el §2 de este documento lo mencionaba junto a "conexiones
 persistentes" dando a entender lo segundo — corregir si se retoma esa
 sección).
 
+**Un tercer uso, sumado 08-ago-2026:** Gina decidió reusar este mismo
+proyecto (`sorsabsaecosystem`) para el login con Google del pendiente #10
+(`PENDIENTES-ECOSISTEMA.md`) — un ID de cliente OAuth nuevo ahí, sin tocar
+la Calendar API que ya tiene. Facebook, en cambio, no puede compartir este
+proyecto: es una plataforma de Meta, no de Google, necesita su propia app en
+developers.facebook.com. Detalle completo del alta de los dos proveedores
+en `PENDIENTES-ECOSISTEMA.md` #10.
+
 ### Tres implementaciones de geo independientes, una de ellas duplicada dos veces
 
 Encontrado a partir de la pregunta de Gina de si el grafo cubría
@@ -446,6 +454,27 @@ todavía porque no ha migrado (arriba).
 ya corren ahí. Lo que falta es DomusCRM (el de mayor volumen esperado, ~3000
 usuarios subiendo fotos de lotes — objetivo del §7) y los dos cubos de
 CondoManager que quedaron atrás.
+
+### Token de GitHub Actions — acceso de lectura para este asistente
+
+Dado por Gina el 08-ago-2026 para que las sesiones de Claude Code puedan
+consultar corridas de CI/CD (`gh run list`, `gh run view`) sin pedírselo a
+ella cada vez — así se verificó en vivo, por ejemplo, que `qa_sorsabsa`
+corre cada ~2h como está diseñado (arriba, tabla de servicios compartidos).
+
+| Dato | Valor |
+|---|---|
+| Nombre | `token-IA-acciones` |
+| Tipo | Personal Access Token de grano fino (`gh auth login --with-token`) |
+| Alcance | **Actions: Read-only**, habilitado para **todos los repositorios** de la cuenta `ginaproanio` |
+| Emitido | 08-ago-2026 |
+| Expira | 07-sep-2026 |
+
+**El valor del token NO se guarda en ningún archivo de ningún repo** —vive
+solo en la sesión donde `gh auth login` lo consumió (config local de `gh`
+CLI, fuera de git). Este documento registra que existe y su alcance, no el
+secreto. Al expirar (07-sep-2026) hay que pedirle uno nuevo a Gina si
+todavía hace falta consultar Actions desde una sesión.
 
 ---
 

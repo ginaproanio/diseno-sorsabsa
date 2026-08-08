@@ -153,18 +153,57 @@ Ninguno de los tres reinventos fue intencional — cada uno se construyó por
 separado porque nadie tenía visibilidad de que el otro ya existía. Es
 justamente lo que este ejercicio estaba pensado para sacar a la luz.
 
-## 10. Login con Google (mejora, no bloquea nada)  🔵 apuntado 08-ago-2026
+## 10. 🟡 Login social: Google + Facebook — código listo, falta la parte de Gina
 
-Agregar "Continuar con Google" a identity — ampliación del Paso 1 de
-`PLAN-DESOLDADO.md`, no depende del Paso 3.
+Ampliado 08-ago-2026 a partir de un punto de Gina: ya existe un proyecto de
+Google Cloud, `sorsabsaecosystem` (el mismo que tiene habilitada la Calendar
+API que usa agente24siete, `ARQUITECTURA-ECOSISTEMA.md` §4-bis), y pidió
+sumar Facebook además de Google. Sigue sin bloquear nada — ampliación del
+Paso 1 de `PLAN-DESOLDADO.md`, no depende del Paso 3.
 
-1. **Gina, Google Cloud Console:** OAuth Client, Redirect URI =
-   `https://gyqgorgfstffbgazhbnb.supabase.co/auth/v1/callback` (de identity,
-   uno solo para todo el ecosistema).
-2. **Gina, Supabase Dashboard** → `sorsabsa-identity` → Sign In/Providers →
-   Google: Client ID/Secret.
-3. **Código:** botón en `auth-sorsabsa` `/oauth/consent` →
-   `identityClient.auth.signInWithOAuth({provider: 'google'})`.
+**Por qué en identity y no en cada producto:** los dos proveedores se dan de
+alta UNA vez en `sorsabsa-identity` (el emisor OIDC único desde
+`PLAN-DESOLDADO.md` Pasos 1-2, cerrados) — no en condomanager ni en ningún
+proyecto de producto. Así alguien que entra por Google a CondoManager y por
+Google a DomusCRM es la misma cuenta si comparte el email, y no hay que
+repetir el alta en cada proyecto.
+
+- ✅ **Código hecho** — `auth-sorsabsa` commit `af41efc`: `/oauth/consent`
+  (la única pantalla de identity donde se escribe contraseña) ahora tiene
+  "Continuar con Google" y "Continuar con Facebook", además del formulario
+  de correo/contraseña que ya tenía.
+  `identityClient.auth.signInWithOAuth({provider: 'google'|'facebook'})`,
+  con el `authorization_id` viajando en el propio `redirectTo` (no en
+  `sessionStorage`, que no sobrevive el salto a un dominio ajeno como
+  `accounts.google.com`). Vuelve con la sesión de identity ya puesta y el
+  mismo `useEffect` que ya existía la detecta y aprueba sola — cero cambios
+  en el resto del flujo (`/auth/login`, `/auth/complete`). `typecheck` y
+  `next build` limpios.
+- 🔲 **Google — falta Gina, Google Cloud Console, proyecto `sorsabsaecosystem`
+  (reusar, no crear uno nuevo):**
+  1. OAuth consent screen (si no está configurado): tipo **Externo** — van a
+     entrar cuentas Gmail de clientes, no solo del equipo.
+  2. Credenciales → Crear credenciales → **ID de cliente de OAuth** → tipo
+     **Aplicación web**. Redirect URI = `https://gyqgorgfstffbgazhbnb.supabase.co/auth/v1/callback`
+     (el callback de **identity**, uno solo para todo el ecosistema — no es
+     el dominio de ningún producto).
+  3. No hace falta habilitar ninguna API nueva en la Biblioteca — el login
+     con Google no usa Calendar ni Maps, solo el ID de cliente OAuth.
+- 🔲 **Facebook — falta Gina, developers.facebook.com (proyecto NUEVO, no
+  reusa nada de Google — son plataformas distintas):**
+  1. Crear app tipo "Consumidor" con el caso de uso **Facebook Login**.
+  2. Facebook Login → Configuración → Valid OAuth Redirect URIs = el mismo
+     callback de identity de arriba.
+  3. Obtener **App ID** y **App Secret** (Configuración básica).
+- 🔲 **Gina, Supabase Dashboard → `sorsabsa-identity` → Authentication →
+  Sign In/Providers:** pegar Client ID/Secret de Google y App ID/Secret de
+  Facebook, habilitar los dos. (No hay MCP de Supabase para este paso — la
+  API de administración no expone configuración de proveedores OAuth, es
+  solo de Dashboard.)
+
+**Queda pendiente de probar en vivo una vez Gina complete su parte:** clic
+real en "Continuar con Google"/"Continuar con Facebook" desde
+`/oauth/consent`, verificar que vuelve con sesión y aprueba sola.
 
 ## 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado
 
