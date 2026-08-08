@@ -70,13 +70,43 @@ conteos coincidieron exacto con la tabla de arriba: `public`=40, `domus`=27,
   ese archivo. Se corrigió el `project_id` a `twkuidnjwhopbjnrhnxp` y se
   archivaron las 6 migraciones huérfanas.
 
-**⏳ Pendiente real, no cerrado:** el criterio de "hecho" de este paso pide
-probarlo en **un proyecto nuevo y vacío, por una petición real**. Se cotizó
-— crear ese proyecto de prueba en la organización `SORSABSA_Corp` cuesta
-**10 USD/mes**, no es gratis, así que no se hizo sin decisión de
-presupuesto. Hasta que se corra esa prueba, el Paso 0 está *hecho en el
-repo* (los tres baseline existen, se commitearon, los conteos cuadran) pero
-**no verificado end-to-end** como pide el propio criterio de este documento.
+### ✅ Cerrado el 07-ago-2026 — probado en proyecto vacío real, con dos bugs reales encontrados y arreglados
+
+Se autorizó el gasto (10 USD/mes) y se creó `paso0-verificacion-temporal`
+(`mmjlsmvsjjedfrpbfboj`) en `SORSABSA_Corp`, vacío. Primer intento de
+`supabase db push` con los tres baseline: **falló**, dos veces, por razones
+reales — no hipotéticas:
+
+1. `GRANT ... TO "app_runtime"` — el rol no existe en un proyecto nuevo. Se
+   creó a mano en algún momento en la base viva, nunca quedó en una
+   migración. Capturado con sus atributos reales (leídos de `pg_roles`) en
+   `crm_inmobiliario/supabase/roles.sql` (commit `c537878`), su dueño real
+   (rol dedicado de DomusCRM, `SIN BYPASSRLS`, ver `backend/.env.example`).
+2. `domus.properties.location` es `extensions.geography` (PostGIS) y
+   `justired.articulos_embeddings` usa `extensions.vector` (pgvector) —
+   `pg_dump --schema=X` no trae extensiones porque viven en el schema
+   `extensions`, fuera del filtro por esquema. Agregado
+   `CREATE EXTENSION IF NOT EXISTS` al inicio de cada baseline afectado
+   (`crm_inmobiliario` `c537878`, `legaltech` `a299189`) — y de paso
+   `pg_net` en `condomanager` (`c87d504`, no bloqueaba el replay porque
+   `check_function_bodies=false` no valida cuerpos de función al crearlos,
+   pero sin la extensión las funciones de sync con DomusCRM fallarían en
+   producción real).
+
+**Con los tres fixes, `supabase db reset --linked` corrió limpio, desde
+cero, sin un solo error:** 73 tablas (40 `public` + 27 `domus` + 6
+`justired`), exacto contra el punto de partida. El *advisory* de RLS del
+proyecto de prueba marcó exactamente las mismas dos tablas ya conocidas
+(`public.unidad_fotos`, `domus.invitations`, pendiente #5 de
+`PENDIENTES-ECOSISTEMA.md`) — ninguna sorpresa nueva ahí.
+
+⚠️ **El proyecto de prueba no se pudo pausar por MCP** ("Project is not
+free-tier") y el MCP no puede borrar proyectos — queda pendiente borrarlo a
+mano desde el dashboard (Settings → General → Delete project) para dejar de
+pagar los 10 USD/mes; ya cumplió su función.
+
+**Paso 0 cerrado de verdad: probado por una petición real, no por lectura
+de código — como pide el criterio de este documento.**
 
 ## Paso 1 — Identity como emisor OIDC
 
