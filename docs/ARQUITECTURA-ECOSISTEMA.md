@@ -411,6 +411,26 @@ porque solo lista los cubos de Supabase:
 | JustiRed, scraper | PDFs de leyes | ✅ **R2** directo (`legaltech/scraper/r2.py`, boto3) — esto NO es nuevo de hoy, ya funcionaba antes de este documento. El cubo Supabase `justired-legal-documents` (§4, 0 objetos) parece un cascarón sin usar |
 | SorsabsaForensic | expedientes periciales (1.5GB, 2296 archivos) | ✅ **R2 privado**, respaldados e íntegros (`PENDIENTES-ECOSISTEMA.md`, "Hecho") |
 
+### API tokens de R2 activos — ✅ dados por Gina 08-ago-2026
+
+Vistos directo en el dashboard de Cloudflare (no hay MCP de Cloudflare para
+verificarlo por API desde acá — esto es lo que ella reportó, tal cual):
+
+| Token | Aplicado a | Permiso | Emitido | Estado |
+|---|---|---|---|---|
+| `condomanager-vercel` | `condomanager-inmuebles` | Object Read & Write | 08-ago-2026 | Active |
+| `R2 Account Token` | `justired-registros-oficiales` | Object Read & Write | 31-jul-2026 | Active |
+
+✅ El segundo coincide exacto con el default de código:
+`legaltech/scraper/r2.py:89` — `os.getenv("R2_BUCKET", "justired-registros-oficiales")`.
+No es el mismo bucket que `justired-legal-documents` de la tabla de Supabase
+Storage del §4 (ese es el cascarón vacío sin usar); son dos cubos distintos,
+uno por plataforma.
+
+Solo dos tokens activos, uno por consumidor real (CondoManager, JustiRed) —
+ninguno de más pagando sin uso, al menos en R2. DomusCRM no tiene token
+todavía porque no ha migrado (arriba).
+
 **Conclusión:** R2 no es "un plan futuro sin empezar" — tres de cinco flujos
 ya corren ahí. Lo que falta es DomusCRM (el de mayor volumen esperado, ~3000
 usuarios subiendo fotos de lotes — objetivo del §7) y los dos cubos de

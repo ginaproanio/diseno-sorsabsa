@@ -167,13 +167,43 @@ de punta a punta.** Variables en Vercel producción, redeploy hecho y `READY`.
 **⏳ Sin probar: el clic real de un residente subiendo una foto por la UI** —
 no se fabricó esa prueba tocando cuentas reales sin permiso.
 
+## 13. 🟡 geo-sorsabsa/service arrancado — Railway ya creado, falta repuntar consumidores
+
+Arrancado 08-ago-2026 a partir de un punto real de Gina: SorsabsaForensic e
+`iot` (Inspección Ocular Técnica, no dispositivos IoT — nombre engañoso,
+repo real `c:/iot/iot`) tenían cada uno su propia extracción de coordenadas
+de un enlace de Google Maps, escrita por separado — riesgo real porque los
+dos generan informes que sostienen afirmaciones ante tribunal. Detalle en
+`ARQUITECTURA-ECOSISTEMA.md` §4-bis.
+
+- ✅ `geo-sorsabsa/service/` — FastAPI, porta de SorsabsaForensic la
+  resolución de enlaces + extracción de coordenadas + distancia/rumbo.
+  Commit `09cf93d`. Probado: 8/8 unitarios + en vivo contra Google real.
+- ✅ Railway creado por Gina, root directory `service/` — 08-ago-2026.
+  **⏳ Sin verificar en vivo**: falta la URL de producción para confirmar
+  que responde (mismo `GET /` de salud que Convertidor/`iot`).
+- 🔴 **Bug real encontrado, arreglado en el servicio nuevo, NO portado de
+  vuelta a SorsabsaForensic:** `UnicodeEncodeError` en la resolución de
+  enlaces cuando la URL trae una tilde o ñ sin percent-encoding (copiar la
+  barra de direcciones del navegador tal cual, con un nombre de lugar en
+  español — plausible en Ecuador). Afecta
+  `SorsabsaForensic/core/processors/georeferencia/processor.py::_resolver_enlace`
+  (el mismo patrón de `urllib.request` sin normalizar la URL). El arreglo
+  ya existe, portado, en `geo-sorsabsa/service/geo_core.py::_normalizar_url_ascii`
+  — falta decidir si se lleva a SorsabsaForensic (código pericial, no se
+  tocó sin permiso) o si directamente ese repo pasa a llamar al servicio
+  nuevo y el bug queda resuelto por esa vía.
+- ⏳ **Sin repuntar ningún consumidor.** Ni SorsabsaForensic ni `iot` llaman
+  al servicio todavía — ambos siguen con su lógica inline. Deliberado: se
+  hace con el servicio ya verificado en vivo, no antes.
+
 ---
 
 ## Hecho (para no re-hacer)
 
 - ✅ pagos + notificaciones: **datos** migrados a Railway (SORSABSA-DATA).
 - ✅ pagos-sorsabsa: **código** corriendo en Railway, verificado end-to-end.
-- ✅ Convertidor backend, IoT: en Railway.
+- ✅ Convertidor backend, `iot` (Inspección Ocular Técnica): en Railway.
 - ✅ Expedientes forenses (1.5 GB, 2296 archivos) respaldados en R2 privado, íntegros.
 - ✅ Supabase Pro activado → núcleo `condomanager` encendido y sin pausarse.
 - ✅ Limpieza menor en agente24siete: fix duplicado en rama `auditoria/ciclo-operativo`
