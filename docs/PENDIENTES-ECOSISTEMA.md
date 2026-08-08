@@ -171,11 +171,28 @@ Al estandarizar, el fix quedó también en la rama `auditoria/ciclo-operativo`
 quedó correcto y desplegado. Revisar/limpiar la rama y el stash cuando se retome
 ese repo. El repo quedó con `main` checked out.
 
-## 5. RLS en 2 tablas expuestas (seguridad)
+## 5. RLS en tablas expuestas (seguridad)
 
-`public.unidad_fotos` y `domus.invitations` tienen RLS DESACTIVADO — cualquiera
-con la anon key lee/escribe todo. Activar RLS + agregar políticas (activar sin
-políticas bloquea la tabla, así que van juntas).
+`public.unidad_fotos` y `domus.invitations` (proyecto `twkuidnjwhopbjnrhnxp`)
+tienen RLS DESACTIVADO — cualquiera con la anon key lee/escribe todo. Activar
+RLS + agregar políticas (activar sin políticas bloquea la tabla, así que van
+juntas).
+
+**Sumado el 2026-08-07, verificado en vivo (MCP Supabase, advisory
+`rls_disabled`):** el proyecto `agente24siete` (`nwcqaginlnzjlkgwifas`) tiene
+las mismas dos más:
+
+- `public.planes`
+- `public.movimientos_saldo`
+
+Con datos reales detrás (no de prueba): 50 filas en `conversaciones`, 4 en
+`negocios`, 1 usuario. SQL de remediación (no aplicado — decidir política
+antes, activar sin políticas bloquea todo el acceso, incluido el de la app):
+
+```sql
+ALTER TABLE public.planes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.movimientos_saldo ENABLE ROW LEVEL SECURITY;
+```
 
 ## 6. Borrar proyecto Supabase huérfano
 
