@@ -34,12 +34,15 @@ usuarios basura: gina, puntablanca, eco.ec, andres-pa — NO migrarlos, los real
 se registran frescos.)
 
 ### Lo hecho el 29-jul
+
 - ✅ Creado proyecto **`sorsabsa-identity`** = `gyqgorgfstffbgazhbnb` (+$10/mes,
   ACTIVE). **Aún NO está conectado a nada** — decidir si se usa o se borra.
 
 ### 🧱 EL MURO (verificado empíricamente — no volver a intentarlo a ciegas)
+
 La idea era: identity firma los tokens, y condomanager confía en ellos SIN
 refactor (browser-RLS sigue igual). **No se puede por llave asimétrica compartida:**
+
 - Supabase **asigna el `kid` él mismo al importar una llave** y NO acepta un `kid`
   propio (import falla). Dos proyectos que importan la MISMA llave reciben **kids
   distintos**.
@@ -50,6 +53,7 @@ refactor (browser-RLS sigue igual). **No se puede por llave asimétrica comparti
   opción "Custom"/OIDC genérico para un Supabase→Supabase.
 
 ### Los dos caminos REALES (elegir con la usuaria)
+
 - **A) Secreto HS256 compartido** entre los dos proyectos: esquiva el kid (HS256
   no usa kid), CondoManager NO se refactoriza, desuelda ya. **Pero** es el camino
   **deprecado** por Supabase → puente temporal, no "de raíz".
@@ -59,6 +63,7 @@ refactor (browser-RLS sigue igual). **No se puede por llave asimétrica comparti
   (hoy browser-RLS) → trabajo real, sesión aparte.
 
 ### Estado y método
+
 - **NADA roto:** auth-sorsabsa sigue apuntando a condomanager; solo se
   experimentó con llaves "standby" que se revirtieron. Login en vivo intacto.
 - **Regla dura:** el próximo intento se **verifica en aislado** (mintear tokens de
@@ -181,28 +186,32 @@ Al estandarizar, el fix quedó también en la rama `auditoria/ciclo-operativo`
 quedó correcto y desplegado. Revisar/limpiar la rama y el stash cuando se retome
 ese repo. El repo quedó con `main` checked out.
 
-## 5. RLS en tablas expuestas (seguridad)
+## 5. ✅ HECHO — RLS activado en las 4 tablas expuestas (seguridad)
 
-`public.unidad_fotos` y `domus.invitations` (proyecto `twkuidnjwhopbjnrhnxp`)
-tienen RLS DESACTIVADO — cualquiera con la anon key lee/escribe todo. Activar
-RLS + agregar políticas (activar sin políticas bloquea la tabla, así que van
-juntas).
+`public.unidad_fotos`/`domus.invitations` (`twkuidnjwhopbjnrhnxp`) y
+`public.planes`/`public.movimientos_saldo` (`nwcqaginlnzjlkgwifas`, con datos
+reales detrás: 50 `conversaciones`, 4 `negocios`, 1 usuario) tenían RLS
+DESACTIVADO — cualquiera con la anon key leía/escribía todo.
 
-**Sumado el 2026-08-07, verificado en vivo (MCP Supabase, advisory
-`rls_disabled`):** el proyecto `agente24siete` (`nwcqaginlnzjlkgwifas`) tiene
-las mismas dos más:
+**Cerrado 08-ago-2026, con la regla de negocio de Gina y aplicado en vivo vía
+Supabase MCP** (no solo escrito — `apply_migration` real, verificado después
+con `get_advisors`: las 4 tablas ya no aparecen en el listado de RLS
+desactivado):
 
-- `public.planes`
-- `public.movimientos_saldo`
+- `unidad_fotos`: el residente sube/ve las fotos de su propia unidad; el
+  admin del condominio solo ve (no sube — eso es `asociaciones.logo`,
+  aparte). Migración: `condomanager` commit `ad7cb10`.
+- `domus.invitations`: el admin que envió la invitación la ve (para saber
+  cuáles quedan pendientes); solo el invitado ve la suya, por su email.
+  Verificado con dato real que `domus.users.id = auth.users.id` antes de
+  escribir la política. Migración: `domuscrm` commit `8ccce4d`.
+- `planes`: catálogo público de solo lectura (para decidir si contratan).
+  `movimientos_saldo`: solo el dueño de su propio negocio. Migración:
+  `agente24siete` commit `28d1981`.
 
-Con datos reales detrás (no de prueba): 50 filas en `conversaciones`, 4 en
-`negocios`, 1 usuario. SQL de remediación (no aplicado — decidir política
-antes, activar sin políticas bloquea todo el acceso, incluido el de la app):
-
-```sql
-ALTER TABLE public.planes ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.movimientos_saldo ENABLE ROW LEVEL SECURITY;
-```
+**Hallazgo aparte, sin resolver — ver pendiente #12:** revisando
+`unidad_fotos` apareció que la subida de fotos va a Supabase Storage
+(`condomanager-inmuebles`), no a R2 como dice `ARQUITECTURA-ECOSISTEMA.md`.
 
 ## 6. ✅ HECHO — proyecto Supabase huérfano borrado
 
@@ -278,6 +287,19 @@ rigor — dos hallazgos, uno limpiado y uno pendiente de decidir:
   arriba, y usa una clave de `localStorage` distinta a la del panel nuevo),
   pero es 10 veces más código que la limpieza ya hecha — se dejó sin tocar
   hasta que Gina decida. Ver `agente24siete/README.md` y `todo.md` (Fase 3).
+
+## 12. CondoManager sube fotos a Supabase Storage, no a R2  🟡 08-ago-2026
+
+`ARQUITECTURA-ECOSISTEMA.md` dice R2 = objetos. Encontrado al escribir el RLS
+del pendiente #5: `app/(dashboard)/panel/residente/mis-unidades/page.tsx`
+(líneas 264-297) sube las fotos de unidad directo a
+`supabase.storage.from('condomanager-inmuebles')` y guarda la URL pública de
+Supabase en `unidad_fotos.url` — no pasa por R2.
+
+**Momento barato para corregirlo:** la tabla está vacía (0 filas reales hoy),
+así que no hay objetos que migrar, solo cambiar a dónde apunta el upload. El
+RLS del pendiente #5 sigue siendo correcto sin importar dónde viva el
+archivo — controla la fila de la tabla, no el storage.
 
 ---
 
