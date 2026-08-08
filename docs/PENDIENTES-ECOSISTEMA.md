@@ -153,7 +153,7 @@ Ninguno de los tres reinventos fue intencional — cada uno se construyó por
 separado porque nadie tenía visibilidad de que el otro ya existía. Es
 justamente lo que este ejercicio estaba pensado para sacar a la luz.
 
-## 10. 🟡 Login social: Google ✅ cerrado — falta Facebook
+## 10. 🟡 Login social: Google ✅ y Facebook ✅ funcionando — falta Revisión de Meta para público general
 
 Ampliado 08-ago-2026 a partir de un punto de Gina: ya existe un proyecto de
 Google Cloud, `sorsabsaecosystem` (el mismo que tiene habilitada la Calendar
@@ -213,23 +213,67 @@ lo cual es falso y quedó anotado para no repetirlo.
     condominio" — la guardia correcta de CondoManager (sin perfil, sin
     acceso), no un fallo del SSO. Cierra Google del todo: funciona para
     cualquier cuenta Google, no solo la de Gina.
-- 🟡 **Facebook — a medias.** App nueva y separada creada en Meta for
-  Developers, **"Sorsabsa Identity"** (aislada, sin asociar al portafolio de
-  WhatsApp de agente24siete — decisión deliberada: una app "Business" con
-  WhatsApp habría ofrecido "Facebook Login for Business", un flujo distinto
-  pensado para activos de negocio, no para autenticar personas). App ID
-  `1851084815870458`. Caso de uso "Facebook Login" clásico configurado,
-  redirect URI = el callback de identity
-  (`https://gyqgorgfstffbgazhbnb.supabase.co/auth/v1/callback`). **Estado:
-  Publicada/Activa** — sin bloqueo de Verificación del Negocio (no hizo
-  falta para el alcance de solo-login, `email` + `public_profile` son
-  permisos estándar que no requieren Revisión de la app).
-  1. 🔲 **Pegar App ID/Secret en Supabase Dashboard** →
-     `sorsabsa-identity` → Sign In/Providers → Facebook (sin MCP para ese
-     paso — la API de administración de Supabase no expone configuración de
-     proveedores OAuth).
-  2. 🔲 Probar en vivo el botón "Continuar con Facebook", igual que se hizo
-     con Google (incluida una cuenta que no sea la de Gina).
+- 🐛 **Bug real #2, ecosistema entero, encontrado probando Facebook —
+  "Cerrar sesión" no cerraba nada de verdad.** Al reintentar con otra
+  cuenta, Gina quedó "colgada en un bucle" — CondoManager solo cerraba SU
+  sesión local; la de `sorsabsa-identity` (el portero real desde
+  `PLAN-DESOLDADO.md` Paso 2) seguía viva, y el OAuth Server de identity
+  auto-aprueba una autorización ya consentida (`auto_approved: true`,
+  confirmado en los logs reales vía Supabase MCP) — cualquier reintento
+  volvía a autenticar en silencio a la MISMA cuenta, sin mostrar el login
+  de nuevo. Afectaba a los 6 productos por igual, no solo a CondoManager
+  (ninguno cerraba la sesión de identity). Corregido:
+  - `auth-sorsabsa` commit `71a6bed` — `/auth/logout` (el "cierre
+    universal" que ya existía de nombre, no de hecho) ahora cierra las DOS
+    sesiones.
+  - `condomanager` commit `b84f771` — el botón de la pantalla "sin perfil"
+    pasa por ese logout compartido en vez de su atajo local.
+  - ⏳ **Queda un gap menor, no urgente:** `condomanager/app/components/SignOutButton.tsx`
+    (el "Salir del sistema" del sidebar normal, con la regla de salir a la
+    web propia de cada condominio/asociación) sigue sin pasar por el
+    logout compartido — a propósito, no se tocó: ese redirect a un dominio
+    arbitrario (`puntablancaecuador.com`, etc.) no está en el allowlist del
+    logout compartido y hubiera roto esa regla de negocio sin más trabajo.
+    Mismo gap probablemente presente en el resto de productos (nadie más
+    fue auditado todavía) — pendiente de un barrido aparte si hace falta.
+- ✅ **Facebook — HECHO y probado en vivo, 08-ago-2026.** App nueva y
+  separada en Meta for Developers, **"Sorsabsa Identity"** (App ID
+  `1851084815870458`, aislada del portafolio de WhatsApp de agente24siete
+  a propósito: una app "Business" con WhatsApp habría ofrecido "Facebook
+  Login for Business", un flujo distinto pensado para activos de negocio,
+  no para autenticar personas). App ID/Secret pegados en Supabase
+  Dashboard → `sorsabsa-identity` → Sign In/Providers → Facebook.
+  - **Camino real hasta que anduvo (tres correcciones mías sobre la
+    marcha, ninguna intuida a la primera):**
+    1. "Dominios de la app" (Configuración → Básica) tenía que llevar el
+       dominio de identity (`gyqgorgfstffbgazhbnb.supabase.co`) — dije
+       primero que era opcional; el propio error de Facebook
+       ("El dominio de esta URL no está incluido...") probó que es
+       obligatorio para este flujo.
+    2. El redirect URI (`.../auth/v1/callback`) nunca había quedado
+       guardado de verdad en Facebook Login → Configurar → "URI de
+       redireccionamiento de OAuth válidos" — el campo estaba vacío, Gina
+       lo había probado en el validador de arriba (que solo comprueba,
+       no guarda) sin darse cuenta de que eran dos campos distintos.
+    3. El permiso `email` (el único scope que pide Supabase) no estaba
+       agregado en Casos de uso → Personalizar → Permisos y funciones —
+       ahí el error fue "Invalid Scopes: email". Se agregó con el botón
+       "+ Agregar" de esa fila.
+  - ✅ **Probado con una cuenta real y ajena:** `gina.proanio@hotmail.com`
+    (vinculada a Facebook) logueó bien contra identity y llegó hasta
+    CondoManager, que la rechazó con "Tu cuenta no pertenece a ningún
+    condominio" — mismo patrón exacto que el cierre de Google: el login
+    funciona, CondoManager filtra por su regla propia.
+  - 🔵 **Sin urgencia — Revisión de Meta para público general.** A
+    diferencia de Google (que no la pidió), Facebook exige **Revisión de
+    la app** para que `email` funcione con cualquier usuario. Mientras no
+    esté aprobada, funciona igual para administradores/desarrolladores/
+    testers de la app (así se probó arriba) — un cliente real y ajeno a
+    Meta for Developers quedaría bloqueado hasta que se apruebe. No
+    bloquea nada del ecosistema; retomar cuando haga falta login público
+    real: Casos de uso → Revisar → completar "Uso permitido", "Tratamiento
+    de datos" e "Instrucciones para revisores", enviar y esperar la
+    aprobación de Meta (días, no minutos).
 
 ## 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado
 
