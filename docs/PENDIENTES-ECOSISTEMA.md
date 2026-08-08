@@ -153,7 +153,7 @@ Ninguno de los tres reinventos fue intencional — cada uno se construyó por
 separado porque nadie tenía visibilidad de que el otro ya existía. Es
 justamente lo que este ejercicio estaba pensado para sacar a la luz.
 
-## 10. 🟡 Login social: Google + Facebook — código listo, falta la parte de Gina
+## 10. 🟡 Login social: Google funcionando en vivo — falta Facebook y confirmar publicación
 
 Ampliado 08-ago-2026 a partir de un punto de Gina: ya existe un proyecto de
 Google Cloud, `sorsabsaecosystem` (el mismo que tiene habilitada la Calendar
@@ -186,35 +186,43 @@ lo cual es falso y quedó anotado para no repetirlo.
   mismo `useEffect` que ya existía la detecta y aprueba sola — cero cambios
   en el resto del flujo (`/auth/login`, `/auth/complete`). `typecheck` y
   `next build` limpios.
-- 🟡 **Google — a medias.** Gina creó el cliente OAuth en
-  `sorsabsaecosystem` (Google Auth Platform → Clientes →
-  `sorsabsa_consola_google`, tipo **Aplicación web**, 08-ago-2026). Client
-  ID/Secret existen (no se guardan acá — van directo al paso de Supabase de
-  abajo, nunca a un repo). Quedan dos cosas:
-  1. 🔲 **Publicar la app.** Quedó en **Testing** — el aviso "acceso
-     restringido a los usuarios de prueba" lo confirma. En Testing SOLO
-     entran los emails que se agreguen a mano a la lista de test users (tope
-     100) — un cliente real con su Gmail choca con un error de acceso. OAuth
-     consent screen → completar lo básico (nombre, correo de soporte, correo
-     de contacto) → **Publish App**, pasar a **In production**. Como el login
-     solo pide scopes básicos (email, perfil), esto no debería requerir
-     revisión de Google.
-  2. 🔲 **Pegar Client ID/Secret en Supabase** (ver paso de abajo).
-- 🔲 **Facebook — falta Gina, developers.facebook.com (proyecto NUEVO, no
-  reusa nada de Google — son plataformas distintas):**
+- ✅ **Google — HECHO y probado en vivo, 08-ago-2026.** Gina creó el cliente
+  OAuth en `sorsabsaecosystem` (Google Auth Platform → Clientes →
+  `sorsabsa_consola_google`, tipo **Aplicación web**) y lo habilitó en
+  Supabase Dashboard → `sorsabsa-identity` → Sign In/Providers → Google.
+  - 🐛 **Bug real encontrado y arreglado en el camino, no achacable a Gina**:
+    el primer intento dio "authorization not found", reproducido incluso en
+    incógnito con un solo intento limpio — no era doble clic ni sesión
+    contaminada (se descartó leyendo los logs reales de `sorsabsa-identity`
+    vía Supabase MCP, no adivinado). Causa real, confirmada contra la doc
+    oficial de Supabase (OAuth 2.1 Server) y el tipo `OAuthAuthorizationDetails`
+    del SDK: `/oauth/consent` nunca llamaba `getAuthorizationDetails()` antes
+    de `approveAuthorization()` — ese paso es el que liga la autorización
+    pendiente a la sesión real, y sin él la aprobación siempre fallaba.
+    Corregido en `auth-sorsabsa` commit `c4cb79f`. Verificado en vivo por
+    Gina después del fix: login con Google completa de punta a punta.
+  - **Hallazgo aparte, esperado y correcto — no es un bug:** Gina entró con
+    `gina.proanio76@gmail.com` y llegó con su acceso de superadmin de
+    CondoManager intacto, sin haberlo pedido de nuevo. Es el comportamiento
+    correcto de un SSO real: identity liga cuentas por email, así que el
+    mismo correo resuelve al mismo perfil sin importar qué método de login
+    se use para probarlo.
+  - ⏳ **Sin confirmar todavía: si la app quedó publicada** (Testing →
+    In production en Google Cloud Console). El login de Gina funciona igual
+    en Testing porque ella es la dueña del proyecto; un cliente real con su
+    propio Gmail necesita la app publicada. Confirmar antes de dar esto por
+    cerrado a nivel de clientes reales, no solo de Gina.
+- 🔲 **Facebook — sin empezar, falta Gina, developers.facebook.com (proyecto
+  NUEVO, no reusa nada de Google — son plataformas distintas):**
   1. Crear app tipo "Consumidor" con el caso de uso **Facebook Login**.
   2. Facebook Login → Configuración → Valid OAuth Redirect URIs = el mismo
-     callback de identity de arriba.
-  3. Obtener **App ID** y **App Secret** (Configuración básica).
-- 🔲 **Gina, Supabase Dashboard → `sorsabsa-identity` → Authentication →
-  Sign In/Providers:** pegar Client ID/Secret de Google y App ID/Secret de
-  Facebook, habilitar los dos. (No hay MCP de Supabase para este paso — la
-  API de administración no expone configuración de proveedores OAuth, es
-  solo de Dashboard.)
-
-**Queda pendiente de probar en vivo una vez Gina complete su parte:** clic
-real en "Continuar con Google"/"Continuar con Facebook" desde
-`/oauth/consent`, verificar que vuelve con sesión y aprueba sola.
+     callback de identity (`https://gyqgorgfstffbgazhbnb.supabase.co/auth/v1/callback`).
+  3. Obtener **App ID** y **App Secret**, pegarlos en Supabase Dashboard →
+     `sorsabsa-identity` → Sign In/Providers → Facebook (sin MCP para ese
+     paso — la API de administración de Supabase no expone configuración de
+     proveedores OAuth).
+  4. Probar en vivo el botón "Continuar con Facebook", igual que se hizo con
+     Google.
 
 ## 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado
 
