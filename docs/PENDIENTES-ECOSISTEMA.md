@@ -291,7 +291,7 @@ rigor — dos hallazgos, uno limpiado y uno pendiente de decidir:
   pero es 10 veces más código que la limpieza ya hecha — se dejó sin tocar
   hasta que Gina decida. Ver `agente24siete/README.md` y `todo.md` (Fase 3).
 
-## 12. 🟡 Código listo — falta el bucket/credenciales reales de R2
+## 12. 🟡 Desplegado y verificado — falta solo el clic real de un residente
 
 `ARQUITECTURA-ECOSISTEMA.md` dice R2 = objetos, y el patrón ya estaba probado
 (`legaltech/scraper/r2.py`, JustiRed) — CondoManager nunca se alineó:
@@ -303,15 +303,18 @@ el MISMO patrón que ya existe en TypeScript
 (`crm_inmobiliario/backend/src/lib/storage.ts`: URLs prefirmadas, el archivo
 va del navegador directo a R2) en vez de inventar uno nuevo — y los mismos
 nombres de variable `S3_*` de ese repo, para no sumar una tercera
-convención. `next build` compila limpio, las 2 rutas nuevas registradas.
+convención.
 
-**Falta lo que solo se hace en Cloudflare (Gina):**
+**Bucket y credenciales reales creados por Gina** (R2 → `condomanager-inmuebles`,
+token de API, acceso público vía `pub-5dd30a40f8e64674a5ea7fe64cdf6c01.r2.dev`).
+Verificado con un script real (presign → PUT → GET público → borrado) contra
+el bucket de verdad, no simulado: **subida, lectura y borrado funcionan de
+punta a punta.** Variables cargadas en Vercel (producción) y redeploy hecho
+— `dpl_3FcYATYNQmDaLneJkZ82nSVE4ghA`, `READY`, build limpio.
 
-1. R2 → crear el bucket `condomanager-inmuebles` (o el nombre que prefiera).
-2. Crear un token de API de R2 con acceso a ese bucket → da Account ID,
-   Access Key ID, Secret Access Key.
-3. Habilitar acceso público al bucket (dominio público r2.dev, o un dominio
-   propio) → esa URL es `S3_PUBLIC_BASE_URL`.
+**⏳ Sin probar: el clic real de un residente subiendo una foto por la UI.**
+No se fabricó esa prueba tocando cuentas reales de residentes sin permiso —
+falta que alguien con rol `residente` y unidad vinculada lo use de verdad.
 4. Cargar en Vercel (proyecto `condomanager`) y en `.env.local`:
    `S3_ENDPOINT` (`https://<account_id>.r2.cloudflarestorage.com`),
    `S3_REGION=auto`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`,
