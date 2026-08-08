@@ -1,7 +1,7 @@
 # Graph Report - diseno-sorsabsa  (2026-08-08)
 
 ## Corpus Check
-- 69 files · ~30,538 words
+- 69 files · ~30,613 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6573645c`
+- Built from commit: `575df492`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -92,7 +92,7 @@ Nodes (32): jest, jest-environment-jsdom, devDependencies, framer-motion, jest, 
 
 ### Community 6 - "Pendientes del ecosistema SORSABSA"
 Cohesion: 0.08
-Nodes (23): 10. Login con Google (mejora, no bloquea nada)  🔵 apuntado 08-ago-2026, 11. agente24siete: /portal sin login real + cascarón viejo sin borrar  🟡, 12. 🟡 R2 desplegado y verificado — falta el clic real de un residente, 1. ✅ RESUELTO — separar auth a su propio proyecto (vía OIDC), 2. ✅ HECHO — JustiRed al SSO central, 3. ✅ HECHO — cutover de pagos (fuera de Vercel), 4. ✅ HECHO — notificaciones-sorsabsa → Railway, 5. ✅ HECHO — RLS activado en las 4 tablas expuestas (seguridad) (+15 more)
+Nodes (23): 10. Login con Google (mejora, no bloquea nada)  🔵 apuntado 08-ago-2026, 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado, 12. 🟡 R2 desplegado y verificado — falta el clic real de un residente, 1. ✅ RESUELTO — separar auth a su propio proyecto (vía OIDC), 2. ✅ HECHO — JustiRed al SSO central, 3. ✅ HECHO — cutover de pagos (fuera de Vercel), 4. ✅ HECHO — notificaciones-sorsabsa → Railway, 5. ✅ HECHO — RLS activado en las 4 tablas expuestas (seguridad) (+15 more)
 
 ### Community 7 - "compilerOptions"
 Cohesion: 0.09

@@ -4901,21 +4901,21 @@
       "norm_label": "10. login con google (mejora, no bloquea nada)  \ud83d\udd35 apuntado 08-ago-2026"
     },
     {
-      "label": "11. agente24siete: /portal sin login real + cascar\u00f3n viejo sin borrar  \ud83d\udfe1",
+      "label": "11. \u2705 HECHO \u2014 agente24siete: login real en /portal + cascar\u00f3n viejo borrado",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
       "source_location": "L133",
       "_origin": "ast",
-      "id": "docs_pendientes_ecosistema_11_agente24siete_portal_sin_login_real_cascar\u00f3n_viejo_sin_borrar",
+      "id": "docs_pendientes_ecosistema_11_hecho_agente24siete_login_real_en_portal_cascar\u00f3n_viejo_borrado",
       "community": 6,
       "community_name": "Pendientes del ecosistema SORSABSA",
-      "norm_label": "11. agente24siete: /portal sin login real + cascaron viejo sin borrar  \ud83d\udfe1"
+      "norm_label": "11. \u2705 hecho \u2014 agente24siete: login real en /portal + cascaron viejo borrado"
     },
     {
       "label": "12. \ud83d\udfe1 R2 desplegado y verificado \u2014 falta el clic real de un residente",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L147",
+      "source_location": "L155",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_12_r2_desplegado_y_verificado_falta_el_clic_real_de_un_residente",
       "community": 6,
@@ -4926,7 +4926,7 @@
       "label": "Hecho (para no re-hacer)",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L164",
+      "source_location": "L172",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_hecho_para_no_re_hacer",
       "community": 6,
@@ -12852,14 +12852,14 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
-      "target": "docs_pendientes_ecosistema_11_agente24siete_portal_sin_login_real_cascar\u00f3n_viejo_sin_borrar",
+      "target": "docs_pendientes_ecosistema_11_hecho_agente24siete_login_real_en_portal_cascar\u00f3n_viejo_borrado",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L147",
+      "source_location": "L155",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
@@ -12969,7 +12969,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L164",
+      "source_location": "L172",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
@@ -13330,5 +13330,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6573645cec9643a3aa0579e948a893b452939fd6"
+  "built_at_commit": "575df492727302d681477c64f8f7489b43000001"
 }
