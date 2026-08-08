@@ -14,7 +14,7 @@
       },
       "_origin": "ast",
       "id": "githooks_pre_push",
-      "community": 20,
+      "community": 19,
       "community_name": "pre-push",
       "norm_label": "pre-push"
     },
@@ -29,7 +29,7 @@
       },
       "_origin": "ast",
       "id": "githooks_pre_push__entry",
-      "community": 20,
+      "community": 19,
       "community_name": "pre-push",
       "norm_label": "pre-push script"
     },
@@ -40,7 +40,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "jest_config",
-      "community": 22,
+      "community": 21,
       "community_name": "jest.config.cjs",
       "norm_label": "jest.config.cjs"
     },
@@ -51,7 +51,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "jest_setup",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "jest.setup.ts"
     },
@@ -62,7 +62,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "package",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "package.json"
     },
@@ -73,7 +73,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "package_name",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "name"
     },
@@ -84,7 +84,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "package_version",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "version"
     },
@@ -95,7 +95,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "package_description",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "description"
     },
@@ -106,7 +106,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "package_license",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "license"
     },
@@ -117,7 +117,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "package_private",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "private"
     },
@@ -128,7 +128,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "package_type",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "type"
     },
@@ -139,7 +139,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "package_main",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "main"
     },
@@ -150,7 +150,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "package_types",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "types"
     },
@@ -161,7 +161,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "package_exports",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "exports"
     },
@@ -172,7 +172,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "package_exports_preset",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "./preset"
     },
@@ -183,7 +183,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "package_exports_tokens_css",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "./tokens.css"
     },
@@ -194,7 +194,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "package_files",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "files"
     },
@@ -205,7 +205,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "package_json_ref_src",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "src"
     },
@@ -216,7 +216,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "ref_tailwind_preset_cjs",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "tailwind-preset.cjs"
     },
@@ -227,7 +227,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "ref_readme_md",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "readme.md"
     },
@@ -238,7 +238,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "package_scripts",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "scripts"
     },
@@ -249,7 +249,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "package_scripts_test",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "test"
     },
@@ -260,7 +260,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "package_scripts_typecheck",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "typecheck"
     },
@@ -623,7 +623,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "package_dependencies",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "dependencies"
     },
@@ -634,7 +634,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "package_dependencies_motion",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "motion"
     },
@@ -645,7 +645,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "package_json_motion",
-      "community": 9,
+      "community": 10,
       "community_name": "package.json",
       "norm_label": "motion"
     },
@@ -656,7 +656,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_package",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "showcase/package.json"
     },
@@ -667,7 +667,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "showcase_package_name",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "name"
     },
@@ -678,7 +678,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_package_private",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "private"
     },
@@ -689,7 +689,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_package_version",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "version"
     },
@@ -700,7 +700,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_package_type",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "type"
     },
@@ -711,7 +711,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "showcase_package_description",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "description"
     },
@@ -722,7 +722,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "showcase_package_scripts",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "scripts"
     },
@@ -733,7 +733,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "showcase_package_scripts_dev",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "dev"
     },
@@ -744,7 +744,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "showcase_package_scripts_build",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "build"
     },
@@ -755,7 +755,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "showcase_package_scripts_preview",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "preview"
     },
@@ -766,7 +766,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "showcase_package_scripts_typecheck",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "typecheck"
     },
@@ -777,7 +777,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "showcase_package_dependencies",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "dependencies"
     },
@@ -788,7 +788,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "showcase_package_dependencies_framer_motion",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "framer-motion"
     },
@@ -799,7 +799,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "showcase_package_json_framer_motion",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "framer-motion"
     },
@@ -810,7 +810,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "showcase_package_dependencies_lucide_react",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "lucide-react"
     },
@@ -821,7 +821,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "showcase_package_json_lucide_react",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "lucide-react"
     },
@@ -832,7 +832,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "showcase_package_dependencies_motion",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "motion"
     },
@@ -843,7 +843,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "showcase_package_json_motion",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "motion"
     },
@@ -854,7 +854,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "showcase_package_dependencies_react",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "react"
     },
@@ -865,7 +865,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "showcase_package_json_react",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "react"
     },
@@ -876,7 +876,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "showcase_package_dependencies_react_dom",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "react-dom"
     },
@@ -887,7 +887,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "showcase_package_json_react_dom",
-      "community": 10,
+      "community": 11,
       "community_name": "showcase/package.json",
       "norm_label": "react-dom"
     },
@@ -898,7 +898,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "showcase_package_devdependencies",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "devdependencies"
     },
@@ -909,7 +909,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_types_react",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "@types/react"
     },
@@ -920,7 +920,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "showcase_package_json_types_react",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "@types/react"
     },
@@ -931,7 +931,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_types_react_dom",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "@types/react-dom"
     },
@@ -942,7 +942,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "showcase_package_json_types_react_dom",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "@types/react-dom"
     },
@@ -953,7 +953,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_vitejs_plugin_react",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "@vitejs/plugin-react"
     },
@@ -964,7 +964,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "vitejs_plugin_react",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "@vitejs/plugin-react"
     },
@@ -975,7 +975,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_autoprefixer",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "autoprefixer"
     },
@@ -986,7 +986,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "autoprefixer",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "autoprefixer"
     },
@@ -997,7 +997,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_postcss",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "postcss"
     },
@@ -1008,7 +1008,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "postcss",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "postcss"
     },
@@ -1019,7 +1019,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_tailwindcss",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "tailwindcss"
     },
@@ -1030,7 +1030,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "tailwindcss",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "tailwindcss"
     },
@@ -1041,7 +1041,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_typescript",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "typescript"
     },
@@ -1052,7 +1052,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "showcase_package_json_typescript",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "typescript"
     },
@@ -1063,7 +1063,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_vite",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "vite"
     },
@@ -1074,7 +1074,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "vite",
-      "community": 12,
+      "community": 13,
       "community_name": "devDependencies",
       "norm_label": "vite"
     },
@@ -1085,7 +1085,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_postcss_config",
-      "community": 23,
+      "community": 22,
       "community_name": "postcss.config.cjs",
       "norm_label": "postcss.config.cjs"
     },
@@ -1165,8 +1165,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_buttonmatrix",
-      "community": 15,
-      "community_name": "Button.tsx",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "buttonmatrix.tsx"
     },
     {
@@ -1176,8 +1176,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_src_components_buttonmatrix_variants",
-      "community": 15,
-      "community_name": "Button.tsx",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "variants"
     },
     {
@@ -1187,8 +1187,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_src_components_buttonmatrix_shadow",
-      "community": 15,
-      "community_name": "Button.tsx",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "shadow"
     },
     {
@@ -1199,8 +1199,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_buttonmatrix_buttonmatrix",
-      "community": 15,
-      "community_name": "Button.tsx",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "buttonmatrix()"
     },
     {
@@ -1210,8 +1210,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_cardstatusdemo",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardstatusdemo.tsx"
     },
     {
@@ -1221,8 +1221,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_src_components_cardstatusdemo_tones",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "tones"
     },
     {
@@ -1232,8 +1232,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_src_components_cardstatusdemo_shadow",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "shadow"
     },
     {
@@ -1244,8 +1244,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_cardstatusdemo_cardstatusdemo",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardstatusdemo()"
     },
     {
@@ -1521,7 +1521,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_notificationdemo",
-      "community": 16,
+      "community": 15,
       "community_name": "NotificationBell.tsx",
       "norm_label": "notificationdemo.tsx"
     },
@@ -1532,7 +1532,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_src_components_notificationdemo_mock",
-      "community": 16,
+      "community": 15,
       "community_name": "NotificationBell.tsx",
       "norm_label": "mock"
     },
@@ -1544,7 +1544,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_notificationdemo_notificationdemo",
-      "community": 16,
+      "community": 15,
       "community_name": "NotificationBell.tsx",
       "norm_label": "notificationdemo()"
     },
@@ -1939,7 +1939,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_tailwind_config",
-      "community": 24,
+      "community": 23,
       "community_name": "tailwind.config.cjs",
       "norm_label": "tailwind.config.cjs"
     },
@@ -1950,7 +1950,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_tsconfig",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "showcase/tsconfig.json"
     },
@@ -1961,7 +1961,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "compileroptions"
     },
@@ -1972,7 +1972,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_target",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "target"
     },
@@ -1983,7 +1983,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_lib",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "lib"
     },
@@ -1994,7 +1994,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_tsconfig_json_ref_dom",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "dom"
     },
@@ -2005,7 +2005,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_tsconfig_json_ref_dom_iterable",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "dom.iterable"
     },
@@ -2016,7 +2016,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_tsconfig_json_ref_es2022",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "es2022"
     },
@@ -2027,7 +2027,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_module",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "module"
     },
@@ -2038,7 +2038,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_moduleresolution",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "moduleresolution"
     },
@@ -2049,7 +2049,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_jsx",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "jsx"
     },
@@ -2060,7 +2060,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_strict",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "strict"
     },
@@ -2071,7 +2071,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_esmoduleinterop",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "esmoduleinterop"
     },
@@ -2082,7 +2082,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_skiplibcheck",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "skiplibcheck"
     },
@@ -2093,7 +2093,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_forceconsistentcasinginfilenames",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "forceconsistentcasinginfilenames"
     },
@@ -2104,7 +2104,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_resolvejsonmodule",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "resolvejsonmodule"
     },
@@ -2115,7 +2115,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_isolatedmodules",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "isolatedmodules"
     },
@@ -2126,7 +2126,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_noemit",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "noemit"
     },
@@ -2137,7 +2137,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "showcase_tsconfig_include",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "include"
     },
@@ -2148,7 +2148,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "showcase_tsconfig_json_ref_src",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "src"
     },
@@ -2159,7 +2159,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "ref_vite_config_ts",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "vite.config.ts"
     },
@@ -2170,7 +2170,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "showcase_tsconfig_exclude",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "exclude"
     },
@@ -2181,7 +2181,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "ref_src_test_tsx",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "../src/**/*.test.tsx"
     },
@@ -2192,7 +2192,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "ref_src_test_ts",
-      "community": 7,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "../src/**/*.test.ts"
     },
@@ -2203,7 +2203,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_vercel",
-      "community": 19,
+      "community": 18,
       "community_name": "vercel.json",
       "norm_label": "vercel.json"
     },
@@ -2214,7 +2214,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "showcase_vercel_framework",
-      "community": 19,
+      "community": 18,
       "community_name": "vercel.json",
       "norm_label": "framework"
     },
@@ -2225,7 +2225,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_vercel_installcommand",
-      "community": 19,
+      "community": 18,
       "community_name": "vercel.json",
       "norm_label": "installcommand"
     },
@@ -2236,7 +2236,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_vercel_buildcommand",
-      "community": 19,
+      "community": 18,
       "community_name": "vercel.json",
       "norm_label": "buildcommand"
     },
@@ -2247,7 +2247,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_vercel_outputdirectory",
-      "community": 19,
+      "community": 18,
       "community_name": "vercel.json",
       "norm_label": "outputdirectory"
     },
@@ -2258,7 +2258,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_vite_config",
-      "community": 21,
+      "community": 20,
       "community_name": "vite.config.ts",
       "norm_label": "vite.config.ts"
     },
@@ -2269,7 +2269,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "showcase_vite_config_dirname",
-      "community": 21,
+      "community": 20,
       "community_name": "vite.config.ts",
       "norm_label": "__dirname"
     },
@@ -2340,8 +2340,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_brandconfig",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 3,
+      "community_name": "BrandProvider.tsx",
       "norm_label": "brandconfig"
     },
     {
@@ -2553,8 +2553,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_appshell",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "appshell.tsx"
     },
     {
@@ -2566,8 +2566,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_appshell_appshellprops",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "appshellprops"
     },
     {
@@ -2578,8 +2578,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_appshell_appshell",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "appshell()"
     },
     {
@@ -2589,8 +2589,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_avatar",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "avatar.tsx"
     },
     {
@@ -2602,8 +2602,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_avatar_avatarprops",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "avatarprops"
     },
     {
@@ -2613,8 +2613,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_components_avatar_size",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "size"
     },
     {
@@ -2625,8 +2625,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_avatar_getinitials",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "getinitials()"
     },
     {
@@ -2637,8 +2637,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_avatar_avatar",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "avatar()"
     },
     {
@@ -2682,8 +2682,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_button",
-      "community": 15,
-      "community_name": "Button.tsx",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "button.tsx"
     },
     {
@@ -2695,8 +2695,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_button_buttonvariant",
-      "community": 15,
-      "community_name": "Button.tsx",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "buttonvariant"
     },
     {
@@ -2708,8 +2708,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_button_buttonsize",
-      "community": 15,
-      "community_name": "Button.tsx",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "buttonsize"
     },
     {
@@ -2719,8 +2719,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_components_button_variants",
-      "community": 15,
-      "community_name": "Button.tsx",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "variants"
     },
     {
@@ -2730,8 +2730,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_components_button_sizes",
-      "community": 15,
-      "community_name": "Button.tsx",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "sizes"
     },
     {
@@ -2743,8 +2743,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_button_commonprops",
-      "community": 15,
-      "community_name": "Button.tsx",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "commonprops"
     },
     {
@@ -2756,8 +2756,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_button_buttonprops",
-      "community": 15,
-      "community_name": "Button.tsx",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "buttonprops"
     },
     {
@@ -2767,8 +2767,8 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "src_components_button_button",
-      "community": 15,
-      "community_name": "Button.tsx",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "button"
     },
     {
@@ -2778,8 +2778,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_card",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "card.tsx"
     },
     {
@@ -2791,8 +2791,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_card_cardprops",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardprops"
     },
     {
@@ -2802,8 +2802,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_components_card_variants",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "variants"
     },
     {
@@ -2814,8 +2814,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_card_card",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "card()"
     },
     {
@@ -2827,8 +2827,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_card_cardheaderprops",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardheaderprops"
     },
     {
@@ -2839,8 +2839,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_card_cardheader",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardheader()"
     },
     {
@@ -2851,8 +2851,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_card_cardtitle",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardtitle()"
     },
     {
@@ -2863,8 +2863,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_card_cardcontent",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardcontent()"
     },
     {
@@ -2898,8 +2898,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_components_input_input",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 5,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "input"
     },
     {
@@ -2958,7 +2958,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_notificationbell",
-      "community": 16,
+      "community": 15,
       "community_name": "NotificationBell.tsx",
       "norm_label": "notificationbell.tsx"
     },
@@ -2971,7 +2971,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_notificationbell_notificacion",
-      "community": 16,
+      "community": 15,
       "community_name": "NotificationBell.tsx",
       "norm_label": "notificacion"
     },
@@ -2984,7 +2984,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_notificationbell_notificationbellprops",
-      "community": 16,
+      "community": 15,
       "community_name": "NotificationBell.tsx",
       "norm_label": "notificationbellprops"
     },
@@ -2995,7 +2995,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_components_notificationbell_type_icon",
-      "community": 16,
+      "community": 15,
       "community_name": "NotificationBell.tsx",
       "norm_label": "type_icon"
     },
@@ -3006,7 +3006,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_components_notificationbell_type_color",
-      "community": 16,
+      "community": 15,
       "community_name": "NotificationBell.tsx",
       "norm_label": "type_color"
     },
@@ -3018,7 +3018,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_notificationbell_notificationbell",
-      "community": 16,
+      "community": 15,
       "community_name": "NotificationBell.tsx",
       "norm_label": "notificationbell()"
     },
@@ -3065,8 +3065,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_propertylistingcard",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "propertylistingcard.tsx"
     },
     {
@@ -3078,8 +3078,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_propertylistingcard_propertylistingcardprops",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "propertylistingcardprops"
     },
     {
@@ -3090,8 +3090,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_propertylistingcard_placeholder",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "placeholder()"
     },
     {
@@ -3102,8 +3102,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_propertylistingcard_stat",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "stat()"
     },
     {
@@ -3223,8 +3223,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_statusbadge_statustone",
-      "community": 13,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "statustone"
     },
     {
@@ -3270,8 +3270,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_statusbadge_statusbadge",
-      "community": 5,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "statusbadge()"
     },
     {
@@ -3562,8 +3562,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_tag",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "tag.tsx"
     },
     {
@@ -3575,8 +3575,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_tag_tagprops",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "tagprops"
     },
     {
@@ -3586,8 +3586,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_components_tag_tone",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "tone"
     },
     {
@@ -3597,8 +3597,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_components_tag_size",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "size"
     },
     {
@@ -3609,8 +3609,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_tag_tag",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "tag()"
     },
     {
@@ -3620,8 +3620,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_toast",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "toast.tsx"
     },
     {
@@ -3633,8 +3633,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_toast_toastprops",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "toastprops"
     },
     {
@@ -3644,8 +3644,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_toast_tone",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "tone"
     },
     {
@@ -3656,8 +3656,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_toast_toast",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 6,
+      "community_name": "AppShell.tsx",
       "norm_label": "toast()"
     },
     {
@@ -3791,7 +3791,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_useonclickoutside",
-      "community": 16,
+      "community": 15,
       "community_name": "NotificationBell.tsx",
       "norm_label": "useonclickoutside.ts"
     },
@@ -3803,7 +3803,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_hooks_useonclickoutside_useonclickoutside",
-      "community": 16,
+      "community": 15,
       "community_name": "NotificationBell.tsx",
       "norm_label": "useonclickoutside()"
     },
@@ -3895,7 +3895,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tailwind_preset",
-      "community": 25,
+      "community": 24,
       "community_name": "tailwind-preset.cjs",
       "norm_label": "tailwind-preset.cjs"
     },
@@ -3906,7 +3906,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tsconfig",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "tsconfig.json"
     },
@@ -3917,7 +3917,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "tsconfig_compileroptions",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "compileroptions"
     },
@@ -3928,7 +3928,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "tsconfig_compileroptions_target",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "target"
     },
@@ -3939,7 +3939,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "tsconfig_compileroptions_lib",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "lib"
     },
@@ -3950,7 +3950,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "tsconfig_json_ref_dom",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "dom"
     },
@@ -3961,7 +3961,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "tsconfig_json_ref_dom_iterable",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "dom.iterable"
     },
@@ -3972,7 +3972,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "tsconfig_json_ref_es2022",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "es2022"
     },
@@ -3983,7 +3983,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "tsconfig_compileroptions_module",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "module"
     },
@@ -3994,7 +3994,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "tsconfig_compileroptions_moduleresolution",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "moduleresolution"
     },
@@ -4005,7 +4005,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "tsconfig_compileroptions_jsx",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "jsx"
     },
@@ -4016,7 +4016,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "tsconfig_compileroptions_strict",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "strict"
     },
@@ -4027,7 +4027,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "tsconfig_compileroptions_nouncheckedindexedaccess",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "nouncheckedindexedaccess"
     },
@@ -4038,7 +4038,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "tsconfig_compileroptions_esmoduleinterop",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "esmoduleinterop"
     },
@@ -4049,7 +4049,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "tsconfig_compileroptions_skiplibcheck",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "skiplibcheck"
     },
@@ -4060,7 +4060,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "tsconfig_compileroptions_forceconsistentcasinginfilenames",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "forceconsistentcasinginfilenames"
     },
@@ -4071,7 +4071,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "tsconfig_compileroptions_noemit",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "noemit"
     },
@@ -4082,7 +4082,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "tsconfig_compileroptions_types",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "types"
     },
@@ -4093,7 +4093,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "ref_jest",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "jest"
     },
@@ -4104,7 +4104,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "ref_testing_library_jest_dom",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "@testing-library/jest-dom"
     },
@@ -4115,7 +4115,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "tsconfig_include",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "include"
     },
@@ -4126,7 +4126,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "tsconfig_json_ref_src",
-      "community": 8,
+      "community": 9,
       "community_name": "compilerOptions",
       "norm_label": "src"
     },
@@ -4280,7 +4280,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "arquitectura-ecosistema.md"
     },
@@ -4687,7 +4687,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_color_y_contraste",
-      "community": 18,
+      "community": 17,
       "community_name": "Color de marca y contraste",
       "norm_label": "color-y-contraste.md"
     },
@@ -4698,7 +4698,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_color_y_contraste_color_de_marca_y_contraste",
-      "community": 18,
+      "community": 17,
       "community_name": "Color de marca y contraste",
       "norm_label": "color de marca y contraste"
     },
@@ -4709,7 +4709,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "docs_color_y_contraste_la_regla",
-      "community": 18,
+      "community": 17,
       "community_name": "Color de marca y contraste",
       "norm_label": "la regla"
     },
@@ -4720,7 +4720,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "docs_color_y_contraste_los_cuatro_tokens",
-      "community": 18,
+      "community": 17,
       "community_name": "Color de marca y contraste",
       "norm_label": "los cuatro tokens"
     },
@@ -4731,7 +4731,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "docs_color_y_contraste_cu\u00e1l_usar",
-      "community": 18,
+      "community": 17,
       "community_name": "Color de marca y contraste",
       "norm_label": "cual usar"
     },
@@ -4742,7 +4742,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "docs_color_y_contraste_componentes_que_ya_lo_aplican",
-      "community": 18,
+      "community": 17,
       "community_name": "Color de marca y contraste",
       "norm_label": "componentes que ya lo aplican"
     },
@@ -4753,7 +4753,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "docs_color_y_contraste_c\u00f3mo_comprobarlo",
-      "community": 18,
+      "community": 17,
       "community_name": "Color de marca y contraste",
       "norm_label": "como comprobarlo"
     },
@@ -4764,7 +4764,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "pendientes-ecosistema.md"
     },
@@ -4775,7 +4775,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "pendientes del ecosistema sorsabsa"
     },
@@ -4786,7 +4786,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_principio_que_gobierna_regla_dura",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "principio que gobierna (regla dura)"
     },
@@ -4797,7 +4797,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_1_separar_auth_a_su_propio_proyecto_1_intentado_29_jul_choc\u00f3_un_muro_real",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "1. separar auth a su propio proyecto  \ud83d\udfe0 #1 \u2014 intentado 29-jul, choco un muro real"
     },
@@ -4808,7 +4808,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_lo_hecho_el_29_jul",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "lo hecho el 29-jul"
     },
@@ -4819,7 +4819,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_el_muro_verificado_emp\u00edricamente_no_volver_a_intentarlo_a_ciegas",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "\ud83e\uddf1 el muro (verificado empiricamente \u2014 no volver a intentarlo a ciegas)"
     },
@@ -4830,7 +4830,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_los_dos_caminos_reales_elegir_con_la_usuaria",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "los dos caminos reales (elegir con la usuaria)"
     },
@@ -4841,7 +4841,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_estado_y_m\u00e9todo",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "estado y metodo"
     },
@@ -4852,7 +4852,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_lo_verificado_el_30_jul_ticket_con_supabase_y_estado_medido",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "lo verificado el 30-jul \u2014 ticket con supabase y estado medido"
     },
@@ -4863,7 +4863,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_2_justired_al_sso_central_casi_hecho_faltan_3_pasos_manuales",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "2. justired al sso central  \ud83d\udfe1 casi hecho \u2014 faltan 3 pasos manuales"
     },
@@ -4874,7 +4874,7 @@
       "source_location": "L151",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_3_hecho_cutover_de_pagos_fuera_de_vercel",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "3. \u2705 hecho \u2014 cutover de pagos (fuera de vercel)"
     },
@@ -4885,7 +4885,7 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_4_hecho_notificaciones_sorsabsa_railway",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "4. \u2705 hecho \u2014 notificaciones-sorsabsa \u2192 railway"
     },
@@ -4896,7 +4896,7 @@
       "source_location": "L167",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_4_bis_limpieza_menor_en_agente24siete",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "4-bis. limpieza menor en agente24siete"
     },
@@ -4907,7 +4907,7 @@
       "source_location": "L174",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_5_rls_en_tablas_expuestas_seguridad",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "5. rls en tablas expuestas (seguridad)"
     },
@@ -4918,7 +4918,7 @@
       "source_location": "L197",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_6_borrar_proyecto_supabase_hu\u00e9rfano",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "6. borrar proyecto supabase huerfano"
     },
@@ -4929,7 +4929,7 @@
       "source_location": "L204",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_7_sorsabsaforensic_fase_0_antes_de_railway",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "7. sorsabsaforensic \u2192 fase 0 antes de railway"
     },
@@ -4940,7 +4940,7 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_8_probar_condomanager_end_to_end_punta_blanca",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "8. probar condomanager end-to-end (punta blanca)"
     },
@@ -4951,7 +4951,7 @@
       "source_location": "L217",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_9_auditar_reuso_de_sistemas_compartidos_graphify",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "9. auditar reuso de sistemas compartidos (graphify)"
     },
@@ -4962,18 +4962,29 @@
       "source_location": "L223",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_10_login_con_google_mejora_no_bloquea_nada_apuntado_08_ago_2026",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "10. login con google (mejora, no bloquea nada)  \ud83d\udd35 apuntado 08-ago-2026"
+    },
+    {
+      "label": "11. agente24siete: /portal sin login real + cascar\u00f3n viejo sin borrar  \ud83d\udfe1 08-ago-2026",
+      "file_type": "document",
+      "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
+      "source_location": "L242",
+      "_origin": "ast",
+      "id": "docs_pendientes_ecosistema_11_agente24siete_portal_sin_login_real_cascar\u00f3n_viejo_sin_borrar_08_ago_2026",
+      "community": 12,
+      "community_name": "Pendientes del ecosistema SORSABSA",
+      "norm_label": "11. agente24siete: /portal sin login real + cascaron viejo sin borrar  \ud83d\udfe1 08-ago-2026"
     },
     {
       "label": "Hecho (para no re-hacer)",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L244",
+      "source_location": "L269",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_hecho_para_no_re_hacer",
-      "community": 11,
+      "community": 12,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "hecho (para no re-hacer)"
     },
@@ -4984,7 +4995,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_plan_desoldado",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "plan-desoldado.md"
     },
@@ -4995,7 +5006,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_plan_desoldado_plan_de_desoldado_del_ecosistema_sorsabsa",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "plan de desoldado del ecosistema sorsabsa"
     },
@@ -5006,7 +5017,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "docs_plan_desoldado_punto_de_partida_medido_el_31_jul_2026_no_recordado",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "punto de partida \u2014 medido el 31-jul-2026, no recordado"
     },
@@ -5017,7 +5028,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "docs_plan_desoldado_paso_0_sacar_el_plano_bloqueante_va_primero",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "paso 0 \u2014 sacar el plano \u26d4 bloqueante, va primero"
     },
@@ -5028,7 +5039,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "docs_plan_desoldado_estado_hecho_el_07_ago_2026_con_un_pendiente_real",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "estado \u2014 hecho el 07-ago-2026, con un pendiente real"
     },
@@ -5039,7 +5050,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "docs_plan_desoldado_cerrado_el_07_ago_2026_probado_en_proyecto_vac\u00edo_real_con_dos_bugs_reales_encontrados_y_arreglados",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "\u2705 cerrado el 07-ago-2026 \u2014 probado en proyecto vacio real, con dos bugs reales encontrados y arreglados"
     },
@@ -5050,7 +5061,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "docs_plan_desoldado_paso_1_identity_como_emisor_oidc",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "paso 1 \u2014 identity como emisor oidc"
     },
@@ -5061,7 +5072,7 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "docs_plan_desoldado_cerrado_el_07_ago_2026_login_oidc_real_de_punta_a_punta_token_verificado",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "\u2705 cerrado el 07-ago-2026 \u2014 login oidc real, de punta a punta, token verificado"
     },
@@ -5072,7 +5083,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "docs_plan_desoldado_paso_2_el_producto_conf\u00eda_en_identity",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "paso 2 \u2014 el producto confia en identity"
     },
@@ -5083,7 +5094,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "docs_plan_desoldado_estado_07_ago_2026_la_federaci\u00f3n_funciona_el_criterio_de_hecho_hay_que_leerlo_con_matices",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "estado \u2014 07-ago-2026: la federacion funciona; el criterio de \"hecho\" hay que leerlo con matices"
     },
@@ -5094,7 +5105,7 @@
       "source_location": "L245",
       "_origin": "ast",
       "id": "docs_plan_desoldado_auth_sorsabsa_reapuntado_commit_212f8b9_07_ago_2026",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "auth-sorsabsa reapuntado \u2014 commit `212f8b9`, 07-ago-2026"
     },
@@ -5102,10 +5113,10 @@
       "label": "Paso 3 \u2014 Cada producto a su propio proyecto",
       "file_type": "document",
       "source_file": "docs/PLAN-DESOLDADO.md",
-      "source_location": "L296",
+      "source_location": "L303",
       "_origin": "ast",
       "id": "docs_plan_desoldado_paso_3_cada_producto_a_su_propio_proyecto",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "paso 3 \u2014 cada producto a su propio proyecto"
     },
@@ -5113,10 +5124,10 @@
       "label": "Lo que NO se hace (decidido, con raz\u00f3n escrita)",
       "file_type": "document",
       "source_file": "docs/PLAN-DESOLDADO.md",
-      "source_location": "L325",
+      "source_location": "L332",
       "_origin": "ast",
       "id": "docs_plan_desoldado_lo_que_no_se_hace_decidido_con_raz\u00f3n_escrita",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "lo que no se hace (decidido, con razon escrita)"
     },
@@ -5124,10 +5135,10 @@
       "label": "Pendiente aparte \u2014 el escaneo de JustiRed fall\u00f3 el 31-jul",
       "file_type": "document",
       "source_file": "docs/PLAN-DESOLDADO.md",
-      "source_location": "L338",
+      "source_location": "L345",
       "_origin": "ast",
       "id": "docs_plan_desoldado_pendiente_aparte_el_escaneo_de_justired_fall\u00f3_el_31_jul",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "pendiente aparte \u2014 el escaneo de justired fallo el 31-jul"
     },
@@ -5138,7 +5149,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_graphify_ci",
-      "community": 17,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "graphify-ci.md"
     },
@@ -5149,7 +5160,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_graphify_ci_grafo_de_conocimiento_graphify_generado_por_ci",
-      "community": 17,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "grafo de conocimiento (graphify) generado por ci"
     },
@@ -5160,7 +5171,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "docs_graphify_ci_qu\u00e9_es",
-      "community": 17,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "que es"
     },
@@ -5171,7 +5182,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "docs_graphify_ci_por_qu\u00e9_ci_y_no_un_hook_local",
-      "community": 17,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "por que ci y no un hook local"
     },
@@ -5182,7 +5193,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "docs_graphify_ci_c\u00f3mo_funciona",
-      "community": 17,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "como funciona"
     },
@@ -5193,7 +5204,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "docs_graphify_ci_convenci\u00f3n_de_gitignore",
-      "community": 17,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "convencion de `.gitignore`"
     },
@@ -5204,7 +5215,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "docs_graphify_ci_estado_por_repo",
-      "community": 17,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "estado por repo"
     },
@@ -5215,7 +5226,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "docs_graphify_ci_c\u00f3mo_ver_el_grafo",
-      "community": 17,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "como ver el grafo"
     },
@@ -5226,7 +5237,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "docs_graphify_ci_a\u00f1adir_pages_a_un_repo_privado_opcional_requiere_github_pro",
-      "community": 17,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "anadir pages a un repo privado (opcional, requiere github pro)"
     },
@@ -5237,7 +5248,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "docs_graphify_ci_bugs_resueltos_durante_el_piloto_lecciones",
-      "community": 17,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "bugs resueltos durante el piloto (lecciones)"
     },
@@ -5248,7 +5259,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_supabase_ticket_jwt_signing_keys",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "supabase-ticket-jwt-signing-keys.md"
     },
@@ -5259,7 +5270,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_supabase_ticket_jwt_signing_keys_ticket_con_supabase_jwt_signing_keys_congeladas_en_twkuidnjwhopbjnrhnxp",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "ticket con supabase \u2014 jwt signing keys congeladas en `twkuidnjwhopbjnrhnxp`"
     },
@@ -5270,7 +5281,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "docs_supabase_ticket_jwt_signing_keys_qu\u00e9_se_pidi\u00f3_3_cosas",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "que se pidio (3 cosas)"
     },
@@ -5281,7 +5292,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "docs_supabase_ticket_jwt_signing_keys_qu\u00e9_hacer_con_cada_respuesta_\u00e1rbol_de_decisi\u00f3n",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "que hacer con cada respuesta \u2014 arbol de decision"
     },
@@ -5292,7 +5303,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "docs_supabase_ticket_jwt_signing_keys_la_carta_enviada_\u00edntegra",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "la carta enviada, integra"
     },
@@ -5303,7 +5314,7 @@
       "source_location": "L171",
       "_origin": "ast",
       "id": "docs_supabase_ticket_jwt_signing_keys_cuando_llegue_la_respuesta",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "cuando llegue la respuesta"
     },
@@ -5314,7 +5325,7 @@
       "source_location": "L177",
       "_origin": "ast",
       "id": "docs_supabase_ticket_jwt_signing_keys_respuesta_de_supabase_31_jul_2026_gabriel_claudino",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "respuesta de supabase \u2014 31-jul-2026 (gabriel claudino)"
     },
@@ -5325,7 +5336,7 @@
       "source_location": "L212",
       "_origin": "ast",
       "id": "docs_supabase_ticket_jwt_signing_keys_lo_verificado_por_nuestra_cuenta_el_31_jul_no_por_lectura",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "lo verificado por nuestra cuenta el 31-jul (no por lectura)"
     },
@@ -5336,7 +5347,7 @@
       "source_location": "L229",
       "_origin": "ast",
       "id": "docs_supabase_ticket_jwt_signing_keys_plan_que_sustituye_al_anterior",
-      "community": 6,
+      "community": 7,
       "community_name": "Plan de desoldado del ecosistema SORSABSA",
       "norm_label": "plan que sustituye al anterior"
     }
@@ -12892,6 +12903,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
+      "source_location": "L242",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
+      "target": "docs_pendientes_ecosistema_11_agente24siete_portal_sin_login_real_cascar\u00f3n_viejo_sin_borrar_08_ago_2026",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
       "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
@@ -13002,7 +13024,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L244",
+      "source_location": "L269",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
@@ -13101,7 +13123,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PLAN-DESOLDADO.md",
-      "source_location": "L325",
+      "source_location": "L332",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_plan_desoldado_plan_de_desoldado_del_ecosistema_sorsabsa",
@@ -13145,7 +13167,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PLAN-DESOLDADO.md",
-      "source_location": "L296",
+      "source_location": "L303",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_plan_desoldado_plan_de_desoldado_del_ecosistema_sorsabsa",
@@ -13156,7 +13178,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PLAN-DESOLDADO.md",
-      "source_location": "L338",
+      "source_location": "L345",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_plan_desoldado_plan_de_desoldado_del_ecosistema_sorsabsa",
@@ -13418,5 +13440,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e5b423ae17524fd2d5946dc906ee8fca8c25ff9a"
+  "built_at_commit": "fe37b3cd2f6ae6d75a6037efbba94385fcd3f400"
 }
