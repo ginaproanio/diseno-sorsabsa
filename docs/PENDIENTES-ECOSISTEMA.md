@@ -167,7 +167,7 @@ de punta a punta.** Variables en Vercel producción, redeploy hecho y `READY`.
 **⏳ Sin probar: el clic real de un residente subiendo una foto por la UI** —
 no se fabricó esa prueba tocando cuentas reales sin permiso.
 
-## 13. 🟡 geo-sorsabsa/service desplegado y verificado — falta repuntar consumidores
+## 13. ✅ HECHO — geo-sorsabsa/service desplegado, verificado y consumido por los dos periciales
 
 Arrancado 08-ago-2026 a partir de un punto real de Gina: SorsabsaForensic e
 `iot` (Inspección Ocular Técnica, no dispositivos IoT — nombre engañoso,
@@ -201,9 +201,30 @@ dos generan informes que sostienen afirmaciones ante tribunal. Detalle en
   — falta decidir si se lleva a SorsabsaForensic (código pericial, no se
   tocó sin permiso) o si directamente ese repo pasa a llamar al servicio
   nuevo y el bug queda resuelto por esa vía.
-- ⏳ **Sin repuntar ningún consumidor.** Ni SorsabsaForensic ni `iot` llaman
-  al servicio todavía — ambos siguen con su lógica inline. Deliberado: se
-  hace con el servicio ya verificado en vivo, no antes.
+- ✅ **Cerrado 08-ago-2026 — los dos consumidores repuntados y probados
+  contra el servicio real en producción** (Gina: "los peritajes realizados
+  ya fueron entregados... no tengas recelo de afectar algún expediente" —
+  una vez entregado el expediente al juez, la copia local ya no es la que
+  cuenta, así que no había razón para seguir esperando):
+  - `SorsabsaForensic` commit `f40b08d` (repo `ginaproanio/sorsabsaforensic`,
+    `c:/sorsabsa/SorsabsaForensic`): se eliminó toda la lógica local de
+    resolución/distancia (`_resolver_enlace`, `_datos_del_enlace`,
+    `_distancia_y_rumbo`, `_cardinal` y sus regexes) — ahora llama al
+    servicio. Sin cálculo local de respaldo si el servicio no responde, a
+    propósito: falla declarado como limitación, no un número sin verificar.
+    Lo que se queda local (`_clasificar_vista_calle`, la captura con
+    Playwright) no lo toca el servicio — necesita un navegador real.
+  - `iot` commit `49548dd` (repo `ginaproanio/iot`, `c:/iot/iot`):
+    `report_service.py::_maps_replace` dejó su regex local
+    (`@(-?\d+\.\d+),(-?\d+\.\d+)`, que solo servía con URLs ya expandidas y
+    tomaba el CENTRO DEL ENCUADRE, no el lugar) y ahora llama al servicio.
+    **Esto no fue solo deduplicar**: probado con una URL real, la
+    coordenada vieja y la correcta difieren ~22 metros — `iot` estaba
+    reportando la posición equivocada. Se degrada sin romper el informe si
+    el servicio no responde (el mapa es un plus, no una obligación).
+  - Los dos probados de punta a punta contra
+    `https://geo-sorsabsa-production.up.railway.app` real, no mocks.
+    `python -m py_compile` limpio en ambos.
 
 ---
 

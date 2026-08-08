@@ -399,12 +399,13 @@ el `$PORT` real que Railway asigna en runtime (`8080`, que el código sí lee
 bien vía `os.getenv`) — 502 hasta corregirlo. Diagnosticado con
 `railway logs` (CLI instalada y con sesión iniciada).
 
-**Sin hacer:**
-1. Repuntar SorsabsaForensic e `iot` para que llamen al servicio en vez de
-   su lógica inline — sin empezar, deliberadamente: los dos tocan código
-   pericial que afecta informes reales. Ya no hay razón de infraestructura
-   para seguir esperando (el servicio está vivo); es una decisión de orden
-   y alcance de Gina.
+**✅ Cerrado del todo, 08-ago-2026** — SorsabsaForensic (commit `f40b08d`) e
+`iot` (commit `49548dd`) ya llaman al servicio, probados contra producción
+real. Detalle completo en `PENDIENTES-ECOSISTEMA.md` #13. Hallazgo real en
+el camino, no solo deduplicación: la extracción vieja de `iot` tomaba el
+centro del encuadre (`/@`) en vez de la coordenada del lugar (`!3d/!4d`) —
+~22 metros de diferencia en la URL de prueba. `iot` reportaba la posición
+equivocada; ya no.
 
 ### R2: quién ya migró y quién no
 
