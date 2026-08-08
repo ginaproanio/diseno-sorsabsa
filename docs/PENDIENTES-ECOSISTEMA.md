@@ -110,12 +110,48 @@ todavía):
    `/api/pagos/iniciar` → PayPhone → `/api/pagos/confirmar` →
    `residente/historial`.
 
-## 9. Auditar reuso de sistemas compartidos (graphify)
+## 9. ✅ HECHO — Auditoría de reuso de sistemas compartidos
 
-Correr graphify sobre el ecosistema (merge de repos) para ver con datos quién
-reusa auth/pagos/notificaciones/design-system y quién reinventó — la
-herramienta pensada para no seguir descubriendo drift repo por repo (como
-pasó con R2 en el #12).
+Cerrado 08-ago-2026. Grafo cruzado armado con graphify sobre los 11 repos
+del ecosistema (auth-sorsabsa, pagos-sorsabsa, notificaciones-sorsabsa,
+diseno-sorsabsa, geo-sorsabsa, condomanager, crm_inmobiliario, legaltech,
+agente24siete, convertidor, `iot`) — 4242 nodos, 6912 edges. El BFS del
+grafo salió con ruido para preguntas puntuales de "quién importa X" (nodos
+genéricos como `GET()`/`POST()` colisionando entre repos); la respuesta
+final se armó con grep dirigido, más rápido y verificable.
+
+**⚠️ Nota de continuidad:** el grafo fusionado vive en el scratch de esta
+sesión (`graphify-out/graph.json` por repo SÍ persiste, ya sea porque cada
+repo lo commitea vía su propio CI, o localmente en `c:/<repo>/graphify-out/`
+para los tres que no lo tenían: `geo-sorsabsa`, `crm_inmobiliario`,
+`convertidor`). El archivo FUSIONADO (`ecosistema-graph.json`) no se guardó
+en ningún repo — para reconstruirlo: `graphify merge-graphs
+<repo1>/graphify-out/graph.json <repo2>/graphify-out/graph.json ... --out
+<destino>`. No hace falta volver a extraer cada repo si su grafo ya existe.
+
+**Resultado — quién reusa cada sistema compartido:**
+
+| Sistema | Reusa | No reusa (y por qué) |
+|---|---|---|
+| SSO (`auth-sorsabsa`) | ✅ 6/6: condomanager, domuscrm, agente24siete, justired, convertidor, `iot` (#14) | — |
+| Pagos (`pagos-sorsabsa`) | ✅ condomanager, domuscrm, agente24siete, justired | — |
+| Notificaciones (`notificaciones-sorsabsa`) | ✅ condomanager, domuscrm | ⚠️ agente24siete no — `alertarAdmin()` sigue en TODO, avisa por WhatsApp (canal baneado), error se traga en silencio |
+| Design system (`@sorsabsa/ui`) | ✅ 6/6 con UI: auth-sorsabsa, condomanager, justired, agente24siete, domuscrm, convertidor | `iot` no (Flask/Jinja — otro stack, no un hueco) |
+| Geo (`@sorsabsa/geo` + `geo-sorsabsa/service`, #13) | ✅ Paquete: domuscrm. Servicio: SorsabsaForensic, `iot` | CondoManager no consume el paquete (Punta Blanca podría necesitarlo — sin arrancar) |
+
+**Reinventado, encontrado con evidencia — y corregido en el camino, no solo
+señalado:**
+
+1. `iot` tenía su propio login (Basic Auth) → corregido, #14.
+2. `iot` tenía su propia extracción de coordenadas de Maps, más débil que la
+   de SorsabsaForensic (tomaba el encuadre, no el lugar — 22m de error real
+   en la URL de prueba) → corregido, #13.
+3. SorsabsaForensic tenía esa misma lógica por su cuenta, sin compartir con
+   `iot` → unificada al servicio, #13.
+
+Ninguno de los tres reinventos fue intencional — cada uno se construyó por
+separado porque nadie tenía visibilidad de que el otro ya existía. Es
+justamente lo que este ejercicio estaba pensado para sacar a la luz.
 
 ## 10. Login con Google (mejora, no bloquea nada)  🔵 apuntado 08-ago-2026
 
