@@ -242,8 +242,43 @@ RLS real" no es probable todavía porque el esquema no tiene ninguna política
 basada en `auth.uid()` — no es una falla, es que no hay nada ahí que
 dependa de quién sos.
 
-**No se tocó** `auth-sorsabsa` (el login real) — sigue siendo el ítem 2 de
-este paso, deliberadamente pendiente.
+### auth-sorsabsa reapuntado — commit `212f8b9`, 07-ago-2026
+
+El único ítem que quedaba del Paso 2. `auth-sorsabsa` (el login real de todo
+el ecosistema) ya no valida contraseña contra condomanager directo:
+
+- `/auth/login`: solo inicia `signInWithOAuth('custom:sorsabsa-identity')`
+  y redirige. Ya no pide contraseña ahí.
+- `/oauth/consent` (nueva): la **única** pantalla del ecosistema donde se
+  escribe una contraseña de verdad — login contra identity, aprueba sin
+  fricción extra (productos propios confiando en su propio emisor, no un
+  tercero de verdad) y redirige de vuelta.
+- `/auth/complete` (nueva): recibe la sesión ya federada de condomanager y
+  hace lo que antes hacía `/auth/login` después del login — valida
+  suscripción contra `pagos-sorsabsa`, traspasa la sesión al producto real.
+
+**Probado:** typecheck limpio, tests existentes pasan (14/15 — el que falla
+es un color de marca, ya fallaba antes de este cambio, confirmado con `git
+stash`). El punto crítico —que el `redirectTo` con `?app=&next=` sobreviva
+íntegro el viaje identity↔condomanager, con los tokens cayendo en el
+fragmento donde `/auth/complete` los espera— se probó con script contra las
+APIs reales. Las 3 páginas compilan y sirven con `next dev`.
+
+**⏳ NO probado — un clic real en navegador**, con hidratación de React y
+las llamadas `fetch` desde dentro de la página. No hay herramienta de
+browser automation en este entorno. La lógica es adaptación directa de lo ya
+probado en el resto del Paso 2 (script) y del código que corría en
+producción — pero el clic en sí no se vio correr.
+
+**⛔ Pendiente para que esto funcione en producción:** agregar en Vercel
+(proyecto `auth-sorsabsa`) las variables `NEXT_PUBLIC_IDENTITY_SUPABASE_URL`
+y `NEXT_PUBLIC_IDENTITY_SUPABASE_ANON_KEY` (valores en `.env.example` del
+repo). **Sin esto, el próximo deploy rompe el login de todo el
+ecosistema** — el build no falla (son variables públicas con `?? ''` de
+respaldo), pero `/oauth/consent` intentaría hablar con una URL vacía.
+
+**Paso 2 cerrado: un solo portero, identity, de punta a punta — probado
+donde se pudo probar, honesto sobre lo que falta ver correr en vivo.**
 
 ## Paso 3 — Cada producto a su propio proyecto
 
