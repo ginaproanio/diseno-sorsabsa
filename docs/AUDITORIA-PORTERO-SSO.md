@@ -446,8 +446,52 @@ no arreglaba su login.
   ahí.
 - **Validación:** typecheck limpio en condomanager. Migración
   `20260809150000_admin_condominio_sin_residente.sql` aplicada en vivo.
-  Pendiente: registrar un condominio de prueba y confirmar que no aparece
-  ninguna fila nueva en `residentes`.
+  Confirmado en vivo (09-ago-2026): registro de prueba real → cero filas
+  nuevas en `residentes`.
+
+### 🔴-10 — ✅ Confirmar cuenta daba "No se pudo instalar la sesión" — RESUELTO 09-ago-2026
+
+Encadenado con lo de arriba, mismo registro de prueba en vivo, tres
+síntomas seguidos hasta llegar a la causa real:
+
+1. El enlace de confirmación rebotaba a la pantalla genérica
+   "Bienvenida a SORSABSA" — `condomanager.vip` no estaba en el allowlist
+   de Redirect URLs de `sorsabsa-identity` (confirmado generando el mismo
+   enlace con una cuenta desechable: pedí `redirect_to=condomanager.vip/login`,
+   Supabase devolvió `redirect_to=https://auth.sorsabsa.com`). Corregido
+   por Gina en el dashboard.
+2. Con el dominio ya permitido, el enlace llegaba a `condomanager.vip/login`
+   pero daba **"No se pudo instalar la sesión."**
+
+- **Causa real:** `/auth/callback` instala la sesión con el cliente del
+  PROYECTO DE PRODUCTO (`setSession`), pero los tokens que trae un enlace
+  de confirmación de correo son de IDENTITY en crudo — nunca pasaron por
+  la federación OIDC. El propio fix de 🔴-7 (`login/page.tsx`, hoy más
+  temprano) reenviaba CUALQUIER `#access_token` detectado a
+  `/auth/callback`, asumiendo que ya estaba federado — cierto en el camino
+  normal de SSO (que nunca aterriza en `/login` con un hash, siempre llega
+  directo a `/auth/callback` desde `/auth/complete`), falso para un enlace
+  de correo directo.
+- **Fix:** `registro-admin`/`registro-residente` — el `redirectTo` del
+  enlace de confirmación apunta DIRECTO a `auth.sorsabsa.com/auth/login`
+  (mismo patrón ya probado de DomusCRM), no a `condomanager.vip/login` —
+  esa pantalla ya sabe instalar una sesión de identity cruda antes de
+  arrancar la federación (mismo fix de hoy que resuelve esto para
+  DomusCRM). `login/page.tsx` corregido también, por los enlaces ya
+  enviados con el `redirectTo` viejo: el reenvío de `#access_token` ahora
+  va a `auth.sorsabsa.com/auth/login`, no a `/auth/callback` local.
+- **Commit:** `condomanager@5d49efb`. typecheck limpio.
+- **Regla nueva para el futuro (pregunta real de Gina):** ningún otro
+  producto necesita su dominio en el allowlist de identity HOY —
+  verificado que solo CondoManager tiene código que le pide a Supabase
+  volver directo al dominio del producto (`registro-admin`/
+  `registro-residente`); todo lo demás (DomusCRM, reseteo, activación
+  masiva) ya vuelve a `auth.sorsabsa.com`. El día que otro producto arme
+  un registro propio con el mismo patrón directo-al-dominio, va a
+  necesitar (a) su dominio en el Redirect URLs allowlist de identity y
+  (b) que su `redirectTo` apunte a `auth.sorsabsa.com/auth/login?app=X`,
+  no directo a su propio dominio — para no repetir este mismo problema en
+  dos pasos.
 
 ---
 
