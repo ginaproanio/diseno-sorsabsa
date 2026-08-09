@@ -515,16 +515,93 @@ ninguno se rompe. typecheck + eslint limpios.
 
 ---
 
+### 🔵-4 — ✅ `deudas.rubro_id`: UI decía "opcional", la base exigía `NOT NULL`, y un `LEFT JOIN` faltante lo hacía peor — RESUELTO 09-ago-2026
+
+**Encontrado en el barrido sistemático** (ver "Próximo paso" resuelto
+más abajo), no reportado por Gina probando.
+
+**Síntoma potencial:** crear una "Deuda Individual" (multas, cargos
+extraordinarios) sin elegir rubro reventaba con un error crudo de
+Postgres — `individual/page.tsx` etiquetaba el campo "Rubro asociado
+(opcional)", sin `required`, con opción "Sin rubro asociado"; pero
+`deudas.rubro_id` es `NOT NULL` desde el esquema base
+(`00000000000000_baseline_schema.sql`).
+
+**Por qué no se resolvió solo relajando el `NOT NULL`:** la vista
+`v_deudas_pendientes` — la que alimenta los totales
+"pendientes/pagados/monto" de `app/(dashboard)/panel/admin/page.tsx`,
+la página principal del admin — hace `JOIN` (no `LEFT JOIN`) contra
+`rubros`. Si se permitía `rubro_id NULL`, una deuda sin rubro
+desaparecía silenciosamente de esos totales: dinero que un residente
+debe, sin ningún indicio en el dashboard de que existe. Encontrado
+leyendo la vista y su único consumidor real en el código — no asumido.
+
+**Decisión de Gina (por pregunta directa):** toda deuda debe tener
+rubro — ninguna excepción "sin categoría".
+
+**Fix (`condomanager@36882ab`):**
+
+- Trigger `sembrar_rubro_cargos_varios()` (`AFTER INSERT ON
+  condominios`) que crea un rubro catch-all "Cargos varios" para cada
+  condominio nuevo — `rubros` es por-condominio (`condominio_id NOT
+  NULL`), no puede ser un rubro global. Se sembró vía trigger, no
+  duplicando el insert en cada lugar que crea un condominio, mismo
+  patrón de fuente única aplicado ya a `validarUnidad`/`validarResidente`.
+  Verificado: hoy solo `app/api/registro-admin/route.ts` crea
+  condominios en producción — igual se eligió trigger sobre duplicar
+  código en ese único punto, para no repetir el error de 🔴 (una función
+  cross-repo borrada por asumir "solo hay un lugar que la llama").
+- Backfill del único condominio ya existente (verificado con SELECT
+  antes y después).
+- `individual/page.tsx`: quitado "(opcional)", agregado `required` al
+  `<select>`, quitado el fallback `rubro_id: formData.rubro_id || null`
+  del insert, agregada validación explícita
+  `if (!formData.rubro_id) throw ...` (mismo patrón que la validación
+  de monto ya existente en el mismo archivo).
+- Limpieza menor de paso: `unidades/nuevo` y `unidades/[id]/editar`
+  todavía tenían `codigo_predial: formData.codigo_predial || null` de
+  cuando el campo era opcional (🔵-3) — inofensivo porque
+  `validarUnidad` ya bloquea el envío vacío antes de llegar ahí, pero
+  contradecía la intención real del código. Cambiado a `.trim()`, igual
+  que `manzana`/`lote`.
+
+**Validación:** typecheck limpio, eslint sin errores nuevos (1 warning
+preexistente no relacionado). Trigger probado con un insert
+transaccional a `condominios` con `ROLLBACK` (no dejó datos), confirmó
+que sembró exactamente 1 fila en `rubros`. Backfill confirmado con
+SELECT: el condominio real ya tiene su "Cargos varios" (`INGRESO`,
+`UNICO`, activo). 0 filas en `deudas` hoy — cero riesgo de datos.
+
+---
+
 ## Próximo paso (actualizado, al final del documento — ver también la nota de Próximo paso más arriba, en el cuerpo del documento)
 
-**Pendiente real, reconocido explícitamente 09-ago-2026:** las ~150
-páginas de `app/(dashboard)/**` nunca tuvieron un barrido sistemático.
-Se sabe, por evidencia repetida (🔵-2, 🔵-3, y su extensión a
-`residentes`), que el patrón "obligatorio en pantalla / opcional en la
-base / validación copiada en 2-3 archivos" se repite al menos 2 veces —
-no hay motivo para asumir que son las únicas. Un barrido real (grep de
-"obligatori[oa]" + otros patrones de validación, cruzado contra
-`information_schema.columns.is_nullable` de cada tabla involucrada) es
-el siguiente paso lógico, todavía no ejecutado — se fue resolviendo caso
-por caso a medida que Gina los encontró probando, no de forma
-sistemática.
+**✅ Barrido sistemático ejecutado 09-ago-2026** (el pendiente de más
+arriba). Método: se extrajeron de la base todas las columnas `NOT NULL
+sin default` de las 24 tablas de `public` (fuente de verdad real, no
+supuesta), y se cruzaron contra los ~43 archivos de
+`app/(dashboard)/**` que escriben directo a Supabase (`.insert`/
+`.update`, sin pasar por una API) — no solo los que Gina ya había
+tocado probando.
+
+**Resultado:** de 43 archivos, uno tenía el defecto (`deudas.rubro_id`,
+🔵-4 arriba) — y resultó tener una segunda víctima escondida
+(`v_deudas_pendientes`) que ni el patrón "obligatorio en pantalla /
+opcional en la base" original hubiera predicho. El resto — `unidades`,
+`residentes` (ya resueltos antes), `condominios`, `rubros`,
+`comunicados`, `amenidades`, `crm_oportunidades`, `crm_vendedores`,
+`crm_actividades`, `inmobiliaria_propiedades`, `unidad_fotos`,
+`miembros_directiva`, `evento_reglas`, `medios_pago`,
+`condominio_modulos`, `datos_facturacion`, `unidad_residente`,
+`mensajes`, `modulos`, `catalogo_rubros` — no repite el patrón: los
+campos obligatorios en pantalla ya son obligatorios en la base (o
+viceversa, sin fallback silencioso a `null`).
+
+**No cubierto por este barrido:** solo miró escrituras directas del
+navegador a Supabase. No revisó las rutas de API (`app/api/**`, que ya
+tienen su propia validación de servidor) ni la lógica de lectura/
+visualización de la UI (fuera del alcance de "obligatorio vs
+nullable"). Si aparece un caso nuevo, el método queda documentado acá
+para repetirlo: `information_schema.columns` con `is_nullable='NO' AND
+column_default IS NULL`, cruzado contra grep de `.insert(\{`/
+`.update(\{` en el árbol de páginas.
