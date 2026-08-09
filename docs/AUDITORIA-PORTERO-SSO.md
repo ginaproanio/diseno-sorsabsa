@@ -52,6 +52,67 @@ La causa raíz es 🔴-1.
 
 ## 🔴 CRÍTICO
 
+### 🔴-1 — ✅ Alta de usuarios no gobernada: el pipeline de registro de cada producto no sabe que identity existe — RESUELTO 09-ago-2026
+
+**Esta es la causa raíz citada en la cadena de arriba — nunca se había
+escrito, solo se nombraba.** Escrita hoy 09-ago-2026 al auditar por qué el
+reseteo de contraseña de `puntablanca.ecuador@hotmail.com` (CondoManager)
+no arreglaba su login.
+
+- **Síntoma que la destapó:** Gina reseteó su contraseña, el correo llegó
+  bien, la pantalla dijo "listo" — y el login siguió fallando con la clave
+  nueva.
+- **Evidencia real, no lectura de código:** `gyqgorgfstffbgazhbnb`
+  (identity) tiene 6 usuarios reales (verificado vía Admin API). Ninguno es
+  `puntablanca.ecuador@hotmail.com` ni `andres-pa@hotmail.com` — los dos
+  únicos `admin_condominio` reales que existen en CondoManager (verificado
+  contra `perfiles`/`residentes` de `twkuidnjwhopbjnrhnxp`).
+- **Causa raíz real:** el 07-ago (commit `212f8b9`) se reapuntó el LOGIN de
+  CondoManager a validar solo contra identity (Paso 2 de
+  `PLAN-DESOLDADO.md`). **Nadie tocó el REGISTRO.** Grep confirmado sobre
+  `condomanager/app/`: `registro-admin/route.ts`,
+  `register/residente/page.tsx`, `residentes/aprobar/route.ts`,
+  `superadmin/admin-condominio/route.ts` y `api/auth/solicitar-reset/route.ts`
+  llaman todos a `supabaseAdmin.auth.admin.createUser()` /
+  `generateLink()` contra el proyecto de producto (`twkuidnjwhopbjnrhnxp`).
+  Cero de esos archivos menciona identity o `gyqgorgfstffbgazhbnb`.
+- **Impacto real, no potencial:** no son cuentas viejas desfasadas — es
+  **el pipeline activo, hoy**. Cualquier admin o residente que se registre
+  en CondoManager ahora mismo queda creado en un proyecto que el login real
+  nunca consulta. `auth-sorsabsa/src/app/auth/reset/page.tsx` (🟡-3) le puso
+  un parche honesto — mandar el reseteo a los dos proyectos posibles — pero
+  eso no crea la cuenta que falta en identity; solo evita filtrar cuál de
+  los dos la tiene.
+- **Verticales sin este problema, comprobado por grep, no por suposición:**
+  `agente24siete`, `crm_inmobiliario/webs` (DomusCRM) y `legaltech`
+  (JustiRed) no tienen código de login/registro propio — heredan identity
+  sin una línea propia. **CondoManager es el único vertical con auth propio
+  todavía vivo, y el único con producto real (Punta Blanca) — por eso es el
+  único donde esto se manifestó.**
+- **Fix implementado, condomanager commit `b28879c` (09-ago-2026):** el alta
+  crea el usuario en identity (`lib/supabase-admin-identity.ts`).
+  `perfiles.user_id` es FK local — no puede crearse en el alta — así que
+  `residentes.rol_pendiente` (migración nueva) guarda el rol hasta el
+  primer login real. `app/api/auth/reconciliar-perfil` (server-side,
+  service role) crea o reapunta el `perfil` la primera vez que ese email
+  llega federado a `/auth/callback` — cubre tanto el alta nueva como las
+  cuentas reales pre-migración (perfil ya existente, `user_id` viejo).
+  `app/reset-password` + `api/auth/solicitar-reset` (huérfanos, causa de la
+  confusión que destapó esto) se borraron.
+- **Validado con una petición real, no lectura de código:** registro de
+  prueba contra producción (`qa-condomanager-…@sorsabsa.test`) → usuario
+  confirmado en identity, ausente en producto, `residentes.rol_pendiente =
+  'admin_condominio'`, sin `perfil`. Login federado simulado con un
+  usuario producto real + magic link + token real → `reconciliar-perfil`
+  devolvió `{"accion":"creado"}` → `perfiles` con el `user_id` federado
+  correcto y `rol_pendiente` limpio. Datos de prueba borrados de ambos
+  proyectos al terminar.
+- **No resuelto todavía (fuera del alcance de este fix):** el cron
+  `limpiar-no-confirmados` sigue listando usuarios no confirmados solo en
+  el proyecto de producto — desde este fix, los nuevos registros no
+  confirmados viven en identity, así que ese cron ya no los va a encontrar.
+  Impacto bajo (housekeeping, no bloquea login), pendiente aparte.
+
 ### 🔴-5 — ✅ agente24siete: nadie puede loguearse, la federación con identity nunca se registró ahí — RESUELTO 09-ago-2026
 
 - **Encontrado:** 09-ago-2026, al intentar armar una cuenta de prueba para
@@ -359,13 +420,16 @@ Frágil por diseño, bajo impacto mientras el script sea manual.
 
 ## Próximo paso
 
-🔴-2/3, 🔴-4/🟠-1, 🔴-5, 🟠-3 y 🟠-5 cerrados y verificados (09-ago-2026).
-Quedan abiertos, en orden de severidad: 🔴-6 (referidos de agente24siete
-sin premio real — requiere decisión de Gina, marcado importante), 🔴-1
-(alta de usuarios no gobernada — la causa raíz más grande, requiere
-diseño nuevo, no un fix rápido), 🟠-2 (empeorado hoy: 3 nombres
-hardcodeados en vez de 2 — el fix declarativo sigue pendiente y ahora
-limpia más), 🟠-4, 🟡-2, 🟡-3, 🔵-1, 🔵-2. El fix de código de 🔴-2/3
-(falla-cerrado explícito por entorno) sigue pendiente — solo se resolvió
-la credencial perdida que bloqueaba verificarlo, no el patrón de fallback
-en sí.
+🔴-1, 🔴-2/3, 🔴-4/🟠-1, 🔴-5, 🟠-3 y 🟠-5 cerrados y verificados
+(09-ago-2026). Quedan abiertos, en orden de severidad: 🔴-6 (referidos de
+agente24siete sin premio real — requiere decisión de Gina, marcado
+importante), 🟠-2 (empeorado el 09-ago: 3 nombres hardcodeados en vez de
+2 — el fix declarativo sigue pendiente y ahora limpia más), 🟠-4, 🟡-2,
+🟡-3 (debería poder eliminarse ahora que 🔴-1 está cerrado — no debería
+haber más cuentas nuevas fuera de identity, pendiente de confirmar con
+uso real), 🔵-1, 🔵-2. El fix de código de 🔴-2/3 (falla-cerrado explícito
+por entorno) sigue pendiente — solo se resolvió la credencial perdida que
+bloqueaba verificarlo, no el patrón de fallback en sí. Pendiente aparte,
+bajo impacto: el cron `limpiar-no-confirmados` de CondoManager solo mira
+el proyecto de producto — desde el fix de 🔴-1 no va a encontrar los
+registros nuevos sin confirmar (viven en identity).
