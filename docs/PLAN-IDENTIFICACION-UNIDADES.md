@@ -76,13 +76,18 @@ administrador, no una excepción para este caso.
 
 ## Dónde se configura
 
-No en Configuración/Parametrización — vive en el módulo de Unidades.
-Un control **siempre visible y editable** en `/panel/admin/unidades`
-(no solo la primera vez): el administrador puede ver y cambiar el
-criterio en cualquier momento, no queda bloqueado después de crear la
-primera unidad. Si hay cero unidades, además se pide explícitamente
-elegir un criterio antes de habilitar "Crear unidad"/"Importar" — un
-empujón de onboarding, no la única vía.
+**Corregido tras probar la Fase 1** — el plan original ponía el control
+editable en `/panel/admin/unidades` (la lista). Gina lo probó y lo
+corrigió: con miles de unidades esa es la pantalla de mayor tráfico —
+no tiene sentido cargarla con un ajuste que casi nunca cambia, y encima
+el fetch de condominio/criterio estaba mezclado dentro de la carga de
+la lista, así que se repetía en cada cambio de página o filtro (no
+solo al elegir el criterio). Se movió a una pestaña nueva ("Unidades")
+en **Perfil del condominio** — mismo patrón de esa pantalla, un solo
+`formData`/submit. La lista de Unidades separó su carga en dos efectos:
+uno que resuelve condominio/criterio una sola vez al entrar, y otro que
+solo toca la tabla `unidades` en cada paginación/filtro — la pantalla
+de alto tráfico dejó de repetir ese round-trip innecesario.
 
 Cambiar el criterio con unidades ya existentes no las rompe: el trigger
 exige el campo nuevo para lo que se cree o edite de ahí en adelante, no
@@ -157,20 +162,20 @@ separados) que hay que rediseñar, no solo cambiar un label:
   criterio no rompe filas existentes. Punta Blanca confirmada intacta,
   en el default `MANZANA_LOTE` hasta que se cambie desde el control
   real (Fase 1).
-- **Fase 1 — ✅ RESUELTO 09-ago-2026 (`condomanager@a90727c`) — Módulo
-  Unidades (bucket A):** la fuente. Control siempre visible en
-  `/panel/admin/unidades` para elegir/cambiar el criterio (select simple,
-  guarda al cambiar, no un gate de una sola vez). Formularios de
-  crear/editar muestran siempre los 4 campos identificadores, pero solo
-  el del criterio activo lleva `*`/`required` — los otros quedan
-  disponibles pero opcionales, no ocultos. Importar CSV agrega columna
-  `casa` y resuelve el criterio antes de validar filas. Lista de
-  unidades simplificada a una columna "Identificador" (usa
-  `lib/unidades/identificar.ts` en vez de 3 columnas fijas
+- **Fase 1 — ✅ RESUELTO 09-ago-2026 (`condomanager@a90727c`,
+  reubicación en `condomanager@db99cc6`) — Módulo Unidades (bucket A):**
+  la fuente. Formularios de crear/editar muestran siempre los 4 campos
+  identificadores, pero solo el del criterio activo lleva `*`/`required`
+  — los otros quedan disponibles pero opcionales, no ocultos. Importar
+  CSV agrega columna `casa` y resuelve el criterio antes de validar
+  filas. Lista de unidades simplificada a una columna "Identificador"
+  (usa `lib/unidades/identificar.ts` en vez de 3 columnas fijas
   Manzana/Lote/Código Predial); búsqueda y orden cubren también `casa`.
-  Detalle de unidad ya no asume que manzana/lote siempre existen.
-  Verificado con typecheck limpio, eslint 0 errores, y una prueba
-  transaccional contra la base real confirmando que
+  Detalle de unidad ya no asume que manzana/lote siempre existen. El
+  control para elegir/cambiar el criterio se probó primero en la lista
+  de Unidades y se corrigió ese mismo día — ver "Dónde se configura"
+  abajo. Verificado con typecheck limpio, eslint 0 errores, y una
+  prueba transaccional contra la base real confirmando que
   `traducirErrorUnidad()` reconoce el mensaje real de Postgres para la
   restricción única de `casa` (sin dejar datos de prueba).
 - **Fase 2 — Resolver + bucket B (15 archivos):** `identificadorUnidad()`
