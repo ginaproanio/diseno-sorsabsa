@@ -545,8 +545,26 @@ cualquier otro producto.
     use de verdad en todos lados es trabajo aparte, con una convención a
     definir primero (fragment vs query), no algo para tocar a ciegas
     mientras había una persona real bloqueada.
-  - Sin confirmar todavía en vivo por Susana — pendiente su próximo
-    intento.
+  - ✅ **Confirmado en vivo, 08-ago-2026** — con `auth-sorsabsa` commit
+    `4375183` (el script de invitación redirige a `/auth/complete`, no a
+    `/auth/login` — evita todo el show de OAuth que quedaba secuestrado
+    por una sesión de identity ajena ya activa en el mismo navegador),
+    Gina entró desde el correo de Susana y llegó de verdad al sistema.
+- 🚨 **Bug propio, encontrado en el camino — commit `b29e7b2` de `iot`
+  arrastró por error fotos y documentos de un expediente real (casos
+  "eloy-alfaro-susana" y "pomasqui-susana") más dos scripts personales de
+  Gina, con un `git add -A` descuidado.** Corregido en el commit
+  `2f1ac56`: sacados del tracking (`git rm --cached`, siguen en disco) y
+  agregados a `.gitignore` (`cases/`, `sync_*_a_railway.py`) para que no
+  vuelva a pasar. **Quedan en el historial del commit anterior** — no se
+  reescribió el historial (force-push) sin confirmar con Gina primero.
+- ⏳ **Pendiente — expedientes de `iot` a R2, todavía sin bucket.**
+  Mismo patrón que el resto del ecosistema (`ARQUITECTURA-ECOSISTEMA.md`:
+  R2 = objetos) — hoy los expedientes de `iot` viven en disco/Volume de
+  Railway, nunca debieron pasar por git en primer lugar (causa raíz del
+  punto de arriba). Falta crear el bucket de R2 para `iot` y portar el
+  patrón de subida ya usado en `legaltech/scraper/r2.py` /
+  `condomanager` (pendiente #12) — sin empezar.
 
 ## 15. 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas
 
