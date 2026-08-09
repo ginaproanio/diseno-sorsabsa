@@ -136,6 +136,24 @@ La causa raíz es 🔴-1.
   aceptada). El fix de "falla-cerrado" en el código (distinguir entorno en
   vez de ausencia de variable) sigue pendiente — el hallazgo original del
   código no se tocó, solo se resolvió la credencial perdida que lo bloqueaba.
+- **Incidente aparte, NO arquitectónico — 09-ago-2026, prueba real de
+  agente24siete con `eco.ec@outlook.com`:** el login llegaba hasta
+  `/auth/complete` y ahí fallaba con el mensaje genérico de bloqueo. Logs
+  de Vercel mostraron `POST /api/entitlements 502` en cada intento. Primer
+  diagnóstico (equivocado, corregido acá para no repetirlo): se sospechó
+  de la clave otra vez y se re-seteó `PAGOS_API_KEY` sin necesidad. La
+  causa real, encontrada reproduciendo la llamada real de punta a punta
+  (sesión real vía Admin API + POST a `auth.sorsabsa.com/api/entitlements`,
+  no un curl directo a pagos-sorsabsa que no reproduce el bug): la
+  respuesta fue `404`, no `401` — `PAGOS_API_URL` en Vercel tenía un `/`
+  de más al final, así que `route.ts` armaba
+  `.../up.railway.app//api/entitlements` (doble slash), que Express
+  resuelve como ruta inexistente. Corregido re-seteando `PAGOS_API_URL`
+  sin el slash y redeploy; **verificado en vivo**:
+  `200 {"active":false,"reason":"sin_suscripcion","app":"agente24siete"}`.
+  No es un hallazgo nuevo de arquitectura — es un typo de configuración,
+  efecto colateral de la rotación de arriba. Queda anotado solo para que
+  quien reponga `PAGOS_API_URL` alguna vez sepa: **sin `/` al final.**
 
 ### 🔴-4 — ⬜ "Funciona por casualidad", admitido en el propio código
 
