@@ -671,6 +671,20 @@ persona que loguea), cada producto llama `crear-trial` en su alta.
 | agente24siete | ✅ bypass (modelo real es saldo, no suscripción — ver `AUDITORIA-PORTERO-SSO.md` 🔴-6) | N/A (no aplica) | ✅ `/portal/referidos`, pero el premio (días de suscripción) no conecta con nada real | ✅ `/portal/recargas` (esto SÍ es self-service, pero es saldo, no plan) |
 | JustiRed | ❌ sin caso, cae al fallback (`subject: userId`) | ❌ no existe ninguna llamada | ❌ nada | ❌ nada — **tampoco hay página de registro propia** |
 
+**Pendiente, decisión de Gina, 09-ago-2026: el pago de la suscripción DEBE
+ser self-service, no "Contactar a Ventas".** Hoy CondoManager y DomusCRM
+resuelven ese gap con un simple `mailto:` — un admin de condominio o una
+inmobiliaria no tiene forma de pagar/renovar su plan sin escribir a
+soporte y esperar. `pagos-sorsabsa` ya tiene lo necesario para esto sin
+construir nada nuevo del lado del motor: `/api/iniciar` (Capa 1, cuenta
+propia de SORSABSA vía `PAYPHONE_TOKEN`/`PAYPHONE_STORE_ID`) acepta
+`suscripcion: { plan, dias, sujeto }`, que al aprobarse extiende
+`pagos.suscripciones` automáticamente (`api/confirmar.js`,
+`extenderSuscripcion`) — es la MISMA pieza que ya usa `/portal/recargas`
+de agente24siete, solo que ahí se usa para saldo. Falta construir la
+pantalla — un botón de pago real en `suscripcion/page.tsx` de CondoManager
+y su equivalente en DomusCRM, en vez del `mailto:` — no un servicio nuevo.
+
 **JustiRed es el riesgo real, no solo un hueco de checklist:** está
 registrado en `auth-sorsabsa/src/lib/apps.ts` (pasa por el SSO central,
 tiene `AuthCallback.tsx`), así que cualquier usuario real que loguee por
