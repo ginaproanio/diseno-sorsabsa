@@ -14,7 +14,7 @@
       },
       "_origin": "ast",
       "id": "githooks_pre_push",
-      "community": 17,
+      "community": 24,
       "community_name": "pre-push",
       "norm_label": "pre-push"
     },
@@ -29,7 +29,7 @@
       },
       "_origin": "ast",
       "id": "githooks_pre_push__entry",
-      "community": 17,
+      "community": 24,
       "community_name": "pre-push",
       "norm_label": "pre-push script"
     },
@@ -40,7 +40,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "jest_config",
-      "community": 19,
+      "community": 27,
       "community_name": "jest.config.cjs",
       "norm_label": "jest.config.cjs"
     },
@@ -62,7 +62,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "package",
-      "community": 11,
+      "community": 13,
       "community_name": "package.json",
       "norm_label": "package.json"
     },
@@ -73,7 +73,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "package_name",
-      "community": 11,
+      "community": 13,
       "community_name": "package.json",
       "norm_label": "name"
     },
@@ -84,7 +84,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "package_version",
-      "community": 11,
+      "community": 13,
       "community_name": "package.json",
       "norm_label": "version"
     },
@@ -95,7 +95,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "package_description",
-      "community": 11,
+      "community": 13,
       "community_name": "package.json",
       "norm_label": "description"
     },
@@ -106,7 +106,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "package_license",
-      "community": 11,
+      "community": 13,
       "community_name": "package.json",
       "norm_label": "license"
     },
@@ -117,7 +117,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "package_private",
-      "community": 11,
+      "community": 13,
       "community_name": "package.json",
       "norm_label": "private"
     },
@@ -128,7 +128,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "package_type",
-      "community": 11,
+      "community": 13,
       "community_name": "package.json",
       "norm_label": "type"
     },
@@ -139,7 +139,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "package_main",
-      "community": 11,
+      "community": 13,
       "community_name": "package.json",
       "norm_label": "main"
     },
@@ -150,7 +150,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "package_types",
-      "community": 11,
+      "community": 13,
       "community_name": "package.json",
       "norm_label": "types"
     },
@@ -161,7 +161,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "package_exports",
-      "community": 11,
+      "community": 13,
       "community_name": "package.json",
       "norm_label": "exports"
     },
@@ -172,7 +172,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "package_exports_preset",
-      "community": 11,
+      "community": 13,
       "community_name": "package.json",
       "norm_label": "./preset"
     },
@@ -183,7 +183,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "package_exports_tokens_css",
-      "community": 11,
+      "community": 13,
       "community_name": "package.json",
       "norm_label": "./tokens.css"
     },
@@ -194,8 +194,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "package_files",
-      "community": 11,
-      "community_name": "package.json",
+      "community": 20,
+      "community_name": "files",
       "norm_label": "files"
     },
     {
@@ -205,8 +205,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "package_json_ref_src",
-      "community": 11,
-      "community_name": "package.json",
+      "community": 20,
+      "community_name": "files",
       "norm_label": "src"
     },
     {
@@ -216,8 +216,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "ref_tailwind_preset_cjs",
-      "community": 11,
-      "community_name": "package.json",
+      "community": 20,
+      "community_name": "files",
       "norm_label": "tailwind-preset.cjs"
     },
     {
@@ -227,8 +227,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "ref_readme_md",
-      "community": 11,
-      "community_name": "package.json",
+      "community": 20,
+      "community_name": "files",
       "norm_label": "readme.md"
     },
     {
@@ -238,8 +238,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "package_scripts",
-      "community": 11,
-      "community_name": "package.json",
+      "community": 23,
+      "community_name": "scripts",
       "norm_label": "scripts"
     },
     {
@@ -249,8 +249,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "package_scripts_test",
-      "community": 11,
-      "community_name": "package.json",
+      "community": 23,
+      "community_name": "scripts",
       "norm_label": "test"
     },
     {
@@ -260,8 +260,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "package_scripts_typecheck",
-      "community": 11,
-      "community_name": "package.json",
+      "community": 23,
+      "community_name": "scripts",
       "norm_label": "typecheck"
     },
     {
@@ -271,8 +271,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "package_peerdependencies",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 17,
+      "community_name": "peerDependencies",
       "norm_label": "peerdependencies"
     },
     {
@@ -282,8 +282,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "package_peerdependencies_framer_motion",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 17,
+      "community_name": "peerDependencies",
       "norm_label": "framer-motion"
     },
     {
@@ -293,8 +293,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "package_json_framer_motion",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 17,
+      "community_name": "peerDependencies",
       "norm_label": "framer-motion"
     },
     {
@@ -304,8 +304,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "package_peerdependencies_lucide_react",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 22,
+      "community_name": "lucide-react",
       "norm_label": "lucide-react"
     },
     {
@@ -315,8 +315,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "package_json_lucide_react",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 22,
+      "community_name": "lucide-react",
       "norm_label": "lucide-react"
     },
     {
@@ -326,8 +326,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "package_peerdependencies_react",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 17,
+      "community_name": "peerDependencies",
       "norm_label": "react"
     },
     {
@@ -337,8 +337,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "package_json_react",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 17,
+      "community_name": "peerDependencies",
       "norm_label": "react"
     },
     {
@@ -348,8 +348,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "package_peerdependencies_react_dom",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 17,
+      "community_name": "peerDependencies",
       "norm_label": "react-dom"
     },
     {
@@ -359,8 +359,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "package_json_react_dom",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 17,
+      "community_name": "peerDependencies",
       "norm_label": "react-dom"
     },
     {
@@ -370,7 +370,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "package_devdependencies",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "devdependencies"
     },
@@ -381,7 +381,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "package_devdependencies_testing_library_jest_dom",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "@testing-library/jest-dom"
     },
@@ -392,7 +392,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "testing_library_jest_dom",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "@testing-library/jest-dom"
     },
@@ -403,7 +403,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "package_devdependencies_testing_library_react",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "@testing-library/react"
     },
@@ -414,7 +414,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "testing_library_react",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "@testing-library/react"
     },
@@ -425,8 +425,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "package_devdependencies_types_jest",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 25,
+      "community_name": "@types/jest",
       "norm_label": "@types/jest"
     },
     {
@@ -436,8 +436,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "types_jest",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 25,
+      "community_name": "@types/jest",
       "norm_label": "@types/jest"
     },
     {
@@ -447,7 +447,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "package_devdependencies_types_react",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "@types/react"
     },
@@ -458,7 +458,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "package_json_types_react",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "@types/react"
     },
@@ -469,7 +469,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "package_devdependencies_types_react_dom",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "@types/react-dom"
     },
@@ -480,7 +480,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "package_json_types_react_dom",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "@types/react-dom"
     },
@@ -491,8 +491,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "package_devdependencies_framer_motion",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 17,
+      "community_name": "peerDependencies",
       "norm_label": "framer-motion"
     },
     {
@@ -502,7 +502,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "package_devdependencies_jest",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "jest"
     },
@@ -513,7 +513,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "jest",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "jest"
     },
@@ -524,7 +524,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "package_devdependencies_jest_environment_jsdom",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "jest-environment-jsdom"
     },
@@ -535,7 +535,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "jest_environment_jsdom",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "jest-environment-jsdom"
     },
@@ -546,8 +546,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "package_devdependencies_lucide_react",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 22,
+      "community_name": "lucide-react",
       "norm_label": "lucide-react"
     },
     {
@@ -557,8 +557,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "package_devdependencies_react",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 17,
+      "community_name": "peerDependencies",
       "norm_label": "react"
     },
     {
@@ -568,8 +568,8 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "package_devdependencies_react_dom",
-      "community": 8,
-      "community_name": "devDependencies",
+      "community": 17,
+      "community_name": "peerDependencies",
       "norm_label": "react-dom"
     },
     {
@@ -579,7 +579,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "package_devdependencies_ts_jest",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "ts-jest"
     },
@@ -590,7 +590,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "ts_jest",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "ts-jest"
     },
@@ -601,7 +601,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "package_devdependencies_typescript",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "typescript"
     },
@@ -612,7 +612,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "package_json_typescript",
-      "community": 8,
+      "community": 11,
       "community_name": "devDependencies",
       "norm_label": "typescript"
     },
@@ -623,8 +623,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "package_dependencies",
-      "community": 11,
-      "community_name": "package.json",
+      "community": 21,
+      "community_name": "dependencies",
       "norm_label": "dependencies"
     },
     {
@@ -634,8 +634,8 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "package_dependencies_motion",
-      "community": 11,
-      "community_name": "package.json",
+      "community": 21,
+      "community_name": "dependencies",
       "norm_label": "motion"
     },
     {
@@ -645,8 +645,8 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "package_json_motion",
-      "community": 11,
-      "community_name": "package.json",
+      "community": 21,
+      "community_name": "dependencies",
       "norm_label": "motion"
     },
     {
@@ -656,7 +656,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_package",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "showcase/package.json"
     },
@@ -667,7 +667,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "showcase_package_name",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "name"
     },
@@ -678,7 +678,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_package_private",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "private"
     },
@@ -689,7 +689,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_package_version",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "version"
     },
@@ -700,7 +700,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_package_type",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "type"
     },
@@ -711,7 +711,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "showcase_package_description",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "description"
     },
@@ -722,7 +722,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "showcase_package_scripts",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "scripts"
     },
@@ -733,7 +733,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "showcase_package_scripts_dev",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "dev"
     },
@@ -744,7 +744,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "showcase_package_scripts_build",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "build"
     },
@@ -755,7 +755,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "showcase_package_scripts_preview",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "preview"
     },
@@ -766,7 +766,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "showcase_package_scripts_typecheck",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "typecheck"
     },
@@ -777,7 +777,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "showcase_package_dependencies",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "dependencies"
     },
@@ -788,7 +788,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "showcase_package_dependencies_framer_motion",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "framer-motion"
     },
@@ -799,7 +799,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "showcase_package_json_framer_motion",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "framer-motion"
     },
@@ -810,7 +810,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "showcase_package_dependencies_lucide_react",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "lucide-react"
     },
@@ -821,7 +821,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "showcase_package_json_lucide_react",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "lucide-react"
     },
@@ -832,7 +832,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "showcase_package_dependencies_motion",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "motion"
     },
@@ -843,7 +843,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "showcase_package_json_motion",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "motion"
     },
@@ -854,7 +854,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "showcase_package_dependencies_react",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "react"
     },
@@ -865,7 +865,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "showcase_package_json_react",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "react"
     },
@@ -876,7 +876,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "showcase_package_dependencies_react_dom",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "react-dom"
     },
@@ -887,7 +887,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "showcase_package_json_react_dom",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "react-dom"
     },
@@ -898,7 +898,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "showcase_package_devdependencies",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "devdependencies"
     },
@@ -909,7 +909,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_types_react",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "@types/react"
     },
@@ -920,7 +920,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "showcase_package_json_types_react",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "@types/react"
     },
@@ -931,7 +931,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_types_react_dom",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "@types/react-dom"
     },
@@ -942,7 +942,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "showcase_package_json_types_react_dom",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "@types/react-dom"
     },
@@ -953,7 +953,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_vitejs_plugin_react",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "@vitejs/plugin-react"
     },
@@ -964,7 +964,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "vitejs_plugin_react",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "@vitejs/plugin-react"
     },
@@ -975,7 +975,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_autoprefixer",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "autoprefixer"
     },
@@ -986,7 +986,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "autoprefixer",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "autoprefixer"
     },
@@ -997,7 +997,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_postcss",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "postcss"
     },
@@ -1008,7 +1008,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "postcss",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "postcss"
     },
@@ -1019,7 +1019,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_tailwindcss",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "tailwindcss"
     },
@@ -1030,7 +1030,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "tailwindcss",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "tailwindcss"
     },
@@ -1041,7 +1041,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_typescript",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "typescript"
     },
@@ -1052,7 +1052,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "showcase_package_json_typescript",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "typescript"
     },
@@ -1063,7 +1063,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_vite",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "vite"
     },
@@ -1074,7 +1074,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "vite",
-      "community": 5,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "vite"
     },
@@ -1085,7 +1085,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_postcss_config",
-      "community": 20,
+      "community": 28,
       "community_name": "postcss.config.cjs",
       "norm_label": "postcss.config.cjs"
     },
@@ -1165,7 +1165,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_buttonmatrix",
-      "community": 13,
+      "community": 14,
       "community_name": "Button.tsx",
       "norm_label": "buttonmatrix.tsx"
     },
@@ -1176,7 +1176,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_src_components_buttonmatrix_variants",
-      "community": 13,
+      "community": 14,
       "community_name": "Button.tsx",
       "norm_label": "variants"
     },
@@ -1187,7 +1187,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_src_components_buttonmatrix_shadow",
-      "community": 13,
+      "community": 14,
       "community_name": "Button.tsx",
       "norm_label": "shadow"
     },
@@ -1199,7 +1199,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_buttonmatrix_buttonmatrix",
-      "community": 13,
+      "community": 14,
       "community_name": "Button.tsx",
       "norm_label": "buttonmatrix()"
     },
@@ -1210,8 +1210,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_cardstatusdemo",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardstatusdemo.tsx"
     },
     {
@@ -1221,8 +1221,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_src_components_cardstatusdemo_tones",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "tones"
     },
     {
@@ -1232,8 +1232,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_src_components_cardstatusdemo_shadow",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "shadow"
     },
     {
@@ -1244,8 +1244,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_cardstatusdemo_cardstatusdemo",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardstatusdemo()"
     },
     {
@@ -1324,7 +1324,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "domuslanding.tsx"
     },
@@ -1336,7 +1336,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_domusnav",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "domusnav()"
     },
@@ -1348,7 +1348,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_hero",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "hero()"
     },
@@ -1360,7 +1360,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_features",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "features"
     },
@@ -1371,7 +1371,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_social",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "social"
     },
@@ -1383,7 +1383,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_socialproof",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "socialproof()"
     },
@@ -1395,7 +1395,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_cta",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "cta()"
     },
@@ -1407,7 +1407,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_footer",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "footer()"
     },
@@ -1419,7 +1419,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_domuslanding",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "domuslanding()"
     },
@@ -1453,7 +1453,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_iconcatalog",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "iconcatalog.tsx"
     },
@@ -1464,7 +1464,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_src_components_iconcatalog_names",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "names"
     },
@@ -1475,7 +1475,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_src_components_iconcatalog_shadow",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "shadow"
     },
@@ -1487,7 +1487,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_iconcatalog_iconcatalog",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "iconcatalog()"
     },
@@ -1521,8 +1521,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_notificationdemo",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 15,
+      "community_name": "NotificationBell.tsx",
       "norm_label": "notificationdemo.tsx"
     },
     {
@@ -1532,8 +1532,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_src_components_notificationdemo_mock",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 15,
+      "community_name": "NotificationBell.tsx",
       "norm_label": "mock"
     },
     {
@@ -1544,8 +1544,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_notificationdemo_notificationdemo",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 15,
+      "community_name": "NotificationBell.tsx",
       "norm_label": "notificationdemo()"
     },
     {
@@ -1717,7 +1717,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_tokenaudit",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "tokenaudit.tsx"
     },
@@ -1728,7 +1728,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_src_components_tokenaudit_tokens",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "tokens"
     },
@@ -1740,7 +1740,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_tokenaudit_tokenaudit",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "tokenaudit()"
     },
@@ -1939,7 +1939,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_tailwind_config",
-      "community": 21,
+      "community": 29,
       "community_name": "tailwind.config.cjs",
       "norm_label": "tailwind.config.cjs"
     },
@@ -1950,7 +1950,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_tsconfig",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "showcase/tsconfig.json"
     },
@@ -1961,7 +1961,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "compileroptions"
     },
@@ -1972,7 +1972,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_target",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "target"
     },
@@ -1983,7 +1983,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_lib",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "lib"
     },
@@ -1994,7 +1994,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_tsconfig_json_ref_dom",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "dom"
     },
@@ -2005,7 +2005,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_tsconfig_json_ref_dom_iterable",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "dom.iterable"
     },
@@ -2016,7 +2016,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_tsconfig_json_ref_es2022",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "es2022"
     },
@@ -2027,7 +2027,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_module",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "module"
     },
@@ -2038,7 +2038,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_moduleresolution",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "moduleresolution"
     },
@@ -2049,7 +2049,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_jsx",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "jsx"
     },
@@ -2060,7 +2060,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_strict",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "strict"
     },
@@ -2071,7 +2071,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_esmoduleinterop",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "esmoduleinterop"
     },
@@ -2082,7 +2082,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_skiplibcheck",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "skiplibcheck"
     },
@@ -2093,7 +2093,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_forceconsistentcasinginfilenames",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "forceconsistentcasinginfilenames"
     },
@@ -2104,7 +2104,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_resolvejsonmodule",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "resolvejsonmodule"
     },
@@ -2115,7 +2115,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_isolatedmodules",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "isolatedmodules"
     },
@@ -2126,7 +2126,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "showcase_tsconfig_compileroptions_noemit",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "noemit"
     },
@@ -2137,7 +2137,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "showcase_tsconfig_include",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "include"
     },
@@ -2148,7 +2148,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "showcase_tsconfig_json_ref_src",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "src"
     },
@@ -2159,7 +2159,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "ref_vite_config_ts",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "vite.config.ts"
     },
@@ -2170,7 +2170,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "showcase_tsconfig_exclude",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "exclude"
     },
@@ -2181,7 +2181,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "ref_src_test_tsx",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "../src/**/*.test.tsx"
     },
@@ -2192,7 +2192,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "ref_src_test_ts",
-      "community": 9,
+      "community": 8,
       "community_name": "compilerOptions",
       "norm_label": "../src/**/*.test.ts"
     },
@@ -2203,7 +2203,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_vercel",
-      "community": 16,
+      "community": 19,
       "community_name": "vercel.json",
       "norm_label": "vercel.json"
     },
@@ -2214,7 +2214,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "showcase_vercel_framework",
-      "community": 16,
+      "community": 19,
       "community_name": "vercel.json",
       "norm_label": "framework"
     },
@@ -2225,7 +2225,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_vercel_installcommand",
-      "community": 16,
+      "community": 19,
       "community_name": "vercel.json",
       "norm_label": "installcommand"
     },
@@ -2236,7 +2236,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_vercel_buildcommand",
-      "community": 16,
+      "community": 19,
       "community_name": "vercel.json",
       "norm_label": "buildcommand"
     },
@@ -2247,7 +2247,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_vercel_outputdirectory",
-      "community": 16,
+      "community": 19,
       "community_name": "vercel.json",
       "norm_label": "outputdirectory"
     },
@@ -2258,7 +2258,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_vite_config",
-      "community": 18,
+      "community": 26,
       "community_name": "vite.config.ts",
       "norm_label": "vite.config.ts"
     },
@@ -2269,7 +2269,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "showcase_vite_config_dirname",
-      "community": 18,
+      "community": 26,
       "community_name": "vite.config.ts",
       "norm_label": "__dirname"
     },
@@ -2280,7 +2280,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_brand_brandprovider_test",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandprovider.test.tsx"
     },
@@ -2291,7 +2291,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_brand_brandprovider_test_base",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "base"
     },
@@ -2303,7 +2303,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_test_ratioentre",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "ratioentre()"
     },
@@ -2314,7 +2314,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_brand_brandprovider",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandprovider.tsx"
     },
@@ -2327,7 +2327,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_brandcolors",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandcolors"
     },
@@ -2340,7 +2340,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_brandconfig",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandconfig"
     },
@@ -2353,7 +2353,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_wordmarktone",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmarktone"
     },
@@ -2366,7 +2366,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_wordmarkanimation",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmarkanimation"
     },
@@ -2377,7 +2377,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "src_brand_brandprovider_brandcontext",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandcontext"
     },
@@ -2389,7 +2389,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_usebrand",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "usebrand()"
     },
@@ -2401,7 +2401,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_hextorgbtriplet",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "hextorgbtriplet()"
     },
@@ -2413,7 +2413,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_hextorgb",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "hextorgb()"
     },
@@ -2425,7 +2425,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_relativeluminance",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "relativeluminance()"
     },
@@ -2437,7 +2437,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_contrastratio",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "contrastratio()"
     },
@@ -2449,7 +2449,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_tohex",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "tohex()"
     },
@@ -2461,7 +2461,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_darkentocontrast",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "darkentocontrast()"
     },
@@ -2473,7 +2473,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_readableon",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "readableon()"
     },
@@ -2485,7 +2485,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_brandtocssvars",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandtocssvars()"
     },
@@ -2497,7 +2497,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_brandprovider",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandprovider()"
     },
@@ -2508,7 +2508,7 @@
       "source_location": "L284",
       "_origin": "ast",
       "id": "src_brand_brandprovider_brand_font_imports",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brand_font_imports"
     },
@@ -2519,7 +2519,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_brand_brands",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brands.ts"
     },
@@ -2530,7 +2530,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_brand_brands_brands",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brands"
     },
@@ -2542,7 +2542,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brands_getbrand",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "getbrand()"
     },
@@ -2648,7 +2648,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_button_test",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "button.test.tsx"
     },
@@ -2659,7 +2659,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_button_test_marcadeprueba",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "marcadeprueba"
     },
@@ -2671,7 +2671,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_button_test_renderconmarca",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "renderconmarca()"
     },
@@ -2682,7 +2682,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_button",
-      "community": 13,
+      "community": 14,
       "community_name": "Button.tsx",
       "norm_label": "button.tsx"
     },
@@ -2695,7 +2695,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_button_buttonvariant",
-      "community": 13,
+      "community": 14,
       "community_name": "Button.tsx",
       "norm_label": "buttonvariant"
     },
@@ -2708,7 +2708,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_button_buttonsize",
-      "community": 13,
+      "community": 14,
       "community_name": "Button.tsx",
       "norm_label": "buttonsize"
     },
@@ -2719,7 +2719,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_components_button_variants",
-      "community": 13,
+      "community": 14,
       "community_name": "Button.tsx",
       "norm_label": "variants"
     },
@@ -2730,7 +2730,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_components_button_sizes",
-      "community": 13,
+      "community": 14,
       "community_name": "Button.tsx",
       "norm_label": "sizes"
     },
@@ -2743,7 +2743,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_button_commonprops",
-      "community": 13,
+      "community": 14,
       "community_name": "Button.tsx",
       "norm_label": "commonprops"
     },
@@ -2756,7 +2756,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_button_buttonprops",
-      "community": 13,
+      "community": 14,
       "community_name": "Button.tsx",
       "norm_label": "buttonprops"
     },
@@ -2767,7 +2767,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "src_components_button_button",
-      "community": 13,
+      "community": 14,
       "community_name": "Button.tsx",
       "norm_label": "button"
     },
@@ -2778,8 +2778,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_card",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "card.tsx"
     },
     {
@@ -2791,8 +2791,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_card_cardprops",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardprops"
     },
     {
@@ -2802,8 +2802,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_components_card_variants",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "variants"
     },
     {
@@ -2814,8 +2814,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_card_card",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "card()"
     },
     {
@@ -2827,8 +2827,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_card_cardheaderprops",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardheaderprops"
     },
     {
@@ -2839,8 +2839,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_card_cardheader",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardheader()"
     },
     {
@@ -2851,8 +2851,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_card_cardtitle",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardtitle()"
     },
     {
@@ -2863,8 +2863,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_card_cardcontent",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "cardcontent()"
     },
     {
@@ -2874,7 +2874,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_input",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "input.tsx"
     },
@@ -2887,7 +2887,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_input_inputprops",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "inputprops"
     },
@@ -2909,7 +2909,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_mobilenav",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "mobilenav.tsx"
     },
@@ -2922,7 +2922,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_mobilenav_mobilenavitem",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "mobilenavitem"
     },
@@ -2935,7 +2935,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_mobilenav_mobilenavprops",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "mobilenavprops"
     },
@@ -2947,7 +2947,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_mobilenav_mobilenav",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "mobilenav()"
     },
@@ -2958,8 +2958,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_notificationbell",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 15,
+      "community_name": "NotificationBell.tsx",
       "norm_label": "notificationbell.tsx"
     },
     {
@@ -2971,8 +2971,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_notificationbell_notificacion",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 15,
+      "community_name": "NotificationBell.tsx",
       "norm_label": "notificacion"
     },
     {
@@ -2984,8 +2984,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_notificationbell_notificationbellprops",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 15,
+      "community_name": "NotificationBell.tsx",
       "norm_label": "notificationbellprops"
     },
     {
@@ -2995,8 +2995,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_components_notificationbell_type_icon",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 15,
+      "community_name": "NotificationBell.tsx",
       "norm_label": "type_icon"
     },
     {
@@ -3006,8 +3006,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_components_notificationbell_type_color",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 15,
+      "community_name": "NotificationBell.tsx",
       "norm_label": "type_color"
     },
     {
@@ -3018,8 +3018,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_notificationbell_notificationbell",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 15,
+      "community_name": "NotificationBell.tsx",
       "norm_label": "notificationbell()"
     },
     {
@@ -3065,8 +3065,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_propertylistingcard",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "propertylistingcard.tsx"
     },
     {
@@ -3078,8 +3078,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_propertylistingcard_propertylistingcardprops",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "propertylistingcardprops"
     },
     {
@@ -3090,8 +3090,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_propertylistingcard_placeholder",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "placeholder()"
     },
     {
@@ -3102,8 +3102,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_propertylistingcard_stat",
-      "community": 2,
-      "community_name": "DomusLanding.tsx",
+      "community": 0,
+      "community_name": "index.ts",
       "norm_label": "stat()"
     },
     {
@@ -3210,7 +3210,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_statusbadge",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "statusbadge.tsx"
     },
@@ -3223,7 +3223,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_statusbadge_statustone",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "statustone"
     },
@@ -3234,7 +3234,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_components_statusbadge_tone_class",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "tone_class"
     },
@@ -3245,7 +3245,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_components_statusbadge_tone_icon",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "tone_icon"
     },
@@ -3258,7 +3258,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_statusbadge_statusbadgeprops",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "statusbadgeprops"
     },
@@ -3270,7 +3270,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_statusbadge_statusbadge",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "statusbadge()"
     },
@@ -3690,7 +3690,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_wordmark_test",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmark.test.tsx"
     },
@@ -3701,7 +3701,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_wordmark",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmark.tsx"
     },
@@ -3712,7 +3712,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_components_wordmark_tone_class",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "tone_class"
     },
@@ -3723,7 +3723,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_components_wordmark_tonos_por_defecto",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "tonos_por_defecto"
     },
@@ -3735,7 +3735,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_wordmark_getanimation",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "getanimation()"
     },
@@ -3747,7 +3747,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_wordmark_wordmark",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmark()"
     },
@@ -3758,7 +3758,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_wordmarkanimations",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmarkanimations.ts"
     },
@@ -3769,7 +3769,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_components_wordmarkanimations_wordmarkvariants",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmarkvariants"
     },
@@ -3780,7 +3780,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_components_wordmarkanimations_wordmarkfadeslidevariants",
-      "community": 6,
+      "community": 4,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmarkfadeslidevariants"
     },
@@ -3791,8 +3791,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_useonclickoutside",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 15,
+      "community_name": "NotificationBell.tsx",
       "norm_label": "useonclickoutside.ts"
     },
     {
@@ -3803,8 +3803,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_hooks_useonclickoutside_useonclickoutside",
-      "community": 0,
-      "community_name": "index.ts",
+      "community": 15,
+      "community_name": "NotificationBell.tsx",
       "norm_label": "useonclickoutside()"
     },
     {
@@ -3814,7 +3814,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_icons_icon",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "icon.tsx"
     },
@@ -3827,7 +3827,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_icons_icon_iconprops",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "iconprops"
     },
@@ -3838,7 +3838,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_icons_icon_icon",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "icon"
     },
@@ -3849,7 +3849,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_icons_icon_paths",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "icon-paths.ts"
     },
@@ -3860,7 +3860,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_icons_icon_paths_icon_paths",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "icon_paths"
     },
@@ -3873,7 +3873,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_icons_icon_paths_iconname",
-      "community": 2,
+      "community": 6,
       "community_name": "DomusLanding.tsx",
       "norm_label": "iconname"
     },
@@ -3895,7 +3895,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tailwind_preset",
-      "community": 22,
+      "community": 30,
       "community_name": "tailwind-preset.cjs",
       "norm_label": "tailwind-preset.cjs"
     },
@@ -4280,7 +4280,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "arquitectura-ecosistema.md"
     },
@@ -4291,7 +4291,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_arquitectura_del_ecosistema_sorsabsa",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "arquitectura del ecosistema sorsabsa"
     },
@@ -4302,7 +4302,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_1_inventario",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "1. inventario"
     },
@@ -4313,7 +4313,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_verticales_lo_que_un_cliente_compra",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "verticales (lo que un cliente compra)"
     },
@@ -4324,7 +4324,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_transversales_no_se_venden_solos_cruzan_todos_los_verticales",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "transversales (no se venden solos \u2014 cruzan todos los verticales)"
     },
@@ -4335,7 +4335,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_2_los_dos_planos",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "2. los dos planos"
     },
@@ -4346,7 +4346,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_plano_web_vercel_correcto",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "plano web \u2014 vercel \u2705 correcto"
     },
@@ -4357,7 +4357,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_plano_de_proceso_ya_existe_parcialmente_correcci\u00f3n_2026_07_30",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "plano de proceso \u2014 ya existe, parcialmente \u2705 (correccion 2026-07-30)"
     },
@@ -4368,7 +4368,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_plano_de_proceso_no_existe",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "plano de proceso \u2014 no existe \u274c"
     },
@@ -4379,7 +4379,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_3_mapa_de_bases_de_datos_la_trampa",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "3. mapa de bases de datos \u2014 la trampa"
     },
@@ -4390,7 +4390,7 @@
       "source_location": "L133",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_estado_verificado_en_sql_el_2026_07_30_nombre_y_ocupantes_actualizados_08_ago_2026",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "estado \u2705 verificado en sql el 2026-07-30 \u2014 nombre y ocupantes actualizados 08-ago-2026"
     },
@@ -4401,7 +4401,7 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_qu\u00e9_cambi\u00f3_desde_el_2026_07_26",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "que cambio desde el 2026-07-26"
     },
@@ -4412,7 +4412,7 @@
       "source_location": "L189",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_acoplamiento_que_sigue_vivo",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "\u26a0\ufe0f acoplamiento que sigue vivo"
     },
@@ -4423,7 +4423,7 @@
       "source_location": "L199",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_3_bis_no_hay_datos_de_clientes_punto",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "3-bis. no hay datos de clientes. punto."
     },
@@ -4434,7 +4434,7 @@
       "source_location": "L223",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_el_l\u00edmite_de_2_proyectos_ya_no_existe_y_la_separaci\u00f3n_sigue_sin_hacerse",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "el limite de 2 proyectos ya no existe \u2014 y la separacion sigue sin hacerse"
     },
@@ -4445,7 +4445,7 @@
       "source_location": "L242",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_4_almacenamiento",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "4. almacenamiento"
     },
@@ -4456,7 +4456,7 @@
       "source_location": "L267",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_defectos_verificados",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "defectos verificados"
     },
@@ -4467,7 +4467,7 @@
       "source_location": "L280",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_4_bis_georreferenciaci\u00f3n_y_r2_estado_real_verificado_2026_08_08",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "4-bis. georreferenciacion y r2 \u2014 estado real (verificado 2026-08-08)"
     },
@@ -4478,7 +4478,7 @@
       "source_location": "L286",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_geo_no_usa_la_api_de_google_maps_la_que_factura",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "geo: no usa la api de google maps (la que factura)"
     },
@@ -4489,7 +4489,7 @@
       "source_location": "L298",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_sorsabsaforensic_s\u00ed_usa_google_maps_pero_no_la_api_pagada_y_es_un_m\u00f3dulo_aparte",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "sorsabsaforensic si usa google maps \u2014 pero no la api pagada, y es un modulo aparte"
     },
@@ -4500,7 +4500,7 @@
       "source_location": "L324",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_el_proyecto_de_google_cloud_sorsabsaecosystem_confirmado_por_gina_calendar_de_agente24siete",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "el proyecto de google cloud (`sorsabsaecosystem`) \u2014 \u2705 confirmado por gina: calendar de agente24siete"
     },
@@ -4511,7 +4511,7 @@
       "source_location": "L372",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_tres_implementaciones_de_geo_independientes_una_de_ellas_duplicada_dos_veces",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "tres implementaciones de geo independientes, una de ellas duplicada dos veces"
     },
@@ -4522,7 +4522,7 @@
       "source_location": "L453",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_r2_qui\u00e9n_ya_migr\u00f3_y_qui\u00e9n_no",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "r2: quien ya migro y quien no"
     },
@@ -4533,7 +4533,7 @@
       "source_location": "L467",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_api_tokens_de_r2_activos_dados_por_gina_08_ago_2026",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "api tokens de r2 activos \u2014 \u2705 dados por gina 08-ago-2026"
     },
@@ -4544,7 +4544,7 @@
       "source_location": "L492",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_token_de_github_actions_acceso_de_lectura_para_este_asistente",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "token de github actions \u2014 acceso de lectura para este asistente"
     },
@@ -4555,7 +4555,7 @@
       "source_location": "L515",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_5_roturas_verificadas_el_2026_07_26",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "5. roturas verificadas el 2026-07-26"
     },
@@ -4566,7 +4566,7 @@
       "source_location": "L527",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_pendientes_conocidos",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "pendientes conocidos"
     },
@@ -4577,7 +4577,7 @@
       "source_location": "L541",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_6_lo_que_no_est\u00e1_verificado",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "6. lo que no esta verificado"
     },
@@ -4588,7 +4588,7 @@
       "source_location": "L562",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_6_bis_plano_de_dns_y_correo_verificado_2026_07_26",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "6-bis. plano de dns y correo \u2705 verificado 2026-07-26"
     },
@@ -4599,7 +4599,7 @@
       "source_location": "L580",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_qui\u00e9n_manda_qu\u00e9_correo_reescrito_09_ago_2026_con_los_dos_consumidores_reales_verificados",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "quien manda que correo \u2014 reescrito 09-ago-2026, con los dos consumidores reales verificados"
     },
@@ -4610,7 +4610,7 @@
       "source_location": "L633",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_limitaciones_y_minas",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "limitaciones y minas"
     },
@@ -4621,7 +4621,7 @@
       "source_location": "L649",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_hostinger",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "hostinger"
     },
@@ -4632,7 +4632,7 @@
       "source_location": "L657",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_7_decisi\u00f3n_de_arquitectura_2026_07_26",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "7. decision de arquitectura (2026-07-26)"
     },
@@ -4643,7 +4643,7 @@
       "source_location": "L673",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_verificado_2026_07_28_qu\u00e9_base_va_a_railway_y_qu\u00e9_se_queda_en_supabase",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "verificado 2026-07-28: que base va a railway y que se queda en supabase"
     },
@@ -4654,7 +4654,7 @@
       "source_location": "L745",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_objetivo_de_capacidad_3000_usuarios_no_por_el_momento",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "objetivo de capacidad: ~3000 usuarios (no \"por el momento\")"
     },
@@ -4665,7 +4665,7 @@
       "source_location": "L787",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_railway_y_no_un_vps_pelado",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "railway y no un vps pelado"
     },
@@ -4676,7 +4676,7 @@
       "source_location": "L807",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_se_elimina",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "se elimina"
     },
@@ -4687,7 +4687,7 @@
       "source_location": "L817",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_por_qu\u00e9_r2_y_dos_cubos",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "por que r2 y dos cubos"
     },
@@ -4698,7 +4698,7 @@
       "source_location": "L829",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_orden_de_migraci\u00f3n_por_urgencia",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "orden de migracion, por urgencia"
     },
@@ -4709,7 +4709,7 @@
       "source_location": "L843",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_riesgos_aceptados",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "riesgos aceptados"
     },
@@ -4720,7 +4720,7 @@
       "source_location": "L854",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_8_por_qu\u00e9_vercel_para_la_web_y_railway_para_el_resto",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "8. por que vercel para la web y railway para el resto"
     },
@@ -4731,7 +4731,7 @@
       "source_location": "L878",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_9_pendientes_en_orden",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "9. pendientes, en orden"
     },
@@ -4742,7 +4742,7 @@
       "source_location": "L880",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_cerrados_el_2026_07_30",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "cerrados el 2026-07-30"
     },
@@ -4753,7 +4753,7 @@
       "source_location": "L893",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_abiertos_en_orden",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "abiertos, en orden"
     },
@@ -4764,9 +4764,108 @@
       "source_location": "L928",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_reglas_que_ya_no_dependen_de_la_memoria",
-      "community": 3,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "reglas que ya no dependen de la memoria"
+    },
+    {
+      "label": "AUDITORIA-CONDOMANAGER.md",
+      "file_type": "document",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_auditoria_condomanager",
+      "community": 9,
+      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "norm_label": "auditoria-condomanager.md"
+    },
+    {
+      "label": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
+      "file_type": "document",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_auditoria_condomanager_auditor\u00eda_condomanager_como_aplicaci\u00f3n_m\u00e1s_all\u00e1_del_portero",
+      "community": 9,
+      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "norm_label": "auditoria \u2014 condomanager como aplicacion (mas alla del portero)"
+    },
+    {
+      "label": "\ud83d\udfe0 IMPORTANTE",
+      "file_type": "document",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "docs_auditoria_condomanager_importante",
+      "community": 9,
+      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "norm_label": "\ud83d\udfe0 importante"
+    },
+    {
+      "label": "\ud83d\udfe0-1 \u2014 \u2b1c Chequeo de rol/autorizaci\u00f3n reimplementado en al menos 13 rutas, sin fuente \u00fanica",
+      "file_type": "document",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "docs_auditoria_condomanager_1_chequeo_de_rol_autorizaci\u00f3n_reimplementado_en_al_menos_13_rutas_sin_fuente_\u00fanica",
+      "community": 9,
+      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "norm_label": "\ud83d\udfe0-1 \u2014 \u2b1c chequeo de rol/autorizacion reimplementado en al menos 13 rutas, sin fuente unica"
+    },
+    {
+      "label": "\ud83d\udfe0-2 \u2014 \u2b1c `resolverPostLogin`: un error de consulta se trata igual que \"usuario sin perfiles todav\u00eda\"",
+      "file_type": "document",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L108",
+      "_origin": "ast",
+      "id": "docs_auditoria_condomanager_2_resolverpostlogin_un_error_de_consulta_se_trata_igual_que_usuario_sin_perfiles_todav\u00eda",
+      "community": 9,
+      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "norm_label": "\ud83d\udfe0-2 \u2014 \u2b1c `resolverpostlogin`: un error de consulta se trata igual que \"usuario sin perfiles todavia\""
+    },
+    {
+      "label": "\ud83d\udd35 MENOR",
+      "file_type": "document",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L166",
+      "_origin": "ast",
+      "id": "docs_auditoria_condomanager_menor",
+      "community": 9,
+      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "norm_label": "\ud83d\udd35 menor"
+    },
+    {
+      "label": "\ud83d\udd35-1 \u2014 \u2b1c Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo",
+      "file_type": "document",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L168",
+      "_origin": "ast",
+      "id": "docs_auditoria_condomanager_1_artefactos_compilados_scratch_dist_js_commiteados_al_repo",
+      "community": 9,
+      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "norm_label": "\ud83d\udd35-1 \u2014 \u2b1c artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo"
+    },
+    {
+      "label": "Hallazgos ya cubiertos en AUDITORIA-PORTERO-SSO.md (no repetidos ac\u00e1)",
+      "file_type": "document",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L190",
+      "_origin": "ast",
+      "id": "docs_auditoria_condomanager_hallazgos_ya_cubiertos_en_auditoria_portero_sso_md_no_repetidos_ac\u00e1",
+      "community": 9,
+      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "norm_label": "hallazgos ya cubiertos en auditoria-portero-sso.md (no repetidos aca)"
+    },
+    {
+      "label": "Pr\u00f3ximo paso",
+      "file_type": "document",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L197",
+      "_origin": "ast",
+      "id": "docs_auditoria_condomanager_pr\u00f3ximo_paso",
+      "community": 9,
+      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "norm_label": "proximo paso"
     },
     {
       "label": "AUDITORIA-PORTERO-SSO.md",
@@ -4775,7 +4874,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "auditoria-portero-sso.md"
     },
@@ -4786,8 +4885,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_auditor\u00eda_portero_sso_del_ecosistema_sorsabsa",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "auditoria \u2014 portero sso del ecosistema sorsabsa"
     },
     {
@@ -4797,8 +4896,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_la_cadena_que_origin\u00f3_esta_auditor\u00eda_no_repetir",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "la cadena que origino esta auditoria (no repetir)"
     },
     {
@@ -4808,8 +4907,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_cr\u00edtico",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd34 critico"
     },
     {
@@ -4819,8 +4918,8 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_1_alta_de_usuarios_no_gobernada_el_pipeline_de_registro_de_cada_producto_no_sabe_que_identity_existe_resuelto_09_ago_2026",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd34-1 \u2014 \u2705 alta de usuarios no gobernada: el pipeline de registro de cada producto no sabe que identity existe \u2014 resuelto 09-ago-2026"
     },
     {
@@ -4830,8 +4929,8 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_5_agente24siete_nadie_puede_loguearse_la_federaci\u00f3n_con_identity_nunca_se_registr\u00f3_ah\u00ed_resuelto_09_ago_2026",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd34-5 \u2014 \u2705 agente24siete: nadie puede loguearse, la federacion con identity nunca se registro ahi \u2014 resuelto 09-ago-2026"
     },
     {
@@ -4841,8 +4940,8 @@
       "source_location": "L181",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_6_importante_marcado_por_gina_el_bypass_de_5_desconecta_el_\u00fanico_uso_real_de_pagos_suscripciones_los_d\u00edas_ganados_por_el_programa_de_referidos",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd34-6 \u2014 \u2b1c importante, marcado por gina: el bypass de \ud83d\udd34-5 desconecta el unico uso real de `pagos.suscripciones` \u2014 los dias ganados por el programa de referidos"
     },
     {
@@ -4852,8 +4951,8 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_2_3_fallback_que_trata_no_configurado_como_estado_v\u00e1lido_en_el_motor_de_cobros_pagos_api_key_rotada_y_verificada",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd34-2 / \ud83d\udd34-3 \u2014 \u2705 fallback que trata \"no configurado\" como estado valido, en el motor de cobros \u2014 pagos_api_key rotada y verificada"
     },
     {
@@ -4863,8 +4962,8 @@
       "source_location": "L289",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_4_funciona_por_casualidad_admitido_en_el_propio_c\u00f3digo_resuelto_08_ago_2026",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd34-4 \u2014 \u2705 \"funciona por casualidad\", admitido en el propio codigo \u2014 resuelto 08-ago-2026"
     },
     {
@@ -4874,8 +4973,8 @@
       "source_location": "L309",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_7_tres_pantallas_del_portero_perd\u00edan_el_resultado_de_un_enlace_de_correo_fragment_resuelto_09_ago_2026",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd34-7 \u2014 \u2705 tres pantallas del portero perdian el resultado de un enlace de correo (fragment) \u2014 resuelto 09-ago-2026"
     },
     {
@@ -4885,8 +4984,8 @@
       "source_location": "L376",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_8_el_send_email_hook_de_sorsabsa_identity_nunca_existi\u00f3_todo_correo_autom\u00e1tico_de_identity_llega_sin_marca",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd34-8 \u2014 \u2b1c el send email hook de `sorsabsa-identity` nunca existio \u2014 todo correo automatico de identity llega sin marca"
     },
     {
@@ -4896,8 +4995,8 @@
       "source_location": "L416",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_9_el_registro_de_admin_creaba_una_fila_de_residente_que_nadie_pidi\u00f3_resuelto_09_ago_2026",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd34-9 \u2014 \u2705 el registro de admin creaba una fila de residente que nadie pidio \u2014 resuelto 09-ago-2026"
     },
     {
@@ -4907,8 +5006,8 @@
       "source_location": "L487",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_10_confirmar_cuenta_daba_no_se_pudo_instalar_la_sesi\u00f3n_resuelto_09_ago_2026_completa_a_7",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd34-10 \u2014 \u2705 confirmar cuenta daba \"no se pudo instalar la sesion\" \u2014 resuelto 09-ago-2026, completa a \ud83d\udd34-7"
     },
     {
@@ -4918,8 +5017,8 @@
       "source_location": "L536",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_alto",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udfe0 alto"
     },
     {
@@ -4929,8 +5028,8 @@
       "source_location": "L538",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_1_excepci\u00f3n_hardcodeada_app_iot_en_auth_complete_resuelto_08_ago_2026",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udfe0-1 \u2014 \u2705 excepcion hardcodeada `app === 'iot'` en /auth/complete \u2014 resuelto 08-ago-2026"
     },
     {
@@ -4940,8 +5039,8 @@
       "source_location": "L552",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_2_bypass_de_entitlements_hardcodeado_por_nombre_de_producto",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udfe0-2 \u2014 \u2b1c bypass de entitlements hardcodeado por nombre de producto"
     },
     {
@@ -4951,8 +5050,8 @@
       "source_location": "L571",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_3_autorizaci\u00f3n_duplicada_en_dos_archivos_de_iot_corregido_09_ago_2026",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udfe0-3 \u2014 \u2705 autorizacion duplicada en dos archivos de iot \u2014 corregido 09-ago-2026"
     },
     {
@@ -4962,8 +5061,8 @@
       "source_location": "L582",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_4_identidades_por_email_hardcodea_dos_emails_en_c\u00f3digo_fuente",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udfe0-4 \u2014 \u2b1c `identidades_por_email` hardcodea dos emails en codigo fuente"
     },
     {
@@ -4973,8 +5072,8 @@
       "source_location": "L596",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_5_condomanager_ten\u00eda_dos_logouts_locales_ambos_corregidos",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udfe0-5 \u2014 \u2705 condomanager tenia dos logouts locales \u2014 ambos corregidos"
     },
     {
@@ -4984,8 +5083,8 @@
       "source_location": "L613",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_medio",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udfe1 medio"
     },
     {
@@ -4995,8 +5094,8 @@
       "source_location": "L615",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_1_eliminaci\u00f3n_manual_de_cuentas_reales_v\u00eda_sql_directo_reconocido_no_repetir",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udfe1-1 \u2014 \u2705 eliminacion manual de cuentas reales via sql directo \u2014 reconocido, no repetir"
     },
     {
@@ -5006,8 +5105,8 @@
       "source_location": "L623",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_2_profile_choices_con_nombres_reales_hardcodeados_en_editor_py",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udfe1-2 \u2014 \u2b1c `profile_choices` con nombres reales hardcodeados en editor.py"
     },
     {
@@ -5017,8 +5116,8 @@
       "source_location": "L627",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_3_reset_dual_via_identity_via_producto_normaliza_el_problema_en_vez_de_resolverlo",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udfe1-3 \u2014 \u2b1c reset dual (via=identity/via=producto) normaliza el problema en vez de resolverlo"
     },
     {
@@ -5028,8 +5127,8 @@
       "source_location": "L635",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_bajo",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd35 bajo"
     },
     {
@@ -5039,8 +5138,8 @@
       "source_location": "L637",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_1_iot_redirecturl_es_una_url_cruda_de_railway_no_dominio_propio",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd35-1 \u2014 \u2b1c `iot.redirecturl` es una url cruda de railway, no dominio propio"
     },
     {
@@ -5050,8 +5149,8 @@
       "source_location": "L640",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_2_fallback_basado_en_el_texto_de_un_error_de_un_proveedor_externo",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd35-2 \u2014 \u2b1c fallback basado en el texto de un error de un proveedor externo"
     },
     {
@@ -5061,8 +5160,8 @@
       "source_location": "L644",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_3_url_del_sso_escrita_a_mano_y_repetida_4_veces_en_condomanager_resuelto_09_ago_2026",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd35-3 \u2014 \u2705 url del sso escrita a mano y repetida 4 veces en condomanager \u2014 resuelto 09-ago-2026"
     },
     {
@@ -5072,8 +5171,8 @@
       "source_location": "L655",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_4_traducci\u00f3n_de_errores_de_supabase_duplicada_entre_repos_a_prop\u00f3sito_con_seguimiento",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd35-4 \u2014 \u2b1c traduccion de errores de supabase duplicada entre repos, a proposito, con seguimiento"
     },
     {
@@ -5083,8 +5182,8 @@
       "source_location": "L671",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_5_importar_residentes_insertaba_fila_por_fila_inviable_a_la_escala_real_de_punta_blanca_resuelto_09_ago_2026",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "\ud83d\udd35-5 \u2014 \u2705 importar residentes insertaba fila por fila \u2014 inviable a la escala real de punta blanca \u2014 resuelto 09-ago-2026"
     },
     {
@@ -5094,8 +5193,8 @@
       "source_location": "L698",
       "_origin": "ast",
       "id": "docs_auditoria_portero_sso_pr\u00f3ximo_paso",
-      "community": 4,
-      "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
+      "community": 7,
+      "community_name": "\ud83d\udd34 CR\u00cdTICO",
       "norm_label": "proximo paso"
     },
     {
@@ -5105,7 +5204,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_color_y_contraste",
-      "community": 15,
+      "community": 18,
       "community_name": "Color de marca y contraste",
       "norm_label": "color-y-contraste.md"
     },
@@ -5116,7 +5215,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_color_y_contraste_color_de_marca_y_contraste",
-      "community": 15,
+      "community": 18,
       "community_name": "Color de marca y contraste",
       "norm_label": "color de marca y contraste"
     },
@@ -5127,7 +5226,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "docs_color_y_contraste_la_regla",
-      "community": 15,
+      "community": 18,
       "community_name": "Color de marca y contraste",
       "norm_label": "la regla"
     },
@@ -5138,7 +5237,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "docs_color_y_contraste_los_cuatro_tokens",
-      "community": 15,
+      "community": 18,
       "community_name": "Color de marca y contraste",
       "norm_label": "los cuatro tokens"
     },
@@ -5149,7 +5248,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "docs_color_y_contraste_cu\u00e1l_usar",
-      "community": 15,
+      "community": 18,
       "community_name": "Color de marca y contraste",
       "norm_label": "cual usar"
     },
@@ -5160,7 +5259,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "docs_color_y_contraste_componentes_que_ya_lo_aplican",
-      "community": 15,
+      "community": 18,
       "community_name": "Color de marca y contraste",
       "norm_label": "componentes que ya lo aplican"
     },
@@ -5171,7 +5270,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "docs_color_y_contraste_c\u00f3mo_comprobarlo",
-      "community": 15,
+      "community": 18,
       "community_name": "Color de marca y contraste",
       "norm_label": "como comprobarlo"
     },
@@ -5182,7 +5281,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "estandar-desarrollo.md"
     },
@@ -5193,7 +5292,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_est\u00e1ndar_de_desarrollo_no_parchear_la_arquitectura",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "estandar de desarrollo \u2014 no parchear la arquitectura"
     },
@@ -5204,7 +5303,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_principio_fundamental",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "principio fundamental"
     },
@@ -5215,7 +5314,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_antes_de_cada_fix_responder_internamente",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "antes de cada fix \u2014 responder internamente"
     },
@@ -5226,7 +5325,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_se\u00f1ales_de_alarma_detenerse_al_estar_por_escribir",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "senales de alarma \u2014 detenerse al estar por escribir"
     },
@@ -5237,7 +5336,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_prohibido_compensar_defectos_de_c\u00f3digo_modificando_datos_reales",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "prohibido compensar defectos de codigo modificando datos reales"
     },
@@ -5248,7 +5347,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_funciona_no_es_lo_mismo_que_est\u00e1_bien_dise\u00f1ado",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "\"funciona\" no es lo mismo que \"esta bien disenado\""
     },
@@ -5259,7 +5358,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_responsabilidad_del_componente",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "responsabilidad del componente"
     },
@@ -5270,7 +5369,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_fuente_\u00fanica_de_verdad",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "fuente unica de verdad"
     },
@@ -5281,7 +5380,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_qu\u00e9_debe_presentarse_antes_de_tocar_c\u00f3digo",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "que debe presentarse antes de tocar codigo"
     },
@@ -5292,7 +5391,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_criterio_de_aceptaci\u00f3n",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "criterio de aceptacion"
     },
@@ -5303,7 +5402,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_regla_final",
-      "community": 4,
+      "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "regla final"
     },
@@ -5314,7 +5413,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "pendientes-ecosistema.md"
     },
@@ -5325,7 +5424,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "pendientes del ecosistema sorsabsa"
     },
@@ -5336,7 +5435,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_principio_que_gobierna_regla_dura",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "principio que gobierna (regla dura)"
     },
@@ -5347,7 +5446,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_1_resuelto_separar_auth_a_su_propio_proyecto_v\u00eda_oidc",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "1. \u2705 resuelto \u2014 separar auth a su propio proyecto (via oidc)"
     },
@@ -5358,7 +5457,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_2_hecho_justired_al_sso_central",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "2. \u2705 hecho \u2014 justired al sso central"
     },
@@ -5369,7 +5468,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_3_hecho_cutover_de_pagos_fuera_de_vercel",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "3. \u2705 hecho \u2014 cutover de pagos (fuera de vercel)"
     },
@@ -5380,7 +5479,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_4_hecho_notificaciones_sorsabsa_railway",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "4. \u2705 hecho \u2014 notificaciones-sorsabsa \u2192 railway"
     },
@@ -5391,7 +5490,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_5_hecho_rls_activado_en_las_4_tablas_expuestas_seguridad",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "5. \u2705 hecho \u2014 rls activado en las 4 tablas expuestas (seguridad)"
     },
@@ -5402,7 +5501,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_6_hecho_proyecto_supabase_hu\u00e9rfano_borrado",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "6. \u2705 hecho \u2014 proyecto supabase huerfano borrado"
     },
@@ -5413,7 +5512,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_7_sorsabsaforensic_fase_0_antes_de_railway",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "7. sorsabsaforensic \u2192 fase 0 antes de railway"
     },
@@ -5424,7 +5523,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_8_probar_condomanager_end_to_end_punta_blanca_siguiente_08_ago_2026",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "8. probar condomanager end-to-end (punta blanca)  \ud83d\udd34 siguiente \u2014 08-ago-2026"
     },
@@ -5435,7 +5534,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_9_hecho_auditor\u00eda_de_reuso_de_sistemas_compartidos",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "9. \u2705 hecho \u2014 auditoria de reuso de sistemas compartidos"
     },
@@ -5446,7 +5545,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_10_login_social_google_cerrado_facebook_funciona_revisi\u00f3n_de_meta_aprobada",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "10. \u2705 login social: google \u2705 cerrado \u2014 facebook \u2705 funciona, revision de meta aprobada"
     },
@@ -5457,7 +5556,7 @@
       "source_location": "L305",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_11_hecho_agente24siete_login_real_en_portal_cascar\u00f3n_viejo_borrado",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "11. \u2705 hecho \u2014 agente24siete: login real en /portal + cascaron viejo borrado"
     },
@@ -5468,7 +5567,7 @@
       "source_location": "L327",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_12_r2_desplegado_y_verificado_falta_el_clic_real_de_un_residente",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "12. \ud83d\udfe1 r2 desplegado y verificado \u2014 falta el clic real de un residente"
     },
@@ -5479,7 +5578,7 @@
       "source_location": "L342",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_13_hecho_geo_sorsabsa_service_desplegado_verificado_y_consumido_por_los_dos_periciales",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "13. \u2705 hecho \u2014 geo-sorsabsa/service desplegado, verificado y consumido por los dos periciales"
     },
@@ -5490,7 +5589,7 @@
       "source_location": "L401",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_14_hecho_iot_consume_el_portero_central_auth_sorsabsa",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "14. \u2705 hecho \u2014 iot consume el portero central (auth-sorsabsa)"
     },
@@ -5501,7 +5600,7 @@
       "source_location": "L573",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_15_whatsapp_de_agente24siete_todas_las_cuentas_del_portafolio_baneadas_dos_pistas_separadas",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "15. \ud83d\udd34 whatsapp de agente24siete: todas las cuentas del portafolio, baneadas \u2014 dos pistas separadas"
     },
@@ -5512,7 +5611,7 @@
       "source_location": "L660",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_16_estandarizar_pagos_suscripciones_referidos_en_todos_los_productos_justired_sin_nada_y_una_idea_de_cr\u00e9ditos_de_ia_todav\u00eda_sin_desarrollar",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "16. \ud83d\udfe1 estandarizar pagos/suscripciones/referidos en todos los productos \u2014 justired sin nada, y una idea de \"creditos de ia\" todavia sin desarrollar"
     },
@@ -5523,7 +5622,7 @@
       "source_location": "L796",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_17_gobernanza_de_correo_masivo_por_tenant_activaci\u00f3n_de_residentes_al\u00edcuotas_dise\u00f1o_acordado_infraestructura_sin_construir",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "17. \ud83d\udfe1 gobernanza de correo masivo por tenant (activacion de residentes, alicuotas) \u2014 diseno acordado, infraestructura sin construir"
     },
@@ -5534,7 +5633,7 @@
       "source_location": "L854",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_hecho_para_no_re_hacer",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "hecho (para no re-hacer)"
     },
@@ -5545,7 +5644,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_plan_desoldado",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "plan-desoldado.md"
     },
@@ -5556,7 +5655,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_plan_desoldado_plan_de_desoldado_del_ecosistema_sorsabsa",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "plan de desoldado del ecosistema sorsabsa"
     },
@@ -5567,7 +5666,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "docs_plan_desoldado_punto_de_partida_medido_el_31_jul_2026_no_recordado",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "punto de partida \u2014 medido el 31-jul-2026, no recordado"
     },
@@ -5578,7 +5677,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "docs_plan_desoldado_paso_0_sacar_el_plano_bloqueante_va_primero",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "paso 0 \u2014 sacar el plano \u26d4 bloqueante, va primero"
     },
@@ -5589,7 +5688,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "docs_plan_desoldado_estado_hecho_el_07_ago_2026_con_un_pendiente_real",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "estado \u2014 hecho el 07-ago-2026, con un pendiente real"
     },
@@ -5600,7 +5699,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "docs_plan_desoldado_cerrado_el_07_ago_2026_probado_en_proyecto_vac\u00edo_real_con_dos_bugs_reales_encontrados_y_arreglados",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "\u2705 cerrado el 07-ago-2026 \u2014 probado en proyecto vacio real, con dos bugs reales encontrados y arreglados"
     },
@@ -5611,7 +5710,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "docs_plan_desoldado_paso_1_identity_como_emisor_oidc",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "paso 1 \u2014 identity como emisor oidc"
     },
@@ -5622,7 +5721,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "docs_plan_desoldado_cerrado_el_07_ago_2026_login_oidc_real_de_punta_a_punta_token_verificado",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "\u2705 cerrado el 07-ago-2026 \u2014 login oidc real, de punta a punta, token verificado"
     },
@@ -5633,7 +5732,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "docs_plan_desoldado_paso_2_el_producto_conf\u00eda_en_identity",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "paso 2 \u2014 el producto confia en identity"
     },
@@ -5644,7 +5743,7 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "docs_plan_desoldado_estado_07_ago_2026_la_federaci\u00f3n_funciona_el_criterio_de_hecho_hay_que_leerlo_con_matices",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "estado \u2014 07-ago-2026: la federacion funciona; el criterio de \"hecho\" hay que leerlo con matices"
     },
@@ -5655,7 +5754,7 @@
       "source_location": "L257",
       "_origin": "ast",
       "id": "docs_plan_desoldado_auth_sorsabsa_reapuntado_commit_212f8b9_07_ago_2026",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "auth-sorsabsa reapuntado \u2014 commit `212f8b9`, 07-ago-2026"
     },
@@ -5666,7 +5765,7 @@
       "source_location": "L319",
       "_origin": "ast",
       "id": "docs_plan_desoldado_paso_3_cada_producto_a_su_propio_proyecto",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "paso 3 \u2014 cada producto a su propio proyecto"
     },
@@ -5677,7 +5776,7 @@
       "source_location": "L372",
       "_origin": "ast",
       "id": "docs_plan_desoldado_lo_que_no_se_hace_decidido_con_raz\u00f3n_escrita",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "lo que no se hace (decidido, con razon escrita)"
     },
@@ -5688,7 +5787,7 @@
       "source_location": "L385",
       "_origin": "ast",
       "id": "docs_plan_desoldado_pendiente_aparte_el_escaneo_de_justired_fall\u00f3_el_31_jul",
-      "community": 7,
+      "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "pendiente aparte \u2014 el escaneo de justired fallo el 31-jul"
     },
@@ -5699,7 +5798,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_graphify_ci",
-      "community": 14,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "graphify-ci.md"
     },
@@ -5710,7 +5809,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_graphify_ci_grafo_de_conocimiento_graphify_generado_por_ci",
-      "community": 14,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "grafo de conocimiento (graphify) generado por ci"
     },
@@ -5721,7 +5820,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "docs_graphify_ci_qu\u00e9_es",
-      "community": 14,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "que es"
     },
@@ -5732,7 +5831,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "docs_graphify_ci_por_qu\u00e9_ci_y_no_un_hook_local",
-      "community": 14,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "por que ci y no un hook local"
     },
@@ -5743,7 +5842,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "docs_graphify_ci_c\u00f3mo_funciona",
-      "community": 14,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "como funciona"
     },
@@ -5754,7 +5853,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "docs_graphify_ci_convenci\u00f3n_de_gitignore",
-      "community": 14,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "convencion de `.gitignore`"
     },
@@ -5765,7 +5864,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "docs_graphify_ci_estado_por_repo",
-      "community": 14,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "estado por repo"
     },
@@ -5776,7 +5875,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "docs_graphify_ci_c\u00f3mo_ver_el_grafo",
-      "community": 14,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "como ver el grafo"
     },
@@ -5787,7 +5886,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "docs_graphify_ci_a\u00f1adir_pages_a_un_repo_privado_opcional_requiere_github_pro",
-      "community": 14,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "anadir pages a un repo privado (opcional, requiere github pro)"
     },
@@ -5798,7 +5897,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "docs_graphify_ci_bugs_resueltos_durante_el_piloto_lecciones",
-      "community": 14,
+      "community": 16,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "bugs resueltos durante el piloto (lecciones)"
     }
@@ -13319,6 +13418,116 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_auditoria_condomanager",
+      "target": "docs_auditoria_condomanager_auditor\u00eda_condomanager_como_aplicaci\u00f3n_m\u00e1s_all\u00e1_del_portero",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_auditoria_condomanager",
+      "target": "docs_auditoria_portero_sso",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_auditoria_condomanager",
+      "target": "docs_estandar_desarrollo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L190",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_auditoria_condomanager_auditor\u00eda_condomanager_como_aplicaci\u00f3n_m\u00e1s_all\u00e1_del_portero",
+      "target": "docs_auditoria_condomanager_hallazgos_ya_cubiertos_en_auditoria_portero_sso_md_no_repetidos_ac\u00e1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_auditoria_condomanager_auditor\u00eda_condomanager_como_aplicaci\u00f3n_m\u00e1s_all\u00e1_del_portero",
+      "target": "docs_auditoria_condomanager_importante",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L166",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_auditoria_condomanager_auditor\u00eda_condomanager_como_aplicaci\u00f3n_m\u00e1s_all\u00e1_del_portero",
+      "target": "docs_auditoria_condomanager_menor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L197",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_auditoria_condomanager_auditor\u00eda_condomanager_como_aplicaci\u00f3n_m\u00e1s_all\u00e1_del_portero",
+      "target": "docs_auditoria_condomanager_pr\u00f3ximo_paso",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_auditoria_condomanager_importante",
+      "target": "docs_auditoria_condomanager_1_chequeo_de_rol_autorizaci\u00f3n_reimplementado_en_al_menos_13_rutas_sin_fuente_\u00fanica",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L108",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_auditoria_condomanager_importante",
+      "target": "docs_auditoria_condomanager_2_resolverpostlogin_un_error_de_consulta_se_trata_igual_que_usuario_sin_perfiles_todav\u00eda",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L168",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_auditoria_condomanager_menor",
+      "target": "docs_auditoria_condomanager_1_artefactos_compilados_scratch_dist_js_commiteados_al_repo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -14308,5 +14517,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6e545b74a77725efb16a05e77e0a10aaadf3c69c"
+  "built_at_commit": "a5268a5cba33f69dad3e700ddb6b5adb12150cbe"
 }
