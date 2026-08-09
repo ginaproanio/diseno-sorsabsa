@@ -36,7 +36,7 @@ problema real, con motivo).
 
 ## 🟠 IMPORTANTE
 
-### 🟠-1 — ⬜ Chequeo de rol/autorización reimplementado en al menos 13 rutas, sin fuente única
+### 🟠-1 — ✅ Chequeo de rol/autorización reimplementado en al menos 13 rutas, sin fuente única — RESUELTO 09-ago-2026
 
 **1. Síntoma:** el mismo bloque — `auth.getUser()` → `perfiles.select("rol,
 condominio_id").eq("user_id", user.id)` → comparar `rol` contra una lista
@@ -102,6 +102,22 @@ vez que se corrija esta regla (ej. agregar un chequeo de suscripción activa
 al gate), hay que acordarse de tocar 13 archivos, y basta con olvidar uno
 para que quede una ruta con una regla de autorización distinta al resto —
 exactamente el patrón que causó la cadena de 7 parches de IOT.
+
+**Resuelto 09-ago-2026** (`condomanager@f60960d`): `lib/auth/requireRole.ts`
+— `getPerfilAutenticado()`, `getPerfilOpcional()`, `requireRole(roles,
+{mensajeError?})`. 11 rutas migradas a `requireRole()` (las 13 originales
+menos `reservas/cancelar`, que no tiene un solo rol permitido — admin O
+residente dueño — y usa `getPerfilAutenticado()` directo; y menos
+`reservas/disponibilidad`, dejada sin tocar a propósito porque su chequeo
+de perfil es opcional, no el mismo patrón de gate). Mensajes 403
+específicos de cada ruta preservados vía `mensajeError`; los 401
+(3 variantes del mismo significado, sin razón funcional) se normalizaron a
+uno solo. El tipado nuevo (`condominio_id: string | null` en vez de `any`
+implícito) sacó a la luz que `reservas/aprobar`, `rechazar` y
+`mantenimiento` pasaban `perfil.condominio_id` a `moduloActivo()` sin
+verificar que no fuera null dentro del bloque `admin_condominio` — se
+agregó un guard explícito fail-closed en los 3 como parte de este mismo
+fix. `tsc --noEmit` y `eslint` limpios.
 
 ---
 
@@ -196,8 +212,10 @@ condomanager (🔵-4), y todo lo de autenticación/federación SSO viven en
 
 ## Próximo paso
 
-Presentado el análisis de 9 puntos para 🟠-1 y 🟠-2 — **pendiente
-decisión de Gina sobre si proceder con el fix ahora** (ambos son de bajo
-riesgo de regresión, pero 🟠-1 toca 13 archivos) o seguir ampliando la
-auditoría primero (pagos/facturación, RLS, crons — todavía no cubiertos).
-🔵-1 es limpieza, se puede hacer en cualquier momento sin discusión.
+🟠-1 cerrado y verificado (09-ago-2026, `condomanager@f60960d`, typecheck +
+eslint limpios — no probado todavía con las 3 sesiones reales descritas en
+su punto 9, recomendado antes de dar por completamente cerrado). Abiertos:
+🟠-2 (fallback peligroso en `resolverPostLogin`, fix propuesto de 2 líneas,
+bajo riesgo) y 🔵-1 (limpieza de `scratch/dist`, sin discusión). Pendiente
+además seguir ampliando la auditoría: pagos/facturación, RLS, crons —
+todavía no cubiertos en esta primera pasada.
