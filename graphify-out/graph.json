@@ -4813,21 +4813,21 @@
       "norm_label": "\ud83d\udfe0-1 \u2014 \u2705 chequeo de rol/autorizacion reimplementado en al menos 13 rutas, sin fuente unica \u2014 resuelto 09-ago-2026"
     },
     {
-      "label": "\ud83d\udfe0-2 \u2014 \u2b1c `resolverPostLogin`: un error de consulta se trata igual que \"usuario sin perfiles todav\u00eda\"",
+      "label": "\ud83d\udfe0-2 \u2014 \u2705 `resolverPostLogin`: un error de consulta se trata igual que \"usuario sin perfiles todav\u00eda\" \u2014 RESUELTO 09-ago-2026",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
       "source_location": "L124",
       "_origin": "ast",
-      "id": "docs_auditoria_condomanager_2_resolverpostlogin_un_error_de_consulta_se_trata_igual_que_usuario_sin_perfiles_todav\u00eda",
+      "id": "docs_auditoria_condomanager_2_resolverpostlogin_un_error_de_consulta_se_trata_igual_que_usuario_sin_perfiles_todav\u00eda_resuelto_09_ago_2026",
       "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
-      "norm_label": "\ud83d\udfe0-2 \u2014 \u2b1c `resolverpostlogin`: un error de consulta se trata igual que \"usuario sin perfiles todavia\""
+      "norm_label": "\ud83d\udfe0-2 \u2014 \u2705 `resolverpostlogin`: un error de consulta se trata igual que \"usuario sin perfiles todavia\" \u2014 resuelto 09-ago-2026"
     },
     {
       "label": "\ud83d\udd35 MENOR",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L182",
+      "source_location": "L192",
       "_origin": "ast",
       "id": "docs_auditoria_condomanager_menor",
       "community": 9,
@@ -4838,7 +4838,7 @@
       "label": "\ud83d\udd35-1 \u2014 \u2b1c Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L184",
+      "source_location": "L194",
       "_origin": "ast",
       "id": "docs_auditoria_condomanager_1_artefactos_compilados_scratch_dist_js_commiteados_al_repo",
       "community": 9,
@@ -4849,7 +4849,7 @@
       "label": "Hallazgos ya cubiertos en AUDITORIA-PORTERO-SSO.md (no repetidos ac\u00e1)",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L206",
+      "source_location": "L216",
       "_origin": "ast",
       "id": "docs_auditoria_condomanager_hallazgos_ya_cubiertos_en_auditoria_portero_sso_md_no_repetidos_ac\u00e1",
       "community": 9,
@@ -4860,7 +4860,7 @@
       "label": "Pr\u00f3ximo paso",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L213",
+      "source_location": "L223",
       "_origin": "ast",
       "id": "docs_auditoria_condomanager_pr\u00f3ximo_paso",
       "community": 9,
@@ -13452,7 +13452,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L206",
+      "source_location": "L216",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_condomanager_auditor\u00eda_condomanager_como_aplicaci\u00f3n_m\u00e1s_all\u00e1_del_portero",
@@ -13474,7 +13474,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L182",
+      "source_location": "L192",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_condomanager_auditor\u00eda_condomanager_como_aplicaci\u00f3n_m\u00e1s_all\u00e1_del_portero",
@@ -13485,7 +13485,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L213",
+      "source_location": "L223",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_condomanager_auditor\u00eda_condomanager_como_aplicaci\u00f3n_m\u00e1s_all\u00e1_del_portero",
@@ -13511,14 +13511,14 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_condomanager_importante",
-      "target": "docs_auditoria_condomanager_2_resolverpostlogin_un_error_de_consulta_se_trata_igual_que_usuario_sin_perfiles_todav\u00eda",
+      "target": "docs_auditoria_condomanager_2_resolverpostlogin_un_error_de_consulta_se_trata_igual_que_usuario_sin_perfiles_todav\u00eda_resuelto_09_ago_2026",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L184",
+      "source_location": "L194",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_condomanager_menor",
@@ -14517,5 +14517,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "bbe7fe14bfec86f30d998a426401c667a884e71d"
+  "built_at_commit": "58351c0d7080f5b9c38b664276bfc5abf48b7c14"
 }

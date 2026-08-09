@@ -1,7 +1,7 @@
 # Graph Report - diseno-sorsabsa  (2026-08-09)
 
 ## Corpus Check
-- 71 files · ~47,282 words
+- 71 files · ~47,401 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `bbe7fe14`
+- Built from commit: `58351c0d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -110,7 +110,7 @@ Nodes (22): ../src/**/*.test.ts, ../src/**/*.test.tsx, vite.config.ts, compilerO
 
 ### Community 9 - "Estándar de desarrollo — no parchear la arquitectura"
 Cohesion: 0.10
-Nodes (19): 🔵-1 — ⬜ Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo, 🟠-1 — ✅ Chequeo de rol/autorización reimplementado en al menos 13 rutas, sin fuente única — RESUELTO 09-ago-2026, 🟠-2 — ⬜ `resolverPostLogin`: un error de consulta se trata igual que "usuario sin perfiles todavía", Auditoría — CondoManager como aplicación (más allá del portero), Hallazgos ya cubiertos en AUDITORIA-PORTERO-SSO.md (no repetidos acá), 🟠 IMPORTANTE, 🔵 MENOR, Próximo paso (+11 more)
+Nodes (19): 🔵-1 — ⬜ Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo, 🟠-1 — ✅ Chequeo de rol/autorización reimplementado en al menos 13 rutas, sin fuente única — RESUELTO 09-ago-2026, 🟠-2 — ✅ `resolverPostLogin`: un error de consulta se trata igual que "usuario sin perfiles todavía" — RESUELTO 09-ago-2026, Auditoría — CondoManager como aplicación (más allá del portero), Hallazgos ya cubiertos en AUDITORIA-PORTERO-SSO.md (no repetidos acá), 🟠 IMPORTANTE, 🔵 MENOR, Próximo paso (+11 more)
 
 ### Community 10 - "compilerOptions"
 Cohesion: 0.09
