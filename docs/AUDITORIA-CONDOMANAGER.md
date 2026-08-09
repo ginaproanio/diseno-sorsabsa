@@ -413,3 +413,32 @@ primaria en `user_id`, una fila por login para siempre), es que no —
 afecta ~120 personas reales del censo de Punta Blanca todavía sin subir.
 No es un fix de una ruta: es un proyecto de varias fases, con su propio
 documento — [PLAN-MULTI-CONDOMINIO.md](./PLAN-MULTI-CONDOMINIO.md).
+
+---
+
+### 🔵-2 — ✅ Unidad fantasma auto-creada en cada registro de admin — RESUELTO 09-ago-2026
+
+**Síntoma:** Gina, probando la asignación de residentes, encontró
+"Unidad 1" ya creada en un condominio recién registrado, sin haber
+importado ni creado ninguna unidad. Su objeción, textual: *"si manejas
+2000 unidades y te olvidas de asignarla te quedan unidades fantasma, no
+le veo el sentido de crear una unidad."*
+
+**Causa raíz (rastreada en git history, no asumida):** este paso nació
+(numerado "5" originalmente) inmediatamente después de crear al
+admin_condominio **como residente también** — el propósito real era
+darle una unidad donde "vivir". Hoy mismo, más temprano en esta sesión,
+se corrigió 🔴-9 (`AUDITORIA-PORTERO-SSO.md`) y se eliminó que el admin
+naciera como residente — el paso de crear la unidad se quedó, renumerado
+a "3", sin nada que lo necesitara. Punto 15 del estándar
+(`ESTANDAR-DESARROLLO.md`: "¿qué código existente debería eliminarse
+como consecuencia de esta solución?") que no se aplicó en su momento.
+
+**Fix:** `condomanager@ee036e6` — eliminado el insert a `unidades` y su
+bloque de rollback en `registro-admin/route.ts`; renumerados los pasos
+restantes. `docs/NOTIFICACIONES-CORREO.md` también describía el flujo
+viejo (admin creado como residente) — corregido de paso. La unidad
+fantasma que ya existía en el condominio de prueba de Gina se borró
+directo en la base (no hacía falta rehacer el registro).
+
+typecheck + eslint limpios.
