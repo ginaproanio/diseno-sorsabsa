@@ -30,9 +30,14 @@ pudo — Supabase asigna el `kid` al importar una llave, no acepta uno propio, y
 la validación es estricta por kid: dos proyectos con la misma llave quedan
 con kids distintos y no validan entre sí. Third-Party Auth tampoco sirve
 (solo Firebase/Clerk/WorkOS/Auth0/Cognito, sin OIDC genérico). Confirmado con
-Supabase soporte el 31-jul: la respuesta y el plan de bloques quedaron en
-[`supabase-ticket-jwt-signing-keys.md`](supabase-ticket-jwt-signing-keys.md).
-Nada se rompió en el proceso — login en vivo intacto durante todo el intento.
+Supabase soporte el 31-jul (Gabriel Claudino): el camino soportado es
+identity como **issuer OIDC** y cada producto como proveedor `custom:`
+confiando en él — sin compartir llave privada ni `kid`. Ese es el plan que
+`PLAN-DESOLDADO.md` ejecuta desde su Paso 1, ya cerrado. (El ticket
+detallado —la carta, los timestamps del 409— se borró 09-ago-2026: la
+decisión que importaba ya vive implementada, no hacía falta conservar el
+expediente.) Nada se rompió en el proceso — login en vivo intacto durante
+todo el intento.
 
 ## 2. ✅ HECHO — JustiRed al SSO central
 

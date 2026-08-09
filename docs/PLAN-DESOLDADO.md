@@ -1,8 +1,13 @@
 # Plan de desoldado del ecosistema SORSABSA
 
-Escrito el 31-jul-2026, después de la respuesta de Supabase
-([`supabase-ticket-jwt-signing-keys.md`](supabase-ticket-jwt-signing-keys.md)).
-Este documento dice **en qué orden** y **cuándo se considera hecho** cada paso.
+Escrito el 31-jul-2026, después de la respuesta de Supabase (soporte,
+Gabriel Claudino, sobre el ticket de JWT signing keys congeladas en
+`twkuidnjwhopbjnrhnxp`): un proyecto Supabase no puede compartir llave/`kid`
+con otro, pero SÍ puede confiar en otro como **issuer OIDC** — el camino que
+este documento ejecuta. (El expediente detallado del ticket se borró
+09-ago-2026, resuelto — la decisión ya vive implementada en los pasos de
+abajo.) Este documento dice **en qué orden** y **cuándo se considera hecho**
+cada paso.
 
 > **Principio que gobierna todo lo de abajo:** nada se prueba en el proyecto que
 > sirve el login. Todo lo verificable se prueba primero contra
