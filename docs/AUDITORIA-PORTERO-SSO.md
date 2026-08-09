@@ -718,3 +718,12 @@ fallback en sí. Pendiente aparte, bajo impacto: el cron
 `limpiar-no-confirmados` de CondoManager solo mira el proyecto de
 producto — desde el fix de 🔴-1 no va a encontrar los registros nuevos sin
 confirmar (viven en identity).
+
+
+**09-ago-2026, ampliación de alcance:** Gina pidió auditar CondoManager
+como aplicación, no solo el portero. Esos hallazgos (duplicación de
+chequeos de rol en 13 rutas, fallback peligroso en `resolverPostLogin`,
+artefactos compilados commiteados) viven en
+[AUDITORIA-CONDOMANAGER.md](./AUDITORIA-CONDOMANAGER.md) — documento
+separado a propósito, para no mezclar identidad/federación con calidad del
+producto.
