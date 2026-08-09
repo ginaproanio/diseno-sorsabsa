@@ -5036,7 +5036,7 @@
       "label": "15. \ud83d\udd34 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas \u2014 dos pistas separadas",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L524",
+      "source_location": "L551",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_15_whatsapp_de_agente24siete_todas_las_cuentas_del_portafolio_baneadas_dos_pistas_separadas",
       "community": 5,
@@ -5047,7 +5047,7 @@
       "label": "Hecho (para no re-hacer)",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L613",
+      "source_location": "L640",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_hecho_para_no_re_hacer",
       "community": 5,
@@ -13089,7 +13089,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L524",
+      "source_location": "L551",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
@@ -13199,7 +13199,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L613",
+      "source_location": "L640",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
@@ -13560,5 +13560,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "d9487a7a65ac11594f43d19ed08575f2025ea957"
+  "built_at_commit": "0ba91568325fad28f5f11dddb97d842a54b95716"
 }
