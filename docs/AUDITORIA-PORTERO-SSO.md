@@ -52,6 +52,36 @@ La causa raíz es 🔴-1.
 
 ## 🔴 CRÍTICO
 
+### 🔴-5 — ⬜ agente24siete: nadie puede loguearse, la federación con identity nunca se registró ahí
+
+- **Encontrado:** 09-ago-2026, al intentar armar una cuenta de prueba para
+  la revisión de Meta (Sorsabsa Asistente / agente24siete).
+- **Evidencia real:** `auth.sso_providers` vacío en el proyecto
+  `nwcqaginlnzjlkgwifas` (agente24siete). Un solo usuario en toda la base
+  (`puntablanca.ecuador@hotmail.com`, `provider: email`, último login
+  27-jul-2026 — ANTES de este esquema). `lib/identity.ts` ya documentaba
+  esto: *"Hoy solo condomanager lo tiene dado de alta... "* — nunca
+  mencionó a agente24siete. `app/admin/LoginGate.tsx` y
+  `app/portal/LoginGate.tsx` mandan directo a `auth.sorsabsa.com`, sin
+  formulario propio de respaldo.
+- **Impacto:** ahora mismo, **nadie nuevo puede loguearse en agente24siete**
+  — ni un cliente real, ni un revisor de Meta para la App Review en curso.
+  El README decía "re-verificado 08-ago-2026", pero solo se verificó que
+  el CÓDIGO existe (JWKS, lib/adminAuth.js) — nunca que un login real
+  hubiera funcionado de punta a punta. Cero evidencia de que alguna vez
+  funcionó.
+- **Bloquea:** la sección "Instrucciones de prueba" de la revisión de
+  Meta para Sorsabsa Asistente — no se puede dar una cuenta de prueba
+  funcional hasta que esto se resuelva.
+- **Fix pendiente de decidir:** registrar el proveedor OIDC personalizado
+  en el proyecto de agente24siete (Supabase Dashboard → Authentication →
+  Sign In / Providers → Custom Providers, mismo paso que ya existe en
+  condomanager) — no se pudo hacer por API/MCP, requiere el dashboard.
+  Alternativa más rápida para desbloquear la revisión de Meta sin esperar
+  ese fix: crear la cuenta de prueba directamente en el proyecto de
+  agente24siete (como está la de Punta Blanca), sin pasar por identity —
+  parche aceptable solo para esto, no la solución de fondo.
+
 ### 🔴-1 — ⬜ No existe un proceso gobernado para dar de alta usuarios con atributos de autorización, ni un mecanismo para propagarlos a los proyectos federados
 
 - **Archivo:** `auth-sorsabsa/scripts/invite-user.mjs` (el proceso) + `iot/auth_sso.py` (la consecuencia)
