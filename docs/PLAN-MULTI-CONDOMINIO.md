@@ -175,18 +175,19 @@ resolver dos problemas a la vez con algo roto en producción; queda para
 cuando se diseñe cómo el portero debe manejar entitlements con
 multi-condominio, fuera de esta fase).
 
-**Hallazgo aparte, no causado hoy, encontrado investigando este
-incidente — sin verificar todavía:** `entity-resolver.ts` resuelve
-`userData.user.id` contra el token de **identity**, pero
-`perfiles.user_id` en el proyecto de producto guarda el id LOCAL
-federado — son valores distintos (confirmado: el `id` de
-`gina.proanio76@gmail.com` en identity no coincide con su `user_id` en
-`perfiles`). Si eso es así en la práctica, `resolve_condominio_for_user`
-nunca encontraría una fila real y el chequeo de suscripción de
-CondoManager estaría en bypass permanente (nadie se bloquea por falta de
-pago) salvo cuando la consulta tira excepción (como hoy, que sí
-bloqueaba). No confirmado con una prueba de punta a punta — pendiente,
-importante antes de que haya un cliente real pagando.
+**Sospecha anterior, verificada y descartada:** se había anotado acá que
+`entity-resolver.ts` podía estar resolviendo con el id de identity contra
+`perfiles.user_id` (id local) — valores distintos por diseño, lo que
+habría dejado el chequeo de suscripción en bypass permanente. Se dejó
+"sin verificar" en vez de comprobarse contra el código real. Comprobado
+ahora, leyendo `auth-sorsabsa/.env.local`: `NEXT_PUBLIC_SUPABASE_URL` de
+auth-sorsabsa apunta al proyecto de PRODUCTO
+(`twkuidnjwhopbjnrhnxp`), no a identity — hay una variable aparte,
+`NEXT_PUBLIC_IDENTITY_SUPABASE_URL`, para lo que sí necesita identity. El
+cliente que usa `entitlements/route.ts` (`createClient(NEXT_PUBLIC_SUPABASE_URL, ...)`)
+valida el token contra el proyecto de producto — el mismo espacio de ids
+que `perfiles.user_id`. No hay mezcla de ids: la sospecha no se sostiene.
+No queda nada pendiente de esto.
 
 **Implementado (`condomanager@04a4ec6`):** `current_rol()`,
 `current_condominio_id()`, `current_residente_id()` ahora ordenan las
