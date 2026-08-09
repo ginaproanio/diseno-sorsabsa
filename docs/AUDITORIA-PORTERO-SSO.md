@@ -360,7 +360,7 @@ no arreglaba su login.
   (agente24siete, JustiRed, IOT, Convertidor) porque su único punto de
   entrada por correo nunca tuvo el problema.
 
-### 🔴-8 — ⬜ El Send Email Hook de `sorsabsa-identity` dejó de llamarse — todo correo automático de identity llega sin marca
+### 🔴-8 — ⬜ El Send Email Hook de `sorsabsa-identity` NUNCA existió — todo correo automático de identity llega sin marca
 
 - **Síntoma real (Gina, 09-ago-2026):** el correo de "recuperar contraseña"
   llegó con remitente/plantilla de Supabase, no de Resend/marca del producto.
@@ -376,27 +376,78 @@ no arreglaba su login.
      corregida hoy más temprano en esta misma sesión).
   3. A las 15:18:12 (14 min después de un redeploy de auth-sorsabsa que ya
      llevaba la clave corregida) **la ruta no aparece llamada — cero logs**.
-- **Causa raíz probable (no verificable con las herramientas disponibles —
-  el toggle del hook vive en Supabase Dashboard, no en Postgres ni en el
-  repo):** los fallos repetidos de la clave vieja llevaron a Supabase a
-  desactivar el Send Email Hook automáticamente (comportamiento documentado
-  de Supabase para Auth Hooks que fallan seguido, para no bloquear
-  login/reseteo real). Corregir la clave no lo reactiva solo.
+- **Causa raíz real, confirmada con screenshot de Gina — no la hipótesis
+  anterior de esta entrada:** Authentication → Auth Hooks del proyecto
+  `sorsabsa-identity` está **completamente vacío** ("Create an auth hook",
+  cero hooks configurados). No es que se haya desactivado por los fallos de
+  la key vieja (esa fue mi primera hipótesis, verificada como INCORRECTA
+  apenas Gina mandó la captura de pantalla real) — **nunca se creó.** La
+  frase de `ARQUITECTURA-ECOSISTEMA.md` de que estaba "configurado en los
+  dos proyectos" era falsa para identity desde el principio; describía la
+  intención de diseño, nunca se verificó en el dashboard real.
 - **Por qué importa más de lo que parece:** desde 🔴-1 (hoy), TODO alta y
-  reseteo real pasa a nacer/resolverse en identity — este hook dejando de
-  andar significa que, de acá en adelante, cada vez más correos de auth
-  reales van a salir sin marca hasta que se reactive.
-- **Fix — fuera de mi alcance con las herramientas actuales:** Supabase
-  Dashboard → proyecto `sorsabsa-identity` → Authentication → Hooks →
-  Send Email Hook → verificar que esté encendido (URL esperada:
-  `https://auth.sorsabsa.com/api/auth-hook/send-email`, secreto =
-  `SEND_EMAIL_HOOK_SECRET` de Vercel/auth-sorsabsa). Pendiente de que Gina
-  lo confirme/reactive y de volver a verificar con un `mail.send` nuevo que
-  ya no diga `noreply@mail.app.supabase.io`.
-- **Corrige a `ARQUITECTURA-ECOSISTEMA.md`:** la sección "Quién manda qué
-  correo" decía que el hook está "configurada idénticamente" en los dos
-  proyectos — eso describe cómo se armó, no el estado actual. Ahora mismo,
-  en identity, no está actuando.
+  reseteo real pasa a nacer/resolverse en identity — sin este hook, todo
+  correo automático de identity sale sin marca desde que existe el proyecto,
+  no desde hoy.
+- **Fix — fuera de mi alcance con las herramientas actuales, acción de
+  Gina:** Supabase Dashboard → `sorsabsa-identity` → Authentication → Auth
+  Hooks → Add a new hook → **Send Email**, tipo HTTPS, URL
+  `https://auth.sorsabsa.com/api/auth-hook/send-email`. Supabase genera un
+  secreto nuevo al crearlo — copiarlo a `SEND_EMAIL_HOOK_SECRET` en Vercel
+  (auth-sorsabsa, Production+Preview) y redeployar.
+- **Sin verificar todavía, a propósito — no repetir el mismo error dos
+  veces:** si `verticales_sorsabsa` (el proyecto de producto) SÍ tiene el
+  hook configurado. No hay evidencia real de ninguno de los dos lados
+  todavía — pendiente de otra captura de pantalla antes de afirmar nada.
+
+### 🔴-9 — ✅ El registro de admin creaba una fila de residente que nadie pidió — RESUELTO 09-ago-2026
+
+- **Síntoma real (Gina, 09-ago-2026):** al registrar un condominio nuevo,
+  quedaba creada como `admin_condominio` **y como residente**, con el mismo
+  correo, marcada "pasivo" en el dashboard de activación — sin haber
+  pedido nunca ser residente de ninguna unidad.
+- **Causa inmediata:** `registro-admin/route.ts`, paso "3. Crear residente
+  (el admin también es residente)" — insertaba una fila en `residentes`
+  para todo admin nuevo, incondicionalmente, con `rol_pendiente:
+  "admin_condominio"`.
+- **Causa raíz:** el modelo de datos conflaba dos roles distintos
+  (administrador del condominio / residente de una unidad) porque
+  `residentes` era la única tabla de "personas" disponible para guardar el
+  nombre a mostrar y el `rol_pendiente` hasta el primer login. No es un bug
+  de hoy — es una decisión de diseño previa a esta sesión (confirmado con
+  `git show` sobre el código anterior al fix de 🔴-1), nunca cuestionada.
+  El propio código de `mi-perfil/page.tsx` ya asumía lo contrario ("admin_
+  condominio y superadmin no tienen fila en residentes") — contradicción
+  interna real entre dos archivos, no solo una preferencia de Gina.
+- **Por qué la fila creada no tenía sentido, más allá de no haberse
+  pedido:** `residentes` no tiene `unidad_id` — la fila del admin quedaba
+  flotando, sin unidad asignada, imposible de vincular a nada real.
+- **Componente responsable:** `condomanager/app/api/registro-admin/route.ts`
+  (creaba la fila) y `app/api/auth/reconciliar-perfil/route.ts` (forzaba
+  `residente_id` en el perfil para cualquier rol, sin distinguir).
+- **Fix:** el admin ya no tiene fila en `residentes`. `condominios` ganó
+  `admin_pendiente_email`/`admin_nombres`/`admin_apellidos` — mismo patrón
+  que `residentes.rol_pendiente`, pero para el admin fundador, sin tocar la
+  tabla de residentes. `reconciliar-perfil` gana un tercer caso: si el
+  email no es residente, busca `admin_pendiente_email` y crea el perfil con
+  `residente_id: null`. El nombre a mostrar (`panel/admin/page.tsx`,
+  `DashboardShell.tsx`) ahora sale de `condominios.admin_*` cuando no hay
+  `residente_id`, en vez de depender de una fila que ya no existe.
+  Si en el futuro un admin SÍ quiere ser también residente de una unidad,
+  es una acción explícita separada (registro/alta de residente normal) —
+  no un efecto colateral automático del alta.
+- **Código eliminado:** el paso 3 completo de `registro-admin/route.ts`
+  (insert a `residentes` + su rollback).
+- **Riesgo de regresión revisado:** grep completo de `residente_id` en el
+  repo — todos los demás usos ya estaban condicionados a `rol === "residente"`
+  o a que `residente_id` no sea null; ninguno asumía que un admin_condominio
+  tuviera uno. `resolverPostLogin` (post-login.ts) ya filtraba el chequeo de
+  estado pendiente/rechazado solo para `rol === "residente"` — sin cambios
+  ahí.
+- **Validación:** typecheck limpio en condomanager. Migración
+  `20260809150000_admin_condominio_sin_residente.sql` aplicada en vivo.
+  Pendiente: registrar un condominio de prueba y confirmar que no aparece
+  ninguna fila nueva en `residentes`.
 
 ---
 

@@ -601,12 +601,12 @@ Resend      →  SALIDA de correo transaccional desde auth.sorsabsa.com
      de *"Restablece tu contraseña"*/*"Confirma tu cuenta"* para **todo** lo
      que pasa por identity — o sea, todos los productos.
      ⚠️ **Estado en vivo, no de diseño — ver `AUDITORIA-PORTERO-SSO.md`
-     🔴-8:** en `sorsabsa-identity` dejó de llamarse (probable
-     auto-desactivación de Supabase tras los fallos de la key vencida del
-     09-ago) — todo correo automático de identity está saliendo con
-     `mail_from: noreply@mail.app.supabase.io`, sin marca. Corregir la key
-     no lo reactiva: es un toggle del dashboard de ese proyecto, pendiente
-     de que Gina lo revise.
+     🔴-8:** confirmado con captura de pantalla real (09-ago-2026) que en
+     `sorsabsa-identity` este hook **nunca se creó** — Authentication →
+     Auth Hooks está vacío. No es que se haya desactivado; nunca existió
+     ahí. Todo correo automático de identity sale con `mail_from:
+     noreply@mail.app.supabase.io`, sin marca, desde siempre — no desde
+     hoy. Sin verificar todavía si `verticales_sorsabsa` sí lo tiene.
   2. **`condomanager`** (`lib/email/resend.ts` + `lib/email/service.ts`) —
      su **propio** envío directo, para correo de negocio que el hook de
      arriba no cubre porque no es un evento automático de Supabase Auth:
