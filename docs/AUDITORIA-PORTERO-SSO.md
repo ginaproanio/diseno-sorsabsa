@@ -461,15 +461,28 @@ no arreglaba su login.
   `20260809150000_admin_condominio_sin_residente.sql` aplicada en vivo.
   Confirmado en vivo (09-ago-2026): registro de prueba real → cero filas
   nuevas en `residentes`.
-- **Revisado contra ESTANDAR-DESARROLLO.md §6 (duplicación) — NO es una
-  violación:** `condominios.admin_pendiente_email` repite el PATRÓN de
-  `residentes.rol_pendiente` (pendiente hasta el primer login), pero sobre
-  una entidad genuinamente distinta (el admin no es un residente — es
-  justo lo que este hallazgo corrige). Unificarlas en una sola tabla
-  "usuarios_pendientes" agnóstica al rol sería sobre-ingeniería con solo
-  dos casos hoy. **Disparador para reconsiderarlo:** si aparece un TERCER
-  tipo de rol pendiente, ahí sí conviene una tabla genérica en vez de una
-  columna más por rol.
+- **❌ CORRECCIÓN, 09-ago-2026 — la nota de abajo estaba mal, no la dejo
+  para que alguien la crea vigente:** ~~"Revisado contra ESTANDAR-DESARROLLO.md
+  §6 — NO es una violación... unificarlas sería sobre-ingeniería"~~. Gina
+  preguntó explícitamente "identifica si acaso alguien más ya cumple su
+  función" y la respuesta era que SÍ: `domus.registros_pendientes`
+  (crm_inmobiliario) ya resolvía este problema exacto — cuenta creada en
+  identity, sin vínculo local hasta el primer login — de forma GENÉRICA
+  (`email, company_id, role, ...`), horas antes de este mismo commit. No
+  era "sobre-ingeniería anticipando un tercer caso": ya existía la
+  solución correcta, sin necesidad de anticipar nada. **Fix real:**
+  `condominios.admin_pendiente_email` se reemplazó por
+  `public.registros_pendientes`, mismo nombre y forma que
+  `domus.registros_pendientes`. `admin_nombres`/`admin_apellidos` se
+  quedan en `condominios` (nombre a mostrar, dato permanente — eso sí
+  estaba bien ahí), pero ahora se llenan al reconciliar, copiados desde
+  `registros_pendientes`, no al registrar. Commit `condomanager@8259ff9`.
+  typecheck limpio.
+- `residentes.rol_pendiente` (para residentes reales) sigue aparte de
+  `registros_pendientes` (para el admin) — mayor superficie de cambio,
+  deferido a propósito. **Disparador para migrarlo también:** cuando se
+  toque `registro-residente`/censo/activación masiva por otra razón real,
+  no antes — no abrir ese cambio solo por simetría.
 
 ### 🔴-10 — ✅ Confirmar cuenta daba "No se pudo instalar la sesión" — RESUELTO 09-ago-2026, completa a 🔴-7
 
