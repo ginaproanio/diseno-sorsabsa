@@ -1,16 +1,16 @@
 # Graph Report - diseno-sorsabsa  (2026-08-09)
 
 ## Corpus Check
-- 70 files · ~41,650 words
+- 70 files · ~42,212 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 503 nodes · 733 edges · 23 communities (21 shown, 2 thin omitted)
+- 504 nodes · 734 edges · 23 communities (21 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8f6f4aca`
+- Built from commit: `2f50baf2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -20,9 +20,9 @@
 - DomusLanding.tsx
 - Arquitectura del ecosistema SORSABSA
 - devDependencies
-- BrandProvider.tsx
 - Pendientes del ecosistema SORSABSA
 - Estándar de desarrollo — no parchear la arquitectura
+- BrandProvider.tsx
 - devDependencies
 - compilerOptions
 - compilerOptions
@@ -52,12 +52,12 @@
   showcase/src/resolveColors.ts → src/brand/BrandProvider.tsx
 - `TokenAudit()` --calls--> `useBrand()`  [EXTRACTED]
   showcase/src/components/TokenAudit.tsx → src/brand/BrandProvider.tsx
+- `Wordmark()` --calls--> `useBrand()`  [EXTRACTED]
+  src/components/Wordmark.tsx → src/brand/BrandProvider.tsx
 - `App()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
   showcase/src/App.tsx → showcase/src/resolveColors.ts
 - `ColorPalette()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
   showcase/src/components/ColorPalette.tsx → showcase/src/resolveColors.ts
-- `ContrastReport()` --calls--> `contrastRatio()`  [EXTRACTED]
-  showcase/src/components/ContrastReport.tsx → showcase/src/contrast.ts
 
 ## Import Cycles
 - None detected.
@@ -70,11 +70,11 @@ Nodes (54): ButtonMatrix(), SHADOW, VARIANTS, DATA, AppShell(), AppShellProps, A
 
 ### Community 1 - "App.tsx"
 Cohesion: 0.08
-Nodes (28): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented() (+20 more)
+Nodes (29): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented() (+21 more)
 
 ### Community 2 - "DomusLanding.tsx"
 Cohesion: 0.06
-Nodes (30): CardStatusDemo(), SHADOW, TONES, DomusLanding(), FEATURES, SOCIAL, IconCatalog(), NAMES (+22 more)
+Nodes (31): CardStatusDemo(), SHADOW, TONES, DomusLanding(), FEATURES, SOCIAL, IconCatalog(), NAMES (+23 more)
 
 ### Community 3 - "Arquitectura del ecosistema SORSABSA"
 Cohesion: 0.05
@@ -84,17 +84,17 @@ Nodes (44): 1. Inventario, 2. Los dos planos, 3-bis. NO HAY DATOS DE CLIENTES. P
 Cohesion: 0.05
 Nodes (38): autoprefixer, postcss, dependencies, framer-motion, lucide-react, motion, react, react-dom (+30 more)
 
-### Community 5 - "BrandProvider.tsx"
-Cohesion: 0.10
-Nodes (27): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandContext, BrandProvider(), brandToCssVars(), contrastRatio() (+19 more)
-
-### Community 6 - "Pendientes del ecosistema SORSABSA"
+### Community 5 - "Pendientes del ecosistema SORSABSA"
 Cohesion: 0.06
 Nodes (32): 10. ✅ Login social: Google ✅ cerrado — Facebook ✅ funciona, Revisión de Meta APROBADA, 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado, 12. 🟡 R2 desplegado y verificado — falta el clic real de un residente, 13. ✅ HECHO — geo-sorsabsa/service desplegado, verificado y consumido por los dos periciales, 14. ✅ HECHO — iot consume el portero central (auth-sorsabsa), 15. 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas, 16. 🟡 Estandarizar pagos/suscripciones/referidos en TODOS los productos — JustiRed sin nada, y una idea de "créditos de IA" todavía sin desarrollar, 1. ✅ RESUELTO — separar auth a su propio proyecto (vía OIDC) (+24 more)
 
-### Community 7 - "Estándar de desarrollo — no parchear la arquitectura"
+### Community 6 - "Estándar de desarrollo — no parchear la arquitectura"
 Cohesion: 0.06
-Nodes (32): 🟡-1 — ✅ Eliminación manual de cuentas reales vía SQL directo — reconocido, no repetir, 🟠-1 — ✅ Excepción hardcodeada `app === 'iot'` en /auth/complete — RESUELTO 08-ago-2026, 🔵-1 — ⬜ `iot.redirectUrl` es una URL cruda de Railway, no dominio propio, 🔴-2 / 🔴-3 — ✅ Fallback que trata "no configurado" como estado válido, en el motor de cobros — PAGOS_API_KEY rotada y verificada, 🟠-2 — ⬜ Bypass de entitlements hardcodeado por nombre de producto, 🔵-2 — ⬜ Fallback basado en el texto de un error de un proveedor externo, 🟡-2 — ⬜ `PROFILE_CHOICES` con nombres reales hardcodeados en editor.py, 🟠-3 — ✅ Autorización duplicada en dos archivos de IOT — CORREGIDO 09-ago-2026 (+24 more)
+Nodes (33): 🔴-1 — ✅ Alta de usuarios no gobernada: el pipeline de registro de cada producto no sabe que identity existe — RESUELTO 09-ago-2026, 🟡-1 — ✅ Eliminación manual de cuentas reales vía SQL directo — reconocido, no repetir, 🟠-1 — ✅ Excepción hardcodeada `app === 'iot'` en /auth/complete — RESUELTO 08-ago-2026, 🔵-1 — ⬜ `iot.redirectUrl` es una URL cruda de Railway, no dominio propio, 🔴-2 / 🔴-3 — ✅ Fallback que trata "no configurado" como estado válido, en el motor de cobros — PAGOS_API_KEY rotada y verificada, 🟠-2 — ⬜ Bypass de entitlements hardcodeado por nombre de producto, 🔵-2 — ⬜ Fallback basado en el texto de un error de un proveedor externo, 🟡-2 — ⬜ `PROFILE_CHOICES` con nombres reales hardcodeados en editor.py (+25 more)
+
+### Community 7 - "BrandProvider.tsx"
+Cohesion: 0.12
+Nodes (25): BRAND_FONT_IMPORTS, BrandColors, BrandConfig, BrandContext, BrandProvider(), brandToCssVars(), contrastRatio(), darkenToContrast() (+17 more)
 
 ### Community 8 - "devDependencies"
 Cohesion: 0.07
@@ -133,7 +133,7 @@ Cohesion: 0.40
 Nodes (4): buildCommand, framework, installCommand, outputDirectory
 
 ## Knowledge Gaps
-- **233 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+228 more)
+- **234 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+229 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -142,15 +142,15 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Arquitectura del ecosistema SORSABSA` connect `Arquitectura del ecosistema SORSABSA` to `Pendientes del ecosistema SORSABSA`?**
   _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **Why does `BrandConfig` connect `App.tsx` to `index.ts`, `BrandProvider.tsx`?**
+- **Why does `BrandConfig` connect `BrandProvider.tsx` to `index.ts`, `App.tsx`?**
   _High betweenness centrality (0.012) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _233 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _234 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.05472636815920398 - nodes in this community are weakly interconnected._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.08325624421831637 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07653061224489796 - nodes in this community are weakly interconnected._
 - **Should `DomusLanding.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.06475485661424607 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06382978723404255 - nodes in this community are weakly interconnected._
 - **Should `Arquitectura del ecosistema SORSABSA` be split into smaller, more focused modules?**
   _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
