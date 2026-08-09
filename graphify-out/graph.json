@@ -6158,7 +6158,7 @@
       "label": "Resuelto con Gina (ya no est\u00e1 pendiente)",
       "file_type": "document",
       "source_file": "docs/PLAN-IDENTIFICACION-UNIDADES.md",
-      "source_location": "L172",
+      "source_location": "L185",
       "_origin": "ast",
       "id": "docs_plan_identificacion_unidades_resuelto_con_gina_ya_no_est\u00e1_pendiente",
       "community": 13,
@@ -6169,7 +6169,7 @@
       "label": "Pendiente de confirmar con Gina antes de ejecutar",
       "file_type": "document",
       "source_file": "docs/PLAN-IDENTIFICACION-UNIDADES.md",
-      "source_location": "L181",
+      "source_location": "L194",
       "_origin": "ast",
       "id": "docs_plan_identificacion_unidades_pendiente_de_confirmar_con_gina_antes_de_ejecutar",
       "community": 13,
@@ -15289,7 +15289,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PLAN-IDENTIFICACION-UNIDADES.md",
-      "source_location": "L181",
+      "source_location": "L194",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_plan_identificacion_unidades_plan_identificaci\u00f3n_de_unidades_configurable_por_condominio",
@@ -15311,7 +15311,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PLAN-IDENTIFICACION-UNIDADES.md",
-      "source_location": "L172",
+      "source_location": "L185",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_plan_identificacion_unidades_plan_identificaci\u00f3n_de_unidades_configurable_por_condominio",
@@ -15617,5 +15617,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "916e833ec085dd1c34cc5a68d7c84425f9835e71"
+  "built_at_commit": "013e97311304b89371dbb0c7cca84c31c47bc734"
 }
