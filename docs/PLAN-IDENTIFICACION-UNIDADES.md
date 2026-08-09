@@ -147,11 +147,16 @@ separados) que hay que rediseñar, no solo cambiar un label:
 
 ## Fases
 
-- **Fase 0 — Datos:** migración (`casa`, `criterio_identificacion_unidad`
-  con default `MANZANA_LOTE`, relajar NOT NULL de
-  manzana/lote/codigo_predial, trigger de obligatoriedad condicional).
-  Sin backfill hardcodeado por condominio — ver "Sin backfill
-  hardcodeado" arriba.
+- **Fase 0 — ✅ RESUELTO 09-ago-2026 (`condomanager@e64e9b0`) — Datos:**
+  migración (`casa`, `criterio_identificacion_unidad` con default
+  `MANZANA_LOTE`, relajar NOT NULL de manzana/lote/codigo_predial,
+  trigger de obligatoriedad condicional). Sin backfill hardcodeado por
+  condominio. Verificado con 7 pruebas transaccionales (rollback, sin
+  dejar datos): rechaza campo faltante según criterio activo, acepta
+  cuando está el campo correcto, rechaza `casa` duplicada, cambio de
+  criterio no rompe filas existentes. Punta Blanca confirmada intacta,
+  en el default `MANZANA_LOTE` hasta que se cambie desde el control
+  real (Fase 1).
 - **Fase 1 — Módulo Unidades (bucket A):** la fuente. Control siempre
   visible para elegir/cambiar el criterio; formularios de
   crear/editar/importar muestran y exigen solo el campo correspondiente.
