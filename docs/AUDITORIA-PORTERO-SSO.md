@@ -98,6 +98,24 @@ La causa raíz es 🔴-1.
   login), falta decidir si esta cuenta necesita una suscripción activa
   de agente24siete o si "sin suscripción" es aceptable para lo que Meta
   revisa (permisos de WhatsApp, no funciones de pago).
+- **Corrección real, mismo día — "sin suscripción" era en sí mismo el
+  bug, no un estado válido para este producto.** Al preguntar por qué el
+  botón "Ir a pagos" de esa pantalla no funcionaba (`sorsabsa.com/pagos`
+  da 404, nunca existió), se encontró la causa de fondo:
+  `entity-resolver.ts` chequeaba `pagos-sorsabsa.suscripciones` para
+  agente24siete, pero el producto **nunca escribe ahí** — ni siquiera
+  llama `crear-trial`. Su modelo real es saldo prepago por EMPRESA
+  (`clientes.id`, tabla `movimientos_saldo`, compartido entre todos sus
+  negocios/agentes — confirmado en `lib/saldo.js`), recargado vía
+  Payphone en `/portal/recargas` — un flujo real que ya funciona, solo
+  que nadie lo conectó con el gate de login. Efecto real: **bloqueaba el
+  login del 100% de los clientes de agente24siete**, no solo la cuenta
+  de prueba — nadie tuvo nunca una fila en `suscripciones`. Fix:
+  `agente24siete` ahora bypasea ese chequeo (mismo patrón que
+  `iot`/`convertidor`, razón distinta: no es que no haya nada que cobrar,
+  es que se cobra por otro camino que no debe bloquear el login).
+  `auth-sorsabsa` commit `4478657`. Verificado en vivo: la misma cuenta
+  de prueba ahora da `200 {"active":true,"bypass":true}`.
 
 ### 🔴-1 — ⬜ No existe un proceso gobernado para dar de alta usuarios con atributos de autorización, ni un mecanismo para propagarlos a los proyectos federados
 
