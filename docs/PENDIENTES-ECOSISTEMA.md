@@ -520,6 +520,33 @@ cualquier otro producto.
   `convertidor` (mismo caso: ambas son herramientas de uso interno, no
   productos con clientes pagando) — mismo patrón que el bypass ya
   existente para superadmin sin condominio/empresa.
+- 🔴 **Bug real #5 — el que de verdad causaba el "bucle" (`auth-sorsabsa`
+  commit `cb045fd`).** Con el #4 arreglado, Susana llegó más lejos pero
+  quedó atrapada rebotando cada 2-9 segundos entre `/oauth/authorize` y
+  `/auth/complete` — confirmado con los logs reales de `auth` de AMBOS
+  proyectos (identity y `verticales_sorsabsa`), no adivinado. Causa: el
+  campo `AppConfig.callbackUrl` ("el destino real tras el login", según
+  su propio comentario) existe desde que se armó el allowlist, pero
+  **nunca se usaba en ningún lado** — ni `resolveSafeRedirect` ni
+  `/api/redirect-allowed` lo consultan, el destino final siempre caía en
+  la raíz del producto con el token en el fragment. Los productos Next.js
+  lo toleraban de pura casualidad (su cliente de Supabase detecta la
+  sesión en cualquier página); `iot` es Flask server-rendered — solo
+  `/auth/callback` sabe canjear el fragment por una cookie
+  (`iot_system/app/editor.py`). Sin pasar por ahí, la raíz nunca ve cookie
+  válida y rebota a `/auth/login`, que con sesión de identity ya puesta
+  auto-aprueba sola (mismo mecanismo `auto_approved: true` del bug #2) y
+  repite el ciclo — el bucle real que describió Gina.
+  - Arreglo **acotado a `iot` a propósito**: los demás productos ya
+    funcionan hoy (verificado en vivo por Gina varias veces con Google y
+    Facebook) y cada uno de sus `/auth/callback` espera el destino final
+    en un lugar distinto — CondoManager por query `?redirect=`, no en el
+    fragment. Homologar a todos los productos para que `callbackUrl` se
+    use de verdad en todos lados es trabajo aparte, con una convención a
+    definir primero (fragment vs query), no algo para tocar a ciegas
+    mientras había una persona real bloqueada.
+  - Sin confirmar todavía en vivo por Susana — pendiente su próximo
+    intento.
 
 ## 15. 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas
 
