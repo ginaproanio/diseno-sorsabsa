@@ -727,6 +727,43 @@ agente24siete hace un rato: `resolveEntitySubject` no tiene su caso, cae a
 suscripción activa". Sin una página de registro propia, hoy no está claro
 cómo se da de alta un cliente nuevo de JustiRed en absoluto.
 
+**Corrección, 09-ago-2026 — JustiRed no está en blanco, tiene MÁS que
+CondoManager/DomusCRM en un punto y les falta en otro.** Ya existe una
+pantalla pública de precios (`src/pages/Pricing.tsx`, ruta `/planes`) que
+llama a una función real (`supabase/functions/justired-payments-iniciar`)
+que **sí** usa el motor centralizado correctamente — `pagos-sorsabsa
+/api/iniciar`, con su propia `PAGOS_API_KEY_JUSTIRED` (confirma lo que ya
+se había visto en Railway: cada producto con su llave), y manda
+`suscripcion: {plan, dias, sujeto}` para que se auto-extienda al
+aprobarse. Eso es exactamente el botón self-service que a CondoManager y
+DomusCRM les falta (arriba en este mismo punto).
+
+**Pero el flujo es 100% anónimo — ahí está el problema real.** Cualquiera
+llena nombre/email/teléfono en `/planes` y paga, **sin loguearse, sin
+crear ninguna cuenta**. El `sujeto` que se manda es
+`justired-${Date.now()}-${random}` — un ID de transacción nuevo en cada
+pago, nunca el mismo dos veces. La fila que queda en `pagos.suscripciones`
+no se puede volver a encontrar: ningún login futuro, con ningún usuario
+real, va a coincidir jamás con ese sujeto. Es un pago que paga algo, pero
+no puede desbloquear una sesión real después. (Tablas relacionadas,
+preexistentes y desconectadas de todo esto:
+`justired.subscription_plans`/`justired.lawyer_subscriptions`, sin
+`auth_user_id` ni relación con `auth.users`.)
+
+**Por dónde empezar cuando se retome (no es la pregunta de individual vs.
+jurídica todavía):**
+
+1. Una tabla que vincule al abogado con su cuenta real de Supabase
+   (`auth_user_id`) — mismo patrón que `domus.companies`. Un despacho de 1
+   persona es solo una fila con un usuario; no hace falta resolver lo de
+   equipos/créditos para dar este paso.
+2. Construir el registro real (hoy no existe) que cree esa fila y llame a
+   `crear-trial`, igual que `registro-admin`/`registro-agencia`.
+3. Agregar el caso `justired` en `entity-resolver.ts`.
+4. Conectar `Pricing.tsx` al usuario logueado real en vez del formulario
+   anónimo, mandando ese `id` estable como `sujeto` en vez del ID de
+   transacción descartable.
+
 **Por qué no se construye ya — respuesta textual de Gina al preguntarle
 quién es la entidad que paga en JustiRed:** *"quien se registra y no he
 contemplado que sea persona natural o jurídica, pero sí que se debe
