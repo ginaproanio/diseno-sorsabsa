@@ -297,8 +297,12 @@ navegador en el tramo que faltaba.**
 de este paso, pero vive en el mismo proyecto consolidado): su `/admin`
 confirmado con el mismo portero, y de paso se limpió un login local muerto
 que una migración anterior había dejado sin desenchufar. Su `/portal` de
-cliente todavía no tiene login real (nunca se construyó, no es una regresión
-de este paso) — ver `PENDIENTES-ECOSISTEMA.md` #11.
+cliente en su momento no tenía login real — **corregido, esta nota estaba
+vieja: cerrado el 08-ago-2026** (`PENDIENTES-ECOSISTEMA.md` #11, commit
+`82b66e4`). El 09-ago se encontraron y corrigieron además dos bugs reales
+más en agente24siete (login que mostraba el menú antes de redirigir, y el
+gate que bloqueaba al 100% de sus clientes por chequear una suscripción
+que el producto nunca usó) — ver `AUDITORIA-PORTERO-SSO.md` 🔴-5/🔴-6.
 
 ## Paso 3 — Cada producto a su propio proyecto
 
