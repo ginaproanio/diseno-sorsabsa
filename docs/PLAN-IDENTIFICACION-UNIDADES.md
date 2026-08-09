@@ -63,25 +63,32 @@ en su versión más extrema: son 23 archivos, no 2 o 3.
   viviendo en la base, no solo en la pantalla (mismo principio aplicado
   toda la sesión, ahora condicional al criterio en vez de fijo).
 
-### Backfill del condominio real
+### Sin backfill hardcodeado
 
-Punta Blanca tiene hoy 1 unidad, con `manzana`, `lote` y
-`codigo_predial` los 3 llenos. Gina confirmó que Punta Blanca se basa en
-código predial → backfill explícito:
-`UPDATE condominios SET criterio_identificacion_unidad = 'CODIGO_PREDIAL' WHERE id = '...'`
-(no dejarlo en el default `MANZANA_LOTE`, aunque los 3 campos ya estén
-llenos y técnicamente pasarían igual).
+**Corregido a pedido de Gina** — la primera versión de este plan
+proponía fijar Punta Blanca en `CODIGO_PREDIAL` a mano vía una
+migración SQL. Es exactamente el "hardcode por cliente" que
+`ESTANDAR-DESARROLLO.md` marca como parche. Se saca: Punta Blanca (y
+cualquier condominio existente) arranca en el default del esquema
+(`MANZANA_LOTE`) y el criterio se corrige, si hace falta, a través del
+control real descrito abajo — la misma vía que va a usar cualquier
+administrador, no una excepción para este caso.
 
-## Dónde se configura (ya acordado con Gina, no se repite la pregunta)
+## Dónde se configura
 
-No en Configuración/Parametrización — vive en el módulo de Unidades. En
-`/panel/admin/unidades`: si el condominio no tiene ninguna unidad
-todavía, se pide elegir el criterio antes de habilitar
-"Crear unidad"/"Importar". **Pendiente de confirmar con Gina:** una vez
-que existe al menos 1 unidad, ¿se bloquea cambiar el criterio (más
-simple, evita decidir qué hacer con unidades que quedarían sin su nuevo
-campo obligatorio), o hace falta un flujo de migración real más
-adelante? Se propone bloquear por ahora — es la opción conservadora.
+No en Configuración/Parametrización — vive en el módulo de Unidades.
+Un control **siempre visible y editable** en `/panel/admin/unidades`
+(no solo la primera vez): el administrador puede ver y cambiar el
+criterio en cualquier momento, no queda bloqueado después de crear la
+primera unidad. Si hay cero unidades, además se pide explícitamente
+elegir un criterio antes de habilitar "Crear unidad"/"Importar" — un
+empujón de onboarding, no la única vía.
+
+Cambiar el criterio con unidades ya existentes no las rompe: el trigger
+exige el campo nuevo para lo que se cree o edite de ahí en adelante, no
+reescribe ni invalida filas viejas. Una unidad vieja que no tenga el
+campo del criterio nuevo simplemente lo muestra vacío hasta que alguien
+la edite y lo complete.
 
 ## Resolver único (reemplaza los 23 lugares que hoy arman el label a mano)
 
@@ -140,29 +147,34 @@ separados) que hay que rediseñar, no solo cambiar un label:
 
 ## Fases
 
-- **Fase 0 — Datos:** migración (`casa`, `criterio_identificacion_unidad`,
-  relajar NOT NULL de manzana/lote/codigo_predial, trigger de
-  obligatoriedad condicional, backfill de Punta Blanca a
-  `CODIGO_PREDIAL`).
-- **Fase 1 — Módulo Unidades (bucket A):** la fuente. Pantalla de elegir
-  criterio cuando no hay unidades; formularios de crear/editar/importar
-  muestran y exigen solo el campo correspondiente.
+- **Fase 0 — Datos:** migración (`casa`, `criterio_identificacion_unidad`
+  con default `MANZANA_LOTE`, relajar NOT NULL de
+  manzana/lote/codigo_predial, trigger de obligatoriedad condicional).
+  Sin backfill hardcodeado por condominio — ver "Sin backfill
+  hardcodeado" arriba.
+- **Fase 1 — Módulo Unidades (bucket A):** la fuente. Control siempre
+  visible para elegir/cambiar el criterio; formularios de
+  crear/editar/importar muestran y exigen solo el campo correspondiente.
 - **Fase 2 — Resolver + bucket B (15 archivos):** `identificadorUnidad()`
   y reemplazo en los 15 lugares de solo-lectura.
 - **Fase 3 — Bucket C (reportes/rubros-por-unidad):** rediseño de filtros.
 - **Fase 4 — Bucket D (residentes/importar):** matching por criterio en
   vez de manzana-lote fijo — el más riesgoso, se hace con más cuidado y
   pruebas.
-- **Fase 5 — Validación:** `lib/unidades/validar.ts` + typecheck + eslint
-  + pruebas transaccionales del trigger + verificación con Gina en vivo.
+- **Fase 5 — Validación:** `lib/unidades/validar.ts`, typecheck, eslint,
+  pruebas transaccionales del trigger, verificación con Gina en vivo.
+
+## Resuelto con Gina (ya no está pendiente)
+
+- **¿Se bloquea cambiar el criterio después de la primera unidad?** No.
+  Es un control siempre visible y editable en el módulo de Unidades, no
+  un gate de una sola vez — ver "Dónde se configura" arriba.
+- **¿El nombre del campo `casa` es el correcto?** Sí, confirmado — y es
+  alfanumérico (Algarrobos de la Viña pone número, otros condominios
+  ponen texto), por eso el tipo es `text`, no `integer`.
 
 ## Pendiente de confirmar con Gina antes de ejecutar
 
-- ¿Se bloquea cambiar el criterio después de la primera unidad, o hace
-  falta un flujo de migración desde el día 1?
-- ¿El nombre del campo `casa` es el correcto, o hay un término más
-  preciso para cómo lo llama Algarrobos de la Viña (número de casa,
-  identificador de vivienda, etc.)?
 - Orden de fases: propuesto 0→1→2→3→4→5 en ese orden porque cada fase
   depende de que la anterior exista, pero se puede pausar entre fases
   para probar en vivo.
