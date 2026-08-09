@@ -347,6 +347,18 @@ no arreglaba su login.
   en vivo con Gina (login normal, sin incógnito, y un registro nuevo con
   confirmación por correo) — no se forzó ningún login para no interferir
   con su propia prueba en curso.
+- **JustiRed e IOT (Railway) — verificado que NO tienen este bug, no solo
+  supuesto:** grep completo sobre `legaltech` e `iot` (los dos repos, todo
+  el código fuente) — cero coincidencias de `signUp(`, `admin.createUser`,
+  `generateLink` o `redirectTo`/`redirect_to`. Ninguno de los dos genera
+  enlaces de correo propios; sus cuentas nacen solo por el script
+  compartido `invite-user.mjs`, que ya apunta a `/auth/complete` — pantalla
+  que YA leía el fragment correctamente antes de este fix (es su función:
+  instalar `#access_token=...` o mostrar `error_description` si vino mal).
+  Con esto, los 6 productos del ecosistema quedan cubiertos: los que tienen
+  registro propio (CondoManager, DomusCRM) por el fix de hoy; los que no
+  (agente24siete, JustiRed, IOT, Convertidor) porque su único punto de
+  entrada por correo nunca tuvo el problema.
 
 ---
 
