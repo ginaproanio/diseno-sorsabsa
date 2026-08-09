@@ -435,30 +435,54 @@ cualquier otro producto.
   lee ningún código (confirmado por grep) — se pueden borrar del dashboard
   cuando convenga, no rompen nada si quedan.
 - **⚠️ Corrección 08-ago-2026, no volver a repetir el error:** `iot` NO
-  tiene su propio proyecto de Supabase — sus usuarios viven en el
-  proyecto de **CondoManager** (`twkuidnjwhopbjnrhnxp`), por el default
+  tiene su propio proyecto de Supabase — sus usuarios viven en
+  **`verticales_sorsabsa`** (`twkuidnjwhopbjnrhnxp` — Gina le cambió el
+  nombre el 08-ago-2026 en el Dashboard, antes decía "condomanager";
+  el cambio de nombre es solo cosmético, no toca ref/URL/keys de nada).
+  **Este proyecto YA era compartido antes de `iot`** — convive con
+  CondoManager (schema `public`), DomusCRM (`domus`) y JustiRed
+  (`justired`), decisión de arquitectura previa documentada en
+  `ARQUITECTURA-ECOSISTEMA.md` §3 (ahorrar los $10/mes por proyecto
+  nuevo mientras no hay clientes pagando). `iot` quedó ahí por el default
   hardcodeado en `iot_system/app/auth_sso.py:33`
-  (`SUPABASE_URL = os.getenv("SUPABASE_URL", "https://twkuidnjwhopbjnrhnxp.supabase.co")`),
-  no en `sorsabsa-identity` (`gyqgorgfstffbgazhbnb`) como el resto del
-  patrón haría suponer. Confirmado en vivo con SQL real, no adivinado:
-  Patricio (`patricio.marmol@hotmail.com`) confirmó e inició sesión bien
+  (`SUPABASE_URL = os.getenv("SUPABASE_URL", "https://twkuidnjwhopbjnrhnxp.supabase.co")`)
+  — creado por un asistente al implementar el portero de `iot`, sin
+  preguntar antes en qué proyecto crearlo. `iot` no necesita tablas
+  propias de Postgres (solo login), así que compartir identidad no
+  acopla datos: cada app filtra acceso con su propia regla
+  (CondoManager por `perfiles`, `iot` por `user_metadata.identidad_iot`)
+  — estar en la misma tabla `auth.users` no da acceso cruzado a nada.
+  Sin decidir todavía si se le da a `iot` un proyecto propio de todos
+  modos ($10/mes) — anotado para no perderlo, no para resolverlo ahora.
+  Confirmado en vivo con SQL real, no adivinado: Patricio
+  (`patricio.marmol@hotmail.com`) confirmó e inició sesión bien
   (invitado 08-ago 15:11, `last_sign_in_at` con dato); Susi
   (`susi.espinosa@hotmail.com`, invitada 08-ago 15:12) nunca confirmó
   (`confirmed_at` null) — coincide con el enlace vencido que reportó. Para
   administrar estos usuarios (reenviar invitación, etc.), el Dashboard
-  correcto es **condomanager**, no identity. Sin decidir todavía si esto
-  se deja así o si `iot` pasa a tener su propio proyecto — anotado para no
-  perderlo, no para resolverlo ahora.
-- ✅ **Dos bugs reales encontrados probando la invitación de Susi,
-  corregidos 08-ago-2026** (`auth-sorsabsa` commit `8952ce8`):
-  1. `src/app/page.tsx` no existía — cualquier `redirect_to` sin path
-     (como el de esta alta por Admin API) caía en 404 crudo al fallar el
-     enlace. Ahora esa ruta existe y muestra un mensaje entendible.
-  2. El correo de invitación mostraba solo la marca institucional
-     "SORSABSA" para apps sin marca propia (`iot`, `convertidor`) — Susi
-     no reconoció el nombre y se asustó. Ya se pasaba `config.welcome`
-     ("Acceso a IOT") a la pantalla de login pero no al correo; ahora
-     también se muestra ahí.
+  correcto es **`verticales_sorsabsa`**, no `sorsabsa-identity`.
+- ✅ **Tres bugs reales encontrados probando la invitación de Susi,
+  corregidos 08/09-ago-2026:**
+  1. `auth-sorsabsa` commit `8952ce8` — `src/app/page.tsx` no existía:
+     cualquier `redirect_to` sin path (como el de esta alta por Admin
+     API) caía en 404 crudo al fallar el enlace. Ahora esa ruta existe y
+     muestra un mensaje entendible.
+  2. `auth-sorsabsa` commit `8952ce8` — el correo de invitación mostraba
+     solo la marca institucional "SORSABSA" para apps sin marca propia
+     (`iot`, `convertidor`) — Susi no reconoció el nombre y se asustó.
+     Ya se pasaba `config.welcome` ("Acceso a IOT") a la pantalla de
+     login pero no al correo; ahora también se muestra ahí.
+  3. 🔴 **El más grave: el portero de `iot` (commit `b6a01d5`, 08-ago)
+     nunca se había desplegado a Railway.** Gina seguía viendo el modal
+     viejo de Basic Auth al entrar a `iot-production-d29b.up.railway.app`
+     — no por un bug de código, sino porque Railway seguía sirviendo el
+     deploy del 29-jul (`7a55d60`), dos commits atrás; el auto-deploy no
+     se disparó solo tras el push. Confirmado con `railway status --json`
+     (deploy activo = commit viejo) antes de tocar nada. Forzado con
+     `railway up` y verificado en vivo: `curl` a la raíz ahora da `302` a
+     `auth.sorsabsa.com/auth/login?app=iot`, sin `WWW-Authenticate`. Sin
+     determinar todavía por qué el auto-deploy de Railway no se disparó
+     solo con el push — revisar si vuelve a pasar con el próximo commit.
 
 ## 15. 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas
 

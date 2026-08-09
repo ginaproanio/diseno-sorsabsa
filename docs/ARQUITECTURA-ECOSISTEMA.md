@@ -119,11 +119,23 @@ contenedor. No hay que mover la capa web: hay que **añadir** la segunda.
 Supabase, organización `SORSABSA_Corp` (`wzhfxbqvalgipuixcugg`), **plan Pro**
 ✅ comprobado por API el 2026-07-30.
 
-### Estado ✅ verificado en SQL el 2026-07-30
+### Estado ✅ verificado en SQL el 2026-07-30 — nombre y ocupantes actualizados 08-ago-2026
+
+⚠️ **El proyecto de abajo YA NO se llama `condomanager` en el Dashboard.**
+Gina lo renombró a **`verticales_sorsabsa`** el 08-ago-2026 — el `ref`
+(`twkuidnjwhopbjnrhnxp`), la URL y las API keys no cambian, es solo el
+nombre visible. El cambio refleja que dejó de ser "la base de
+CondoManager con inquilinos": ya tenía tres productos antes (ver fila),
+y ese mismo día se sumó un cuarto, `iot` (auth-only, sin schema propio —
+detalle en pendiente #14 de `PENDIENTES-ECOSISTEMA.md`), sin que quedara
+anotado acá en su momento. Si algún texto más abajo en este documento
+todavía dice "proyecto de CondoManager", es narración histórica de
+cuando ese era el nombre real — no se reescribió retroactivamente, pero
+la fila de esta tabla es la que manda para el estado actual.
 
 | Proyecto | Ref | Estado | Qué contiene |
 |---|---|---|---|
-| `condomanager` | `twkuidnjwhopbjnrhnxp` | ACTIVO | **TRES esquemas de producto: `public` (40 tablas, CondoManager) · `domus` (27, DomusCRM) · `justired` (6, JustiRed)** + `auth` (23 tablas, **4 usuarios**) + `storage` |
+| `verticales_sorsabsa` (antes `condomanager`) | `twkuidnjwhopbjnrhnxp` | ACTIVO | **TRES esquemas de producto: `public` (40 tablas, CondoManager) · `domus` (27, DomusCRM) · `justired` (6, JustiRed)** + `auth` (23 tablas, **4 usuarios + 2 de `iot`, sumados 08-ago-2026 — recuento sin reverificar**) + `storage` |
 | `sorsabsa-identity` | `gyqgorgfstffbgazhbnb` | ACTIVO | **vacío**: `public` sin tablas, `auth` con **0 usuarios**. Creado el 2026-07-29 y nunca poblado |
 | `agente24siete` | `nwcqaginlnzjlkgwifas` | ACTIVO | ✅ `public` (15), `auth`, `storage`. Un solo dueño |
 
