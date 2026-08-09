@@ -60,40 +60,52 @@ La causa raíz es 🔴-1.
 - **Solución arquitectónica:** endpoint gobernado en el portero que garantice alta SIEMPRE en identity, con el rol/producto en una tabla real (no en `user_metadata` de un JWT), y que cada producto consulte esa tabla o reciba el claim vía un Custom Access Token Hook configurado explícitamente — nunca inventando su propio criterio.
 - **Código a eliminar:** `invite-user.mjs` como mecanismo de alta real (puede quedar como utilidad de emergencia).
 
-### 🔴-2 / 🔴-3 — 🔧 Fallback que trata "no configurado" como estado válido, en el motor de cobros
+### 🔴-2 / 🔴-3 — ✅ Fallback que trata "no configurado" como estado válido, en el motor de cobros — PAGOS_API_KEY rotada y verificada
 
 - **Archivos:**
   `auth-sorsabsa/src/app/api/entitlements/route.ts:47-50` — `if (!pagosUrl) return { active: true, simulated: true }`
   `auth-sorsabsa/src/lib/entity-resolver.ts:27` — `if (!db) return { subject: userId }`
-- **Estado de la investigación (09-ago-2026):** `PAGOS_API_URL` y `PAGOS_API_KEY`
-  **SÍ existen** en Vercel producción (confirmado vía `vercel env pull`, sin
-  exponer valores — solo existencia/longitud). Pero `PAGOS_API_URL` (13
-  caracteres) **no empieza con `http://` ni `https://`** — no es una URL
-  real, probablemente un placeholder. Eso significa que el código NO cae en
-  el fallback "simulated: true" que se temía (ese solo dispara si la
-  variable está vacía) — cae en el otro lado: `fetch()` falla al construir
-  la URL, se captura, devuelve `503 pagos_unreachable`.
-- **Sin confirmar todavía:** si esto bloquea HOY a usuarios reales de
-  condomanager/domuscrm/justired/agente24siete (los que no tienen el bypass
-  de iot/convertidor). Los logs de Vercel de los últimos 7 días para
-  `/api/entitlements` **no tienen tráfico real de otros productos** — todo
-  lo que aparece es la prueba propia de hoy con IOT (que ni siquiera llega
-  a esta rama, por el bypass). No hay evidencia para afirmar ni descartar
-  que otros productos estén bloqueados ahora mismo.
-- **Próximo paso antes de tocar código:** confirmar con Gina qué contiene
-  realmente `PAGOS_API_URL` (¿placeholder a propósito porque pagos-sorsabsa
-  no está en producción todavía? ¿URL vieja de un ambiente que ya no existe?)
-  y si CondoManager/DomusCRM han tenido logins reales exitosos recientemente
-  fuera de esta sesión.
-- **Fix propuesto (una vez confirmado):** distinguir "no configurado en
-  desarrollo" de "falló en producción" de forma explícita (por entorno, no
-  por ausencia de variable) — en producción, sin motor de pagos conectado
-  y verificable, bloquear con un motivo claro, no aprobar ni fallar en
-  silencio con un mensaje genérico.
-- **Riesgo de regresión:** si el motor de pagos realmente no está listo
-  todavía, un fix de "falla-cerrado" mal aplicado podría bloquear acceso
-  que hoy funciona por otra razón no identificada — de ahí la necesidad de
-  confirmar antes de tocar código.
+- **Estado de la investigación (09-ago-2026), corregido:** `PAGOS_API_URL` y
+  `PAGOS_API_KEY` existen en Vercel producción, marcadas como "Sensitive"
+  — Vercel devuelve el literal `[SENSITIVE]` en cualquier lectura (CLI,
+  dashboard, incluso al dueño de la cuenta): el valor real es
+  **irrecuperable por diseño**, no es que falte. El chequeo de "no empieza
+  con https://" de la primera pasada medía ese placeholder, no el valor
+  real — hallazgo descartado, no aplica.
+- **Evidencia independiente de que SÍ está bien conectado:** `pagos-sorsabsa`
+  es un servicio real, desplegado en Railway
+  (`https://pagos-sorsabsa-production.up.railway.app`, activo desde
+  29-jul-2026, confirmado respondiendo ahora — `200` en `/`, `405` en
+  `/api/entitlements` vía GET, coherente con una ruta que exige POST+Bearer).
+  Su propio README confirma que YA está integrado con código real:
+  `condomanager/app/api/registro-admin/route.ts` y
+  `condomanager/app/api/superadmin/suscripcion-condominio/route.ts` lo
+  llaman en producción. No hay evidencia de que el fallback "simulated"
+  esté disparándose hoy — probablemente el motor de pagos SÍ está conectado.
+- **Lo que sigue siendo un hallazgo real (independiente de si hoy funciona):**
+  el código en sí mismo no distingue "no configurado" de "configurado y
+  válido" — si `PAGOS_API_URL` se borrara por accidente en Vercel mañana,
+  el sistema empezaría a aprobar todo en silencio, sin ninguna alerta. Eso
+  no depende de si hoy está bien seteada.
+- **Fix propuesto (sin cambios):** distinguir "no configurado en
+  desarrollo" de "falta en producción" por entorno explícito, no por
+  ausencia de variable — en cualquier entorno no-desarrollo, sin
+  `PAGOS_API_URL` debe bloquear con motivo claro, nunca aprobar.
+- **Riesgo de regresión:** bajo — con la variable realmente seteada (como
+  todo indica), este fix no cambia el comportamiento actual, solo lo que
+  pasaría si la variable desapareciera.
+- **Cierre real, 09-ago-2026:** en el camino se descubrió que nadie tenía
+  `PAGOS_API_KEY` guardada en ningún lado recuperable (marcada "Sensitive"
+  en Vercel Y en Railway — irrecuperable por diseño de ambas plataformas,
+  ni para el dueño de la cuenta). Se roto: valor nuevo generado
+  (`openssl rand -hex 32`), actualizado a la vez en los 3 lugares que lo
+  necesitan (Railway `pagos-sorsabsa`, Vercel `auth-sorsabsa`, Vercel
+  `condomanager`), con redeploy en los tres, y **verificado con una llamada
+  real** a `pagos-sorsabsa/api/entitlements`: `401 No autorizado` (key
+  vieja) → `200 {"active":false,"reason":"sin_suscripcion"}` (key nueva,
+  aceptada). El fix de "falla-cerrado" en el código (distinguir entorno en
+  vez de ausencia de variable) sigue pendiente — el hallazgo original del
+  código no se tocó, solo se resolvió la credencial perdida que lo bloqueaba.
 
 ### 🔴-4 — ⬜ "Funciona por casualidad", admitido en el propio código
 
@@ -162,18 +174,20 @@ La causa raíz es 🔴-1.
   autorizaciones en identity), no una constante — para que la 3ª persona
   con acceso no requiera un deploy de código.
 
-### 🟠-5 — ⬜ CondoManager nunca usa el logout universal — mismo bug que tuvo IOT, sin corregir
+### 🟠-5 — ✅ CondoManager tenía DOS logouts locales — ambos corregidos
 
-- **Archivo:** `condomanager/app/components/SignOutButton.tsx:34`
-- **Código:** `await supabase.auth.signOut();` — solo el cliente de producto, nunca `identityClient`.
-- **Impacto:** cualquier residente/administrador de CondoManager que haga
-  clic en "Salir del sistema" **no cierra sesión de verdad** — la sesión de
-  identity queda viva, el próximo login se auto-aprueba solo. Mismo bucle
-  que vivió Gina con IOT, pendiente de explotar en el producto con clientes
-  reales (Punta Blanca).
-- **Fix:** redirigir a `https://auth.sorsabsa.com/auth/logout?app=condomanager&next=<destino de negocio>`
-  en vez de llamar `signOut()` localmente.
-- **Código a eliminar:** la llamada directa a `supabase.auth.signOut()` en este archivo.
+- **Parte 1 (`DashboardShell.tsx`, pantalla "sin condominio"):** ya corregida
+  el 08-ago-2026 (commit `b84f771`), antes de que esta auditoría empezara.
+- **Parte 2 (`SignOutButton.tsx`, "Salir del sistema" de la barra lateral —
+  el que usa cualquier residente/administrador normal):** encontrada HOY
+  como bug real y activo (confirmado con `grep`: el componente sí está en
+  uso). **Corregida 09-ago-2026, commit `677f478`.**
+- **Lo que NO cambió, a propósito:** la regla de negocio de a dónde sale
+  cada quien (asociación Punta Blanca → su dominio, condominio con web
+  propia → su web, si no → portada) — eso lo sigue decidiendo CondoManager,
+  como siempre. Solo cambió quién cierra la sesión de identity: antes nadie
+  la tocaba desde este botón, ahora pasa por `/auth/logout?app=condomanager&next=<destino ya calculado>`.
+- **Verificado:** typecheck limpio, desplegado, `condomanager.vip` responde.
 
 ---
 
@@ -212,6 +226,10 @@ Frágil por diseño, bajo impacto mientras el script sea manual.
 
 ## Próximo paso
 
-Confirmar con Gina el contenido real de `PAGOS_API_URL` (🔴-2/3) antes de
-tocar ese código — es el hallazgo en curso. El resto queda ⬜ en el orden
-de esta lista salvo que se indique otra prioridad.
+🔴-2/3 y 🟠-5 cerrados y verificados (09-ago-2026). Quedan abiertos, en
+orden de severidad: 🔴-1 (alta de usuarios no gobernada — la causa raíz
+más grande, requiere diseño nuevo, no un fix rápido), 🔴-4 (traspaso de
+sesión que funciona "por casualidad" en 5 de 6 productos), 🟠-1, 🟠-2,
+🟠-4, 🟡-2, 🟡-3, 🔵-1, 🔵-2. El fix de código de 🔴-2/3 (falla-cerrado
+explícito por entorno) sigue pendiente — solo se resolvió la credencial
+perdida que bloqueaba verificarlo, no el patrón de fallback en sí.
