@@ -295,3 +295,23 @@ activo" (nombre, cuándo se fija, cuánto dura) — de esa forma dependen
 Fase 4 (backend, incluye hacer que `lib/supabase/server.ts` reenvíe el
 header `x-condominio-activo` que la Fase 2 ya sabe leer) y Fase 5
 (frontend). Nada de eso implementado todavía.
+
+---
+
+## Apéndice — utilidades de reset para la ronda manual
+
+Dos funciones SQL para acelerar las pruebas repetidas (no expuestas a
+anon/authenticated, solo accesibles con acceso directo a la base; quitar
+cuando haya clientes reales):
+
+- `public.reset_datos_prueba()` en `twkuidnjwhopbjnrhnxp` (guardada en
+  `condomanager/supabase/migrations/20260809193000_reset_datos_prueba_utilidad.sql`) —
+  borra todo lo condominio-scoped, deja solo el perfil de superadmin.
+- `public.reset_cuentas_prueba(p_proteger text[])` en `gyqgorgfstffbgazhbnb`
+  (identity, sin repo propio con carpeta de migraciones — documentada acá
+  porque no tiene otro lugar natural) — borra toda cuenta de `auth.users`
+  cuyo email no esté en la lista de protección. Default: el superadmin de
+  condomanager + 2 cuentas de IOT + 3 cuentas de origen todavía no
+  confirmado (`sorsabsa@gmail.com`, `gina.proanio@hotmail.com`,
+  `eco.ec@outlook.com`) — protegidas por default hasta saber a qué
+  producto pertenecen, no borradas sin confirmar.
