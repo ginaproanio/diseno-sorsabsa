@@ -225,7 +225,7 @@ La causa raíz es 🔴-1.
   efecto colateral de la rotación de arriba. Queda anotado solo para que
   quien reponga `PAGOS_API_URL` alguna vez sepa: **sin `/` al final.**
 
-### 🔴-4 — ⬜ "Funciona por casualidad", admitido en el propio código
+### 🔴-4 — ✅ "Funciona por casualidad", admitido en el propio código — RESUELTO 08-ago-2026
 
 - **Archivo:** `auth-sorsabsa/src/app/auth/complete/page.tsx:106-110`
 - **Cita textual del comentario:** *"Para las apps Next.js del ecosistema
@@ -236,25 +236,32 @@ La causa raíz es 🔴-1.
   porque `detectSessionInUrl: true` rescata cualquier fragmento por
   accidente. El día que eso cambie en cualquiera de esos clientes, reaparece
   el mismo bug que tuvo IOT, en un producto con clientes reales.
-- **Solución arquitectónica:** usar `config.callbackUrl` de forma
-  incondicional en `/auth/complete` para todos los productos — ver 🟠-1
-  (mismo fix, mismo lugar).
+- **Cierre real, commit `c2653e4`:** en vez del `config.callbackUrl`
+  incondicional que proponía esta entrada (que hubiera roto a condomanager
+  — pisa su `next=` rico con `?redirect=&condominio=&asociacion=`), se usó
+  la condición real: `sinDestinoEspecifico = destino === config.redirectUrl`.
+  Cualquier producto que llegue sin un `next` específico (no solo iot)
+  aterriza en su `callbackUrl` real. Verificado: typecheck/build limpios,
+  condomanager preservado (confirmado leyendo su propio `app/login/page.tsx`
+  antes de aplicar el fix). Mismo commit que cierra 🟠-1.
 
 ---
 
 ## 🟠 ALTO
 
-### 🟠-1 — ⬜ Excepción hardcodeada `app === 'iot'` en /auth/complete
+### 🟠-1 — ✅ Excepción hardcodeada `app === 'iot'` en /auth/complete — RESUELTO 08-ago-2026
 
 - **Archivo:** `auth-sorsabsa/src/app/auth/complete/page.tsx:122`
-- **Código:** `const destinoFinal = app === 'iot' && config.callbackUrl ? config.callbackUrl : destino;`
+- **Código (viejo):** `const destinoFinal = app === 'iot' && config.callbackUrl ? config.callbackUrl : destino;`
 - **Causa raíz:** `callbackUrl` existe en `AppConfig` para los 6 productos,
   documentado como "el destino real tras el login", pero el código nunca lo
   consultaba para nadie. Se corrigió para uno solo en vez de arreglarlo
   para todos.
 - **Componente responsable:** el portero (`/auth/complete`), no cada producto.
-- **Fix:** usar `config.callbackUrl` siempre que exista, para cualquier app.
-- **Código a eliminar:** `app === 'iot' &&`.
+- **Cierre real, commit `c2653e4`:** eliminado el `app === 'iot' &&` —
+  reemplazado por `sinDestinoEspecifico = destino === config.redirectUrl`
+  (ver detalle en 🔴-4, mismo fix). Ya no hay ningún nombre de producto
+  hardcodeado en esta condición.
 
 ### 🟠-2 — ⬜ Bypass de entitlements hardcodeado por nombre de producto
 
@@ -266,6 +273,14 @@ La causa raíz es 🔴-1.
   default `true`).
 - **Código a eliminar:** el `if` con nombres de producto en
   `entity-resolver.ts` y el gemelo en `api/entitlements/route.ts:42`.
+- ⚠️ **Empeorado, no arreglado, 09-ago-2026:** el fix de 🔴-5 agregó
+  `agente24siete` a esta MISMA lista (`if (app === 'agente24siete') {
+  return { subject: null, bypass: true }; }`) — necesario en el momento
+  para desbloquear el login real de un producto entero, pero es
+  exactamente el mismo antipatrón que este hallazgo ya señalaba. Tres
+  nombres hardcodeados ahora, no dos. El fix declarativo (`billable:
+  boolean` en `AppConfig`) sigue siendo el correcto, y ahora limpia tres
+  casos en vez de dos.
 
 ### 🟠-3 — ✅ Autorización duplicada en dos archivos de IOT — CORREGIDO 09-ago-2026
 
@@ -348,7 +363,9 @@ Frágil por diseño, bajo impacto mientras el script sea manual.
 Quedan abiertos, en orden de severidad: 🔴-6 (referidos de agente24siete
 sin premio real — requiere decisión de Gina, marcado importante), 🔴-1
 (alta de usuarios no gobernada — la causa raíz más grande, requiere
-diseño nuevo, no un fix rápido), 🟠-2, 🟠-4, 🟡-2, 🟡-3, 🔵-1, 🔵-2. El
-fix de código de 🔴-2/3 (falla-cerrado explícito por entorno) sigue
-pendiente — solo se resolvió la credencial perdida que bloqueaba
-verificarlo, no el patrón de fallback en sí.
+diseño nuevo, no un fix rápido), 🟠-2 (empeorado hoy: 3 nombres
+hardcodeados en vez de 2 — el fix declarativo sigue pendiente y ahora
+limpia más), 🟠-4, 🟡-2, 🟡-3, 🔵-1, 🔵-2. El fix de código de 🔴-2/3
+(falla-cerrado explícito por entorno) sigue pendiente — solo se resolvió
+la credencial perdida que bloqueaba verificarlo, no el patrón de fallback
+en sí.
