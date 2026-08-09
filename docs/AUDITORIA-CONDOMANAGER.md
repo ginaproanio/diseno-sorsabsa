@@ -191,7 +191,7 @@ bajo riesgo, pero no se ha probado en vivo.
 
 ## 🔵 MENOR
 
-### 🔵-1 — ⬜ Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo
+### 🔵-1 — ✅ Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo — RESUELTO 09-ago-2026
 
 **Síntoma:** `scratch/dist/lib/crypto.js`, `scratch/dist/lib/facturacion/service.js`
 y `scratch/dist/scratch/test_invoicing_flow.js` están trackeados en git —
@@ -206,6 +206,10 @@ desechables).
 `.gitignore`. Si `scratch/test_invoicing_flow.ts` y `scratch/run-qa-suite.js`
 siguen siendo útiles como script de QA manual, pueden quedarse trackeados
 (son fuente, no build output) — a decidir con Gina.
+
+**Resuelto 09-ago-2026** (`condomanager@5aaa1c7`): `git rm -r --cached
+scratch/dist` + entrada en `.gitignore`. El fuente (`test_invoicing_flow.ts`,
+`run-qa-suite.js`) se quedó trackeado.
 
 **Riesgo:** ninguno funcional. Es exactamente el tipo de "basura que se va
 quedando" que motivó esta auditoría — no cambia el comportamiento de la
@@ -227,6 +231,8 @@ typecheck + eslint limpios en ambos) — **ninguno de los dos tiene todavía
 la validación en vivo que su propio punto 9 pide** (🟠-1: probar las 3
 rutas migradas con sesión real de cada rol; 🟠-2: simular un error de red
 en la consulta a `perfiles` y confirmar que bloquea en vez de dejar
-pasar). Queda abierto 🔵-1 (limpieza de `scratch/dist`, sin discusión).
-Pendiente además seguir ampliando la auditoría: pagos/facturación, RLS,
-crons — todavía no cubiertos en esta primera pasada.
+pasar). 🔵-1 cerrado (09-ago-2026, `condomanager@5aaa1c7`, limpieza sin
+riesgo). Pendiente seguir ampliando la auditoría: pagos/facturación, RLS,
+crons — todavía no cubiertos en esta primera pasada. La validación en vivo
+de 🟠-1/🟠-2 queda deliberadamente para el final — Gina prefiere agrupar
+lo manual en vez de interrumpir el trabajo automatizable con eso.
