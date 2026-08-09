@@ -52,7 +52,7 @@ La causa raíz es 🔴-1.
 
 ## 🔴 CRÍTICO
 
-### 🔴-5 — ⬜ agente24siete: nadie puede loguearse, la federación con identity nunca se registró ahí
+### 🔴-5 — ✅ agente24siete: nadie puede loguearse, la federación con identity nunca se registró ahí — RESUELTO 09-ago-2026
 
 - **Encontrado:** 09-ago-2026, al intentar armar una cuenta de prueba para
   la revisión de Meta (Sorsabsa Asistente / agente24siete).
@@ -81,6 +81,23 @@ La causa raíz es 🔴-1.
   ese fix: crear la cuenta de prueba directamente en el proyecto de
   agente24siete (como está la de Punta Blanca), sin pasar por identity —
   parche aceptable solo para esto, no la solución de fondo.
+- **Cierre real, 09-ago-2026, verificado en vivo por Gina:** registrado el
+  cliente OAuth en identity (`14c6cdd4-df0f-4a19-824c-8b08a915b4a8`,
+  credenciales en `agente24siete/.env.admin.local`) y el proveedor
+  `custom:sorsabsa-identity` en agente24siete, mismo patrón que
+  condomanager. Cuenta de prueba `eco.ec@outlook.com` recreada en
+  identity. En el camino, dos incidentes aparte que bloquearon la
+  verificación (ninguno era esto — ver 🔴-2/3 arriba, entrada del
+  09-ago-2026): `PAGOS_API_KEY` re-seteada sin necesidad (era 404, no
+  401) y `PAGOS_API_URL` con un `/` de más causando el 404 real.
+  Corregidos ambos. **Login real de Gina, incógnito, con
+  `eco.ec@outlook.com`: llega hasta agente24siete y muestra
+  correctamente "💳 Sin suscripción activa"** — el mensaje esperado para
+  una cuenta sin plan pago, no un error técnico. Queda cerrado el login;
+  para que la revisión de Meta pruebe funcionalidad completa (no solo
+  login), falta decidir si esta cuenta necesita una suscripción activa
+  de agente24siete o si "sin suscripción" es aceptable para lo que Meta
+  revisa (permisos de WhatsApp, no funciones de pago).
 
 ### 🔴-1 — ⬜ No existe un proceso gobernado para dar de alta usuarios con atributos de autorización, ni un mecanismo para propagarlos a los proyectos federados
 
