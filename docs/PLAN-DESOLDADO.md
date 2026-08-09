@@ -226,13 +226,20 @@ con un script: login en identity → condomanager → token federado → `GET
 **El panel real hereda la confianza en identity sin tocar una línea de
 código.**
 
-`backend/` (`crm-inmobiliario-api`) queda aparte: sin `Dockerfile` ni config
-de Railway en el repo, y **nada en todo el repo firma un JWT con la forma
-que espera** (`company_id`/`role` como claims directos — hubiera necesitado
-un Auth Hook de Supabase que nunca se configuró). Confirmado con Gina: no
-está sirviendo tráfico real. No es un segundo portero en producción — es
-código incompleto o abandonado. Pendiente de decisión aparte (completarlo,
-conectarlo a identity igual que `webs/`, o borrarlo), no bloquea este plan.
+`backend/` (`crm-inmobiliario-api`) quedaba aparte: sin `Dockerfile` ni
+config de Railway en el repo, y **nada en todo el repo firmaba un JWT con
+la forma que esperaba** (`company_id`/`role` como claims directos —
+hubiera necesitado un Auth Hook de Supabase que nunca se configuró). No
+era un segundo portero en producción — era código incompleto o
+abandonado.
+
+**✅ Resuelto — borrado el 09-ago-2026** (`crm_inmobiliario` commit
+`9cc5c94`). Verificado módulo por módulo antes de borrar, no por
+sospecha: todo lo que hacía (`properties`, `leads`, `network`, `feeds`,
+`sites`, hasta las mismas 3 plantillas editoriales Corcoran/Compass/
+Sotheby's) ya existe, más completo, funcionando en producción en `webs/`.
+`backend/sql/` se conservó — es la referencia canónica del esquema
+`domus` (citada en `ARQUITECTURA-ECOSISTEMA.md`), no código de la API.
 
 **Lectura honesta:** el Paso 2 está probado y funciona en todo lo que
 importa hoy — CondoManager (`public`, verificado con una política RLS real)
