@@ -474,3 +474,15 @@ aplicar). Mensaje legible en los 3 formularios en vez del error crudo de
 Postgres cuando se repite un código predial. Verificado con insert
 transaccional duplicado (rechazado, rollback sin dejar datos). typecheck
 limpio, eslint sin errores nuevos.
+
+**Actualización 🔵-3, mismo día:** a pedido de Gina, se centralizó la
+validación (`lib/unidades/validar.ts`) que estaba copiada, cada una con
+su propia versión, en las 3 pantallas que tocan `unidades` directo desde
+el navegador (crear, importar CSV, editar — ninguna pasa por una API).
+De paso, viendo la UI real, Gina decidió que `codigo_predial` pase de
+opcional a **obligatorio** — `*` en el label, `required` en el input,
+`NOT NULL` en la base (verificado antes: tabla vacía, sin conflicto).
+`condomanager@60d8456`. Se identificó un 4to lugar que toca `unidades`
+(`panel/residente/mis-unidades/page.tsx`) — no duplica esta validación,
+edita solo campos de comercialización (precio, redes sociales), no toca
+manzana/lote/codigo_predial.
