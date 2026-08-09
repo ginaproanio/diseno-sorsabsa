@@ -565,7 +565,16 @@ estaba vacío, `nombre_comercial` caía a `condominio.nombre` (Generales)
 en vez de a `condominio.nombre_comercial` (Legales) — que existía y
 **nadie leía en ningún lugar del código**, confirmado con grep. Verificado
 con SQL antes de tocar código que el condominio real no necesitaba
-backfill (los campos duplicados nunca se habían llenado). Ver
+backfill (los campos duplicados nunca se habían llenado).
+
+**Segunda corrección, mismo día (`condomanager@feee488`):** el fix
+anterior seguía mostrando razón social/nombre comercial/dirección en
+Facturación, aunque fuera de solo lectura. Gina: "pero para que repetir
+otra vez los datos que ya aparecen en otra ficha, solo debería pedir el
+correo de facturación" — mostrar el valor dos veces sigue siendo
+repetirlo, aunque no se pueda editar ahí. Se quitó el resumen por
+completo; Facturación pide solo el correo, con un link de texto (sin
+mostrar ningún valor) a Datos Fiscales/Perfil del condominio. Ver
 [PLAN-CONFIGURACION-CONDOMINIO.md](PLAN-CONFIGURACION-CONDOMINIO.md)
 Fase 2 para el detalle completo.
 

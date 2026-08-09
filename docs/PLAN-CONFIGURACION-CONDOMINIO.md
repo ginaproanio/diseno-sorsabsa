@@ -146,13 +146,22 @@ Facturación: quitar los campos duplicados, arreglar el fallback roto
 **Ejecutado:** verificado por SQL antes de tocar código — el condominio
 real ya tenía `nombre_comercial`/`direccion` completos (vienen de
 Legales/Perfil) y `nombre_facturacion`/`direccion_facturacion` nunca se
-habían llenado. Cero backfill necesario. La sección pasó de "Datos
-Legales del Emisor (SRI)" (3 campos editables, uno de ellos duplicando
-mal) a "Identidad del Emisor": resumen de solo lectura de razón
-social/nombre comercial/dirección, con link a dónde editarlos de verdad
-(Datos Fiscales, Perfil del condominio), más el único campo real y
-propio de esta pantalla (correo de facturación, que Gina confirmó como
-caso de uso legítimo y distinto del correo de contacto general).
+habían llenado. Cero backfill necesario.
+
+Primer intento (`condomanager@e9dcf0f`): la sección pasó de "Datos
+Legales del Emisor (SRI)" (3 campos editables) a "Identidad del
+Emisor" — un resumen de **solo lectura** de razón social/nombre
+comercial/dirección, con link a dónde editarlos de verdad.
+
+Gina lo corrigió el mismo día: "pero para que repetir otra vez los
+datos que ya aparecen en otra ficha, solo debería pedir el correo de
+facturación" — mostrar el dato de solo lectura seguía siendo mostrarlo
+dos veces. **Corregido a `condomanager@feee488`:** Facturación pide
+únicamente el correo de facturación (el único campo real y propio de
+esta pantalla, caso de uso legítimo y distinto del correo de contacto
+general). Ni un valor de razón social/nombre comercial/dirección se
+repite en ningún lado — solo un link de texto a Datos Fiscales/Perfil
+del condominio, sin mostrar los valores.
 
 ### Fase 3 — Reagrupar el sidebar
 
