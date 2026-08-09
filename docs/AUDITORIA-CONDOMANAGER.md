@@ -397,3 +397,11 @@ por el navegador (`registro-admin` → confirmar correo → login →
 `reconciliar-perfil`; las 3 rutas migradas en 🟠-1 con sesión de cada rol;
 el cron disparado de verdad contra una cuenta de prueba vieja en
 identity). Esa ronda de validación manual, agrupada, es el siguiente paso.
+
+**09-ago-2026, hallazgo nuevo, no de un fix — de una pregunta de negocio:**
+Gina preguntó si el sistema soporta que una persona tenga propiedades en
+más de un condominio. La respuesta, verificada contra `perfiles` (llave
+primaria en `user_id`, una fila por login para siempre), es que no —
+afecta ~120 personas reales del censo de Punta Blanca todavía sin subir.
+No es un fix de una ruta: es un proyecto de varias fases, con su propio
+documento — [PLAN-MULTI-CONDOMINIO.md](./PLAN-MULTI-CONDOMINIO.md).
