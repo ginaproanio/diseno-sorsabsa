@@ -153,7 +153,7 @@ Ninguno de los tres reinventos fue intencional — cada uno se construyó por
 separado porque nadie tenía visibilidad de que el otro ya existía. Es
 justamente lo que este ejercicio estaba pensado para sacar a la luz.
 
-## 10. 🟡 Login social: Google ✅ cerrado — Facebook ✅ funciona, Revisión de Meta enviada (~20 días)
+## 10. ✅ Login social: Google ✅ cerrado — Facebook ✅ funciona, Revisión de Meta APROBADA
 
 Ampliado 08-ago-2026 a partir de un punto de Gina: ya existe un proyecto de
 Google Cloud, `sorsabsaecosystem` (el mismo que tiene habilitada la Calendar
@@ -264,12 +264,14 @@ lo cual es falso y quedó anotado para no repetirlo.
     CondoManager, que la rechazó con "Tu cuenta no pertenece a ningún
     condominio" — mismo patrón exacto que el cierre de Google: el login
     funciona, CondoManager filtra por su regla propia.
-  - 🟡 **Revisión de Meta — ENVIADA, 08-ago-2026, ~20 días de espera.** A
-    diferencia de Google (que no la pidió), Facebook exige **Revisión de
-    la app** para que `email` funcione con cualquier usuario ajeno a la
-    app. Mientras no esté aprobada, sigue funcionando igual para
-    administradores/desarrolladores/testers (así se probó arriba, con
-    `gina.proanio@hotmail.com`) — no bloquea nada del ecosistema.
+  - ✅ **Revisión de Meta — APROBADA.** Enviada 08-ago-2026; Meta contestó
+    el **mismo día**, 8 de agosto de 2026 a las 18:55 GMT-5 (mucho antes de
+    los ~20 días estimados): *"Solicitud aprobada — Completamos la revisión
+    y se aprobaron las solicitudes y la configuración de la app."* App
+    **"Sorsabsa Identity"** (App ID `1851084815870458`). A partir de acá
+    `email` vía Facebook Login funciona para cualquier usuario, no solo
+    administradores/desarrolladores/testers — cierra del todo el login
+    social de identity (Google + Facebook, ambos ✅ en producción).
     - "Uso permitido" y "Tratamiento de datos" completados. En este
       último, corregido en el camino: el encargado del tratamiento
       declarado inicialmente era solo Gina — se agregó **Supabase, Inc.**
@@ -290,9 +292,6 @@ lo cual es falso y quedó anotado para no repetirlo.
       primer error). Estado final correcto: "Dominios de la app" =
       `auth.sorsabsa.com` + `gyqgorgfstffbgazhbnb.supabase.co` (los dos,
       sin `https://`); "URL del sitio" = `https://auth.sorsabsa.com`.
-    - Enviado a Revisión de Meta. Resultado esperado en ~20 días — revisar
-      "Acciones requeridas" en el panel de Meta for Developers cuando
-      llegue la respuesta.
 - ✅ **UI — botones de Google/Facebook lado a lado, no apilados.** Pedido
   de Gina 08-ago-2026 (con los dos uno debajo del otro el formulario
   quedaba largo). `auth-sorsabsa` commit `afa4ee6`. `typecheck`/`next

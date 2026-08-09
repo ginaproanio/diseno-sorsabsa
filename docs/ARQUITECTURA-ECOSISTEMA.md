@@ -347,6 +347,17 @@ proyecto: es una plataforma de Meta, no de Google, necesita su propia app en
 developers.facebook.com. Detalle completo del alta de los dos proveedores
 en `PENDIENTES-ECOSISTEMA.md` #10.
 
+✅ **Revisión de Meta de la app "Sorsabsa Identity" — APROBADA.** Enviada
+08-ago-2026, aprobada el mismo día a las 18:55 GMT-5 ("Solicitud aprobada —
+Completamos la revisión y se aprobaron las solicitudes y la configuración
+de la app"), muy por debajo de los ~20 días estimados. App ID
+`1851084815870458`. Con esto el login social (Google + Facebook) de
+`sorsabsa-identity` queda en producción para cualquier usuario, no solo
+administradores/testers. Detalle completo en `PENDIENTES-ECOSISTEMA.md` #10
+— **no confundir con la revisión, aparte y todavía en curso, de la app
+"Sorsabsa Asistente"** (WhatsApp de agente24siete, `PENDIENTES-ECOSISTEMA.md`
+§ "En curso, 08-ago-2026").
+
 ### Tres implementaciones de geo independientes, una de ellas duplicada dos veces
 
 Encontrado a partir de la pregunta de Gina de si el grafo cubría
