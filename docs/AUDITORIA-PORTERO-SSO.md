@@ -347,6 +347,19 @@ no arreglaba su login.
   en vivo con Gina (login normal, sin incógnito, y un registro nuevo con
   confirmación por correo) — no se forzó ningún login para no interferir
   con su propia prueba en curso.
+- **⚠️ Auto-auditoría, 09-ago-2026 (Gina: "no puede ser que siga en lo
+  mismo"): este fix estaba INCOMPLETO — es exactamente el patrón "fix
+  sobre fix" que ESTANDAR-DESARROLLO.md prohíbe.** El reenvío de
+  `condomanager/login` a `/auth/callback` asumía que cualquier
+  `#access_token` llegado ahí ya estaba federado al producto — cierto en
+  el camino normal de SSO, falso para un enlace de correo directo, cuyos
+  tokens son de identity en crudo. Resultado real, en producción, con
+  Gina probando: "No se pudo instalar la sesión." Corregido recién en
+  🔴-10 — no se marca como un hallazgo nuevo separado, es la continuación
+  de este mismo. La causa de fondo del "fix sobre fix": al escribir este
+  fix no distinguí los DOS tipos de sesión que pueden llegar a `/login`
+  (ya federada vs. identity cruda) — modelar esa distinción explícitamente
+  desde el principio hubiera evitado el segundo síntoma.
 - **JustiRed e IOT (Railway) — verificado que NO tienen este bug, no solo
   supuesto:** grep completo sobre `legaltech` e `iot` (los dos repos, todo
   el código fuente) — cero coincidencias de `signUp(`, `admin.createUser`,
@@ -448,11 +461,23 @@ no arreglaba su login.
   `20260809150000_admin_condominio_sin_residente.sql` aplicada en vivo.
   Confirmado en vivo (09-ago-2026): registro de prueba real → cero filas
   nuevas en `residentes`.
+- **Revisado contra ESTANDAR-DESARROLLO.md §6 (duplicación) — NO es una
+  violación:** `condominios.admin_pendiente_email` repite el PATRÓN de
+  `residentes.rol_pendiente` (pendiente hasta el primer login), pero sobre
+  una entidad genuinamente distinta (el admin no es un residente — es
+  justo lo que este hallazgo corrige). Unificarlas en una sola tabla
+  "usuarios_pendientes" agnóstica al rol sería sobre-ingeniería con solo
+  dos casos hoy. **Disparador para reconsiderarlo:** si aparece un TERCER
+  tipo de rol pendiente, ahí sí conviene una tabla genérica en vez de una
+  columna más por rol.
 
-### 🔴-10 — ✅ Confirmar cuenta daba "No se pudo instalar la sesión" — RESUELTO 09-ago-2026
+### 🔴-10 — ✅ Confirmar cuenta daba "No se pudo instalar la sesión" — RESUELTO 09-ago-2026, completa a 🔴-7
 
-Encadenado con lo de arriba, mismo registro de prueba en vivo, tres
-síntomas seguidos hasta llegar a la causa real:
+**No es un hallazgo independiente — es 🔴-7 terminado de resolver.** Ver la
+nota de auto-auditoría en esa entrada: el fix original ahí no distinguía
+sesión ya federada de sesión de identity cruda, y ese es exactamente el
+bug de acá. Mismo registro de prueba en vivo, tres síntomas seguidos hasta
+llegar a la causa real:
 
 1. El enlace de confirmación rebotaba a la pantalla genérica
    "Bienvenida a SORSABSA" — `condomanager.vip` no estaba en el allowlist
@@ -603,25 +628,55 @@ No es auth, es infraestructura. Ya documentado, no urgente.
 `invite-user.mjs`: `if (error?.message?.includes('already been registered'))`.
 Frágil por diseño, bajo impacto mientras el script sea manual.
 
+### 🔵-3 — ✅ URL del SSO escrita a mano y repetida 4 veces en condomanager — RESUELTO 09-ago-2026
+
+Encontrado en la auto-auditoría pedida por Gina contra ESTANDAR-DESARROLLO.md
+(§5/§6, duplicación). `"https://auth.sorsabsa.com/auth/login?app=condomanager"`
+estaba repetida sin fuente única en `registro-admin`, `registro-residente` y
+dos veces en `login/page.tsx` (`irAlSSO()` y el reenvío de fragment de
+🔴-10). **Fix:** `lib/auth/sso.ts` — `ssoLoginUrl(params?)`, único lugar
+que arma esa URL, con params opcionales (`next`, `ctx`) para el caso que
+ya los necesitaba. Commit `condomanager@62a444c`. Verificado con grep: cero
+literales de esa URL fuera del helper. typecheck limpio.
+
+### 🔵-4 — ⬜ Traducción de errores de Supabase duplicada entre repos, a propósito, con seguimiento
+
+`condomanager/app/login/page.tsx` (`MENSAJES_HASH`/`traducirErrorHash`) y
+`auth-sorsabsa/src/lib/traducir-error.ts` tienen el mismo par de entradas
+(`otp_expired`, `access_denied`) en dos repos distintos — duplicación real
+por la letra de ESTANDAR-DESARROLLO.md §6. **Por qué no se resuelve
+ahora:** los dos consumen `@sorsabsa/ui` (github package, versionado) —
+mover esto ahí es la fuente única correcta, pero implica publicar una
+versión nueva y actualizar el rango en los dos repos, un cambio de mayor
+riesgo/coreografía que el contenido (4-6 pares clave-valor, bajo riesgo de
+desviarse) justifica en medio de un incidente activo. **Regla de
+disparo:** si aparece una TERCERA copia, o si alguna de las dos empieza a
+divergir del otro texto para el mismo código, ahí sí mover a
+`@sorsabsa/ui` sin más demora — no esperar a que sea el mismo tipo de
+cadena de "parche sobre parche" que ya costó caro hoy.
+
 ---
 
 ## Próximo paso
 
-🔴-1, 🔴-2/3, 🔴-4/🟠-1, 🔴-5, 🔴-7, 🟠-3 y 🟠-5 cerrados y verificados
-(09-ago-2026; 🔴-7 pendiente de reproducir en vivo con Gina, ver su
-entrada). Nuevo y abierto, requiere acción de Gina en el dashboard de
-Supabase (fuera del alcance de las herramientas de esta sesión): 🔴-8, el
-Send Email Hook de identity dejó de llamarse — todo correo automático de
-identity sale sin marca. Quedan abiertos además, en orden de severidad:
-🔴-6 (referidos de
-agente24siete sin premio real — requiere decisión de Gina, marcado
-importante), 🟠-2 (empeorado el 09-ago: 3 nombres hardcodeados en vez de
-2 — el fix declarativo sigue pendiente y ahora limpia más), 🟠-4, 🟡-2,
-🟡-3 (debería poder eliminarse ahora que 🔴-1 está cerrado — no debería
-haber más cuentas nuevas fuera de identity, pendiente de confirmar con
-uso real), 🔵-1, 🔵-2. El fix de código de 🔴-2/3 (falla-cerrado explícito
-por entorno) sigue pendiente — solo se resolvió la credencial perdida que
-bloqueaba verificarlo, no el patrón de fallback en sí. Pendiente aparte,
-bajo impacto: el cron `limpiar-no-confirmados` de CondoManager solo mira
-el proyecto de producto — desde el fix de 🔴-1 no va a encontrar los
-registros nuevos sin confirmar (viven en identity).
+🔴-1, 🔴-2/3, 🔴-4/🟠-1, 🔴-5, 🔴-7 (completado por 🔴-10, ver nota de
+auto-auditoría en 🔴-7), 🔴-9, 🔴-10, 🟠-3, 🟠-5 y 🔵-3 cerrados y
+verificados (09-ago-2026, registro real de punta a punta con Gina).
+Abierto, requiere acción de Gina en el dashboard de Supabase (fuera del
+alcance de las herramientas de esta sesión): 🔴-8, el Send Email Hook de
+identity nunca se creó — todo correo automático de identity sale sin
+marca; falta además confirmar si `verticales_sorsabsa` sí lo tiene. Queda
+también 🔵-4 (traducción de errores duplicada entre repos), deferido a
+propósito con regla de disparo escrita. Quedan abiertos además, en orden
+de severidad: 🔴-6 (referidos de agente24siete sin premio real — requiere
+decisión de Gina, marcado importante), 🟠-2 (empeorado el 09-ago: 3
+nombres hardcodeados en vez de 2 — el fix declarativo sigue pendiente y
+ahora limpia más), 🟠-4, 🟡-2, 🟡-3 (debería poder eliminarse ahora que
+🔴-1 está cerrado — no debería haber más cuentas nuevas fuera de identity,
+pendiente de confirmar con uso real), 🔵-1, 🔵-2. El fix de código de
+🔴-2/3 (falla-cerrado explícito por entorno) sigue pendiente — solo se
+resolvió la credencial perdida que bloqueaba verificarlo, no el patrón de
+fallback en sí. Pendiente aparte, bajo impacto: el cron
+`limpiar-no-confirmados` de CondoManager solo mira el proyecto de
+producto — desde el fix de 🔴-1 no va a encontrar los registros nuevos sin
+confirmar (viven en identity).
