@@ -1,0 +1,169 @@
+# Plan — Reordenar Configuración/Parametrización de CondoManager
+
+Nace de una pregunta de Gina sobre si se puede compartir una URL directa a
+un condominio, que llevó a revisar el menú de Configuración completo.
+Confirmado con lectura de código, no supuesto — ver hilo en el chat del
+09-ago-2026 y [AUDITORIA-CONDOMANAGER.md](AUDITORIA-CONDOMANAGER.md) 🔵-4
+y siguientes para el resto de hallazgos de esa sesión.
+
+## Causa raíz
+
+Dos reglas que nunca existieron:
+
+1. **No hay criterio de agrupación de pantallas.** 14 pantallas de un solo
+   formulario repartidas en dos menús (`Configuración`, `Parametrización`)
+   sin una regla — cada una se agregó donde había espacio cuando se
+   construyó. Ejemplo que lo delata: "Seguridad" (2FA, sesión) vive en
+   `Parametrización` junto a Rubros y Morosidad, pero es tan "cuenta" como
+   Identidad Visual, que vive en `Configuración`.
+2. **No hay política de dónde vive un dato.** Unas pantallas escriben
+   columnas propias de `condominios` (Generales, Legales, Ubicación,
+   Contacto); otras escriben dentro de `condominios.configuracion`
+   (JSONB), cada una en su propia llave (Facturación, Identidad,
+   Seguridad, Reportes, Morosidad, Residentes-parametrización). Las que
+   usan JSONB con llave propia están aisladas por construcción — nunca se
+   pisan entre sí, porque cada handleSubmit hace "leer todo el JSON →
+   fusionar solo su llave → guardar". Las que usan columnas planas
+   (Ubicación, Contacto) no tienen ese aislamiento.
+
+De (2) sale un bug real, no solo estético: **Ubicación y Contacto escriben
+las mismas 3 columnas** (`direccion`, `latitud`, `longitud`) de
+`condominios`, cada una con su propio formulario que no sabe del otro. Si
+actualizás la dirección en Ubicación y después guardás cualquier cambio en
+Contacto (aunque sea solo el teléfono), Contacto reescribe
+`direccion`/`latitud`/`longitud` con la copia vieja que cargó al abrir esa
+pantalla — **se pierde el cambio, sin ningún error visible.**
+
+De (1)+(2) sale la duplicación de captura que vio Gina: "Datos Legales del
+Emisor (SRI)" en Facturación vuelve a pedir razón social y dirección, ya
+capturadas en Legales/Ubicación, guardadas en un lugar distinto de la
+base (JSONB vs. columnas), sin ningún vínculo entre ambos.
+
+## Alcance real, verificado leyendo cada archivo (no asumido)
+
+- **Ubicación ↔ Contacto**: comparten `direccion`/`latitud`/`longitud` en
+  `condominios`. Bug de pérdida de datos activo hoy.
+- **Facturación → `lib/facturacion/service.ts`** (el generador real del
+  PDF de factura) ya tiene fallback para 2 de los 3 campos duplicados:
+  - `direccion_facturacion` → cae a `condominio.direccion` si está vacío. ✅ ya correcto.
+  - `email_facturacion` → cae a `condominio.email` si está vacío. Gina
+    confirmó que es un caso de uso real y distinto (correo de
+    contabilidad ≠ correo de acceso al sistema) — **se queda, no se
+    toca.**
+  - `nombre_facturacion` → cae a `condominio.nombre` (el nombre simple de
+    Generales) si está vacío. **Esto está mal**: existe
+    `condominios.nombre_comercial` (capturado en Legales, pensado
+    exactamente para esto) que **nadie lee en ningún lugar del código** —
+    confirmado con grep, cero consumidores. Es dato muerto hoy.
+- **Superadmin tiene su propia pantalla de "Facturación"**
+  (`app/(dashboard)/panel/superadmin/configuracion/page.tsx`, tabla
+  `global_config`, campos con los mismos nombres) — pero es la
+  facturación de **SORSABSA a los condominios** (plataforma → cliente,
+  para cobrar la suscripción), no la de condominio → residente. Mismo
+  patrón de campos por coincidencia, alcance completamente distinto.
+  **Fuera de este plan** — lo registro para que quede constancia de que
+  no se pasó por alto, no que se ignoró.
+- **`residentes` / `datos_facturacion`**: revisado completo
+  (`nuevo`/`[id]/editar`). **No requiere cambios** — ya tiene el checkbox
+  "Usar los mismos datos del residente para facturación", con espejo
+  automático mientras está marcado y campos independientes reales solo
+  cuando se desmarca a propósito (caso "facturar a nombre de otra
+  persona"). Es el patrón correcto; el problema es específico del nivel
+  condominio.
+- **Los 4 campos de numeración SRI** (Establecimiento, Punto Emisión,
+  Siguiente Secuencial, Ambiente SRI) — **no se tocan.** Tienen que seguir
+  siendo editables a mano: un condominio que ya facturaba con otro
+  sistema necesita poder continuar su numeración real, no reiniciar en 1.
+
+## Fases
+
+### Fase 1 — Fusionar Ubicación + Contacto + Identidad Visual + Generales en "Perfil del condominio"
+
+La más urgente: es la que tiene el bug de pérdida de datos activo.
+
+- Nueva ruta `app/(dashboard)/panel/admin/configuracion/perfil/page.tsx`:
+  un solo `formData`, una sola carga (`cargarDatos`), un solo
+  `handleSubmit` con un único `.update()` que incluye todos los campos:
+  `nombre` (solo lectura, ya lo es hoy), `slug`, `pais`, `provincia`,
+  `ciudad`, `sector`, `direccion`, `latitud`, `longitud`, `email`,
+  `telefono`, `sitio_web` — más `logo_url`/`eslogan` (siguen en
+  `configuracion.identidad`, mismo patrón fetch-merge-write que ya usan
+  las pantallas JSONB, no cambia de lugar).
+- Borrar `ubicacion/page.tsx`, `contacto/page.tsx`, `identidad/page.tsx`.
+  `generales/page.tsx` se fusiona también (nombre + slug ya están cubiertos
+  arriba).
+- Compatibilidad: `/configuracion/{ubicacion,contacto,identidad,generales}`
+  quedan como `redirect()` a `/configuracion/perfil`, para no romper
+  enlaces guardados o accesos directos que ya existan.
+- Sidebar (`DashboardShell.tsx`): las 4 entradas actuales se reemplazan
+  por una sola, "Perfil del condominio", primera del grupo (es lo primero
+  que se configura al crear un condominio).
+- Por qué esto elimina el bug por construcción, no lo parcha: al no
+  existir dos `formData` independientes para las mismas columnas, no hay
+  forma de que uno pise al otro — no es una regla nueva a recordar, es
+  que la segunda copia deja de existir.
+
+### Fase 2 — Facturación: quitar los campos duplicados, arreglar el fallback roto
+
+- Quitar del formulario de Facturación: `nombre_facturacion` y
+  `direccion_facturacion` (los 2 campos de "Datos Legales del Emisor
+  (SRI)" que repetían Legales/Perfil). Se queda `email_facturacion` tal
+  cual, y los 4 campos de numeración SRI intactos.
+- `lib/facturacion/service.ts`, función que arma `emisorData`:
+  - `nombre_comercial`: cambia de `configFact.nombre_facturacion ||
+    condominio.nombre` a `condominio.nombre_comercial ||
+    condominio.nombre` — arregla el bug de que "Nombre Comercial" de
+    Legales nunca se leía en ningún lado.
+  - `direccion`: cambia de `configFact.direccion_facturacion ||
+    condominio.direccion || "Quito, Ecuador"` a `condominio.direccion ||
+    "Quito, Ecuador"` — se quita el nivel intermedio que ya no existe.
+  - `email` no cambia.
+- Backfill antes de borrar el campo del formulario: verificar por SQL
+  cuántos condominios reales tienen
+  `configuracion.facturacion.nombre_facturacion` o `direccion_facturacion`
+  con un valor distinto de `nombre_comercial`/`direccion` — si hay alguno,
+  copiar ese valor a la columna correspondiente antes de quitar el campo
+  de la UI, para no perderlo. (Verificar con SQL antes de asumir "no hay
+  datos", como en 🔵-3/🔵-4 — no repetir el error de asumir.)
+
+### Fase 3 — Reagrupar el sidebar
+
+Sin bug de por medio, es la parte de "eficiencia del menú" que preguntó
+Gina. Propuesta de grupos (a confirmar con ella antes de tocar
+`DashboardShell.tsx`):
+
+- **Identidad y legal**: Perfil del condominio (Fase 1), Datos Fiscales
+  (ex-Legales), Facturación, Medios de Pago, Módulos/Suscripción
+  (Marketplace), Notificaciones.
+- **Operación**: Rubros y Cobros, Morosidad, Reportes, Config. Residentes.
+- **Cuenta**: Seguridad — se muda desde `Parametrización`.
+
+Cambia solo el sidebar (`DashboardShell.tsx`), ninguna lógica de página
+se toca en esta fase salvo mover el `<SidebarLink>` de Seguridad de un
+bloque a otro.
+
+### Fase 4 — Verificación y cierre
+
+- `npx tsc --noEmit` + `npx eslint` sobre todos los archivos tocados.
+- SQL antes/después: confirmar que ningún condominio real perdió datos en
+  la fusión (comparar columnas relevantes pre y post migración).
+- Validación en vivo: Gina reingresa a "Perfil del condominio" y a
+  "Facturación", confirma que ve sus datos actuales tal cual estaban.
+- Actualizar `AUDITORIA-CONDOMANAGER.md` con el hallazgo del bug de
+  pérdida de datos (Ubicación/Contacto) como una entrada 🔵 más, con el
+  commit de `condomanager` que lo resuelve.
+
+## Orden recomendado
+
+Fase 1 primero (bug activo de pérdida de datos, la más urgente) → Fase 2
+(duplicación real + bug del fallback, sin pérdida de datos pero con
+consecuencia legal en la factura) → Fase 3 (reordenar sidebar, cosmético,
+se puede hacer junto con 1 y 2 en el mismo PR o después, no tiene apuro) →
+Fase 4 en cada fase, no solo al final.
+
+## Pendiente de decidir con Gina antes de ejecutar
+
+- ¿Fase 3 (reagrupar sidebar) se hace en el mismo lote que 1 y 2, o
+  después, por separado?
+- Nombre final de los grupos del sidebar ("Identidad y legal" /
+  "Operación" / "Cuenta" son una propuesta, no una decisión).
