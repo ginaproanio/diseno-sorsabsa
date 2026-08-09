@@ -1,7 +1,7 @@
 # Graph Report - diseno-sorsabsa  (2026-08-09)
 
 ## Corpus Check
-- 71 files · ~40,506 words
+- 71 files · ~40,681 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5bc0aafa`
+- Built from commit: `def490a7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -90,7 +90,7 @@ Nodes (28): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandConfig, 
 
 ### Community 6 - "Estándar de desarrollo — no parchear la arquitectura"
 Cohesion: 0.06
-Nodes (31): 🟡-1 — ✅ Eliminación manual de cuentas reales vía SQL directo — reconocido, no repetir, 🟠-1 — ⬜ Excepción hardcodeada `app === 'iot'` en /auth/complete, 🔵-1 — ⬜ `iot.redirectUrl` es una URL cruda de Railway, no dominio propio, 🔴-1 — ⬜ No existe un proceso gobernado para dar de alta usuarios con atributos de autorización, ni un mecanismo para propagarlos a los proyectos federados, 🔴-2 / 🔴-3 — 🔧 Fallback que trata "no configurado" como estado válido, en el motor de cobros, 🟠-2 — ⬜ Bypass de entitlements hardcodeado por nombre de producto, 🔵-2 — ⬜ Fallback basado en el texto de un error de un proveedor externo, 🟡-2 — ⬜ `PROFILE_CHOICES` con nombres reales hardcodeados en editor.py (+23 more)
+Nodes (31): 🟡-1 — ✅ Eliminación manual de cuentas reales vía SQL directo — reconocido, no repetir, 🟠-1 — ⬜ Excepción hardcodeada `app === 'iot'` en /auth/complete, 🔵-1 — ⬜ `iot.redirectUrl` es una URL cruda de Railway, no dominio propio, 🔴-1 — ⬜ No existe un proceso gobernado para dar de alta usuarios con atributos de autorización, ni un mecanismo para propagarlos a los proyectos federados, 🔴-2 / 🔴-3 — ✅ Fallback que trata "no configurado" como estado válido, en el motor de cobros — PAGOS_API_KEY rotada y verificada, 🟠-2 — ⬜ Bypass de entitlements hardcodeado por nombre de producto, 🔵-2 — ⬜ Fallback basado en el texto de un error de un proveedor externo, 🟡-2 — ⬜ `PROFILE_CHOICES` con nombres reales hardcodeados en editor.py (+23 more)
 
 ### Community 7 - "devDependencies"
 Cohesion: 0.07
