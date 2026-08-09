@@ -13,7 +13,7 @@ trabajo lo redescubría desde cero — a veces rompiendo algo en el intento.
 
 ## 1. Inventario
 
-### Productos (lo que un cliente compra)
+### Verticales (lo que un cliente compra)
 
 | Producto | Repo | Plataforma | Estado verificado |
 |---|---|---|---|
@@ -35,7 +35,17 @@ trabajo lo redescubría desde cero — a veces rompiendo algo en el intento.
 > solo el backend OCR (§2), en contenedor (Railway) o local, invocado directo.
 > **No re-desplegar en Vercel por ahora.**
 
-### Servicios compartidos (no se venden solos)
+### Transversales (no se venden solos — cruzan todos los verticales)
+
+Terminología fijada por Gina, 09-ago-2026: **vertical** = producto que un
+cliente contrata (Agente24Siete, DomusCRM, CondoManager, JustiRed —
+crecen agregando funciones DENTRO de su propio dominio). **Transversal**
+= sistema que ningún vertical vende por sí solo, pero que TODOS
+consumen igual (Pagos, Suscripciones, Notificaciones, SSO, Geo...) — un
+cambio ahí afecta a todos los verticales a la vez, por eso vive fuera de
+cualquiera de ellos. Antes tabulado como "Servicios compartidos"; mismo
+contenido, nombre corregido para que quede claro que la relación es de
+cruce (todo vertical depende de cada transversal), no de jerarquía.
 
 | Servicio | Repo | Estado |
 |---|---|---|
