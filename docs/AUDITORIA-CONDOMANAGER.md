@@ -120,6 +120,14 @@ inutilizable antes; el fix solo la habilita.
 hacía su trabajo (borraba el condominio y el usuario de identity en cada
 intento fallido), así que no quedó ningún condominio a medio crear.
 
+**Validación real de punta a punta — hecha 09-ago-2026, por Gina:**
+"solicitar demo" → registro de admin_condominio → confirmar correo →
+login como admin → login como superadmin. Los 4 pasos funcionaron. Esto
+cierra la validación en vivo que había quedado pendiente para 🔴-3 (y de
+paso confirma el incidente de `resolve_condominio_for_user` — ver
+`PLAN-MULTI-CONDOMINIO.md` — quedó resuelto: sin esa función, el login
+fallaba en el chequeo de suscripción del portero).
+
 ---
 
 ## Resto de la pasada "portero × pagos/facturación/RLS/crons"
