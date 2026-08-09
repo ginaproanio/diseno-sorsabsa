@@ -793,6 +793,40 @@ real.
 
 ---
 
+## 17. 🟡 Gobernanza de correo masivo por tenant (activación de residentes, alícuotas) — diseño acordado, infraestructura sin construir
+
+**Origen:** 09-ago-2026, discutiendo cómo activar los residentes precargados de
+Punta Blanca (censo real, ~3800). Gina identificó el riesgo correcto: si un
+admin manda un masivo (invitaciones, recordatorio de alícuotas) a una lista
+sucia, el rebote/queja daña la reputación de **todo el dominio compartido**
+(`auth.sorsabsa.com`, único verificado en Resend) — el reseteo de contraseña
+de otro condominio, de otro producto, puede empezar a caer en spam.
+
+**Diseño acordado con Gina, no implementado todavía:**
+1. **Segundo dominio verificado en Resend, solo para masivos** (ej.
+   `notificaciones.sorsabsa.com`), separado del transaccional — mismo patrón
+   que usan Buildium/AppFolio/TownSq (software de gestión de condominios):
+   canal transaccional nunca se degrada por culpa del canal masivo.
+2. **Cupo por condominio** (arrancar en 2 envíos masivos/mes, activación +
+   alícuotas comparten el cupo) — con aviso visible al admin antes de
+   confirmar, cupo restante a la vista.
+3. **Corte automático por rebotes/quejas**, no solo por conteo — un tenant
+   puede respetar el cupo y aun así ensuciar la lista.
+4. **Envío en tandas**, nunca un blast instantáneo — batch API de Resend o
+   cola propia, goteado.
+
+**Por qué no se hizo hoy:** requiere DNS/dominio nuevo y una cola de envío
+(los serverless functions de Vercel no aguantan mandar miles de correos en
+una sola invocación) — más grande que el resto del trabajo de hoy. La
+activación de residentes (ítem relacionado, ver commits de CondoManager
+09-ago-2026) se construyó para funcionar SIN esto: el disparador "bajo
+demanda" (uno a uno, cuando el residente entra por su cuenta) no necesita
+nada de lo de arriba. El disparador "masivo" queda con un cupo simple
+(sin segundo dominio ni cola) hasta que esto se construya — usarlo con
+cuidado mientras tanto.
+
+---
+
 ## Hecho (para no re-hacer)
 
 - ✅ pagos + notificaciones: **datos** migrados a Railway (SORSABSA-DATA).
