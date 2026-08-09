@@ -117,7 +117,42 @@ La causa raíz es 🔴-1.
   `auth-sorsabsa` commit `4478657`. Verificado en vivo: la misma cuenta
   de prueba ahora da `200 {"active":true,"bypass":true}`.
 
-### 🔴-1 — ⬜ No existe un proceso gobernado para dar de alta usuarios con atributos de autorización, ni un mecanismo para propagarlos a los proyectos federados
+### 🔴-6 — ⬜ IMPORTANTE, marcado por Gina: el bypass de 🔴-5 desconecta el único uso real de `pagos.suscripciones` — los días ganados por el programa de referidos
+
+- **Encontrado:** 09-ago-2026, explicado por Gina al justificar por qué el
+  login SÍ debía validar contra la suscripción — no era arbitrario.
+- **Evidencia real, en el propio código:** `agente24siete/pages/api/portal/referidos.js`,
+  comentario del archivo: *"quien arrienda el servicio es quien refiere:
+  el sujeto es el CLIENTE del portal (la entidad que paga), resuelto de
+  la sesión — **la recompensa son días de SU suscripción**."* Cuando un
+  referido se convierte (primer pago real), `pagos-sorsabsa` extiende
+  `suscripciones` para el referidor (mismo mecanismo que
+  `api/extender-suscripcion.js` / `api/confirmar.js`).
+- **El problema real:** en TODO agente24siete, el único consumidor de
+  `pagos.suscripciones` era el gate de login en `auth-sorsabsa` — el
+  mismo que 🔴-5 bypaseó porque bloqueaba al 100% de los clientes desde
+  el día uno (nadie llama `crear-trial`, nadie tiene fila inicial). Con
+  el bypass, cualquiera entra tenga o no días ganados por referir.
+  `registrarConsumo` (lo que cobra el uso real de la IA, en
+  `lib/saldo.js`) solo lee `clientes.plan_id` para el markup — **nunca
+  lee `pagos.suscripciones`**. Los días de suscripción ganados por
+  referir quedan registrados en la base, pero no producen ningún efecto
+  visible o funcional en ningún lugar de la app.
+- **No revertir 🔴-5** — sin el bypass, el bug original (100% de clientes
+  reales bloqueados desde el primer login, antes de poder referir a
+  nadie) vuelve. El login no es el lugar correcto para este chequeo de
+  todas formas: un cliente sin suscripción/saldo necesita poder entrar
+  igual para recargar o para invitar referidos — bloquearlo en el login
+  bloquea el propio programa que se quiere premiar.
+- **Fix pendiente de decidir (requiere a Gina — qué debe otorgar
+  exactamente un día de suscripción ganado):** conectar
+  `pagos.suscripciones` a algo real DENTRO de agente24siete en vez del
+  login — candidatos, a definir: (a) `registrarConsumo` aplica
+  `markup_uso = 1` (sin recargo) mientras la suscripción esté activa,
+  (b) los días ganados se traducen a saldo acreditado directo (mismo
+  mecanismo que `webhook-recarga`), (c) desbloquean `negocios_incluidos`
+  extra del plan. Sin esta decisión, el programa de referidos de
+  agente24siete no tiene ningún premio real hoy.
 
 - **Archivo:** `auth-sorsabsa/scripts/invite-user.mjs` (el proceso) + `iot/auth_sso.py` (la consecuencia)
 - **Problema:** ningún componente decide "esta persona debe existir en identity, con estos atributos, con acceso a este producto" — lo decide quien corre el script a mano.
@@ -309,10 +344,11 @@ Frágil por diseño, bajo impacto mientras el script sea manual.
 
 ## Próximo paso
 
-🔴-2/3 y 🟠-5 cerrados y verificados (09-ago-2026). Quedan abiertos, en
-orden de severidad: 🔴-1 (alta de usuarios no gobernada — la causa raíz
-más grande, requiere diseño nuevo, no un fix rápido), 🔴-4 (traspaso de
-sesión que funciona "por casualidad" en 5 de 6 productos), 🟠-1, 🟠-2,
-🟠-4, 🟡-2, 🟡-3, 🔵-1, 🔵-2. El fix de código de 🔴-2/3 (falla-cerrado
-explícito por entorno) sigue pendiente — solo se resolvió la credencial
-perdida que bloqueaba verificarlo, no el patrón de fallback en sí.
+🔴-2/3, 🔴-4/🟠-1, 🔴-5, 🟠-3 y 🟠-5 cerrados y verificados (09-ago-2026).
+Quedan abiertos, en orden de severidad: 🔴-6 (referidos de agente24siete
+sin premio real — requiere decisión de Gina, marcado importante), 🔴-1
+(alta de usuarios no gobernada — la causa raíz más grande, requiere
+diseño nuevo, no un fix rápido), 🟠-2, 🟠-4, 🟡-2, 🟡-3, 🔵-1, 🔵-2. El
+fix de código de 🔴-2/3 (falla-cerrado explícito por entorno) sigue
+pendiente — solo se resolvió la credencial perdida que bloqueaba
+verificarlo, no el patrón de fallback en sí.
