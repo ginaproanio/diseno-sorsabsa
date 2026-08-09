@@ -60,10 +60,12 @@ sin ese patrón exacto. Repetido con un criterio más amplio (cualquier
   condominio está la persona. Hoy no se nota porque solo puede existir
   una fila; con el fix, mostraría datos de un condominio arbitrario **sin
   error visible** — el peor tipo de bug.
-- **`resolve_condominio_for_user()`** — función SQL huérfana en
-  `00000000000000_baseline_schema.sql`, mismo defecto
-  (`... LIMIT 1`), pero no la llama nada del código actual. Limpieza, no
-  riesgo activo.
+- **`resolve_condominio_for_user()`** — ⚠️ **NO era huérfana.** Se
+  marcó así, se borró en la Fase 2, y rompió el login de CondoManager en
+  producción — ver nota en la Fase 2 más abajo. El grep que la declaró
+  "sin uso" solo cubrió el repo de condomanager; la llama
+  `auth-sorsabsa/src/lib/entity-resolver.ts` por SQL directo, desde OTRO
+  repositorio. Restaurada.
 
 No se afirma que esta lista sea definitiva — es lo que apareció con este
 segundo barrido. Puede haber más; se trata como una lista viva, no
@@ -143,8 +145,48 @@ Se encontró antes de ejecutar, revisando `pg_policies` primero.
 **Recomendada: Opción B** — mismo riesgo total más bajo (cero políticas
 reescritas) y une Fase 2 con Fase 3 en un solo mecanismo. Confirmada por
 Gina 09-ago-2026. `is_modulo_activo()` no se tocó — ya recibe el
-condominio como parámetro. `resolve_condominio_for_user(p_user_id uuid)`
-eliminada — huérfana, nadie la llamaba.
+condominio como parámetro.
+
+**🔴 Incidente real, mismo día, causado por este fix:**
+`resolve_condominio_for_user(p_user_id uuid)` se marcó "huérfana, nadie la
+llamaba" y se eliminó. El grep que la declaró sin uso solo cubrió el repo
+de `condomanager` — **la llama `auth-sorsabsa/src/lib/entity-resolver.ts`
+por SQL directo** (`SELECT public.resolve_condominio_for_user($1::uuid)`,
+vía un pool de Postgres propio, rol `app_runtime`), para resolver qué
+condominio paga la suscripción de cada login. Al borrarla, esa consulta
+empezó a tirar excepción en cada login de CondoManager; el `catch` de
+`entity-resolver.ts` falla-cerrado a un sujeto sintético
+(`__resolucion_fallida__...`), que pagos-sorsabsa correctamente reporta
+sin suscripción — de ahí la pantalla "Sin suscripción activa" que Gina
+vio al registrar un condominio nuevo y de prueba, cero clientes reales
+afectados por suerte de timing, pero el login de CondoManager estuvo roto
+en producción durante el tramo entre borrar la función y este arreglo.
+
+**Causa raíz del error de auditoría:** verificar "¿quién llama esto?" con
+un grep de UN SOLO repositorio, cuando el ecosistema tiene múltiples
+repos que se conectan a la misma base por vías distintas (PostgREST desde
+condomanager, un pool de `pg` directo desde auth-sorsabsa). "No encontré
+llamadas" no es lo mismo que "no hay llamadas" — es "no busqué en todos
+los lugares donde podría haber una".
+
+**Restaurada** (`resolve_condominio_for_user`, misma definición
+original — sin agregarle awareness de multi-condominio ahora, sería
+resolver dos problemas a la vez con algo roto en producción; queda para
+cuando se diseñe cómo el portero debe manejar entitlements con
+multi-condominio, fuera de esta fase).
+
+**Hallazgo aparte, no causado hoy, encontrado investigando este
+incidente — sin verificar todavía:** `entity-resolver.ts` resuelve
+`userData.user.id` contra el token de **identity**, pero
+`perfiles.user_id` en el proyecto de producto guarda el id LOCAL
+federado — son valores distintos (confirmado: el `id` de
+`gina.proanio76@gmail.com` en identity no coincide con su `user_id` en
+`perfiles`). Si eso es así en la práctica, `resolve_condominio_for_user`
+nunca encontraría una fila real y el chequeo de suscripción de
+CondoManager estaría en bypass permanente (nadie se bloquea por falta de
+pago) salvo cuando la consulta tira excepción (como hoy, que sí
+bloqueaba). No confirmado con una prueba de punta a punta — pendiente,
+importante antes de que haya un cliente real pagando.
 
 **Implementado (`condomanager@04a4ec6`):** `current_rol()`,
 `current_condominio_id()`, `current_residente_id()` ahora ordenan las
