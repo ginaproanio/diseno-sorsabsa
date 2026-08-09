@@ -577,16 +577,51 @@ Resend      →  SALIDA de correo transaccional desde auth.sorsabsa.com
 
 **Entrada por Cloudflare, salida por Resend.** División correcta, no se pisan.
 
-### Quién manda qué correo
+### Quién manda qué correo — reescrito 09-ago-2026, con los dos consumidores reales verificados
 
 - **Resend NO lo usa `notificaciones-sorsabsa`.** Ese servicio es la campana
   dentro de la app (`crear`, `listar`, `marcar-leida`); sus únicas variables
   son `NOTIFICACIONES_API_KEY` y `DATABASE_URL`. No manda correo.
-- Resend está enganchado como **SMTP de Supabase Auth**. Por eso el remitente
-  es `auth.sorsabsa.com` y lo que sale son *"Restablece tu contraseña"* y
-  *"Confirma tu cuenta"*. Verificado: entrega real el 2026-07-23.
+- **`DomusCRM`, `agente24siete`, `JustiRed`: ninguno tiene su propia
+  `RESEND_API_KEY`, y está bien así — no la necesitan.** Verificado por
+  código, no supuesto: ninguno de los tres tiene una sola llamada a Resend
+  en su repo. Todo su correo (si lo tienen) pasa por el consumidor #1 de
+  abajo.
+- **Dos consumidores reales, cada uno con su propia `RESEND_API_KEY` — la
+  MISMA key, en dos proyectos Vercel distintos, deliberadamente:**
+  1. **`auth-sorsabsa`** (`src/app/api/auth-hook/send-email/route.ts`) —
+     el **Send Email Hook** de Supabase Auth (Authentication → Hooks, no
+     es SMTP plano como decía esta sección antes). Configurado en **los
+     dos** proyectos Supabase (`sorsabsa-identity` y `verticales_sorsabsa`,
+     mismo `SEND_EMAIL_HOOK_SECRET` en ambos): cuando cualquiera de los dos
+     necesita mandar un correo automático de Auth (recovery, confirmación
+     de signup, magic link), Supabase deja de usar su plantilla genérica y
+     llama a este endpoint, que arma el correo con la marca del producto
+     correcto y lo manda por Resend. Es el remitente de *"Restablece tu
+     contraseña"*/*"Confirma tu cuenta"* para **todo** lo que pasa por
+     identity — o sea, todos los productos.
+  2. **`condomanager`** (`lib/email/resend.ts` + `lib/email/service.ts`) —
+     su **propio** envío directo, para correo de negocio que el hook de
+     arriba no cubre porque no es un evento automático de Supabase Auth:
+     bienvenida al admin (`registro-admin`), confirmación de residente
+     (`registro-residente`), aprobación/rechazo de residente, invitación
+     de activación masiva (`PENDIENTES-ECOSISTEMA.md` #17), notificaciones
+     internas. Es el único producto con este segundo canal — DomusCRM y
+     agente24siete no lo tienen porque no arman correo propio hoy.
 
-Son dos planos distintos y ambos están vivos: campana en la app, correo fuera.
+Son dos planos distintos y ambos están vivos: campana en la app,
+correo del hook de identity, correo propio de condomanager.
+
+**Incidente real, 09-ago-2026 — por qué esto importa:** las dos
+`RESEND_API_KEY` (auth-sorsabsa y condomanager) se vencieron/rotaron por
+separado, en momentos distintos, y **cada una falló en silencio** — el
+API devolvía éxito genérico igual, Resend nunca veía el intento (rechazo
+por key inválida no deja rastro en el dashboard de Resend), y nadie se
+enteraba hasta que un usuario real decía "no me llegó el correo". Las dos
+quedaron alineadas a la misma key hoy. **No hay alerta automática si
+alguna vuelve a vencerse** — sigue siendo un pendiente, ver
+`PENDIENTES-ECOSISTEMA.md` #17 (que también cubre la idea de un dashboard
+de consumo por producto/cliente, todavía sin construir).
 
 ### Limitaciones y minas
 
