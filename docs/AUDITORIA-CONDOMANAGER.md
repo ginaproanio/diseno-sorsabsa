@@ -515,6 +515,46 @@ ninguno se rompe. typecheck + eslint limpios.
 
 ---
 
+### 🟠-3 — ✅ Ubicación y Contacto escribían las mismas columnas sin saberlo — pérdida de datos real — RESUELTO 09-ago-2026
+
+Marcado 🟠 (no 🔵) porque a diferencia de los hallazgos "obligatorio en
+pantalla / opcional en base" anteriores, este SÍ podía borrar un dato ya
+guardado, sin ningún error visible. Encontrado a raíz de una pregunta de
+Gina sobre compartir la URL de un condominio, que llevó a revisar el
+menú de Configuración completo — ver
+[PLAN-CONFIGURACION-CONDOMINIO.md](PLAN-CONFIGURACION-CONDOMINIO.md)
+para el análisis completo y las 4 fases.
+
+**Síntoma:** `app/(dashboard)/panel/admin/configuracion/ubicacion` y
+`.../contacto` eran 2 pantallas independientes, cada una con su propio
+`formData` y su propio `handleSubmit`, escribiendo las **mismas 3
+columnas** de `condominios` (`direccion`, `latitud`, `longitud`) sin
+fetch-merge entre sí. Guardar en una, después de haber guardado un
+cambio en la otra, reescribía esas 3 columnas con la copia vieja que esa
+pantalla había cargado al abrirse — el cambio previo desaparecía en
+silencio.
+
+**Causa raíz:** no había política de dónde vive un dato de condominio.
+Las pantallas que guardan dentro de `condominios.configuracion` (JSONB)
+sí están aisladas por construcción — cada una hace fetch-merge-write
+sobre su propia llave, nunca se pisan. Las que escriben columnas planas
+(Ubicación, Contacto, también Generales/Identidad) no tenían ese
+aislamiento porque cada una se armó por separado, sin una sola pantalla
+dueña de esos datos.
+
+**Fix (no un parche):** fusionadas Generales + Ubicación + Contacto +
+Identidad Visual en una sola pantalla, "Perfil del condominio"
+(`condomanager@5267329`, Fase 1 de
+[PLAN-CONFIGURACION-CONDOMINIO.md](PLAN-CONFIGURACION-CONDOMINIO.md)).
+Un solo `formData`, un solo `handleSubmit` — la segunda copia que podía
+pisar a la primera deja de existir, no es una regla a recordar. Rutas
+viejas (`generales`, `ubicacion`, `contacto`, `identidad`) quedan como
+`redirect()` a `/configuracion/perfil`. Verificado: typecheck limpio,
+eslint 0 errores, SQL confirma que el condominio real no perdió ningún
+dato (cambio solo de UI/routing, sin migración de por medio).
+
+---
+
 ### 🔵-4 — ✅ `deudas.rubro_id`: UI decía "opcional", la base exigía `NOT NULL`, y un `LEFT JOIN` faltante lo hacía peor — RESUELTO 09-ago-2026
 
 **Encontrado en el barrido sistemático** (ver "Próximo paso" resuelto

@@ -77,9 +77,24 @@ base (JSONB vs. columnas), sin ningún vínculo entre ambos.
 
 ## Fases
 
-### Fase 1 — Fusionar Ubicación + Contacto + Identidad Visual + Generales en "Perfil del condominio"
+### Fase 1 — ✅ RESUELTO 09-ago-2026 (`condomanager@5267329`)
 
-La más urgente: es la que tiene el bug de pérdida de datos activo.
+Fusionar Ubicación + Contacto + Identidad Visual + Generales en "Perfil del condominio"
+
+La más urgente: es la que tenía el bug de pérdida de datos activo.
+
+**Ajuste sobre el plan original, a pedido de Gina:** no un formulario
+plano de 14 campos — organizado en pestañas (General / Ubicación /
+Contacto) dentro de un único `<form>`, con un solo botón Guardar visible
+sin importar la pestaña activa. Sigue siendo un solo `formData` y un
+solo `handleSubmit` (el bug se elimina igual, por construcción), solo
+que presentado sin abrumar. Tabs extraído a un componente reutilizable
+(`app/components/ui/Tabs.tsx`) porque ya era el segundo lugar que
+necesitaba el mismo patrón que Facturación tenía inline.
+
+También aclaró Gina: "Nombre Comercial" y "Razón Social" (en Legales)
+son campos reales y distintos establecidos por el SRI ecuatoriano — no
+son duplicados entre sí, no se tocan en ninguna fase de este plan.
 
 - Nueva ruta `app/(dashboard)/panel/admin/configuracion/perfil/page.tsx`:
   un solo `formData`, una sola carga (`cargarDatos`), un solo
