@@ -33,9 +33,21 @@ autenticación de `pagos/iniciar`, `pagos/confirmar`, `pagos/consultar`.
 
 **NO cubierto todavía — no asumir que está limpio:** lógica de negocio
 completa (montos, cálculos, reglas de facturación en sí) de `lib/pagos/*`
-y `lib/facturacion/service.ts`, las páginas del dashboard
-(`app/(dashboard)/**`) más allá de lo que aparece por grep, RLS de tablas
-fuera de `perfiles`/`residentes`, y `lib/domuscrm-sync.ts`.
+y `lib/facturacion/service.ts`, RLS de tablas fuera de
+`perfiles`/`residentes`, y `lib/domuscrm-sync.ts`.
+
+**09-ago-2026, aclarado a pedido directo de Gina — "¿fue auditada la
+UI?":** No. Las ~150 páginas de `app/(dashboard)/**` NUNCA estuvieron en
+el alcance de esta auditoría — el barrido buscó hardcodes/bypasses/RLS
+mal conectado en rutas de servidor, no reglas de negocio mal puestas en
+un formulario de cliente. Todo lo de 🔵-2 y 🔵-3 lo encontró Gina
+usando la app, no un barrido de código. Confirmado que el patrón se
+repite: el mismo defecto de `unidades` (obligatorio en pantalla, opcional
+en la base, validación copiada en 3 pantallas que llaman a Supabase
+directo sin pasar por ninguna API) se verificó también en `residentes`
+(mismos 3 archivos: `nuevo`, `importar`, `[id]/editar`) — ver 🔵-3.
+**No se puede afirmar que no haya más casos así** sin un barrido real de
+la UI, todavía no hecho.
 
 Leyenda de estado: ⬜ pendiente · 🔧 en análisis (9 puntos presentados, sin
 código tocado) · ✅ corregido y verificado · ❌ descartado (no era un
@@ -486,3 +498,33 @@ opcional a **obligatorio** — `*` en el label, `required` en el input,
 (`panel/residente/mis-unidades/page.tsx`) — no duplica esta validación,
 edita solo campos de comercialización (precio, redes sociales), no toca
 manzana/lote/codigo_predial.
+
+**Extensión del mismo patrón a `residentes`, mismo día
+(`condomanager@6f42bc0`):** Gina preguntó directo si la UI había sido
+auditada — no lo había sido (ver corrección de alcance más arriba). Se
+verificó el mismo defecto en `residentes`: "Nombres, apellidos y email
+son obligatorios" copiado en 3 pantallas (`nuevo`, `importar`,
+`[id]/editar`), pero las 3 columnas eran opcionales en la base.
+Confirmado con Gina: los 3 deben ser siempre obligatorios. Centralizado
+en `lib/residentes/validar.ts`; `ALTER COLUMN ... SET NOT NULL` en
+`nombres`/`apellidos`/`email` (verificado antes: tabla vacía, sin
+conflicto). Verificados los 4 sitios que insertan `residentes`
+(`importar`, `nuevo`, `registro-residente/route.ts`,
+`scratch/test_invoicing_flow.ts`) — todos ya proveían los 3 campos,
+ninguno se rompe. typecheck + eslint limpios.
+
+---
+
+## Próximo paso (actualizado, al final del documento — ver también la nota de Próximo paso más arriba, en el cuerpo del documento)
+
+**Pendiente real, reconocido explícitamente 09-ago-2026:** las ~150
+páginas de `app/(dashboard)/**` nunca tuvieron un barrido sistemático.
+Se sabe, por evidencia repetida (🔵-2, 🔵-3, y su extensión a
+`residentes`), que el patrón "obligatorio en pantalla / opcional en la
+base / validación copiada en 2-3 archivos" se repite al menos 2 veces —
+no hay motivo para asumir que son las únicas. Un barrido real (grep de
+"obligatori[oa]" + otros patrones de validación, cruzado contra
+`information_schema.columns.is_nullable` de cada tabla involucrada) es
+el siguiente paso lógico, todavía no ejecutado — se fue resolviendo caso
+por caso a medida que Gina los encontró probando, no de forma
+sistemática.
