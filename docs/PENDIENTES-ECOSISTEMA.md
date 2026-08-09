@@ -825,6 +825,30 @@ nada de lo de arriba. El disparador "masivo" queda con un cupo simple
 (sin segundo dominio ni cola) hasta que esto se construya — usarlo con
 cuidado mientras tanto.
 
+**Añadido 09-ago-2026 — visibilidad de consumo, no solo gobernanza:**
+Gina notó que hoy no hay nada centralizado para saber cuánto se gasta de
+Resend, ni por producto ni por condominio — el dashboard de Resend es una
+sola vista para toda la cuenta, sin separar por tenant. Diseño propuesto:
+
+1. **Corto plazo, sin infraestructura nueva:** mandar `tags` en cada
+   `.send()` de Resend (ej. `{name:'condominio', value:'punta-blanca'}`) —
+   el propio dashboard de Resend ya puede filtrar por tag.
+2. **Consumo real, visible al cliente:** registrar cada envío (quién, a
+   quién, cuándo, si rebotó) en `notificaciones-sorsabsa` — ya es el
+   servicio que trackea comunicaciones (la campana in-app) y ya tiene base
+   en Railway; extenderlo es reusar, no duplicar. Lo más robusto: un
+   **webhook de Resend** (`email.sent`/`delivered`/`bounced`) apuntando a
+   un endpoint nuevo ahí, para que se registre solo sin depender de que
+   cada producto se acuerde de reportarlo.
+3. **Dónde se ve:** el superadmin de CondoManager (o de cualquier
+   vertical) consultaría esa base vía API de `notificaciones-sorsabsa` —
+   una vista de "consumo de correo por condominio" en
+   `panel/superadmin/condominios/[id]` (o un reporte agregado), el mismo
+   patrón que ya usa `pagos-sorsabsa` para que cada producto consulte su
+   propio estado de facturación sin duplicar la lógica.
+
+No implementado — queda anotado junto con el resto de este ítem.
+
 ---
 
 ## Hecho (para no re-hacer)
