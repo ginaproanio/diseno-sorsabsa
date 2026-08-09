@@ -4835,21 +4835,21 @@
       "norm_label": "\ud83d\udd35 menor"
     },
     {
-      "label": "\ud83d\udd35-1 \u2014 \u2b1c Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo",
+      "label": "\ud83d\udd35-1 \u2014 \u2705 Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo \u2014 RESUELTO 09-ago-2026",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
       "source_location": "L194",
       "_origin": "ast",
-      "id": "docs_auditoria_condomanager_1_artefactos_compilados_scratch_dist_js_commiteados_al_repo",
+      "id": "docs_auditoria_condomanager_1_artefactos_compilados_scratch_dist_js_commiteados_al_repo_resuelto_09_ago_2026",
       "community": 9,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
-      "norm_label": "\ud83d\udd35-1 \u2014 \u2b1c artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo"
+      "norm_label": "\ud83d\udd35-1 \u2014 \u2705 artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo \u2014 resuelto 09-ago-2026"
     },
     {
       "label": "Hallazgos ya cubiertos en AUDITORIA-PORTERO-SSO.md (no repetidos ac\u00e1)",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L216",
+      "source_location": "L220",
       "_origin": "ast",
       "id": "docs_auditoria_condomanager_hallazgos_ya_cubiertos_en_auditoria_portero_sso_md_no_repetidos_ac\u00e1",
       "community": 9,
@@ -4860,7 +4860,7 @@
       "label": "Pr\u00f3ximo paso",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L223",
+      "source_location": "L227",
       "_origin": "ast",
       "id": "docs_auditoria_condomanager_pr\u00f3ximo_paso",
       "community": 9,
@@ -13452,7 +13452,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L216",
+      "source_location": "L220",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_condomanager_auditor\u00eda_condomanager_como_aplicaci\u00f3n_m\u00e1s_all\u00e1_del_portero",
@@ -13485,7 +13485,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L223",
+      "source_location": "L227",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_condomanager_auditor\u00eda_condomanager_como_aplicaci\u00f3n_m\u00e1s_all\u00e1_del_portero",
@@ -13522,7 +13522,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_condomanager_menor",
-      "target": "docs_auditoria_condomanager_1_artefactos_compilados_scratch_dist_js_commiteados_al_repo",
+      "target": "docs_auditoria_condomanager_1_artefactos_compilados_scratch_dist_js_commiteados_al_repo_resuelto_09_ago_2026",
       "confidence_score": 1.0
     },
     {
@@ -14517,5 +14517,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "58351c0d7080f5b9c38b664276bfc5abf48b7c14"
+  "built_at_commit": "8eb1299196e20b09187f4d9d3853595ce9a521b4"
 }
