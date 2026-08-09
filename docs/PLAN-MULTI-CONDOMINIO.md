@@ -81,6 +81,7 @@ asociación en común, en vez de destrabar el que existe).
 
 `perfiles` deja de tener `user_id` como llave primaria. Pasa a tener un
 `id` propio, con:
+
 - índice único `(user_id, condominio_id)` para el caso normal.
 - índice único parcial `(user_id) WHERE condominio_id IS NULL` — cubre al
   superadmin (verificado: su única fila hoy tiene `condominio_id = NULL`;
@@ -89,17 +90,48 @@ asociación en común, en vez de destrabar el que existe).
   hoy no existe a nivel de base, solo se respeta por convención en el
   código.
 
-## Fase 2 — RLS y funciones SQL
+## Fase 2 — RLS y funciones SQL — alcance corregido 09-ago-2026
 
-Las políticas de `perfiles`/`residentes` (`perfiles_select`,
-`perfiles_write`, `residentes_select`, `residentes_write`) pasan de "¿tu
-única fila coincide?" a "¿existe ALGUNA de tus filas que coincida con
-esta?" (patrón `EXISTS`, estándar para RLS multi-pertenencia).
-`current_rol()`, `current_condominio_id()`, `current_residente_id()`
-dejan de tener sentido como "la" respuesta — se reescriben para recibir
-el condominio como parámetro, igual que `is_modulo_activo()` ya hace bien
-desde el principio (no se toca). Se elimina `resolve_condominio_for_user()`
-(huérfana).
+**Antes de escribir la primera línea de esta fase se descubrió que el
+alcance original estaba mal calculado.** No son 4 políticas en
+`perfiles`/`residentes` — son **41 políticas en 24 tablas**
+(`pagos`, `comprobantes`, `deudas`, `reservas`, `condominios`, `unidades`,
+`mensajes`, `notificaciones`, `rubros`, `medios_pago`, `comunicados`,
+`auditoria_log`, `miembros_directiva`, `condominio_modulos`,
+`condominio_config_pago`, `condominio_evento_canales`, `unidad_fotos`,
+`unidad_residente`, `amenidades`, `amenidad_mantenimientos`,
+`deuda_detalle`, `pago_detalle`, `inmobiliaria_propiedades`, más
+`perfiles`/`residentes`) que llaman a `current_rol()`,
+`current_condominio_id()` o `current_residente_id()`. Verificado contra
+`pg_policies` directo, no inferido. Cambiar la firma de esas funciones o
+borrarlas —lo que decía la versión anterior de este plan— habría roto el
+control de acceso de la aplicación entera, incluida la parte de dinero.
+Se encontró antes de ejecutar, revisando `pg_policies` primero.
+
+**Dos caminos reales, no uno:**
+
+- **Opción A — reescribir las 41 políticas** a patrón `EXISTS` ("¿existe
+  alguna fila mía que coincida con esta?" en vez de "¿coincide con mi
+  única fila?"). Correcto, pero mucha superficie nueva tocando control de
+  acceso en 24 tablas, incluidas `pagos`/`comprobantes`/`deudas`.
+- **Opción B — ninguna de las 41 políticas se toca.** `current_rol()`,
+  `current_condominio_id()`, `current_residente_id()` cambian por dentro:
+  leen "cuál condominio está activo" de la sesión de Postgres (vía un
+  pre-request hook de PostgREST que setea una GUC a partir de un header),
+  mismo mecanismo que la Fase 3 ya iba a necesitar para el cookie de
+  "condominio activo" — se funden en una sola pieza. Si no hay condominio
+  activo en la sesión, cae al comportamiento actual (`LIMIT 1`), así que
+  nada se rompe para quien no haya migrado todavía. Menos código nuevo,
+  pero ese código nuevo usa un mecanismo (pre-request hook) que este
+  proyecto no usa hoy — hay que probarlo con cuidado por ser nuevo, no por
+  su volumen.
+
+**Recomendada: Opción B** — mismo riesgo total más bajo (cero políticas
+reescritas) y une Fase 2 con Fase 3 en un solo mecanismo. Pendiente de
+confirmación antes de escribir código. `is_modulo_activo()` no se toca en
+ningún camino — ya recibe el condominio como parámetro. Se elimina
+`resolve_condominio_for_user(p_user_id uuid)` en cualquier caso — huérfana,
+sin este ni ningún otro riesgo.
 
 ## Fase 3 — "Condominio activo": un solo mecanismo
 
