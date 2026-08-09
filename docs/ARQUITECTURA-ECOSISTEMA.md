@@ -591,15 +591,22 @@ Resend      →  SALIDA de correo transaccional desde auth.sorsabsa.com
   MISMA key, en dos proyectos Vercel distintos, deliberadamente:**
   1. **`auth-sorsabsa`** (`src/app/api/auth-hook/send-email/route.ts`) —
      el **Send Email Hook** de Supabase Auth (Authentication → Hooks, no
-     es SMTP plano como decía esta sección antes). Configurado en **los
-     dos** proyectos Supabase (`sorsabsa-identity` y `verticales_sorsabsa`,
-     mismo `SEND_EMAIL_HOOK_SECRET` en ambos): cuando cualquiera de los dos
-     necesita mandar un correo automático de Auth (recovery, confirmación
-     de signup, magic link), Supabase deja de usar su plantilla genérica y
-     llama a este endpoint, que arma el correo con la marca del producto
-     correcto y lo manda por Resend. Es el remitente de *"Restablece tu
-     contraseña"*/*"Confirma tu cuenta"* para **todo** lo que pasa por
-     identity — o sea, todos los productos.
+     es SMTP plano como decía esta sección antes). Diseñado para estar
+     configurado en **los dos** proyectos Supabase (`sorsabsa-identity` y
+     `verticales_sorsabsa`, mismo `SEND_EMAIL_HOOK_SECRET` en ambos): cuando
+     cualquiera de los dos necesita mandar un correo automático de Auth
+     (recovery, confirmación de signup, magic link), Supabase deja de usar
+     su plantilla genérica y llama a este endpoint, que arma el correo con
+     la marca del producto correcto y lo manda por Resend. Es el remitente
+     de *"Restablece tu contraseña"*/*"Confirma tu cuenta"* para **todo** lo
+     que pasa por identity — o sea, todos los productos.
+     ⚠️ **Estado en vivo, no de diseño — ver `AUDITORIA-PORTERO-SSO.md`
+     🔴-8:** en `sorsabsa-identity` dejó de llamarse (probable
+     auto-desactivación de Supabase tras los fallos de la key vencida del
+     09-ago) — todo correo automático de identity está saliendo con
+     `mail_from: noreply@mail.app.supabase.io`, sin marca. Corregir la key
+     no lo reactiva: es un toggle del dashboard de ese proyecto, pendiente
+     de que Gina lo revise.
   2. **`condomanager`** (`lib/email/resend.ts` + `lib/email/service.ts`) —
      su **propio** envío directo, para correo de negocio que el hook de
      arriba no cubre porque no es un evento automático de Supabase Auth:

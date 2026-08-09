@@ -360,6 +360,44 @@ no arreglaba su login.
   (agente24siete, JustiRed, IOT, Convertidor) porque su único punto de
   entrada por correo nunca tuvo el problema.
 
+### 🔴-8 — ⬜ El Send Email Hook de `sorsabsa-identity` dejó de llamarse — todo correo automático de identity llega sin marca
+
+- **Síntoma real (Gina, 09-ago-2026):** el correo de "recuperar contraseña"
+  llegó con remitente/plantilla de Supabase, no de Resend/marca del producto.
+- **Evidencia, no lectura de código:**
+  1. `get_logs(gyqgorgfstffbgazhbnb, auth)`: evento `mail.send` de las 15:18:12
+     (el reseteo de Gina) con `mail_from: noreply@mail.app.supabase.io`.
+     Mismo patrón en un `mail.send` tipo `confirmation` de las 12:52:35 —
+     **no es solo el reseteo, es todo correo automático que sale de identity**
+     (`resetPasswordForEmail`, `signUp` público).
+  2. Vercel runtime logs de `auth-sorsabsa`, ruta `/api/auth-hook/send-email`:
+     a las 11:35:50 SÍ fue llamada y respondió 500 — `"Resend rechazó el
+     envío: API key is invalid"` (la clave vieja de auth-sorsabsa,
+     corregida hoy más temprano en esta misma sesión).
+  3. A las 15:18:12 (14 min después de un redeploy de auth-sorsabsa que ya
+     llevaba la clave corregida) **la ruta no aparece llamada — cero logs**.
+- **Causa raíz probable (no verificable con las herramientas disponibles —
+  el toggle del hook vive en Supabase Dashboard, no en Postgres ni en el
+  repo):** los fallos repetidos de la clave vieja llevaron a Supabase a
+  desactivar el Send Email Hook automáticamente (comportamiento documentado
+  de Supabase para Auth Hooks que fallan seguido, para no bloquear
+  login/reseteo real). Corregir la clave no lo reactiva solo.
+- **Por qué importa más de lo que parece:** desde 🔴-1 (hoy), TODO alta y
+  reseteo real pasa a nacer/resolverse en identity — este hook dejando de
+  andar significa que, de acá en adelante, cada vez más correos de auth
+  reales van a salir sin marca hasta que se reactive.
+- **Fix — fuera de mi alcance con las herramientas actuales:** Supabase
+  Dashboard → proyecto `sorsabsa-identity` → Authentication → Hooks →
+  Send Email Hook → verificar que esté encendido (URL esperada:
+  `https://auth.sorsabsa.com/api/auth-hook/send-email`, secreto =
+  `SEND_EMAIL_HOOK_SECRET` de Vercel/auth-sorsabsa). Pendiente de que Gina
+  lo confirme/reactive y de volver a verificar con un `mail.send` nuevo que
+  ya no diga `noreply@mail.app.supabase.io`.
+- **Corrige a `ARQUITECTURA-ECOSISTEMA.md`:** la sección "Quién manda qué
+  correo" decía que el hook está "configurada idénticamente" en los dos
+  proyectos — eso describe cómo se armó, no el estado actual. Ahora mismo,
+  en identity, no está actuando.
+
 ---
 
 ## 🟠 ALTO
@@ -476,7 +514,11 @@ Frágil por diseño, bajo impacto mientras el script sea manual.
 
 🔴-1, 🔴-2/3, 🔴-4/🟠-1, 🔴-5, 🔴-7, 🟠-3 y 🟠-5 cerrados y verificados
 (09-ago-2026; 🔴-7 pendiente de reproducir en vivo con Gina, ver su
-entrada). Quedan abiertos, en orden de severidad: 🔴-6 (referidos de
+entrada). Nuevo y abierto, requiere acción de Gina en el dashboard de
+Supabase (fuera del alcance de las herramientas de esta sesión): 🔴-8, el
+Send Email Hook de identity dejó de llamarse — todo correo automático de
+identity sale sin marca. Quedan abiertos además, en orden de severidad:
+🔴-6 (referidos de
 agente24siete sin premio real — requiere decisión de Gina, marcado
 importante), 🟠-2 (empeorado el 09-ago: 3 nombres hardcodeados en vez de
 2 — el fix declarativo sigue pendiente y ahora limpia más), 🟠-4, 🟡-2,
