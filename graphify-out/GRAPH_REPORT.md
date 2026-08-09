@@ -1,35 +1,35 @@
 # Graph Report - diseno-sorsabsa  (2026-08-09)
 
 ## Corpus Check
-- 69 files · ~37,829 words
+- 70 files · ~38,799 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 477 nodes · 709 edges · 30 communities (27 shown, 3 thin omitted)
+- 489 nodes · 720 edges · 30 communities (27 shown, 3 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e11ab86f`
+- Built from commit: `8008137c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- App.tsx
 - index.ts
+- App.tsx
+- DomusLanding.tsx
 - Arquitectura del ecosistema SORSABSA
-- CardStatusDemo.tsx
+- devDependencies
 - BrandProvider.tsx
 - Pendientes del ecosistema SORSABSA
 - compilerOptions
 - compilerOptions
-- showcase/package.json
-- devDependencies
 - devDependencies
 - Plan de desoldado del ecosistema SORSABSA
 - @sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA
+- Estándar de desarrollo — no parchear la arquitectura
 - package.json
-- NotificationBell.tsx
+- Button.tsx
 - Grafo de conocimiento (graphify) generado por CI
 - peerDependencies
 - Color de marca y contraste
@@ -50,9 +50,9 @@
 5. `BrandConfig` - 11 edges
 6. `IconName` - 11 edges
 7. `@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA` - 11 edges
-8. `resolveEffectiveColors()` - 9 edges
-9. `brandToCssVars()` - 9 edges
-10. `Icon` - 9 edges
+8. `Estándar de desarrollo — no parchear la arquitectura` - 11 edges
+9. `resolveEffectiveColors()` - 9 edges
+10. `brandToCssVars()` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `resolveEffectiveColors()` --calls--> `brandToCssVars()`  [EXTRACTED]
@@ -71,65 +71,65 @@
 
 ## Communities (30 total, 3 thin omitted)
 
-### Community 0 - "App.tsx"
+### Community 0 - "index.ts"
 Cohesion: 0.06
-Nodes (35): App(), BRAND_KEYS, AtomShowcase(), ButtonMatrix(), SHADOW, VARIANTS, ColorPalette(), TOKEN_ORDER (+27 more)
+Nodes (49): DATA, AppShell(), AppShellProps, Avatar(), AvatarProps, getInitials(), SIZE, NotificationBell() (+41 more)
 
-### Community 1 - "index.ts"
+### Community 1 - "App.tsx"
+Cohesion: 0.07
+Nodes (30): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), MOCK (+22 more)
+
+### Community 2 - "DomusLanding.tsx"
 Cohesion: 0.06
-Nodes (49): DATA, AppShell(), AppShellProps, Avatar(), AvatarProps, getInitials(), SIZE, ButtonProps (+41 more)
+Nodes (30): CardStatusDemo(), SHADOW, TONES, DomusLanding(), FEATURES, SOCIAL, IconCatalog(), NAMES (+22 more)
 
-### Community 2 - "Arquitectura del ecosistema SORSABSA"
+### Community 3 - "Arquitectura del ecosistema SORSABSA"
 Cohesion: 0.05
 Nodes (44): 1. Inventario, 2. Los dos planos, 3-bis. NO HAY DATOS DE CLIENTES. Punto., 3. Mapa de bases de datos — LA TRAMPA, 4. Almacenamiento, 4-bis. Georreferenciación y R2 — estado real (verificado 2026-08-08), 5. Roturas verificadas el 2026-07-26, 6-bis. Plano de DNS y correo ✅ verificado 2026-07-26 (+36 more)
 
-### Community 3 - "CardStatusDemo.tsx"
-Cohesion: 0.08
-Nodes (27): CardStatusDemo(), SHADOW, TONES, IconCatalog(), NAMES, SHADOW, Card(), CardContent() (+19 more)
+### Community 4 - "devDependencies"
+Cohesion: 0.05
+Nodes (38): autoprefixer, postcss, dependencies, framer-motion, lucide-react, motion, react, react-dom (+30 more)
 
-### Community 4 - "BrandProvider.tsx"
+### Community 5 - "BrandProvider.tsx"
 Cohesion: 0.10
 Nodes (28): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandConfig, BrandContext, BrandProvider(), brandToCssVars() (+20 more)
 
-### Community 5 - "Pendientes del ecosistema SORSABSA"
+### Community 6 - "Pendientes del ecosistema SORSABSA"
 Cohesion: 0.07
 Nodes (26): 10. 🟡 Login social: Google ✅ cerrado — Facebook ✅ funciona, Revisión de Meta enviada (~20 días), 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado, 12. 🟡 R2 desplegado y verificado — falta el clic real de un residente, 13. ✅ HECHO — geo-sorsabsa/service desplegado, verificado y consumido por los dos periciales, 14. ✅ HECHO — iot consume el portero central (auth-sorsabsa), 15. 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas, 1. ✅ RESUELTO — separar auth a su propio proyecto (vía OIDC), 2. ✅ HECHO — JustiRed al SSO central (+18 more)
 
-### Community 6 - "compilerOptions"
+### Community 7 - "compilerOptions"
 Cohesion: 0.09
 Nodes (22): ../src/**/*.test.ts, ../src/**/*.test.tsx, vite.config.ts, compilerOptions, esModuleInterop, forceConsistentCasingInFileNames, isolatedModules, jsx (+14 more)
 
-### Community 7 - "compilerOptions"
+### Community 8 - "compilerOptions"
 Cohesion: 0.09
 Nodes (20): jest, @testing-library/jest-dom, compilerOptions, esModuleInterop, forceConsistentCasingInFileNames, jsx, lib, module (+12 more)
 
-### Community 8 - "showcase/package.json"
-Cohesion: 0.09
-Nodes (21): dependencies, framer-motion, lucide-react, motion, react, react-dom, description, framer-motion (+13 more)
-
 ### Community 9 - "devDependencies"
-Cohesion: 0.12
-Nodes (17): autoprefixer, postcss, devDependencies, autoprefixer, postcss, tailwindcss, @types/react, @types/react-dom (+9 more)
-
-### Community 10 - "devDependencies"
 Cohesion: 0.12
 Nodes (17): jest, jest-environment-jsdom, devDependencies, jest, jest-environment-jsdom, @testing-library/jest-dom, @testing-library/react, ts-jest (+9 more)
 
-### Community 11 - "Plan de desoldado del ecosistema SORSABSA"
+### Community 10 - "Plan de desoldado del ecosistema SORSABSA"
 Cohesion: 0.15
 Nodes (13): auth-sorsabsa reapuntado — commit `212f8b9`, 07-ago-2026, ✅ Cerrado el 07-ago-2026 — login OIDC real, de punta a punta, token verificado, ✅ Cerrado el 07-ago-2026 — probado en proyecto vacío real, con dos bugs reales encontrados y arreglados, Estado — 07-ago-2026: la federación funciona; el criterio de "hecho" hay que leerlo con matices, Estado — hecho el 07-ago-2026, con un pendiente real, Lo que NO se hace (decidido, con razón escrita), Paso 0 — Sacar el plano ⛔ BLOQUEANTE, va primero, Paso 1 — Identity como emisor OIDC (+5 more)
 
-### Community 12 - "@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA"
+### Community 11 - "@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA"
 Cohesion: 0.15
 Nodes (12): ⚠️ Bumpear la versión en cada cambio real (16 jul 2026, incidente real), ⚠️ Checklist del consumidor — Tailwind v3 vs v4 (incidente real, 16 jul 2026), Cómo funciona (la arquitectura de tokens), Instalación en un producto, ⚠️ La etiqueta tiene que ser ANOTADA, La regla ya NO depende de la memoria: hook pre-push, Pruebas, Publicar una versión (flujo desde 16 jul 2026 — sin copiar hashes) (+4 more)
+
+### Community 12 - "Estándar de desarrollo — no parchear la arquitectura"
+Cohesion: 0.17
+Nodes (11): Antes de cada fix — responder internamente, Criterio de aceptación, Estándar de desarrollo — no parchear la arquitectura, Fuente única de verdad, "Funciona" no es lo mismo que "está bien diseñado", Principio fundamental, Prohibido compensar defectos de código modificando datos reales, Qué debe presentarse antes de tocar código (+3 more)
 
 ### Community 13 - "package.json"
 Cohesion: 0.17
 Nodes (11): description, exports, ./preset, ./tokens.css, license, main, name, private (+3 more)
 
-### Community 14 - "NotificationBell.tsx"
-Cohesion: 0.24
-Nodes (8): MOCK, NotificationDemo(), Notificacion, NotificationBell(), NotificationBellProps, TYPE_COLOR, TYPE_ICON, useOnClickOutside()
+### Community 14 - "Button.tsx"
+Cohesion: 0.18
+Nodes (10): ButtonMatrix(), SHADOW, VARIANTS, Button, ButtonProps, ButtonSize, ButtonVariant, CommonProps (+2 more)
 
 ### Community 15 - "Grafo de conocimiento (graphify) generado por CI"
 Cohesion: 0.20
@@ -164,7 +164,7 @@ Cohesion: 0.67
 Nodes (3): scripts, test, typecheck
 
 ## Knowledge Gaps
-- **212 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+207 more)
+- **222 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+217 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -172,16 +172,16 @@ Nodes (3): scripts, test, typecheck
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Arquitectura del ecosistema SORSABSA` connect `Arquitectura del ecosistema SORSABSA` to `Pendientes del ecosistema SORSABSA`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
-- **Why does `BrandConfig` connect `BrandProvider.tsx` to `App.tsx`, `index.ts`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+  _High betweenness centrality (0.022) - this node is a cross-community bridge._
+- **Why does `BrandConfig` connect `BrandProvider.tsx` to `index.ts`, `App.tsx`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _212 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.05737704918032787 - nodes in this community are weakly interconnected._
+  _222 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.060655737704918035 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.060814383923849816 - nodes in this community are weakly interconnected._
+- **Should `App.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.07346938775510205 - nodes in this community are weakly interconnected._
+- **Should `DomusLanding.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.06475485661424607 - nodes in this community are weakly interconnected._
 - **Should `Arquitectura del ecosistema SORSABSA` be split into smaller, more focused modules?**
   _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
-- **Should `CardStatusDemo.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.08250355618776671 - nodes in this community are weakly interconnected._
