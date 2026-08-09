@@ -442,3 +442,35 @@ fantasma que ya existía en el condominio de prueba de Gina se borró
 directo en la base (no hacía falta rehacer el registro).
 
 typecheck + eslint limpios.
+
+---
+
+### 🔵-3 — ✅ `codigo_predial` sin garantía de unicidad — RESUELTO 09-ago-2026
+
+**Síntoma:** Gina notó que `manzana`/`lote` son obligatorios para crear
+una unidad, pero no son "el código principal" — debería serlo
+`codigo_predial` (el código catastral oficial en Ecuador). Preocupación:
+que el patrón esté repetido en varios lugares.
+
+**Verificado:** `codigo_predial` ya existía en `unidades`, pero como
+texto libre sin ninguna restricción — podían coexistir 2 unidades con el
+mismo código predial en el mismo condominio sin que nada lo impidiera.
+`manzana`+`lote` sí tienen `UNIQUE(condominio_id, manzana, lote)` — son
+hoy la llave de identidad real de una unidad, no solo un campo obligatorio
+suelto. Repetido en 3 lugares con la misma validación
+(`unidades/nuevo`, `unidades/importar`, `unidades/[id]/editar`).
+Revisado `lib/facturacion/service.ts` por si había una razón tributaria
+(SRI) para depender de manzana/lote — no la hay, solo se usa como texto
+de respaldo para mostrar una dirección.
+
+**Decisión de Gina (por pregunta directa, no asumida):** de 3 opciones
+presentadas, eligió la más conservadora — `codigo_predial` pasa a ser una
+llave única real (cuando está presente), pero `manzana`/`lote` NO se
+tocan, siguen obligatorios como hoy.
+
+**Fix:** `condomanager@e2dbb2e` — `UNIQUE(condominio_id, codigo_predial)
+WHERE codigo_predial IS NOT NULL` (verificado sin duplicados antes de
+aplicar). Mensaje legible en los 3 formularios en vez del error crudo de
+Postgres cuando se repite un código predial. Verificado con insert
+transaccional duplicado (rechazado, rollback sin dejar datos). typecheck
+limpio, eslint sin errores nuevos.
