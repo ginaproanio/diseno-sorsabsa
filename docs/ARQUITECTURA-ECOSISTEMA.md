@@ -39,7 +39,8 @@ trabajo lo redescubría desde cero — a veces rompiendo algo en el intento.
 
 | Servicio | Repo | Estado |
 |---|---|---|
-| Pagos | `pagos-sorsabsa` | ⚠️ 20/20 despliegues verdes; su base depende de CondoManager (§3) |
+| Pagos | `pagos-sorsabsa` | ⚠️ 20/20 despliegues verdes; base propia en Railway (Postgres, proyecto `SORSABSA-DATA`) desde la migración del 30-jul-2026 (§3) — **ya no depende de CondoManager**, corregido 09-ago-2026 (afirmación vieja de esta misma fila) |
+| Suscripciones | *(sin repo propio — hoy vive dentro de `pagos-sorsabsa`)* | ⚠️ Sistema **conceptualmente independiente** de Pagos — "¿quién tiene acceso a qué?" es una pregunta distinta de "¿cómo se procesó este cobro?" — aunque hoy comparten repo, base y schema Postgres (`pagos.suscripciones`, junto a `pagos.pagos`/`pagos.comercios`/`pagos.referido_*`). Expone su propio contrato HTTP (`/api/entitlements`, `/api/crear-trial`, `/api/extender-suscripcion`) que ya es, de hecho, un servicio aparte — solo falta que la infraestructura lo refleje. Ver `AUDITORIA-PORTERO-SSO.md` 🔴-6: el gap real hoy es que ningún producto (ni agente24siete) se integra con este sistema como un contrato propio — o lo ignora del todo, o lo trata como tablas internas de pagos-sorsabsa. |
 | SSO | `auth-sorsabsa` | ⚠️ 16/16 verdes; 6 apps registradas (domuscrm, condomanager, agente24siete, justired, convertidor, `iot` — este último desde 08-ago-2026, ver PENDIENTES-ECOSISTEMA.md #14) |
 | Notificaciones | `notificaciones-sorsabsa` | ❓ |
 | Geo | `geo-sorsabsa` (`@sorsabsa/geo`) | ✅ v0.1.0, Leaflet + OpenStreetMap, sin API key — ver §4-bis |
