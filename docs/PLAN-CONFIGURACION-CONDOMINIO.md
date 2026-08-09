@@ -118,7 +118,9 @@ son duplicados entre sí, no se tocan en ninguna fase de este plan.
   forma de que uno pise al otro — no es una regla nueva a recordar, es
   que la segunda copia deja de existir.
 
-### Fase 2 — Facturación: quitar los campos duplicados, arreglar el fallback roto
+### Fase 2 — ✅ RESUELTO 09-ago-2026 (`condomanager@e9dcf0f`)
+
+Facturación: quitar los campos duplicados, arreglar el fallback roto
 
 - Quitar del formulario de Facturación: `nombre_facturacion` y
   `direccion_facturacion` (los 2 campos de "Datos Legales del Emisor
@@ -140,6 +142,17 @@ son duplicados entre sí, no se tocan en ninguna fase de este plan.
   copiar ese valor a la columna correspondiente antes de quitar el campo
   de la UI, para no perderlo. (Verificar con SQL antes de asumir "no hay
   datos", como en 🔵-3/🔵-4 — no repetir el error de asumir.)
+
+**Ejecutado:** verificado por SQL antes de tocar código — el condominio
+real ya tenía `nombre_comercial`/`direccion` completos (vienen de
+Legales/Perfil) y `nombre_facturacion`/`direccion_facturacion` nunca se
+habían llenado. Cero backfill necesario. La sección pasó de "Datos
+Legales del Emisor (SRI)" (3 campos editables, uno de ellos duplicando
+mal) a "Identidad del Emisor": resumen de solo lectura de razón
+social/nombre comercial/dirección, con link a dónde editarlos de verdad
+(Datos Fiscales, Perfil del condominio), más el único campo real y
+propio de esta pantalla (correo de facturación, que Gina confirmó como
+caso de uso legítimo y distinto del correo de contacto general).
 
 ### Fase 3 — Reagrupar el sidebar
 

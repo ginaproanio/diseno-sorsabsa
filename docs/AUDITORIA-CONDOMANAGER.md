@@ -553,6 +553,22 @@ viejas (`generales`, `ubicacion`, `contacto`, `identidad`) quedan como
 eslint 0 errores, SQL confirma que el condominio real no perdió ningún
 dato (cambio solo de UI/routing, sin migración de por medio).
 
+**Extensión, mismo día (Fase 2, `condomanager@e9dcf0f`):** Gina notó que
+Facturación seguía pidiendo razón social/nombre comercial/dirección —
+"por que facturacion tiene datos legales, no dijimos que la idea es no
+repetir". Mismo patrón, un nivel más: esos 2 campos se quitan del
+formulario de Facturación (queda solo `email_facturacion`, caso de uso
+real y distinto confirmado por Gina, más los 4 campos de numeración SRI
+que tienen que seguir siendo editables a mano). De paso se corrigió un
+fallback roto en `lib/facturacion/service.ts`: cuando el campo duplicado
+estaba vacío, `nombre_comercial` caía a `condominio.nombre` (Generales)
+en vez de a `condominio.nombre_comercial` (Legales) — que existía y
+**nadie leía en ningún lugar del código**, confirmado con grep. Verificado
+con SQL antes de tocar código que el condominio real no necesitaba
+backfill (los campos duplicados nunca se habían llenado). Ver
+[PLAN-CONFIGURACION-CONDOMINIO.md](PLAN-CONFIGURACION-CONDOMINIO.md)
+Fase 2 para el detalle completo.
+
 ---
 
 ### 🔵-4 — ✅ `deudas.rubro_id`: UI decía "opcional", la base exigía `NOT NULL`, y un `LEFT JOIN` faltante lo hacía peor — RESUELTO 09-ago-2026
