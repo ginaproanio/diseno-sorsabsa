@@ -685,6 +685,34 @@ de agente24siete, solo que ahí se usa para saldo. Falta construir la
 pantalla — un botón de pago real en `suscripcion/page.tsx` de CondoManager
 y su equivalente en DomusCRM, en vez del `mailto:` — no un servicio nuevo.
 
+**Pendiente de analizar, planteado por Gina, 09-ago-2026: ¿es correcto que
+`suscripciones` viva DENTRO de `pagos-sorsabsa`, o debería ser su propio
+servicio?** Ya quedó anotado en `ARQUITECTURA-ECOSISTEMA.md` (fila
+"Suscripciones") que son dominios distintos — "¿quién tiene acceso a qué?"
+no es "¿cómo se procesó este cobro?" — pero hoy comparten repo, base
+Postgres y schema (`pagos.suscripciones`, junto a `pagos.pagos`/
+`pagos.comercios`/`pagos.referido_*`), a diferencia de `notificaciones`,
+que sí es un servicio Railway aparte. **No decidido todavía — queda para
+analizar, no para ejecutar a ciegas:**
+
+- A favor de separarlo: mismo argumento de siempre en este ecosistema
+  (identity no puede vivir dentro de un producto, §3 de
+  `ARQUITECTURA-ECOSISTEMA.md`) — "quién tiene acceso" es un servicio que
+  todo el ecosistema consulta constantemente (cada login pasa por acá),
+  mientras que "pagos" es transaccional y más pesado (llamadas a
+  PayPhone, credenciales cifradas por comercio). Separar reduce el radio
+  de un incidente: un problema en el procesador de pagos no debería poder
+  tumbar el chequeo de acceso de todo el ecosistema, y viceversa.
+- En contra / a favor de dejarlo como está: `api/confirmar.js` extiende
+  la suscripción DENTRO de la misma función que confirma el pago
+  (`extenderSuscripcion`, ver arriba) — son pocas tablas, poco tráfico
+  hoy, y separarlo hoy es un servicio nuevo que mantener (otro deploy,
+  otra clave, otra URL) por un beneficio que todavía no se siente
+  (nadie reportó un incidente donde uno tumbó al otro).
+
+Sin decisión de Gina, no se toca la infraestructura — esto es solo para
+que quede visible la próxima vez que se revise arquitectura de fondo.
+
 **JustiRed es el riesgo real, no solo un hueco de checklist:** está
 registrado en `auth-sorsabsa/src/lib/apps.ts` (pasa por el SSO central,
 tiene `AuthCallback.tsx`), así que cualquier usuario real que loguee por
