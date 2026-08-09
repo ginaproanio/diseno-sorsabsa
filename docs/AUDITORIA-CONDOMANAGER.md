@@ -121,7 +121,7 @@ fix. `tsc --noEmit` y `eslint` limpios.
 
 ---
 
-### 🟠-2 — ⬜ `resolverPostLogin`: un error de consulta se trata igual que "usuario sin perfiles todavía"
+### 🟠-2 — ✅ `resolverPostLogin`: un error de consulta se trata igual que "usuario sin perfiles todavía" — RESUELTO 09-ago-2026
 
 **1. Síntoma:** si la consulta a `perfiles` en `lib/auth/post-login.ts`
 falla (error de red, timeout, etc.), el usuario es enviado a `/panel` sin
@@ -177,6 +177,16 @@ salta es el mensaje de negocio ("tu solicitud está pendiente"). Por eso es
 pendiente ve una pantalla confusa en vez del mensaje claro), no acceso
 indebido a datos de otro condominio.
 
+**Resuelto 09-ago-2026** (`condomanager@e4a7051`): el `if` compuesto se
+separó en dos, exactamente como se propuso en el punto 6 — `perfilesError`
+ahora devuelve `{ ok: false, error: "No se pudo verificar tu cuenta.
+Intenta de nuevo." }` en vez de `{ ok: true, destino: "/panel" }`.
+`app/auth/callback/page.tsx` ya manejaba `ok: false` de forma genérica
+(`setMensaje(resultado.error)`), sin acoplarse al texto — no hubo que
+tocarlo. `tsc --noEmit` y `eslint` limpios. **Validación real (punto 9,
+simular el error de red) todavía no hecha** — el cambio es mínimo y de
+bajo riesgo, pero no se ha probado en vivo.
+
 ---
 
 ## 🔵 MENOR
@@ -212,10 +222,11 @@ condomanager (🔵-4), y todo lo de autenticación/federación SSO viven en
 
 ## Próximo paso
 
-🟠-1 cerrado y verificado (09-ago-2026, `condomanager@f60960d`, typecheck +
-eslint limpios — no probado todavía con las 3 sesiones reales descritas en
-su punto 9, recomendado antes de dar por completamente cerrado). Abiertos:
-🟠-2 (fallback peligroso en `resolverPostLogin`, fix propuesto de 2 líneas,
-bajo riesgo) y 🔵-1 (limpieza de `scratch/dist`, sin discusión). Pendiente
-además seguir ampliando la auditoría: pagos/facturación, RLS, crons —
-todavía no cubiertos en esta primera pasada.
+🟠-1 y 🟠-2 corregidos (09-ago-2026, `condomanager@f60960d` y `@e4a7051`,
+typecheck + eslint limpios en ambos) — **ninguno de los dos tiene todavía
+la validación en vivo que su propio punto 9 pide** (🟠-1: probar las 3
+rutas migradas con sesión real de cada rol; 🟠-2: simular un error de red
+en la consulta a `perfiles` y confirmar que bloquea en vez de dejar
+pasar). Queda abierto 🔵-1 (limpieza de `scratch/dist`, sin discusión).
+Pendiente además seguir ampliando la auditoría: pagos/facturación, RLS,
+crons — todavía no cubiertos en esta primera pasada.
