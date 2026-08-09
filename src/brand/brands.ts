@@ -121,6 +121,32 @@ export const BRANDS: Record<string, BrandConfig> = {
     radius: '0.5rem',
   },
 
+  // iot (Inspección Ocular Técnica — nombre engañoso, no dispositivos IoT,
+  // ver ARQUITECTURA-ECOSISTEMA.md §4-bis). Hasta 08-ago-2026 usaba la marca
+  // institucional (arriba) en todo el login/correo — pero SÍ tenía identidad
+  // propia, aislada en el CSS de sus informes PDF
+  // (iot_system/app/services/report.css) y nunca extraída hasta ahora.
+  // Extraído literal de ese archivo, no inventado: navy de portada/
+  // encabezados + dorado de acentos/divisores + azul info de metadatos.
+  iot: {
+    name: 'iot',
+    displayName: 'IOT',
+    wordmark: { first: 'I', second: 'OT', tones: ['accent', 'primary'] },
+    colors: {
+      primary: '#1B2A40',      // navy de portada y encabezados de evidencia
+      accent: '#D4AC0D',       // dorado de acentos, divisores, numeración
+      secondary: '#2980B9',    // azul de etiquetas de sección/metadatos
+      surface: '#FFFFFF',
+      background: '#F4F6F8',
+      text: '#1A1A2E',
+      muted: '#7F8C8D',
+      border: '#D5D8DC',
+    },
+    radius: '0.5rem',
+    // report.css usa system sans ("Segoe UI", Helvetica, Arial) sin fuente
+    // decorativa — no se agrega headingFont/fontImport, sería inventado.
+  },
+
   // EcoInmobiliaria — empresa ALIADA que consume DomusCRM (no es producto
   // propio de SORSABSA), su identidad vive aquí porque es la carta de
   // presentación de lo que vendemos con DomusCRM.
