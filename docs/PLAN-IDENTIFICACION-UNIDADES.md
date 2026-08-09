@@ -157,9 +157,22 @@ separados) que hay que rediseñar, no solo cambiar un label:
   criterio no rompe filas existentes. Punta Blanca confirmada intacta,
   en el default `MANZANA_LOTE` hasta que se cambie desde el control
   real (Fase 1).
-- **Fase 1 — Módulo Unidades (bucket A):** la fuente. Control siempre
-  visible para elegir/cambiar el criterio; formularios de
-  crear/editar/importar muestran y exigen solo el campo correspondiente.
+- **Fase 1 — ✅ RESUELTO 09-ago-2026 (`condomanager@a90727c`) — Módulo
+  Unidades (bucket A):** la fuente. Control siempre visible en
+  `/panel/admin/unidades` para elegir/cambiar el criterio (select simple,
+  guarda al cambiar, no un gate de una sola vez). Formularios de
+  crear/editar muestran siempre los 4 campos identificadores, pero solo
+  el del criterio activo lleva `*`/`required` — los otros quedan
+  disponibles pero opcionales, no ocultos. Importar CSV agrega columna
+  `casa` y resuelve el criterio antes de validar filas. Lista de
+  unidades simplificada a una columna "Identificador" (usa
+  `lib/unidades/identificar.ts` en vez de 3 columnas fijas
+  Manzana/Lote/Código Predial); búsqueda y orden cubren también `casa`.
+  Detalle de unidad ya no asume que manzana/lote siempre existen.
+  Verificado con typecheck limpio, eslint 0 errores, y una prueba
+  transaccional contra la base real confirmando que
+  `traducirErrorUnidad()` reconoce el mensaje real de Postgres para la
+  restricción única de `casa` (sin dejar datos de prueba).
 - **Fase 2 — Resolver + bucket B (15 archivos):** `identificadorUnidad()`
   y reemplazo en los 15 lugares de solo-lectura.
 - **Fase 3 — Bucket C (reportes/rubros-por-unidad):** rediseño de filtros.
