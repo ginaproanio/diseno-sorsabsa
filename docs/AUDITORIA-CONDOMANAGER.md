@@ -137,37 +137,44 @@ No es una inferencia del código — se leyó `pg_policies` directo.
 - `procesar-activaciones-masivas` — CORRECTO. Crea las cuentas de
   activación con `supabaseAdminIdentity` (identity), no con el proyecto de
   producto — mismo patrón que `registro-admin`.
-- `limpiar-no-confirmados` — confirma el pendiente que ya estaba anotado
-  en `AUDITORIA-PORTERO-SSO.md`: usa `supabaseAdmin.auth.admin.listUsers()`
-  del proyecto de PRODUCTO. Desde 🔴-1, las cuentas nuevas sin confirmar
-  (admin o residente) se crean en IDENTITY — este cron nunca las va a
-  encontrar. Su propósito declarado ("defensa contra basura de bots") es
-  hoy un no-op para toda cuenta nueva; solo seguiría limpiando las 2
-  cuentas reales pre-🔴-1. Efecto colateral no evaluado a fondo: un email
-  que un bot usó para un registro nunca confirmado queda ocupado en
-  identity para siempre (nadie lo libera), lo que podría bloquear
-  permanentemente a la persona real dueña de ese correo si intenta
-  registrarse. Queda igual que estaba: bajo impacto, sin 9 puntos
-  completos todavía — se prioriza según lo que Gina decida.
+- `limpiar-no-confirmados` — ✅ **RESUELTO** (`condomanager@0d961cc`).
+  Usaba `supabaseAdmin.auth.admin.listUsers()` del proyecto de PRODUCTO;
+  desde 🔴-1 las cuentas nuevas sin confirmar nacen en IDENTITY, así que
+  era un no-op para toda cuenta nueva desde entonces (el email que un bot
+  usaba quedaba ocupado en identity para siempre, sin liberarse nunca).
+  Reescrito para escanear IDENTITY y emparejar por **email** (no por id de
+  producto, que ya no existe para altas nuevas) contra
+  `registros_pendientes`/`residentes.rol_pendiente`. Cuidado explícito con
+  la frontera entre productos: identity es compartida con DomusCRM y
+  JustiRed — un candidato sin ningún rastro en las tablas de CondoManager
+  no se toca (podría ser un pendiente de otro producto; limpiarlo no es
+  responsabilidad de este cron). Caso nuevo cubierto: una persona con
+  residente en más de un condominio (uno pendiente-basura, otro real de
+  censo) con el mismo email — la cuenta de identity solo se borra si
+  ninguna fila real sigue esperándola. Verificado con datos de prueba
+  transaccionales (rollback, sin dejar datos) para los 3 casos: admin
+  pendiente, residente solo pendiente, y el caso mixto.
 
 **Pagos/facturación × portero:** mecanismo CORRECTO (`auth.getUser()` →
 `perfiles.select(rol)`, igual que el resto) en `pagos/iniciar` y
 `pagos/consultar/[id]`. `pagos/confirmar` es el webhook de PayPhone —
 correctamente NO usa sesión de usuario, reconfirma contra PayPhone como
-fuente de verdad. Hallazgo menor: `pagos/iniciar` y `pagos/consultar/[id]`
-son 2 copias más del mismo patrón que 🟠-1 ya centralizó en
-`lib/auth/requireRole.ts` — no migradas todavía (quedaron fuera del
-barrido original porque ese barrido fue sobre `app/api/**` completo pero
-priorizó los 13 casos con gate estricto de rol; estos dos también
-califican). Fast-follow de bajo riesgo, no urgente.
+fuente de verdad. `pagos/iniciar` y `pagos/consultar/[id]` migrados a
+`requireRole()`/`getPerfilAutenticado()` — ✅ **RESUELTO**
+(`condomanager@940e095`).
 
-**Menor, pre-existente, no de hoy:** `get_advisors` marca que
-`current_rol()`, `current_condominio_id()`, `current_residente_id()`,
-`is_modulo_activo()` e `is_superadmin()` son `SECURITY DEFINER` y
-ejecutables vía RPC por `anon` (no solo `authenticated`). No es un bug
-introducido hoy y no se investigó si es explotable (probablemente no:
-`auth.uid()` es `NULL` sin sesión, así que devolverían "sin rol"/`false`)
-— queda anotado para cuando se audite RLS a fondo, no ahora.
+**Menor, pre-existente, no de hoy — ✅ RESUELTO** (`condomanager@12d3a84`):
+`get_advisors` marcaba `current_rol()`, `current_condominio_id()`,
+`current_residente_id()`, `is_modulo_activo()` e `is_superadmin()` como
+`SECURITY DEFINER` ejecutables vía RPC por `anon`. Investigado (no se dejó
+sin mirar): 4 de las 5 eran inofensivas para `anon` (`auth.uid()` es
+`NULL` sin sesión, no matchean nada), pero `is_modulo_activo()` SÍ era
+explotable — no depende de `auth.uid()` en absoluto, cualquiera con la
+anon key (pública) podía pasar un `condominio_id` arbitrario y aprender
+qué módulos pagos tiene activo cualquier condominio. `REVOKE EXECUTE ...
+FROM anon` solo no bastó (seguían abiertas vía `PUBLIC`); revocado también
+de `PUBLIC`. Verificado en vivo: `anon` bloqueado, `authenticated` sigue
+funcionando sin cambios.
 
 ---
 
@@ -363,26 +370,30 @@ condomanager (🔵-4), y todo lo de autenticación/federación SSO viven en
 
 ## Próximo paso
 
-**Auditoría automatizable cerrada por ahora, a propósito** (09-ago-2026,
-a pedido explícito de Gina: acotar a "cómo interactúa el portero con
-pagos/facturación/RLS/crons" y de ahí pasar a validación manual). Estado:
+**Auditoría "portero × pagos/facturación/RLS/crons" cerrada, todo lo
+encontrado corregido** (09-ago-2026). De los 3 ítems que quedaron
+anotados como "fast-follow"/"bajo impacto" sin subsanar, Gina preguntó
+directamente por qué no se arreglaban ya — la respuesta correcta era que
+2 de los 3 no tenían ningún motivo real para esperar (bajo riesgo,
+mecánicos), y el tercero (el cron) sí merecía cuidado por tocar borrado de
+datos cruzando proyectos, no por el estado actual (datos de prueba, cero
+clientes) sino por el código en sí — así que se hizo, con el cuidado
+puesto donde correspondía, no aplazado. Estado final:
 
-- 🔴-3 corregido y verificado en vivo (`condomanager@1ebebc3`) — era el
-  hallazgo más serio: `registro-admin` y `activar-residentes-masivo`
-  estaban rotos en producción.
-- 🟠-1 corregido (`@f60960d`), 🟠-2 corregido (`@e4a7051`), 🔵-1 corregido
-  (`@5aaa1c7`) — typecheck + eslint limpios en los tres.
-- RLS de `perfiles`/`residentes` verificada en vivo: correcta, sin
-  hallazgo.
-- Crons: `procesar-activaciones-masivas` correcto; `limpiar-no-confirmados`
-  confirma el pendiente ya conocido (bajo impacto).
-- Pagos/facturación: mecanismo de auth correcto; 2 archivos más
-  (`pagos/iniciar`, `pagos/consultar/[id]`) quedaron fuera del barrido de
-  🟠-1, fast-follow de bajo riesgo.
+- 🔴-3 (`condomanager@1ebebc3`) — el más serio: `registro-admin` y
+  `activar-residentes-masivo` estaban rotos en producción.
+- 🟠-1 (`@f60960d`), 🟠-2 (`@e4a7051`), 🔵-1 (`@5aaa1c7`).
+- `pagos/iniciar`/`pagos/consultar` migrados (`@940e095`).
+- 5 funciones RPC con `anon`/`PUBLIC` revocado (`@12d3a84`).
+- `limpiar-no-confirmados` reescrito para identity + emparejamiento por
+  email, con la frontera entre productos cuidada explícitamente
+  (`@0d961cc`).
 
-**Ninguno de 🔴-3/🟠-1/🟠-2 tiene todavía la validación en vivo con
-sesión real de usuario** (🔴-3 sí se validó a nivel de base de datos —
-grants y RLS con `set local role` — pero no se probó el flujo completo
-`registro-admin` → confirmar correo → login → `reconciliar-perfil` de
-punta a punta después del fix). Esa ronda de validación manual, agrupada,
-es el siguiente paso — no antes.
+**Lo que SÍ falta — validación con sesión real de usuario, no solo SQL/
+transacciones de prueba:** todo lo de arriba se verificó a nivel de base
+de datos (`set local role`, inserts transaccionales con rollback) o
+typecheck/lint, pero ninguno se probó todavía con el flujo completo real
+por el navegador (`registro-admin` → confirmar correo → login →
+`reconciliar-perfil`; las 3 rutas migradas en 🟠-1 con sesión de cada rol;
+el cron disparado de verdad contra una cuenta de prueba vieja en
+identity). Esa ronda de validación manual, agrupada, es el siguiente paso.
