@@ -483,6 +483,20 @@ cualquier otro producto.
      `auth.sorsabsa.com/auth/login?app=iot`, sin `WWW-Authenticate`. Sin
      determinar todavía por qué el auto-deploy de Railway no se disparó
      solo con el push — revisar si vuelve a pasar con el próximo commit.
+  4. `auth-sorsabsa` commit `e456fc7` — `/oauth/consent` (donde se
+     escribe la contraseña de verdad) mostraba texto fijo ("Un acceso,
+     todos tus productos") para cualquier app, ignorando
+     `welcome`/`subtitle` de `AppConfig` que `/auth/login` sí usaba.
+     Ahora usa el mismo dato en las dos pantallas.
+- ✅ **`iot` consiguió marca propia, 08-ago-2026** — hasta acá usaba
+  `BRANDS.sorsabsa` (genérica) en todo el login/correo aunque sus
+  informes PDF (`iot_system/app/services/report.css`) ya tenían una
+  identidad real: navy `#1B2A40` + dorado `#D4AC0D` + azul info `#2980B9`,
+  nunca extraída al sistema de diseño. Gina la encontró y se agregó a
+  `diseno-sorsabsa/src/brand/brands.ts` (`@sorsabsa/ui` v0.1.39, commit
+  `b5c56a2`) y se conectó en `auth-sorsabsa/src/lib/apps.ts` (commit
+  `c1e1120`). Ya no debería verse "SORSABSA" genérico en ninguna pantalla
+  de `iot`.
 
 ## 15. 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas
 
