@@ -10,3 +10,8 @@ graphify-out/*
 !graphify-out/GRAPH_REPORT.md
 
 .vercel
+
+# Instalaciones locales de skills (Claude Code) — no son parte del proyecto
+.agents/
+.claude/
+skills-lock.json
