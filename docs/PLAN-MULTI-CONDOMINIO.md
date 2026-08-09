@@ -77,7 +77,7 @@ Punta Blanca = 1 fila en `asociaciones`, 5 condominios debajo. Sin esto,
 la Fase 6 sería otra (construir un selector nuevo para condominios sin
 asociación en común, en vez de destrabar el que existe).
 
-## Fase 1 — Esquema
+## Fase 1 — Esquema — ✅ RESUELTO 09-ago-2026
 
 `perfiles` deja de tener `user_id` como llave primaria. Pasa a tener un
 `id` propio, con:
@@ -90,7 +90,21 @@ asociación en común, en vez de destrabar el que existe).
   hoy no existe a nivel de base, solo se respeta por convención en el
   código.
 
-## Fase 2 — RLS y funciones SQL — alcance corregido 09-ago-2026
+**Hallazgo al ejecutar, no anticipado en el plan:** `crm_vendedores.perfil_id`
+tenía una FK a `perfiles(user_id)` — quitarle la unicidad a `user_id` la
+hubiera roto. Lo que esa columna en verdad necesita es "qué login es este
+vendedor", no "qué perfil de condominio" — se redirigió a `auth.users(id)`,
+que sigue siendo único por login para siempre. Tabla vacía (0 filas) al
+momento del cambio, su RLS no depende de las 3 funciones de la Fase 2 —
+verificado antes de tocarla, no asumido.
+
+**Aplicado:** `condomanager@04a4ec6`. **Verificado con datos
+transaccionales (rollback, sin dejar nada):** un segundo perfil para el
+mismo `user_id` en otro condominio ahora se puede crear (antes la PK lo
+rechazaba); un duplicado exacto (mismo `user_id`+`condominio_id`) sigue
+rechazado; un `residente_id` repetido en dos perfiles sigue rechazado.
+
+## Fase 2 — RLS y funciones SQL — ✅ RESUELTO 09-ago-2026 (Opción B)
 
 **Antes de escribir la primera línea de esta fase se descubrió que el
 alcance original estaba mal calculado.** No son 4 políticas en
@@ -127,11 +141,40 @@ Se encontró antes de ejecutar, revisando `pg_policies` primero.
   su volumen.
 
 **Recomendada: Opción B** — mismo riesgo total más bajo (cero políticas
-reescritas) y une Fase 2 con Fase 3 en un solo mecanismo. Pendiente de
-confirmación antes de escribir código. `is_modulo_activo()` no se toca en
-ningún camino — ya recibe el condominio como parámetro. Se elimina
-`resolve_condominio_for_user(p_user_id uuid)` en cualquier caso — huérfana,
-sin este ni ningún otro riesgo.
+reescritas) y une Fase 2 con Fase 3 en un solo mecanismo. Confirmada por
+Gina 09-ago-2026. `is_modulo_activo()` no se tocó — ya recibe el
+condominio como parámetro. `resolve_condominio_for_user(p_user_id uuid)`
+eliminada — huérfana, nadie la llamaba.
+
+**Implementado (`condomanager@04a4ec6`):** `current_rol()`,
+`current_condominio_id()`, `current_residente_id()` ahora ordenan las
+filas de `perfiles` del usuario por si el `condominio_id` coincide con la
+GUC `app.condominio_activo` (la fila que coincide gana el `LIMIT 1`); sin
+GUC, cae al mismo comportamiento arbitrario de siempre — cero regresión
+para quien no haya migrado. La GUC la fija
+`public.condomanager_pre_request()`, registrada en el rol `authenticator`
+vía `pgrst.db_pre_request`, leyendo el header `x-condominio-activo`.
+
+**Verificado en vivo, en dos niveles — no solo que "se aplicó":**
+
+- SQL directo: con 2 perfiles de prueba (mismo `user_id`, condominios
+  distintos) y la GUC seteada manualmente a cada uno, `current_rol()`/
+  `current_condominio_id()` devuelven el rol y el condominio correctos de
+  cada uno — no uno arbitrario.
+- HTTP real, no solo SQL: `curl` contra el endpoint REST desplegado con
+  el header `x-condominio-activo` puesto — el pre-request hook lo lee y
+  fija la GUC de verdad, confirmado con una función de prueba temporal
+  (creada y borrada en la misma sesión). Sin el header, cae a vacío como
+  se diseñó.
+- La revocación de `anon`/`PUBLIC` en estas 3 funciones (hecha antes en
+  la misma sesión, por otro hallazgo) se confirmó intacta después del
+  `CREATE OR REPLACE`.
+
+**No probado todavía:** el flujo completo desde la app real (el cookie de
+"condominio activo" que la Fase 3/5 van a fijar y que el cliente Supabase
+del servidor tendría que reenviar como este header — hoy nada en
+`lib/supabase/server.ts` lo hace todavía). Eso es trabajo de Fase 3 en
+adelante, no de esta fase.
 
 ## Fase 3 — "Condominio activo": un solo mecanismo
 
@@ -201,7 +244,11 @@ paralelo desde la Fase 1, no como un paso al final.
 
 ## Próximo paso
 
-Nada implementado todavía. Antes de tocar código en Fase 1: presentar el
-análisis de 9 puntos de `ESTANDAR-DESARROLLO.md` para el cambio de llave
-primaria de `perfiles` — es el más riesgoso de tocar primero porque todo
-lo demás depende de él.
+**Fase 1 y Fase 2 cerradas y verificadas** (09-ago-2026,
+`condomanager@04a4ec6`) — la base ya soporta que una persona tenga perfil
+en más de un condominio, y ni una de las 41 políticas RLS existentes se
+tocó. Sigue Fase 3: decidir la forma exacta del cookie "condominio
+activo" (nombre, cuándo se fija, cuánto dura) — de esa forma dependen
+Fase 4 (backend, incluye hacer que `lib/supabase/server.ts` reenvíe el
+header `x-condominio-activo` que la Fase 2 ya sabe leer) y Fase 5
+(frontend). Nada de eso implementado todavía.
