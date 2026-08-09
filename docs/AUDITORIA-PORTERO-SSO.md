@@ -668,6 +668,31 @@ divergir del otro texto para el mismo código, ahí sí mover a
 `@sorsabsa/ui` sin más demora — no esperar a que sea el mismo tipo de
 cadena de "parche sobre parche" que ya costó caro hoy.
 
+### 🔵-5 — ✅ Importar residentes insertaba fila por fila — inviable a la escala real de Punta Blanca — RESUELTO 09-ago-2026
+
+- **Síntoma que lo destapó:** Gina, pensando en subir ~3500 residentes por
+  condominio × 5 condominios de Punta Blanca, preguntó cuándo se resolvía
+  esto — no es sobre nomenclatura de tablas, es sobre si la carga real
+  iba a funcionar.
+- **Causa real:** `residentes/importar/page.tsx` insertaba UNA fila a la
+  vez desde el navegador (cliente, no server route), con 2-3 viajes de
+  red por residente (`residentes` + `datos_facturacion` +
+  `unidad_residente`). Con 3500 filas: miles de peticiones secuenciales,
+  horas de duración en una sola pestaña, sin barra de progreso real y sin
+  forma de reanudar si se corta la conexión a mitad de camino.
+- **Fix:** lotes de 250 — un `insert()` masivo (un solo `INSERT` SQL con
+  muchas filas) por lote para `residentes`, y otro para
+  `datos_facturacion`/`unidad_residente` de ese lote usando los ids que
+  devuelve el insert masivo. Si un lote entero falla (una fila mala tumba
+  las ~250 buenas — es una sola sentencia SQL), reintenta de a una SOLO
+  dentro de ese lote, para no perder el resto y seguir señalando
+  exactamente cuál fila. Barra de progreso real (`X de Y`) en vez de un
+  spinner ciego.
+- **Commit:** `condomanager@bf0c11f`. typecheck limpio.
+- **No verificado todavía con datos reales de esa escala** — recomendado
+  antes de la carga real: una prueba con un CSV de unos cientos de filas
+  primero.
+
 ---
 
 ## Próximo paso
