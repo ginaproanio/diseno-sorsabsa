@@ -652,6 +652,61 @@ prueba a `1771240747588175/phone_numbers` (número de CondoManager) mostró
 Revisar cuándo se destrabe el baneo; hoy no importa porque la cuenta no
 manda ni recibe nada de todos modos.
 
+## 16. 🟡 Estandarizar pagos/suscripciones/referidos en TODOS los productos — JustiRed sin nada, y una idea de "créditos de IA" todavía sin desarrollar
+
+**Decisión de Gina, 09-ago-2026:** suscripciones, pagos y referidos deben
+estar implementados en cada producto vertical del ecosistema (CondoManager,
+DomusCRM, agente24siete, JustiRed, etc.) — no es una idea nueva, ya es el
+principio documentado en `condomanager/docs/PAGOS.md` y
+`crm_inmobiliario/webs/docs/SUSCRIPCIONES.md` (11/15-jul-2026): un servicio
+centralizado (`pagos-sorsabsa`), entidad = quien paga (no siempre la
+persona que loguea), cada producto llama `crear-trial` en su alta.
+
+**Estado real por producto, verificado en código (no supuesto):**
+
+| Producto | `entity-resolver.ts` | `crear-trial` en el alta | Referidos | Pago de suscripción self-service |
+| --- | --- | --- | --- | --- |
+| CondoManager | ✅ `resolve_condominio_for_user` | ✅ `registro-admin` | ✅ `/admin/referidos` | ❌ solo "Contactar a Ventas" (mailto) |
+| DomusCRM | ✅ `resolve_company_for_user` | ✅ `registro-agencia` | ✅ `api/referrals` | ❌ mismo gap |
+| agente24siete | ✅ bypass (modelo real es saldo, no suscripción — ver `AUDITORIA-PORTERO-SSO.md` 🔴-6) | N/A (no aplica) | ✅ `/portal/referidos`, pero el premio (días de suscripción) no conecta con nada real | ✅ `/portal/recargas` (esto SÍ es self-service, pero es saldo, no plan) |
+| JustiRed | ❌ sin caso, cae al fallback (`subject: userId`) | ❌ no existe ninguna llamada | ❌ nada | ❌ nada — **tampoco hay página de registro propia** |
+
+**JustiRed es el riesgo real, no solo un hueco de checklist:** está
+registrado en `auth-sorsabsa/src/lib/apps.ts` (pasa por el SSO central,
+tiene `AuthCallback.tsx`), así que cualquier usuario real que loguee por
+primera vez ejecuta el mismo camino que bloqueó a DomusCRM el 15-jul y a
+agente24siete hace un rato: `resolveEntitySubject` no tiene su caso, cae a
+`{subject: userId}`, pregunta a `pagos.suscripciones`, no hay fila, "Sin
+suscripción activa". Sin una página de registro propia, hoy no está claro
+cómo se da de alta un cliente nuevo de JustiRed en absoluto.
+
+**Por qué no se construye ya — respuesta textual de Gina al preguntarle
+quién es la entidad que paga en JustiRed:** *"quien se registra y no he
+contemplado que sea persona natural o jurídica, pero sí que se debe
+considerar los dos tipos; si es un paquete individual puede manejar el
+sistema solo, si es un cierto número de usuarios aquí puede haber un
+volumen de usuarios tipo 5 usuarios, otro 10 usuarios, y van con cupo de
+créditos de IAs, pueden comprar créditos — no sé si hacer un sistema de
+créditos, porque a cada producto le puede llegar a necesitar créditos de
+IA, se asigna un cupo y es administrable el cupo, pero todavía me falta
+desarrollar la idea."*
+
+**Lo que esto insinúa, sin decidirlo por ella:** un futuro sistema de
+"créditos de IA" podría ser, como suscripciones/pagos/referidos, su propio
+dominio transversal — no exclusivo de JustiRed. `agente24siete` ya tiene
+un prototipo funcional de esto (`saldo`/`movimientos_saldo`, markup por
+plan) que podría ser el punto de partida a generalizar, en vez de
+inventar uno nuevo para JustiRed. **No implementar todavía** — falta que
+Gina termine de definir: persona natural vs. jurídica, los tiers por
+volumen de usuarios, y si créditos de IA se comparte entre productos o es
+por producto.
+
+**No hacer nada de código para JustiRed hasta que esto se resuelva.** Si
+antes de eso alguien intenta registrarse como cliente real de JustiRed,
+va a chocar con "Sin suscripción activa" sin poder pagar nada — vale la
+pena que Gina lo sepa antes de anunciar o vender JustiRed a un cliente
+real.
+
 ---
 
 ## Hecho (para no re-hacer)
