@@ -306,6 +306,48 @@ no arreglaba su login.
   condomanager preservado (confirmado leyendo su propio `app/login/page.tsx`
   antes de aplicar el fix). Mismo commit que cierra 🟠-1.
 
+### 🔴-7 — ✅ Tres pantallas del portero perdían el resultado de un enlace de correo (fragment) — RESUELTO 09-ago-2026
+
+- **Archivos:** `auth-sorsabsa/src/app/auth/login/page.tsx`,
+  `auth-sorsabsa/src/app/oauth/consent/page.tsx`, `condomanager/app/login/page.tsx`.
+- **Síntoma real (Gina, `puntablanca.ecuador@hotmail.com`):** clic en
+  "Google" → `authorization not found` en pantalla, en inglés; funcionaba
+  solo en incógnito. Registro nuevo → correo de confirmación en inglés
+  ("Email not confirmed"), y al confirmarlo, la misma pantalla de error.
+- **Causa raíz:** Supabase devuelve el resultado de un enlace de correo
+  (confirmación, y cualquier cosa que redirija con sesión) como **fragment**
+  de la URL (`#access_token=...` si funcionó, `#error=...` si el enlace ya
+  venció o se usó — ej. el escáner de enlaces de Hotmail/Outlook
+  consumiéndolo antes del clic humano) — nunca como query string. Tres
+  pantallas usadas como `redirect_to`/`emailRedirectTo` real
+  (`condomanager/login` por `registro-admin`, `auth-sorsabsa/auth/login`
+  por el `signUp()` de DomusCRM) no miraban el fragment: lo pisaban con un
+  reinicio ciego del login (`irAlSSO()` / `signInWithOAuth()`), perdiendo
+  tanto la sesión válida como el error real. `/oauth/consent` además
+  mostraba el `.message` crudo de Supabase sin traducir para cualquier
+  error que no fuera "Invalid login credentials".
+- **Componente responsable:** el portero, no cada producto — mismo patrón
+  ya resuelto para IOT en `auth-sorsabsa/src/app/page.tsx` (08-ago-2026),
+  nunca generalizado a las otras tres pantallas que tienen el mismo problema.
+- **Fix:** las tres pantallas ahora inspeccionan el fragment antes de
+  decidir algo — `access_token` reenvía a instalar sesión (en
+  `condomanager/login`, a `/auth/callback`, que ya sabe reconciliar+resolver;
+  en `auth-sorsabsa/auth/login`, se instala en `identityClient` antes de
+  pedir la autorización del producto, así `/oauth/consent` la encuentra y
+  aprueba sola); `error` muestra un mensaje traducido en vez de reiniciar a
+  ciegas. `/oauth/consent`: si `getAuthorizationDetails`/`approveAuthorization`
+  fallan porque la autorización murió (vencida/ya consumida/reabierta desde
+  una pestaña o enlace viejo), reintenta UNA vez pidiendo una autorización
+  nueva en `/auth/login` en vez de mostrar un callejón sin salida; el resto
+  de mensajes de Supabase se traducen con una sola fuente
+  (`auth-sorsabsa/src/lib/traducir-error.ts`, consolidó el mapa duplicado
+  que ya tenía `page.tsx`).
+- **Commits:** `auth-sorsabsa@3a157d7`, `condomanager@46d76fe`.
+- **Validación:** typecheck limpio en los dos repos. Pendiente: reproducir
+  en vivo con Gina (login normal, sin incógnito, y un registro nuevo con
+  confirmación por correo) — no se forzó ningún login para no interferir
+  con su propia prueba en curso.
+
 ---
 
 ## 🟠 ALTO
@@ -420,8 +462,9 @@ Frágil por diseño, bajo impacto mientras el script sea manual.
 
 ## Próximo paso
 
-🔴-1, 🔴-2/3, 🔴-4/🟠-1, 🔴-5, 🟠-3 y 🟠-5 cerrados y verificados
-(09-ago-2026). Quedan abiertos, en orden de severidad: 🔴-6 (referidos de
+🔴-1, 🔴-2/3, 🔴-4/🟠-1, 🔴-5, 🔴-7, 🟠-3 y 🟠-5 cerrados y verificados
+(09-ago-2026; 🔴-7 pendiente de reproducir en vivo con Gina, ver su
+entrada). Quedan abiertos, en orden de severidad: 🔴-6 (referidos de
 agente24siete sin premio real — requiere decisión de Gina, marcado
 importante), 🟠-2 (empeorado el 09-ago: 3 nombres hardcodeados en vez de
 2 — el fix declarativo sigue pendiente y ahora limpia más), 🟠-4, 🟡-2,
