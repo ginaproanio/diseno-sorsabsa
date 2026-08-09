@@ -497,6 +497,29 @@ cualquier otro producto.
   `b5c56a2`) y se conectó en `auth-sorsabsa/src/lib/apps.ts` (commit
   `c1e1120`). Ya no debería verse "SORSABSA" genérico en ninguna pantalla
   de `iot`.
+- ✅ **`scripts/invite-user.mjs` (`auth-sorsabsa`, commit `70805aa`)** — el
+  botón "Invite user" del Dashboard de Supabase no deja fijar
+  `redirect_to`, así que el correo salía con la marca institucional
+  genérica sin importar el fix de arriba (probado en vivo: Gina invitó a
+  Susana desde el Dashboard y le llegó "Bienvenida a SORSABSA", no la
+  marca de `iot`). El script sí fija `redirect_to` con `?app=`, reusable
+  para cualquier producto/usuario futuro. Uso:
+  `SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/invite-user.mjs <email> <app>`
+  (la llave de `verticales_sorsabsa` ya está en `condomanager/.env.local`,
+  mismo proyecto).
+- 🔴 **Bug real #4, el más grave de los cuatro — `auth-sorsabsa` commit
+  `4c6c1cc`.** Con el correo ya bien y el enlace funcionando, Susana llegó
+  a loguearse de verdad y quedó bloqueada en `/auth/complete` con "No
+  pudimos verificar tu cuenta / Hubo un problema técnico al validar tu
+  suscripción". Causa real: `lib/entity-resolver.ts::resolveEntitySubject`
+  solo tenía casos para `condomanager`/`domuscrm` — cualquier otra app
+  (incl. `iot`, herramienta INTERNA sin nada que cobrar) caía al
+  fallback (`subject: userId`, sin bypass) y `/api/entitlements` terminaba
+  pidiéndole a `pagos-sorsabsa` la suscripción de un producto que nunca
+  estuvo ahí para venderse. Agregado bypass explícito para `iot` y
+  `convertidor` (mismo caso: ambas son herramientas de uso interno, no
+  productos con clientes pagando) — mismo patrón que el bypass ya
+  existente para superadmin sin condominio/empresa.
 
 ## 15. 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas
 
