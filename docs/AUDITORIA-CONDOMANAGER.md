@@ -20,17 +20,154 @@ deuda acumulada en el producto mismo, no solo en el punto de entrada.
 búsqueda de patrones de riesgo (hardcode, bypass, fallback peligroso,
 secretos embebidos) en todo `*.ts`/`*.tsx`.
 
+**09-ago-2026, segunda pasada acotada a propósito:** Gina pidió
+específicamente *"cómo interactúa el portero con esto: pagos/facturación,
+RLS, crons — solo hasta ahí la auditoría"* antes de pasar a validación
+manual. No es una auditoría completa de esos 3 subsistemas — es
+específicamente el punto de contacto entre la sesión post-portero
+(`auth.getUser()`, `perfiles.user_id`, RLS) y cada uno. Cubierto: RLS real
+de `perfiles`/`residentes` vía `pg_policies` (antes solo se infería del
+código), GRANTs reales de las tablas creadas hoy vía `pg_class.relacl`
+(antes no se habían mirado), los 2 crons completos, y el patrón de
+autenticación de `pagos/iniciar`, `pagos/confirmar`, `pagos/consultar`.
+
 **NO cubierto todavía — no asumir que está limpio:** lógica de negocio
-completa de `lib/pagos/*` y `lib/facturacion/service.ts`, las páginas del
-dashboard (`app/(dashboard)/**`) más allá de lo que aparece por grep,
-políticas RLS en la base (no se consultó `pg_policies` directamente, solo
-se infiere de los comentarios en código), los crons
-(`cron/limpiar-no-confirmados`, `cron/procesar-activaciones-masivas`), y
-`lib/domuscrm-sync.ts`.
+completa (montos, cálculos, reglas de facturación en sí) de `lib/pagos/*`
+y `lib/facturacion/service.ts`, las páginas del dashboard
+(`app/(dashboard)/**`) más allá de lo que aparece por grep, RLS de tablas
+fuera de `perfiles`/`residentes`, y `lib/domuscrm-sync.ts`.
 
 Leyenda de estado: ⬜ pendiente · 🔧 en análisis (9 puntos presentados, sin
 código tocado) · ✅ corregido y verificado · ❌ descartado (no era un
 problema real, con motivo).
+
+---
+
+## 🔴 CRÍTICO
+
+### 🔴-3 — ✅ `registros_pendientes` y `campanas_masivas` sin GRANT ni RLS — service_role no podía usarlas — RESUELTO 09-ago-2026
+
+**1. Síntoma:** encontrado auditando "¿cómo interactúa el portero con RLS?".
+Al verificar en vivo (no inferir del código) si `service_role` podía leer
+`registros_pendientes` — la tabla de la que depende `reconciliar-perfil`
+(el paso post-portero que crea el `perfil` del admin) — Postgres devolvía
+`permission denied for table registros_pendientes`.
+
+**2. Causa inmediata:** la tabla no tenía NINGÚN grant — ni siquiera para
+`service_role` — y RLS estaba deshabilitado. `pg_class.relacl` mostraba
+`null` (sin ACL) contra el `condominios=arwdDxtm/postgres,anon=...,
+authenticated=...,service_role=...` que sí tiene cada tabla normal del
+schema.
+
+**3. Causa raíz, confirmada con SQL:** `select * from pg_default_acl where
+defaclnamespace='public'::regnamespace` devuelve vacío — este proyecto NO
+tiene `ALTER DEFAULT PRIVILEGES` configurado en `public`. Cada tabla nueva
+necesita su propio `GRANT` explícito en su propia migración; si la
+migración no lo incluye, la tabla queda invisible incluso para
+`service_role` (que bypasea RLS pero sigue necesitando el GRANT — son dos
+mecanismos independientes). Las migraciones de hoy
+(`20260809160000_registros_pendientes.sql`,
+`20260809140000_activacion_residentes.sql`) no lo incluyeron — yo no lo
+incluí. Mismo patrón exacto en las dos, por la misma razón: no sabía que
+este proyecto no tiene default privileges.
+
+**4. Componente responsable:** cualquier migración que cree una tabla
+nueva en este proyecto — debe incluir su propio `GRANT`.
+
+**5. Código/impacto afectado — esto es lo grave:** con
+`registros_pendientes` inaccesible, **todo alta de `admin_condominio`
+desde que se aplicó esa migración fallaba** en el paso 2.1 de
+`app/api/registro-admin/route.ts` (el insert a `registros_pendientes`),
+disparando el rollback completo (borra el condominio y el usuario de
+identity) y devolviendo 500. Registro de admin estuvo roto en producción
+todo ese tiempo. Con `campanas_masivas` en el mismo estado,
+`app/api/admin/activar-residentes-masivo/route.ts` también estaba roto —
+la función construida hoy mismo para el caso de uso real de Punta Blanca.
+
+**6. Fix aplicado:**
+
+```sql
+GRANT ALL ON public.registros_pendientes TO anon, authenticated, service_role;
+GRANT ALL ON public.campanas_masivas TO anon, authenticated, service_role;
+ALTER TABLE public.registros_pendientes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.campanas_masivas ENABLE ROW LEVEL SECURITY;
+```
+
+Sin policies para `anon`/`authenticated` a propósito — mismo patrón que el
+resto del schema (grant + RLS), y ambas tablas solo las toca código
+server-side con `supabaseAdmin`.
+
+**7. Código que debe eliminarse:** ninguno.
+
+**8. Riesgo de regresión:** ninguno — la tabla estaba completamente
+inutilizable antes; el fix solo la habilita.
+
+**9. Validación — hecha en vivo, no solo aplicada:**
+
+- `set local role service_role; select count(*) from registros_pendientes;`
+  → antes: `permission denied`. Después: `0` (sin error).
+- Insert real transaccional como `service_role` (con `rollback` al final,
+  sin dejar datos): confirmado que ahora puede escribir.
+- Insert como `anon`: `42501 row-level security policy` — confirma que
+  quedó bloqueado por RLS (no por falta de grant, que sería un error
+  distinto) — el diseño "grant + RLS deniega" funciona como se esperaba.
+- Mismas 3 pruebas repetidas para `campanas_masivas` — mismo resultado.
+- `get_advisors(security)` después del fix: ambas tablas aparecen como
+  "RLS enabled, no policies" (INFO, no error) — es el estado esperado, no
+  un hallazgo nuevo.
+
+**No se necesitó reparar datos** — el rollback de `registro-admin` ya
+hacía su trabajo (borraba el condominio y el usuario de identity en cada
+intento fallido), así que no quedó ningún condominio a medio crear.
+
+---
+
+## Resto de la pasada "portero × pagos/facturación/RLS/crons"
+
+**RLS de `perfiles`/`residentes` — verificado en vivo, CORRECTO, sin
+hallazgo.** `perfiles_select`/`perfiles_write`/`residentes_select`/
+`residentes_write` usan `user_id = auth.uid()` y las funciones
+`current_rol()`/`current_condominio_id()`/`current_residente_id()`/
+`is_superadmin()` — exactamente el modelo post-🔴-1: `auth.uid()` es el id
+LOCAL federado de este proyecto, que es lo que `perfiles.user_id` guarda.
+No es una inferencia del código — se leyó `pg_policies` directo.
+
+**Crons × portero:**
+
+- `procesar-activaciones-masivas` — CORRECTO. Crea las cuentas de
+  activación con `supabaseAdminIdentity` (identity), no con el proyecto de
+  producto — mismo patrón que `registro-admin`.
+- `limpiar-no-confirmados` — confirma el pendiente que ya estaba anotado
+  en `AUDITORIA-PORTERO-SSO.md`: usa `supabaseAdmin.auth.admin.listUsers()`
+  del proyecto de PRODUCTO. Desde 🔴-1, las cuentas nuevas sin confirmar
+  (admin o residente) se crean en IDENTITY — este cron nunca las va a
+  encontrar. Su propósito declarado ("defensa contra basura de bots") es
+  hoy un no-op para toda cuenta nueva; solo seguiría limpiando las 2
+  cuentas reales pre-🔴-1. Efecto colateral no evaluado a fondo: un email
+  que un bot usó para un registro nunca confirmado queda ocupado en
+  identity para siempre (nadie lo libera), lo que podría bloquear
+  permanentemente a la persona real dueña de ese correo si intenta
+  registrarse. Queda igual que estaba: bajo impacto, sin 9 puntos
+  completos todavía — se prioriza según lo que Gina decida.
+
+**Pagos/facturación × portero:** mecanismo CORRECTO (`auth.getUser()` →
+`perfiles.select(rol)`, igual que el resto) en `pagos/iniciar` y
+`pagos/consultar/[id]`. `pagos/confirmar` es el webhook de PayPhone —
+correctamente NO usa sesión de usuario, reconfirma contra PayPhone como
+fuente de verdad. Hallazgo menor: `pagos/iniciar` y `pagos/consultar/[id]`
+son 2 copias más del mismo patrón que 🟠-1 ya centralizó en
+`lib/auth/requireRole.ts` — no migradas todavía (quedaron fuera del
+barrido original porque ese barrido fue sobre `app/api/**` completo pero
+priorizó los 13 casos con gate estricto de rol; estos dos también
+califican). Fast-follow de bajo riesgo, no urgente.
+
+**Menor, pre-existente, no de hoy:** `get_advisors` marca que
+`current_rol()`, `current_condominio_id()`, `current_residente_id()`,
+`is_modulo_activo()` e `is_superadmin()` son `SECURITY DEFINER` y
+ejecutables vía RPC por `anon` (no solo `authenticated`). No es un bug
+introducido hoy y no se investigó si es explotable (probablemente no:
+`auth.uid()` es `NULL` sin sesión, así que devolverían "sin rol"/`false`)
+— queda anotado para cuando se audite RLS a fondo, no ahora.
 
 ---
 
@@ -226,13 +363,26 @@ condomanager (🔵-4), y todo lo de autenticación/federación SSO viven en
 
 ## Próximo paso
 
-🟠-1 y 🟠-2 corregidos (09-ago-2026, `condomanager@f60960d` y `@e4a7051`,
-typecheck + eslint limpios en ambos) — **ninguno de los dos tiene todavía
-la validación en vivo que su propio punto 9 pide** (🟠-1: probar las 3
-rutas migradas con sesión real de cada rol; 🟠-2: simular un error de red
-en la consulta a `perfiles` y confirmar que bloquea en vez de dejar
-pasar). 🔵-1 cerrado (09-ago-2026, `condomanager@5aaa1c7`, limpieza sin
-riesgo). Pendiente seguir ampliando la auditoría: pagos/facturación, RLS,
-crons — todavía no cubiertos en esta primera pasada. La validación en vivo
-de 🟠-1/🟠-2 queda deliberadamente para el final — Gina prefiere agrupar
-lo manual en vez de interrumpir el trabajo automatizable con eso.
+**Auditoría automatizable cerrada por ahora, a propósito** (09-ago-2026,
+a pedido explícito de Gina: acotar a "cómo interactúa el portero con
+pagos/facturación/RLS/crons" y de ahí pasar a validación manual). Estado:
+
+- 🔴-3 corregido y verificado en vivo (`condomanager@1ebebc3`) — era el
+  hallazgo más serio: `registro-admin` y `activar-residentes-masivo`
+  estaban rotos en producción.
+- 🟠-1 corregido (`@f60960d`), 🟠-2 corregido (`@e4a7051`), 🔵-1 corregido
+  (`@5aaa1c7`) — typecheck + eslint limpios en los tres.
+- RLS de `perfiles`/`residentes` verificada en vivo: correcta, sin
+  hallazgo.
+- Crons: `procesar-activaciones-masivas` correcto; `limpiar-no-confirmados`
+  confirma el pendiente ya conocido (bajo impacto).
+- Pagos/facturación: mecanismo de auth correcto; 2 archivos más
+  (`pagos/iniciar`, `pagos/consultar/[id]`) quedaron fuera del barrido de
+  🟠-1, fast-follow de bajo riesgo.
+
+**Ninguno de 🔴-3/🟠-1/🟠-2 tiene todavía la validación en vivo con
+sesión real de usuario** (🔴-3 sí se validó a nivel de base de datos —
+grants y RLS con `set local role` — pero no se probó el flujo completo
+`registro-admin` → confirmar correo → login → `reconciliar-perfil` de
+punta a punta después del fix). Esa ronda de validación manual, agrupada,
+es el siguiente paso — no antes.
