@@ -178,8 +178,19 @@ separados) que hay que rediseñar, no solo cambiar un label:
   prueba transaccional contra la base real confirmando que
   `traducirErrorUnidad()` reconoce el mensaje real de Postgres para la
   restricción única de `casa` (sin dejar datos de prueba).
-- **Fase 2 — Resolver + bucket B (15 archivos):** `identificadorUnidad()`
-  y reemplazo en los 15 lugares de solo-lectura.
+- **Fase 2 — ✅ RESUELTO 09-ago-2026 (`condomanager@4f2be4b`) — Resolver +
+  bucket B (15 archivos):** cada uno agrega `codigo_predial`/`casa` a su
+  select, resuelve el criterio del condominio, y reemplaza
+  `${manzana} - ${lote}` a mano por `identificadorUnidad()`. Incluye
+  registro público, pago rápido público, mis-unidades, pagos de
+  residente, las 3 pantallas de recaudación admin, las 4 de residentes
+  admin (`pendientes/page.tsx` de paso perdió 2 campos muertos que
+  nunca se usaban), los 2 reportes, la config de QR, y
+  `lib/facturacion/service.ts` (dirección del receptor en el PDF).
+  Verificado: typecheck limpio, eslint 0 errores nuevos. Confirmado con
+  SQL que Punta Blanca (ya en `CODIGO_PREDIAL`, código real
+  `046-114-014`) sigue intacta — antes de este fix esa unidad se
+  hubiera mostrado en blanco en estas 15 pantallas.
 - **Fase 3 — Bucket C (reportes/rubros-por-unidad):** rediseño de filtros.
 - **Fase 4 — Bucket D (residentes/importar):** matching por criterio en
   vez de manzana-lote fijo — el más riesgoso, se hace con más cuidado y
