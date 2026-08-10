@@ -178,7 +178,7 @@ no arreglaba su login.
   `auth-sorsabsa` commit `4478657`. Verificado en vivo: la misma cuenta
   de prueba ahora da `200 {"active":true,"bypass":true}`.
 
-### 🔴-6 — 🔧 DECISIÓN TOMADA 09-ago-2026, en construcción — el bypass de 🔴-5 desconecta el único uso real de `pagos.suscripciones` — los días ganados por el programa de referidos
+### 🔴-6 — 🔧 CONSTRUIDO 09-ago-2026, falta backfill + verificación en vivo — el bypass de 🔴-5 desconecta el único uso real de `pagos.suscripciones` — los días ganados por el programa de referidos
 
 - **Encontrado:** 09-ago-2026, explicado por Gina al justificar por qué el
   login SÍ debía validar contra la suscripción — no era arbitrario.

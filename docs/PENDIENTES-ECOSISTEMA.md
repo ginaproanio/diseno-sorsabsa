@@ -846,10 +846,23 @@ complementan (mismo patrón que Anthropic/OpenAI: plan base + créditos
 consumibles aparte). Hoy agente24siete no tiene ninguna de las dos
 capas realmente conectadas: el login la bypasea por completo (🔴-5,
 correcto, no revertir) y `pagos.suscripciones` no tiene ningún
-consumidor real en la app (🔴-6). **En construcción, 09-ago-2026** — ver
-`AUDITORIA-PORTERO-SSO.md` 🔴-6 para el detalle de qué se descartó (3
-candidatos que mezclaban suscripción con saldo) y por qué el gate real
-va dentro de agente24siete, no en el login SSO.
+consumidor real en la app (🔴-6). **✅ Construido 09-ago-2026
+(`agente24siete@57cfd58`), falta el backfill de clientes existentes y
+verificar en vivo** — ver `AUDITORIA-PORTERO-SSO.md` 🔴-6 para el
+detalle de qué se descartó (3 candidatos que mezclaban suscripción con
+saldo) y por qué el gate real va dentro de agente24siete, no en el login
+SSO.
+
+**🔴 Pendiente real antes de que esto sea seguro en producción:** correr
+`agente24siete/scripts/backfill-suscripciones.mjs` (dry-run por defecto,
+`--confirm` para escribir) — les da 365 días de trial a los clientes que
+ya existen, para que el gate nuevo no les corte el servicio de un
+momento a otro. No se corrió todavía: las credenciales reales
+(`DATABASE_URL`/`PAGOS_API_URL`/`PAGOS_API_KEY`) no estaban disponibles
+en el entorno de esta sesión, solo en Vercel. **El gate ya está en
+`main` y activo en el próximo deploy** — correr el backfill antes de que
+eso pase, o los clientes reales sin fila en `pagos.suscripciones` se
+quedan sin poder mandar mensajes.
 
 ---
 
