@@ -211,9 +211,25 @@ separados) que hay que rediseñar, no solo cambiar un label:
   typecheck limpio, eslint 0 errores nuevos (2 warnings `exhaustive-deps`
   preexistentes, no tocados). Confirmado con SQL que Punta Blanca
   (`CODIGO_PREDIAL`, predial real `046-114-014`) sigue intacta.
-- **Fase 4 — Bucket D (residentes/importar):** matching por criterio en
-  vez de manzana-lote fijo — el más riesgoso, se hace con más cuidado y
-  pruebas.
+- **Fase 4 — ✅ RESUELTO 09-ago-2026 (`condomanager@aadfac8`) — Bucket D
+  (residentes/importar):** el más delicado del plan. `lib/unidades/identificar.ts`
+  gana `claveUnidad()` — a diferencia de `identificadorUnidad()` (que cae a
+  otro campo si el activo está vacío, para mostrar algo en vez de "Sin
+  identificar"), esta NO tiene fallback: matchear un residente contra la
+  unidad equivocada por usar el campo equivocado es peor que no matchear
+  nada. `importar/page.tsx` resuelve el criterio del condominio, extiende
+  el select de `unidades` con `codigo_predial`/`casa`, y arma el mapa de
+  matching con `claveUnidad()` en vez de `` `${manzana}-${lote}` `` fijo.
+  La plantilla CSV gana 2 columnas (`unidad_codigo_predial`,
+  `unidad_casa`) — las 4 quedan siempre presentes, se llena solo la del
+  criterio activo (mismo patrón que Fase 1), con aviso en pantalla junto
+  al botón de descarga. Verificado: typecheck limpio, eslint 0 errores.
+  Confirmado contra la base real que el select nuevo funciona con Punta
+  Blanca (`CODIGO_PREDIAL`, `046-114-014`); los otros 2 criterios (CASA,
+  MANZANA_LOTE) probados transaccionalmente con datos sintéticos —
+  `BEGIN`/insert/select con la forma exacta de la query de la app,
+  `ROLLBACK`, sin dejar datos (no existe todavía un condominio real en
+  CASA ni en MANZANA_LOTE para probar contra datos reales).
 - **Fase 5 — Validación:** `lib/unidades/validar.ts`, typecheck, eslint,
   pruebas transaccionales del trigger, verificación con Gina en vivo.
 
