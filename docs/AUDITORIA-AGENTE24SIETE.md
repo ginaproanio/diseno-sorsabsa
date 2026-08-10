@@ -43,7 +43,7 @@ la fuente específica de agente24siete; 🔴-11 es el consolidado ecosistema.
 
 ## 🔴 CRÍTICO
 
-### 🔴-1 — 🔧 CONSTRUIDO 10-ago-2026 (los 3 casos), falta probar en vivo — El portero de agente24siete es 100% client-side — sin `middleware.ts`, a diferencia del patrón ya estabilizado en CondoManager
+### 🔴-1 — ✅ RESUELTO Y VALIDADO EN VIVO 10-ago-2026 — El portero de agente24siete es 100% client-side — sin `middleware.ts`, a diferencia del patrón ya estabilizado en CondoManager
 
 **1. Síntoma:** un usuario sin sesión válida (sin token, con token vencido,
 o con token de una cuenta sin cliente asociado) ve el shell COMPLETO del
@@ -441,11 +441,35 @@ secreto — son URLs públicas, se pueden pegar acá para revisar juntos).
   `agente24siete@6325176`, `agente24siete@b505379`,
   `agente24siete@87c5216` y `auth-sorsabsa@d693e0a`. typecheck y `next
   build` completo limpios en todos.
-- **Único pendiente real de esta auditoría:** la validación EN VIVO de
-  🔴-1 (punto 9) — sin cookie, cookie vencida, y cuenta SIN
-  cliente/usuario asociado, confirmando esta vez que ningún caso vuelve
-  a rebotar contra `auth.sorsabsa.com`. Recién con esa confirmación se
-  borra `LoginGate.tsx` (punto 7, "código que debe eliminarse") — se dejó
-  a propósito como red de seguridad hasta entonces.
-- **🟠-3** se resuelve en la MISMA prueba que valida 🔴-1, no hace falta
-  repetirla.
+- **✅ Validado en vivo por Gina, 10-ago-2026:** login completo con la
+  cuenta de prueba (sin cliente asociado) → una sola pantalla centrada,
+  marca correcta, sin sidebar, sin rebotar contra `auth.sorsabsa.com`.
+  Los 3 casos del punto 9 quedan cubiertos: sin token → login (probado en
+  todo este ciclo), token vencido → login (🟠-2), cuenta sin cliente →
+  pantalla terminal (probado hoy en vivo, el caso que faltaba).
+- **La causa de fondo era `AUDITORIA-PORTERO-SSO.md` 🔴-12** (agente24siete
+  verificaba el JWT contra su propio proyecto Supabase en vez de contra
+  `verticales_sorsabsa`, que es quien realmente emite la sesión en el
+  login por SSO) — **también resuelve 🟠-3**, que quedaba "no
+  diferenciado": era un problema de configuración, no vencimiento
+  natural.
+- **Hallazgo adicional, descubierto por este mismo fix:** una vez que el
+  JWT empezó a verificar bien, apareció un segundo problema —
+  `DATABASE_URL` de agente24siete usaba el hostname de conexión directa a
+  Postgres (`db.<proyecto>.supabase.co`), que requiere IPv6 y las
+  funciones serverless de Vercel no siempre resuelven — `getaddrinfo
+  ENOTFOUND`. Estaba oculto porque el login nunca pasaba de la
+  verificación de JWT antes de hoy. **Corregido:** `DATABASE_URL`
+  reemplazada por la cadena del "Transaction pooler" de Supabase.
+  Detalle completo en `AUDITORIA-PORTERO-SSO.md` 🔴-12.
+- **Corrección sobre el plan original — `LoginGate.tsx` NO se borra.** El
+  punto 7 de este hallazgo decía eliminarlo "una vez que el middleware
+  cubra su función" — eso era cierto para el chequeo de vigencia (🟠-2),
+  pero desde el fix del caso "cuenta sin cliente" (mismo día, más tarde),
+  `LoginGate` también hace la consulta a `whoami` que confirma la
+  asociación a un cliente/usuario real — algo que `middleware.ts` **no
+  puede hacer** desde Edge (sin acceso a la base). Borrarlo eliminaría la
+  única capa que cubre ese caso. Queda como está, a propósito — no es
+  duplicación sin sentido, es la pieza que middleware estructuralmente no
+  puede reemplazar sin convertirse en un middleware Node con acceso a
+  base (cambio de arquitectura mayor, no evaluado hoy).

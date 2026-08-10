@@ -608,7 +608,7 @@ botón de salir, y a dónde apunta?
 | --- | --- | --- | --- | --- |
 | **CondoManager** | ✅ existe | Sesión real (`getUser()` contra Supabase — vigencia, no solo presencia) | Redirige antes de servir HTML — nunca se ve el panel | ✅ `SignOutButton.tsx` → `auth.sorsabsa.com/auth/logout` |
 | **DomusCRM** | ✅ existe (`webs/src/middleware.ts`) | ✅ **10-ago-2026:** ahora valida en vivo contra Supabase (`sesionVigente()`), no solo presencia — commit `domuscrm@13d9176` | ⚠️ el caso común (sesión vencida) ya no llega a esta pantalla, gracias al fix de arriba. Queda un caso residual sin tocar: `AdminLayout` sigue dibujando `<aside>` sin condición, así que si `LoginGate` dispara por otra razón (401 de la API por otro motivo) todavía se ve dentro del chasis | ✅ **10-ago-2026:** `SignOutButton.tsx` agregado al sidebar y al menú móvil, mismo commit |
-| **agente24siete** | ❌ no existe | Nada — el gate es 100% cliente (`LoginGate.tsx`, solo mira si hay *algún* string en `localStorage`) | ❌ igual que DomusCRM, chasis completo + error adentro (ver `AUDITORIA-AGENTE24SIETE.md` 🔴-1) | ❌ no existe |
+| **agente24siete** | ✅ **10-ago-2026:** `middleware.ts` nuevo, valida vigencia real | ✅ vigencia (middleware) + asociación a cliente/usuario (`whoami`, el caso que middleware no puede cubrir desde Edge) — commits `agente24siete@89429ff`/`63251761`/`87c5216`, causa de fondo cerrada en 🔴-12 | ✅ validado en vivo: cuenta sin cliente → una sola pantalla centrada, sin sidebar, sin bucle | ✅ `SignOutButton.tsx` → `auth.sorsabsa.com/auth/logout`, commit `agente24siete@c6f2578` |
 | **JustiRed** | N/A — SPA pura (Vite, sin servidor propio que intercepte antes del HTML) | `supabase.auth.getSession()`/`setSession()` del SDK oficial — vigencia real, correcto para su arquitectura | N/A — no tiene panel privado gateado, solo personaliza el navbar si hay sesión | ⚠️ el botón existe (`Navbar.tsx`, "Cerrar Sesión") pero `useAuth.ts::signOut()` llama solo `supabase.auth.signOut()` — nunca pasa por `auth.sorsabsa.com/auth/logout` |
 
 **No es un bug copiado 4 veces — son tres fallas distintas, y confirma la
@@ -653,7 +653,10 @@ JustiRed siguen pendientes de confirmación, uno por uno, no en bloque:**
   chasis ya no ocurre — cambiar cómo `AdminLayout` decide qué dibujar es
   un cambio de forma para un caso ahora residual, no entró en el lote de
   fixes chicos de hoy.
-- **agente24siete:** ver `AUDITORIA-AGENTE24SIETE.md` (🔴-1, 🟠-1, 🟠-2).
+- **agente24siete — ✅ RESUELTO Y VALIDADO EN VIVO 10-ago-2026:** ver
+  `AUDITORIA-AGENTE24SIETE.md` (🔴-1, 🟠-1, 🟠-2, 🟠-3) y 🔴-12 de este
+  documento (causa de fondo: verificaba la sesión contra el proyecto
+  Supabase equivocado).
 - **JustiRed:** `useAuth.ts::signOut()` — antes de/en vez de
   `supabase.auth.signOut()`, redirigir a
   `https://auth.sorsabsa.com/auth/logout?app=justired&next=<destino>`. Es
@@ -671,7 +674,7 @@ prohíbe.
 
 ---
 
-### 🔴-12 — ⬜ agente24siete verifica su sesión contra el proyecto Supabase equivocado — causa real del bucle que 🔴-1/🟠-3 nunca cerraron
+### 🔴-12 — ✅ RESUELTO Y VALIDADO EN VIVO 10-ago-2026 — agente24siete verificaba su sesión contra el proyecto Supabase equivocado — causa real del bucle que 🔴-1/🟠-3 nunca cerraron
 
 **Origen:** pedido explícito de Gina, 10-ago-2026, después de que el fix de
 🔴-1 (middleware + `whoami`) no rompiera el bucle real: *"necesito que...
@@ -764,15 +767,35 @@ confirmado incorrecto con los datos de arriba.
 configuración a un valor verificado con datos reales, no un cambio de
 lógica. El comentario que indujo el valor equivocado ya no existe.
 
-**9. Validación pendiente, la hace Gina cuando decida retomar:** pegar los
-dos valores en Vercel (Production y Preview), redeploy, y repetir el login
-completo una vez — con esto, sumado a los fixes ya construidos hoy
-(middleware, `whoami`, `next` absoluto), el bucle debería cerrarse del
-todo.
+**9. Validación — ✅ hecha en vivo por Gina, 10-ago-2026:** valores
+pegados en Vercel (Production y Preview), redeploy, login completo
+repetido con la cuenta de prueba (sin cliente asociado). Resultado:
+**una sola pantalla centrada, marca correcta, sin sidebar, sin volver a
+rebotar contra `auth.sorsabsa.com`** — el mensaje `Cuenta sin cliente
+asociado` apareciendo exactamente como debía, la primera vez en toda
+esta cadena que el sistema se comportó como se diseñó.
 
-**Nota aparte, no bloqueante:** esto también resuelve 🟠-3 de
+**Segundo hallazgo, descubierto por este mismo fix (no antes posible):**
+una vez que la verificación de JWT empezó a pasar, apareció un error
+NUEVO y real detrás — `Error: getaddrinfo ENOTFOUND
+db.nwcqaginlnzjlkgwifas.supabase.co` en `whoami`, `dashboard` y
+`reconciliar-cliente` (confirmado con `get_runtime_errors` de Vercel, no
+adivinado). Estaba oculto: antes de este fix, el login nunca pasaba de
+la verificación de JWT, así que el código que consulta `clientes` jamás
+se ejecutaba. **Causa:** `DATABASE_URL` usaba el hostname de conexión
+directa (`db.<proyecto>.supabase.co`), que requiere IPv6 — las funciones
+serverless de Vercel no siempre lo resuelven (gotcha documentado de
+Supabase+Vercel, ya conocido en el ecosistema: ver la nota sobre "usar el
+pooler, no la conexión directa" en `auth-sorsabsa/.env.example`, misma
+lección, otro proyecto). **Fix — ✅ validado en vivo:** `DATABASE_URL`
+reemplazada por la cadena del "Transaction pooler" de Supabase
+(`aws-....pooler.supabase.com:6543`, pensado para funciones serverless
+sin conexión persistente). Redeploy, y el login completó de punta a
+punta.
+
+**Nota aparte:** esto también resuelve 🟠-3 de
 `AUDITORIA-AGENTE24SIETE.md`, que había quedado como "no diferenciado" —
-ahora sí: era (b), un problema de configuración, no vencimiento natural.
+era (b), un problema de configuración, no vencimiento natural.
 
 ---
 
@@ -953,9 +976,10 @@ vivo de un mensaje real, bloqueada por el baneo de Meta a las cuentas de
 WhatsApp (ver `PENDIENTES-ECOSISTEMA.md` #15; no volver a preguntar esto
 hasta que ese bloqueo se levante). Quedan abiertos además, en orden de
 severidad: **🔴-11 (10-ago-2026 — portero inconsistente en los 4 productos
-web, tres fallas distintas; DomusCRM ya corregido el mismo día — middleware
-con validación real + botón de Salir, commit `domuscrm@13d9176` —,
-agente24siete y JustiRed siguen pendientes de confirmación de Gina)**, 🟠-2 (empeorado el
+web, tres fallas distintas; DomusCRM y agente24siete ya corregidos y
+validados en vivo el mismo día — agente24siete además cerró 🔴-12, la
+causa de fondo del bucle; JustiRed sigue pendiente de confirmación de
+Gina)**, 🟠-2 (empeorado el
 09-ago: 3 nombres hardcodeados en vez de 2 — el fix declarativo sigue
 pendiente y ahora limpia más), 🟠-4, 🟡-2, 🟡-3 (debería poder eliminarse
 ahora que 🔴-1 está cerrado — no debería haber más cuentas nuevas fuera de
