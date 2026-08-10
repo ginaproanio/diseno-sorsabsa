@@ -271,6 +271,33 @@ no arreglaba su login.
   Código e infraestructura de 🔴-6 quedan **completos y verificados** sin
   esa prueba — la validación de producto queda en espera de que #15 se
   resuelva, no se vuelve a preguntar por esto hasta entonces.
+- **10-ago-2026 — auditoría de transversales completada, pedido explícito
+  de Gina ("no hicimos auditoria hasta la relación que establece con los
+  transversales"). Hallazgo real, verificado con código, no ejecutado
+  todavía:** con la suscripción real ya construida, el mecanismo de
+  premio (arriba, "el problema real") sigue sin conectar, mismo síntoma
+  que antes por una razón distinta. `agente24siete/pages/api/portal/
+  referidos.js` solo llama a `/api/referidos-resumen` (ver el propio
+  premio acumulado) y `/api/referidos-invitar` (mandar invitaciones) —
+  **nunca llama al paso que acredita el premio** (`extender-suscripcion`
+  o el mecanismo equivalente de "convertir", ver `referidos-registrar.js`:
+  *"este endpoint NO acredita recompensas: eso ocurre al CONVERTIR"*).
+  Grep completo de `agente24siete/pages/api` y `lib/`: ningún archivo
+  llama a ese paso. **Causa de fondo, distinta a DomusCRM:** DomusCRM
+  dispara la conversión desde su alta pública de cuenta
+  (`registro-agencia/route.ts`, lee `?ref=` del formulario de registro
+  self-service). agente24siete no tiene ese formulario — sus clientes los
+  da de alta un admin (`pages/api/admin/clientes.js`), no hay flujo
+  público de "invitado se registra solo con un código". El punto de
+  disparo que el resto del ecosistema usa **no existe en el modelo de
+  negocio de agente24siete**, no es que se haya olvidado conectarlo.
+  **No resuelto — necesita decisión de Gina:** ¿cuál es, en agente24siete,
+  el equivalente real de "invitado se convierte"? Candidatos sin decidir:
+  primera recarga de saldo real del referido, o que el admin marque el
+  alta como venida de una invitación al crear el cliente. Cualquiera de
+  los dos dispara `extender-suscripcion` con `producto: "agente24siete"`
+  igual que ya hace `referidos-registrar` para el resto — no hace falta
+  inventar un mecanismo nuevo, solo decidir el disparador y conectarlo.
 
 - **Archivo:** `auth-sorsabsa/scripts/invite-user.mjs` (el proceso) + `iot/auth_sso.py` (la consecuencia)
 - **Problema:** ningún componente decide "esta persona debe existir en identity, con estos atributos, con acceso a este producto" — lo decide quien corre el script a mano.
