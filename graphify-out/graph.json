@@ -4917,26 +4917,26 @@
       "norm_label": "\ud83d\udfe0 importante"
     },
     {
-      "label": "\ud83d\udfe0-1 \u2014 No existe bot\u00f3n de cerrar sesi\u00f3n en ning\u00fan panel \u2014 y la versi\u00f3n ingenua repetir\u00eda un bug ya corregido en CondoManager e identity",
+      "label": "\ud83d\udfe0-1 \u2014 \u2705 CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` \u2014 No existe bot\u00f3n de cerrar sesi\u00f3n en ning\u00fan panel \u2014 y la versi\u00f3n ingenua repetir\u00eda un bug ya corregido en CondoManager e identity",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-AGENTE24SIETE.md",
       "source_location": "L137",
       "_origin": "ast",
-      "id": "docs_auditoria_agente24siete_1_no_existe_bot\u00f3n_de_cerrar_sesi\u00f3n_en_ning\u00fan_panel_y_la_versi\u00f3n_ingenua_repetir\u00eda_un_bug_ya_corregido_en_condomanager_e_identity",
+      "id": "docs_auditoria_agente24siete_1_corregido_10_ago_2026_commit_agente24siete_c6f2578_no_existe_bot\u00f3n_de_cerrar_sesi\u00f3n_en_ning\u00fan_panel_y_la_versi\u00f3n_ingenua_repetir\u00eda_un_bug_ya_corregido_en_condomanager_e_identity",
       "community": 4,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
-      "norm_label": "\ud83d\udfe0-1 \u2014 no existe boton de cerrar sesion en ningun panel \u2014 y la version ingenua repetiria un bug ya corregido en condomanager e identity"
+      "norm_label": "\ud83d\udfe0-1 \u2014 \u2705 corregido 10-ago-2026, commit `agente24siete@c6f2578` \u2014 no existe boton de cerrar sesion en ningun panel \u2014 y la version ingenua repetiria un bug ya corregido en condomanager e identity"
     },
     {
-      "label": "\ud83d\udfe0-2 \u2014 `LoginGate` valida presencia de token, nunca vigencia \u2014 deja pasar sesiones vencidas al shell completo",
+      "label": "\ud83d\udfe0-2 \u2014 \u2705 CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` \u2014 `LoginGate` valida presencia de token, nunca vigencia \u2014 deja pasar sesiones vencidas al shell completo",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-AGENTE24SIETE.md",
       "source_location": "L194",
       "_origin": "ast",
-      "id": "docs_auditoria_agente24siete_2_logingate_valida_presencia_de_token_nunca_vigencia_deja_pasar_sesiones_vencidas_al_shell_completo",
+      "id": "docs_auditoria_agente24siete_2_corregido_10_ago_2026_commit_agente24siete_c6f2578_logingate_valida_presencia_de_token_nunca_vigencia_deja_pasar_sesiones_vencidas_al_shell_completo",
       "community": 4,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
-      "norm_label": "\ud83d\udfe0-2 \u2014 `logingate` valida presencia de token, nunca vigencia \u2014 deja pasar sesiones vencidas al shell completo"
+      "norm_label": "\ud83d\udfe0-2 \u2014 \u2705 corregido 10-ago-2026, commit `agente24siete@c6f2578` \u2014 `logingate` valida presencia de token, nunca vigencia \u2014 deja pasar sesiones vencidas al shell completo"
     },
     {
       "label": "\ud83d\udfe0-3 \u2014 Pendiente de verificar en vivo, no descartado: \u00bfel mensaje de Gina fue realmente por vencimiento, o hay un problema de configuraci\u00f3n?",
@@ -14594,7 +14594,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_agente24siete_importante",
-      "target": "docs_auditoria_agente24siete_1_no_existe_bot\u00f3n_de_cerrar_sesi\u00f3n_en_ning\u00fan_panel_y_la_versi\u00f3n_ingenua_repetir\u00eda_un_bug_ya_corregido_en_condomanager_e_identity",
+      "target": "docs_auditoria_agente24siete_1_corregido_10_ago_2026_commit_agente24siete_c6f2578_no_existe_bot\u00f3n_de_cerrar_sesi\u00f3n_en_ning\u00fan_panel_y_la_versi\u00f3n_ingenua_repetir\u00eda_un_bug_ya_corregido_en_condomanager_e_identity",
       "confidence_score": 1.0
     },
     {
@@ -14605,7 +14605,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_agente24siete_importante",
-      "target": "docs_auditoria_agente24siete_2_logingate_valida_presencia_de_token_nunca_vigencia_deja_pasar_sesiones_vencidas_al_shell_completo",
+      "target": "docs_auditoria_agente24siete_2_corregido_10_ago_2026_commit_agente24siete_c6f2578_logingate_valida_presencia_de_token_nunca_vigencia_deja_pasar_sesiones_vencidas_al_shell_completo",
       "confidence_score": 1.0
     },
     {
@@ -16436,5 +16436,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "bf198dc3268fade9c01062059074ced53690b77d"
+  "built_at_commit": "1b6fdf7a9fc48aee179d78bfb6bae8f18d83e266"
 }
