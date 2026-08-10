@@ -73,7 +73,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "package",
-      "community": 19,
+      "community": 17,
       "community_name": "package.json",
       "norm_label": "package.json"
     },
@@ -84,7 +84,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "package_name",
-      "community": 19,
+      "community": 17,
       "community_name": "package.json",
       "norm_label": "name"
     },
@@ -95,7 +95,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "package_version",
-      "community": 19,
+      "community": 17,
       "community_name": "package.json",
       "norm_label": "version"
     },
@@ -106,7 +106,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "package_description",
-      "community": 19,
+      "community": 17,
       "community_name": "package.json",
       "norm_label": "description"
     },
@@ -117,7 +117,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "package_license",
-      "community": 19,
+      "community": 17,
       "community_name": "package.json",
       "norm_label": "license"
     },
@@ -128,7 +128,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "package_private",
-      "community": 19,
+      "community": 17,
       "community_name": "package.json",
       "norm_label": "private"
     },
@@ -139,7 +139,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "package_type",
-      "community": 19,
+      "community": 17,
       "community_name": "package.json",
       "norm_label": "type"
     },
@@ -150,7 +150,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "package_main",
-      "community": 19,
+      "community": 17,
       "community_name": "package.json",
       "norm_label": "main"
     },
@@ -161,7 +161,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "package_types",
-      "community": 19,
+      "community": 17,
       "community_name": "package.json",
       "norm_label": "types"
     },
@@ -282,7 +282,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "package_peerdependencies",
-      "community": 25,
+      "community": 24,
       "community_name": "peerDependencies",
       "norm_label": "peerdependencies"
     },
@@ -293,7 +293,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "package_peerdependencies_framer_motion",
-      "community": 25,
+      "community": 24,
       "community_name": "peerDependencies",
       "norm_label": "framer-motion"
     },
@@ -304,7 +304,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "package_json_framer_motion",
-      "community": 25,
+      "community": 24,
       "community_name": "peerDependencies",
       "norm_label": "framer-motion"
     },
@@ -337,7 +337,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "package_peerdependencies_react",
-      "community": 25,
+      "community": 24,
       "community_name": "peerDependencies",
       "norm_label": "react"
     },
@@ -348,7 +348,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "package_json_react",
-      "community": 25,
+      "community": 24,
       "community_name": "peerDependencies",
       "norm_label": "react"
     },
@@ -359,7 +359,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "package_peerdependencies_react_dom",
-      "community": 25,
+      "community": 24,
       "community_name": "peerDependencies",
       "norm_label": "react-dom"
     },
@@ -370,7 +370,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "package_json_react_dom",
-      "community": 25,
+      "community": 24,
       "community_name": "peerDependencies",
       "norm_label": "react-dom"
     },
@@ -502,7 +502,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "package_devdependencies_framer_motion",
-      "community": 25,
+      "community": 24,
       "community_name": "peerDependencies",
       "norm_label": "framer-motion"
     },
@@ -568,7 +568,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "package_devdependencies_react",
-      "community": 25,
+      "community": 24,
       "community_name": "peerDependencies",
       "norm_label": "react"
     },
@@ -579,7 +579,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "package_devdependencies_react_dom",
-      "community": 25,
+      "community": 24,
       "community_name": "peerDependencies",
       "norm_label": "react-dom"
     },
@@ -634,7 +634,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "package_dependencies",
-      "community": 19,
+      "community": 17,
       "community_name": "package.json",
       "norm_label": "dependencies"
     },
@@ -645,7 +645,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "package_dependencies_motion",
-      "community": 19,
+      "community": 17,
       "community_name": "package.json",
       "norm_label": "motion"
     },
@@ -656,7 +656,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "package_json_motion",
-      "community": 19,
+      "community": 17,
       "community_name": "package.json",
       "norm_label": "motion"
     },
@@ -667,7 +667,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_package",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "showcase/package.json"
     },
@@ -678,7 +678,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "showcase_package_name",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "name"
     },
@@ -689,7 +689,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_package_private",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "private"
     },
@@ -700,7 +700,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_package_version",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "version"
     },
@@ -711,7 +711,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_package_type",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "type"
     },
@@ -722,7 +722,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "showcase_package_description",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "description"
     },
@@ -733,7 +733,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "showcase_package_scripts",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "scripts"
     },
@@ -744,7 +744,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "showcase_package_scripts_dev",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "dev"
     },
@@ -755,7 +755,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "showcase_package_scripts_build",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "build"
     },
@@ -766,7 +766,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "showcase_package_scripts_preview",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "preview"
     },
@@ -777,7 +777,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "showcase_package_scripts_typecheck",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "typecheck"
     },
@@ -788,7 +788,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "showcase_package_dependencies",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "dependencies"
     },
@@ -799,7 +799,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "showcase_package_dependencies_framer_motion",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "framer-motion"
     },
@@ -810,7 +810,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "showcase_package_json_framer_motion",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "framer-motion"
     },
@@ -821,7 +821,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "showcase_package_dependencies_lucide_react",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "lucide-react"
     },
@@ -832,7 +832,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "showcase_package_json_lucide_react",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "lucide-react"
     },
@@ -843,7 +843,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "showcase_package_dependencies_motion",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "motion"
     },
@@ -854,7 +854,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "showcase_package_json_motion",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "motion"
     },
@@ -865,7 +865,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "showcase_package_dependencies_react",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "react"
     },
@@ -876,7 +876,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "showcase_package_json_react",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "react"
     },
@@ -887,7 +887,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "showcase_package_dependencies_react_dom",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "react-dom"
     },
@@ -898,7 +898,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "showcase_package_json_react_dom",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "react-dom"
     },
@@ -909,7 +909,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "showcase_package_devdependencies",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "devdependencies"
     },
@@ -920,7 +920,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_types_react",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "@types/react"
     },
@@ -931,7 +931,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "showcase_package_json_types_react",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "@types/react"
     },
@@ -942,7 +942,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_types_react_dom",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "@types/react-dom"
     },
@@ -953,7 +953,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "showcase_package_json_types_react_dom",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "@types/react-dom"
     },
@@ -964,7 +964,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_vitejs_plugin_react",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "@vitejs/plugin-react"
     },
@@ -975,7 +975,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "vitejs_plugin_react",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "@vitejs/plugin-react"
     },
@@ -986,7 +986,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_autoprefixer",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "autoprefixer"
     },
@@ -997,7 +997,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "autoprefixer",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "autoprefixer"
     },
@@ -1008,7 +1008,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_postcss",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "postcss"
     },
@@ -1019,7 +1019,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "postcss",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "postcss"
     },
@@ -1030,7 +1030,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_tailwindcss",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "tailwindcss"
     },
@@ -1041,7 +1041,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "showcase_package_json_tailwindcss",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "tailwindcss"
     },
@@ -1052,7 +1052,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_typescript",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "typescript"
     },
@@ -1063,7 +1063,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "showcase_package_json_typescript",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "typescript"
     },
@@ -1074,7 +1074,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "showcase_package_devdependencies_vite",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "vite"
     },
@@ -1085,7 +1085,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "vite",
-      "community": 2,
+      "community": 3,
       "community_name": "devDependencies",
       "norm_label": "vite"
     },
@@ -1176,7 +1176,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_buttonmatrix",
-      "community": 20,
+      "community": 18,
       "community_name": "Button.tsx",
       "norm_label": "buttonmatrix.tsx"
     },
@@ -1187,7 +1187,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_src_components_buttonmatrix_variants",
-      "community": 20,
+      "community": 18,
       "community_name": "Button.tsx",
       "norm_label": "variants"
     },
@@ -1198,7 +1198,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_src_components_buttonmatrix_shadow",
-      "community": 20,
+      "community": 18,
       "community_name": "Button.tsx",
       "norm_label": "shadow"
     },
@@ -1210,7 +1210,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_buttonmatrix_buttonmatrix",
-      "community": 20,
+      "community": 18,
       "community_name": "Button.tsx",
       "norm_label": "buttonmatrix()"
     },
@@ -1221,8 +1221,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_cardstatusdemo",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "cardstatusdemo.tsx"
     },
     {
@@ -1232,8 +1232,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_src_components_cardstatusdemo_tones",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "tones"
     },
     {
@@ -1243,8 +1243,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_src_components_cardstatusdemo_shadow",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "shadow"
     },
     {
@@ -1255,8 +1255,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_cardstatusdemo_cardstatusdemo",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "cardstatusdemo()"
     },
     {
@@ -1335,7 +1335,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "domuslanding.tsx"
     },
@@ -1347,7 +1347,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_domusnav",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "domusnav()"
     },
@@ -1359,7 +1359,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_hero",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "hero()"
     },
@@ -1371,7 +1371,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_features",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "features"
     },
@@ -1382,7 +1382,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_social",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "social"
     },
@@ -1394,7 +1394,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_socialproof",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "socialproof()"
     },
@@ -1406,7 +1406,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_cta",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "cta()"
     },
@@ -1418,7 +1418,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_footer",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "footer()"
     },
@@ -1430,7 +1430,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_domuslanding_domuslanding",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "domuslanding()"
     },
@@ -1464,7 +1464,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_iconcatalog",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "iconcatalog.tsx"
     },
@@ -1475,7 +1475,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_src_components_iconcatalog_names",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "names"
     },
@@ -1486,7 +1486,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_src_components_iconcatalog_shadow",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "shadow"
     },
@@ -1498,7 +1498,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_iconcatalog_iconcatalog",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "iconcatalog()"
     },
@@ -1728,7 +1728,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_src_components_tokenaudit",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "tokenaudit.tsx"
     },
@@ -1739,7 +1739,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_src_components_tokenaudit_tokens",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "tokens"
     },
@@ -1751,7 +1751,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "showcase_src_components_tokenaudit_tokenaudit",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "tokenaudit()"
     },
@@ -2225,7 +2225,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "showcase_vercel",
-      "community": 30,
+      "community": 29,
       "community_name": "vercel.json",
       "norm_label": "vercel.json"
     },
@@ -2236,7 +2236,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "showcase_vercel_framework",
-      "community": 30,
+      "community": 29,
       "community_name": "vercel.json",
       "norm_label": "framework"
     },
@@ -2247,7 +2247,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "showcase_vercel_installcommand",
-      "community": 30,
+      "community": 29,
       "community_name": "vercel.json",
       "norm_label": "installcommand"
     },
@@ -2258,7 +2258,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "showcase_vercel_buildcommand",
-      "community": 30,
+      "community": 29,
       "community_name": "vercel.json",
       "norm_label": "buildcommand"
     },
@@ -2269,7 +2269,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "showcase_vercel_outputdirectory",
-      "community": 30,
+      "community": 29,
       "community_name": "vercel.json",
       "norm_label": "outputdirectory"
     },
@@ -2302,7 +2302,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_brand_brandprovider_test",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandprovider.test.tsx"
     },
@@ -2313,7 +2313,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_brand_brandprovider_test_base",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "base"
     },
@@ -2325,7 +2325,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_test_ratioentre",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "ratioentre()"
     },
@@ -2336,7 +2336,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_brand_brandprovider",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandprovider.tsx"
     },
@@ -2349,7 +2349,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_brandcolors",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandcolors"
     },
@@ -2375,7 +2375,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_wordmarktone",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmarktone"
     },
@@ -2388,7 +2388,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_wordmarkanimation",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmarkanimation"
     },
@@ -2399,7 +2399,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "src_brand_brandprovider_brandcontext",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandcontext"
     },
@@ -2411,7 +2411,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_usebrand",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "usebrand()"
     },
@@ -2423,7 +2423,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_hextorgbtriplet",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "hextorgbtriplet()"
     },
@@ -2435,7 +2435,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_hextorgb",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "hextorgb()"
     },
@@ -2447,7 +2447,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_relativeluminance",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "relativeluminance()"
     },
@@ -2459,7 +2459,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_contrastratio",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "contrastratio()"
     },
@@ -2471,7 +2471,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_tohex",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "tohex()"
     },
@@ -2483,7 +2483,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_darkentocontrast",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "darkentocontrast()"
     },
@@ -2495,7 +2495,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_readableon",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "readableon()"
     },
@@ -2507,7 +2507,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_brandtocssvars",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandtocssvars()"
     },
@@ -2519,7 +2519,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brandprovider_brandprovider",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brandprovider()"
     },
@@ -2530,7 +2530,7 @@
       "source_location": "L284",
       "_origin": "ast",
       "id": "src_brand_brandprovider_brand_font_imports",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brand_font_imports"
     },
@@ -2541,7 +2541,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_brand_brands",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brands.ts"
     },
@@ -2552,7 +2552,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_brand_brands_brands",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "brands"
     },
@@ -2564,7 +2564,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_brand_brands_getbrand",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "getbrand()"
     },
@@ -2575,7 +2575,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_appshell",
-      "community": 13,
+      "community": 19,
       "community_name": "AppShell.tsx",
       "norm_label": "appshell.tsx"
     },
@@ -2588,7 +2588,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_appshell_appshellprops",
-      "community": 13,
+      "community": 19,
       "community_name": "AppShell.tsx",
       "norm_label": "appshellprops"
     },
@@ -2600,7 +2600,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_appshell_appshell",
-      "community": 13,
+      "community": 19,
       "community_name": "AppShell.tsx",
       "norm_label": "appshell()"
     },
@@ -2611,8 +2611,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_avatar",
-      "community": 13,
-      "community_name": "AppShell.tsx",
+      "community": 30,
+      "community_name": "Avatar.tsx",
       "norm_label": "avatar.tsx"
     },
     {
@@ -2624,8 +2624,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_avatar_avatarprops",
-      "community": 13,
-      "community_name": "AppShell.tsx",
+      "community": 30,
+      "community_name": "Avatar.tsx",
       "norm_label": "avatarprops"
     },
     {
@@ -2635,8 +2635,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_components_avatar_size",
-      "community": 13,
-      "community_name": "AppShell.tsx",
+      "community": 30,
+      "community_name": "Avatar.tsx",
       "norm_label": "size"
     },
     {
@@ -2647,8 +2647,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_avatar_getinitials",
-      "community": 13,
-      "community_name": "AppShell.tsx",
+      "community": 30,
+      "community_name": "Avatar.tsx",
       "norm_label": "getinitials()"
     },
     {
@@ -2659,8 +2659,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_avatar_avatar",
-      "community": 13,
-      "community_name": "AppShell.tsx",
+      "community": 30,
+      "community_name": "Avatar.tsx",
       "norm_label": "avatar()"
     },
     {
@@ -2670,7 +2670,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_button_test",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "button.test.tsx"
     },
@@ -2681,7 +2681,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_button_test_marcadeprueba",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "marcadeprueba"
     },
@@ -2693,7 +2693,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_button_test_renderconmarca",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "renderconmarca()"
     },
@@ -2704,7 +2704,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_button",
-      "community": 20,
+      "community": 18,
       "community_name": "Button.tsx",
       "norm_label": "button.tsx"
     },
@@ -2717,7 +2717,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_button_buttonvariant",
-      "community": 20,
+      "community": 18,
       "community_name": "Button.tsx",
       "norm_label": "buttonvariant"
     },
@@ -2730,7 +2730,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_button_buttonsize",
-      "community": 20,
+      "community": 18,
       "community_name": "Button.tsx",
       "norm_label": "buttonsize"
     },
@@ -2741,7 +2741,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_components_button_variants",
-      "community": 20,
+      "community": 18,
       "community_name": "Button.tsx",
       "norm_label": "variants"
     },
@@ -2752,7 +2752,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_components_button_sizes",
-      "community": 20,
+      "community": 18,
       "community_name": "Button.tsx",
       "norm_label": "sizes"
     },
@@ -2765,7 +2765,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_button_commonprops",
-      "community": 20,
+      "community": 18,
       "community_name": "Button.tsx",
       "norm_label": "commonprops"
     },
@@ -2778,7 +2778,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_button_buttonprops",
-      "community": 20,
+      "community": 18,
       "community_name": "Button.tsx",
       "norm_label": "buttonprops"
     },
@@ -2789,7 +2789,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "src_components_button_button",
-      "community": 20,
+      "community": 18,
       "community_name": "Button.tsx",
       "norm_label": "button"
     },
@@ -2800,8 +2800,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_card",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "card.tsx"
     },
     {
@@ -2813,8 +2813,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_card_cardprops",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "cardprops"
     },
     {
@@ -2824,8 +2824,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_components_card_variants",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "variants"
     },
     {
@@ -2836,8 +2836,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_card_card",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "card()"
     },
     {
@@ -2849,8 +2849,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_card_cardheaderprops",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "cardheaderprops"
     },
     {
@@ -2861,8 +2861,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_card_cardheader",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "cardheader()"
     },
     {
@@ -2873,8 +2873,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_card_cardtitle",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "cardtitle()"
     },
     {
@@ -2885,8 +2885,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_card_cardcontent",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "cardcontent()"
     },
     {
@@ -2896,7 +2896,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_formsection",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "formsection.tsx"
     },
@@ -2909,7 +2909,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_formsection_formsectionprops",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "formsectionprops"
     },
@@ -2921,7 +2921,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_formsection_formsection",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "formsection()"
     },
@@ -2932,7 +2932,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_input",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "input.tsx"
     },
@@ -2945,7 +2945,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_input_inputprops",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "inputprops"
     },
@@ -2967,7 +2967,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_mobilenav",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "mobilenav.tsx"
     },
@@ -2980,7 +2980,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_mobilenav_mobilenavitem",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "mobilenavitem"
     },
@@ -2993,7 +2993,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_mobilenav_mobilenavprops",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "mobilenavprops"
     },
@@ -3005,7 +3005,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_mobilenav_mobilenav",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "mobilenav()"
     },
@@ -3016,7 +3016,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_notificationbell",
-      "community": 29,
+      "community": 28,
       "community_name": "NotificationBell.tsx",
       "norm_label": "notificationbell.tsx"
     },
@@ -3042,7 +3042,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_notificationbell_notificationbellprops",
-      "community": 29,
+      "community": 28,
       "community_name": "NotificationBell.tsx",
       "norm_label": "notificationbellprops"
     },
@@ -3053,7 +3053,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_components_notificationbell_type_icon",
-      "community": 29,
+      "community": 28,
       "community_name": "NotificationBell.tsx",
       "norm_label": "type_icon"
     },
@@ -3064,7 +3064,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_components_notificationbell_type_color",
-      "community": 29,
+      "community": 28,
       "community_name": "NotificationBell.tsx",
       "norm_label": "type_color"
     },
@@ -3076,7 +3076,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_notificationbell_notificationbell",
-      "community": 29,
+      "community": 28,
       "community_name": "NotificationBell.tsx",
       "norm_label": "notificationbell()"
     },
@@ -3087,7 +3087,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_propertycarousel",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "propertycarousel.tsx"
     },
@@ -3100,7 +3100,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_propertycarousel_propertycarouselprops",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "propertycarouselprops"
     },
@@ -3112,7 +3112,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_propertycarousel_propertycarousel",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "propertycarousel()"
     },
@@ -3123,8 +3123,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_propertylistingcard",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "propertylistingcard.tsx"
     },
     {
@@ -3136,8 +3136,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_propertylistingcard_propertylistingcardprops",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "propertylistingcardprops"
     },
     {
@@ -3148,8 +3148,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_propertylistingcard_placeholder",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "placeholder()"
     },
     {
@@ -3160,8 +3160,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_propertylistingcard_stat",
-      "community": 15,
-      "community_name": "CardStatusDemo.tsx",
+      "community": 1,
+      "community_name": "DomusLanding.tsx",
       "norm_label": "stat()"
     },
     {
@@ -3183,7 +3183,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_sectionheader",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "sectionheader.tsx"
     },
@@ -3196,7 +3196,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_sectionheader_sectionheaderprops",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "sectionheaderprops"
     },
@@ -3208,7 +3208,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_sectionheader_sectionheader",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "sectionheader()"
     },
@@ -3219,7 +3219,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_segmentedcontrol",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "segmentedcontrol.tsx"
     },
@@ -3232,7 +3232,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_segmentedcontrol_segmentedoption",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "segmentedoption"
     },
@@ -3245,7 +3245,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_segmentedcontrol_segmentedcontrolprops",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "segmentedcontrolprops"
     },
@@ -3257,7 +3257,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_segmentedcontrol_segmentedcontrol",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "segmentedcontrol()"
     },
@@ -3268,7 +3268,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_statusbadge",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "statusbadge.tsx"
     },
@@ -3281,7 +3281,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_statusbadge_statustone",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "statustone"
     },
@@ -3292,7 +3292,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_components_statusbadge_tone_class",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "tone_class"
     },
@@ -3303,7 +3303,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_components_statusbadge_tone_icon",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "tone_icon"
     },
@@ -3316,7 +3316,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_statusbadge_statusbadgeprops",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "statusbadgeprops"
     },
@@ -3328,7 +3328,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_statusbadge_statusbadge",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "statusbadge()"
     },
@@ -3620,7 +3620,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_tag",
-      "community": 13,
+      "community": 19,
       "community_name": "AppShell.tsx",
       "norm_label": "tag.tsx"
     },
@@ -3633,7 +3633,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_tag_tagprops",
-      "community": 13,
+      "community": 19,
       "community_name": "AppShell.tsx",
       "norm_label": "tagprops"
     },
@@ -3644,7 +3644,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_components_tag_tone",
-      "community": 13,
+      "community": 19,
       "community_name": "AppShell.tsx",
       "norm_label": "tone"
     },
@@ -3655,7 +3655,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_components_tag_size",
-      "community": 13,
+      "community": 19,
       "community_name": "AppShell.tsx",
       "norm_label": "size"
     },
@@ -3667,7 +3667,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_tag_tag",
-      "community": 13,
+      "community": 19,
       "community_name": "AppShell.tsx",
       "norm_label": "tag()"
     },
@@ -3678,7 +3678,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_toast",
-      "community": 13,
+      "community": 19,
       "community_name": "AppShell.tsx",
       "norm_label": "toast.tsx"
     },
@@ -3691,7 +3691,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_toast_toastprops",
-      "community": 13,
+      "community": 19,
       "community_name": "AppShell.tsx",
       "norm_label": "toastprops"
     },
@@ -3702,7 +3702,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_toast_tone",
-      "community": 13,
+      "community": 19,
       "community_name": "AppShell.tsx",
       "norm_label": "tone"
     },
@@ -3714,7 +3714,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_toast_toast",
-      "community": 13,
+      "community": 19,
       "community_name": "AppShell.tsx",
       "norm_label": "toast()"
     },
@@ -3725,7 +3725,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_typingdots",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "typingdots.tsx"
     },
@@ -3737,7 +3737,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_typingdots_typingdots",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "typingdots()"
     },
@@ -3748,7 +3748,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_wordmark_test",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmark.test.tsx"
     },
@@ -3759,7 +3759,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_wordmark",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmark.tsx"
     },
@@ -3770,7 +3770,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_components_wordmark_tone_class",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "tone_class"
     },
@@ -3781,7 +3781,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_components_wordmark_tonos_por_defecto",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "tonos_por_defecto"
     },
@@ -3793,7 +3793,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_wordmark_getanimation",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "getanimation()"
     },
@@ -3805,7 +3805,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_wordmark_wordmark",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmark()"
     },
@@ -3816,7 +3816,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_wordmarkanimations",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmarkanimations.ts"
     },
@@ -3827,7 +3827,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_components_wordmarkanimations_wordmarkvariants",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmarkvariants"
     },
@@ -3838,7 +3838,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_components_wordmarkanimations_wordmarkfadeslidevariants",
-      "community": 4,
+      "community": 5,
       "community_name": "BrandProvider.tsx",
       "norm_label": "wordmarkfadeslidevariants"
     },
@@ -3849,7 +3849,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_useonclickoutside",
-      "community": 29,
+      "community": 28,
       "community_name": "NotificationBell.tsx",
       "norm_label": "useonclickoutside.ts"
     },
@@ -3861,7 +3861,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_hooks_useonclickoutside_useonclickoutside",
-      "community": 29,
+      "community": 28,
       "community_name": "NotificationBell.tsx",
       "norm_label": "useonclickoutside()"
     },
@@ -3872,7 +3872,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_icons_icon",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "icon.tsx"
     },
@@ -3885,7 +3885,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_icons_icon_iconprops",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "iconprops"
     },
@@ -3896,7 +3896,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_icons_icon_icon",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "icon"
     },
@@ -3907,7 +3907,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_icons_icon_paths",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "icon-paths.ts"
     },
@@ -3918,7 +3918,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_icons_icon_paths_icon_paths",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "icon_paths"
     },
@@ -3931,7 +3931,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_icons_icon_paths_iconname",
-      "community": 5,
+      "community": 1,
       "community_name": "DomusLanding.tsx",
       "norm_label": "iconname"
     },
@@ -3942,7 +3942,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_index",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "index.ts"
     },
@@ -3953,7 +3953,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_apierror",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "apierror.ts"
     },
@@ -3965,7 +3965,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_lib_apierror_mensajedeerrordata",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "mensajedeerrordata()"
     },
@@ -3977,7 +3977,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_lib_apierror_mensajedeerror",
-      "community": 16,
+      "community": 14,
       "community_name": "index.ts",
       "norm_label": "mensajedeerror()"
     },
@@ -4230,7 +4230,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "readme",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "readme.md"
     },
@@ -4241,7 +4241,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "readme_sorsabsa_ui_sistema_de_dise\u00f1o_whitelabel_de_sorsabsa",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "@sorsabsa/ui \u2014 sistema de diseno whitelabel de sorsabsa"
     },
@@ -4252,7 +4252,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "readme_instalaci\u00f3n_en_un_producto",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "instalacion en un producto"
     },
@@ -4263,7 +4263,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "readme_checklist_del_consumidor_tailwind_v3_vs_v4_incidente_real_16_jul_2026",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "\u26a0\ufe0f checklist del consumidor \u2014 tailwind v3 vs v4 (incidente real, 16 jul 2026)"
     },
@@ -4274,7 +4274,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "readme_vestir_la_app_con_su_marca",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "vestir la app con su marca"
     },
@@ -4285,7 +4285,7 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "readme_c\u00f3mo_funciona_la_arquitectura_de_tokens",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "como funciona (la arquitectura de tokens)"
     },
@@ -4296,7 +4296,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "readme_showcase_auditor\u00eda_visual_en_vivo_de_cada_marca",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "showcase \u2014 auditoria visual en vivo de cada marca"
     },
@@ -4307,7 +4307,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "readme_pruebas",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "pruebas"
     },
@@ -4318,7 +4318,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "readme_reglas_de_la_librer\u00eda",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "reglas de la libreria"
     },
@@ -4329,7 +4329,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "readme_bumpear_la_versi\u00f3n_en_cada_cambio_real_16_jul_2026_incidente_real",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "\u26a0\ufe0f bumpear la version en cada cambio real (16 jul 2026, incidente real)"
     },
@@ -4340,7 +4340,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "readme_publicar_una_versi\u00f3n_flujo_desde_16_jul_2026_sin_copiar_hashes",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "publicar una version (flujo desde 16 jul 2026 \u2014 sin copiar hashes)"
     },
@@ -4351,7 +4351,7 @@
       "source_location": "L189",
       "_origin": "ast",
       "id": "readme_la_etiqueta_tiene_que_ser_anotada",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "\u26a0\ufe0f la etiqueta tiene que ser anotada"
     },
@@ -4362,7 +4362,7 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "readme_la_regla_ya_no_depende_de_la_memoria_hook_pre_push",
-      "community": 18,
+      "community": 16,
       "community_name": "@sorsabsa/ui \u2014 Sistema de dise\u00f1o whitelabel de SORSABSA",
       "norm_label": "la regla ya no depende de la memoria: hook pre-push"
     },
@@ -4373,7 +4373,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "arquitectura-ecosistema.md"
     },
@@ -4384,7 +4384,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_arquitectura_del_ecosistema_sorsabsa",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "arquitectura del ecosistema sorsabsa"
     },
@@ -4395,7 +4395,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_1_inventario",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "1. inventario"
     },
@@ -4406,7 +4406,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_verticales_lo_que_un_cliente_compra",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "verticales (lo que un cliente compra)"
     },
@@ -4417,7 +4417,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_transversales_no_se_venden_solos_cruzan_todos_los_verticales",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "transversales (no se venden solos \u2014 cruzan todos los verticales)"
     },
@@ -4428,7 +4428,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_2_los_dos_planos",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "2. los dos planos"
     },
@@ -4439,7 +4439,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_plano_web_vercel_correcto",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "plano web \u2014 vercel \u2705 correcto"
     },
@@ -4450,7 +4450,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_plano_de_proceso_ya_existe_parcialmente_correcci\u00f3n_2026_07_30",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "plano de proceso \u2014 ya existe, parcialmente \u2705 (correccion 2026-07-30)"
     },
@@ -4461,7 +4461,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_plano_de_proceso_no_existe",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "plano de proceso \u2014 no existe \u274c"
     },
@@ -4472,7 +4472,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_3_mapa_de_bases_de_datos_la_trampa",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "3. mapa de bases de datos \u2014 la trampa"
     },
@@ -4483,7 +4483,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_estado_verificado_en_sql_el_2026_07_30_nombre_y_ocupantes_actualizados_08_ago_2026",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "estado \u2705 verificado en sql el 2026-07-30 \u2014 nombre y ocupantes actualizados 08-ago-2026"
     },
@@ -4494,7 +4494,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_qu\u00e9_cambi\u00f3_desde_el_2026_07_26",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "que cambio desde el 2026-07-26"
     },
@@ -4505,7 +4505,7 @@
       "source_location": "L191",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_acoplamiento_que_sigue_vivo",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "\u26a0\ufe0f acoplamiento que sigue vivo"
     },
@@ -4516,7 +4516,7 @@
       "source_location": "L201",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_3_bis_no_hay_datos_de_clientes_punto",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "3-bis. no hay datos de clientes. punto."
     },
@@ -4527,7 +4527,7 @@
       "source_location": "L225",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_el_l\u00edmite_de_2_proyectos_ya_no_existe_y_la_separaci\u00f3n_sigue_sin_hacerse",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "el limite de 2 proyectos ya no existe \u2014 y la separacion sigue sin hacerse"
     },
@@ -4538,7 +4538,7 @@
       "source_location": "L244",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_4_almacenamiento",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "4. almacenamiento"
     },
@@ -4549,7 +4549,7 @@
       "source_location": "L269",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_defectos_verificados",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "defectos verificados"
     },
@@ -4560,7 +4560,7 @@
       "source_location": "L282",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_4_bis_georreferenciaci\u00f3n_y_r2_estado_real_verificado_2026_08_08",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "4-bis. georreferenciacion y r2 \u2014 estado real (verificado 2026-08-08)"
     },
@@ -4571,7 +4571,7 @@
       "source_location": "L288",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_geo_no_usa_la_api_de_google_maps_la_que_factura",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "geo: no usa la api de google maps (la que factura)"
     },
@@ -4582,7 +4582,7 @@
       "source_location": "L300",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_sorsabsaforensic_s\u00ed_usa_google_maps_pero_no_la_api_pagada_y_es_un_m\u00f3dulo_aparte",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "sorsabsaforensic si usa google maps \u2014 pero no la api pagada, y es un modulo aparte"
     },
@@ -4593,7 +4593,7 @@
       "source_location": "L326",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_el_proyecto_de_google_cloud_sorsabsaecosystem_confirmado_por_gina_calendar_de_agente24siete",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "el proyecto de google cloud (`sorsabsaecosystem`) \u2014 \u2705 confirmado por gina: calendar de agente24siete"
     },
@@ -4604,7 +4604,7 @@
       "source_location": "L374",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_tres_implementaciones_de_geo_independientes_una_de_ellas_duplicada_dos_veces",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "tres implementaciones de geo independientes, una de ellas duplicada dos veces"
     },
@@ -4615,7 +4615,7 @@
       "source_location": "L463",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_auditor\u00eda_del_inventario_de_railway_10_ago_2026",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "auditoria del inventario de railway, 10-ago-2026"
     },
@@ -4626,7 +4626,7 @@
       "source_location": "L486",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_r2_qui\u00e9n_ya_migr\u00f3_y_qui\u00e9n_no",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "r2: quien ya migro y quien no"
     },
@@ -4637,7 +4637,7 @@
       "source_location": "L500",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_api_tokens_de_r2_activos_dados_por_gina_08_ago_2026",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "api tokens de r2 activos \u2014 \u2705 dados por gina 08-ago-2026"
     },
@@ -4648,7 +4648,7 @@
       "source_location": "L525",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_token_de_github_actions_acceso_de_lectura_para_este_asistente",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "token de github actions \u2014 acceso de lectura para este asistente"
     },
@@ -4659,7 +4659,7 @@
       "source_location": "L548",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_5_roturas_verificadas_el_2026_07_26",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "5. roturas verificadas el 2026-07-26"
     },
@@ -4670,7 +4670,7 @@
       "source_location": "L560",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_pendientes_conocidos",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "pendientes conocidos"
     },
@@ -4681,7 +4681,7 @@
       "source_location": "L574",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_6_lo_que_no_est\u00e1_verificado",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "6. lo que no esta verificado"
     },
@@ -4692,7 +4692,7 @@
       "source_location": "L595",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_6_bis_plano_de_dns_y_correo_verificado_2026_07_26",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "6-bis. plano de dns y correo \u2705 verificado 2026-07-26"
     },
@@ -4703,7 +4703,7 @@
       "source_location": "L613",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_qui\u00e9n_manda_qu\u00e9_correo_reescrito_09_ago_2026_con_los_dos_consumidores_reales_verificados",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "quien manda que correo \u2014 reescrito 09-ago-2026, con los dos consumidores reales verificados"
     },
@@ -4714,7 +4714,7 @@
       "source_location": "L666",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_limitaciones_y_minas",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "limitaciones y minas"
     },
@@ -4725,7 +4725,7 @@
       "source_location": "L682",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_hostinger",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "hostinger"
     },
@@ -4736,7 +4736,7 @@
       "source_location": "L690",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_7_decisi\u00f3n_de_arquitectura_2026_07_26",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "7. decision de arquitectura (2026-07-26)"
     },
@@ -4747,7 +4747,7 @@
       "source_location": "L706",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_verificado_2026_07_28_qu\u00e9_base_va_a_railway_y_qu\u00e9_se_queda_en_supabase",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "verificado 2026-07-28: que base va a railway y que se queda en supabase"
     },
@@ -4758,7 +4758,7 @@
       "source_location": "L778",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_objetivo_de_capacidad_3000_usuarios_no_por_el_momento",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "objetivo de capacidad: ~3000 usuarios (no \"por el momento\")"
     },
@@ -4769,7 +4769,7 @@
       "source_location": "L820",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_railway_y_no_un_vps_pelado",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "railway y no un vps pelado"
     },
@@ -4780,7 +4780,7 @@
       "source_location": "L840",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_se_elimina",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "se elimina"
     },
@@ -4791,7 +4791,7 @@
       "source_location": "L850",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_por_qu\u00e9_r2_y_dos_cubos",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "por que r2 y dos cubos"
     },
@@ -4802,7 +4802,7 @@
       "source_location": "L862",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_orden_de_migraci\u00f3n_por_urgencia",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "orden de migracion, por urgencia"
     },
@@ -4813,7 +4813,7 @@
       "source_location": "L876",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_riesgos_aceptados",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "riesgos aceptados"
     },
@@ -4824,7 +4824,7 @@
       "source_location": "L887",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_8_por_qu\u00e9_vercel_para_la_web_y_railway_para_el_resto",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "8. por que vercel para la web y railway para el resto"
     },
@@ -4835,7 +4835,7 @@
       "source_location": "L911",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_9_pendientes_en_orden",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "9. pendientes, en orden"
     },
@@ -4846,7 +4846,7 @@
       "source_location": "L913",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_cerrados_el_2026_07_30",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "cerrados el 2026-07-30"
     },
@@ -4857,7 +4857,7 @@
       "source_location": "L926",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_abiertos_en_orden",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "abiertos, en orden"
     },
@@ -4868,7 +4868,7 @@
       "source_location": "L961",
       "_origin": "ast",
       "id": "docs_arquitectura_ecosistema_reglas_que_ya_no_dependen_de_la_memoria",
-      "community": 1,
+      "community": 2,
       "community_name": "Arquitectura del ecosistema SORSABSA",
       "norm_label": "reglas que ya no dependen de la memoria"
     },
@@ -4879,7 +4879,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_auditoria_agente24siete",
-      "community": 23,
+      "community": 22,
       "community_name": "Auditor\u00eda \u2014 agente24siete, el portero (sesi\u00f3n/autenticaci\u00f3n)",
       "norm_label": "auditoria-agente24siete.md"
     },
@@ -4890,7 +4890,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_auditoria_agente24siete_auditor\u00eda_agente24siete_el_portero_sesi\u00f3n_autenticaci\u00f3n",
-      "community": 23,
+      "community": 22,
       "community_name": "Auditor\u00eda \u2014 agente24siete, el portero (sesi\u00f3n/autenticaci\u00f3n)",
       "norm_label": "auditoria \u2014 agente24siete, el portero (sesion/autenticacion)"
     },
@@ -4901,7 +4901,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "docs_auditoria_agente24siete_cr\u00edtico",
-      "community": 23,
+      "community": 22,
       "community_name": "Auditor\u00eda \u2014 agente24siete, el portero (sesi\u00f3n/autenticaci\u00f3n)",
       "norm_label": "\ud83d\udd34 critico"
     },
@@ -4912,7 +4912,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "docs_auditoria_agente24siete_1_resuelto_y_validado_en_vivo_10_ago_2026_el_portero_de_agente24siete_es_100_client_side_sin_middleware_ts_a_diferencia_del_patr\u00f3n_ya_estabilizado_en_condomanager",
-      "community": 23,
+      "community": 22,
       "community_name": "Auditor\u00eda \u2014 agente24siete, el portero (sesi\u00f3n/autenticaci\u00f3n)",
       "norm_label": "\ud83d\udd34-1 \u2014 \u2705 resuelto y validado en vivo 10-ago-2026 \u2014 el portero de agente24siete es 100% client-side \u2014 sin `middleware.ts`, a diferencia del patron ya estabilizado en condomanager"
     },
@@ -4923,7 +4923,7 @@
       "source_location": "L297",
       "_origin": "ast",
       "id": "docs_auditoria_agente24siete_importante",
-      "community": 23,
+      "community": 22,
       "community_name": "Auditor\u00eda \u2014 agente24siete, el portero (sesi\u00f3n/autenticaci\u00f3n)",
       "norm_label": "\ud83d\udfe0 importante"
     },
@@ -4934,7 +4934,7 @@
       "source_location": "L299",
       "_origin": "ast",
       "id": "docs_auditoria_agente24siete_1_corregido_10_ago_2026_commit_agente24siete_c6f2578_no_existe_bot\u00f3n_de_cerrar_sesi\u00f3n_en_ning\u00fan_panel_y_la_versi\u00f3n_ingenua_repetir\u00eda_un_bug_ya_corregido_en_condomanager_e_identity",
-      "community": 23,
+      "community": 22,
       "community_name": "Auditor\u00eda \u2014 agente24siete, el portero (sesi\u00f3n/autenticaci\u00f3n)",
       "norm_label": "\ud83d\udfe0-1 \u2014 \u2705 corregido 10-ago-2026, commit `agente24siete@c6f2578` \u2014 no existe boton de cerrar sesion en ningun panel \u2014 y la version ingenua repetiria un bug ya corregido en condomanager e identity"
     },
@@ -4945,7 +4945,7 @@
       "source_location": "L356",
       "_origin": "ast",
       "id": "docs_auditoria_agente24siete_2_corregido_10_ago_2026_commit_agente24siete_c6f2578_logingate_valida_presencia_de_token_nunca_vigencia_deja_pasar_sesiones_vencidas_al_shell_completo",
-      "community": 23,
+      "community": 22,
       "community_name": "Auditor\u00eda \u2014 agente24siete, el portero (sesi\u00f3n/autenticaci\u00f3n)",
       "norm_label": "\ud83d\udfe0-2 \u2014 \u2705 corregido 10-ago-2026, commit `agente24siete@c6f2578` \u2014 `logingate` valida presencia de token, nunca vigencia \u2014 deja pasar sesiones vencidas al shell completo"
     },
@@ -4956,7 +4956,7 @@
       "source_location": "L392",
       "_origin": "ast",
       "id": "docs_auditoria_agente24siete_3_pendiente_de_verificar_en_vivo_no_descartado_el_mensaje_de_gina_fue_realmente_por_vencimiento_o_hay_un_problema_de_configuraci\u00f3n",
-      "community": 23,
+      "community": 22,
       "community_name": "Auditor\u00eda \u2014 agente24siete, el portero (sesi\u00f3n/autenticaci\u00f3n)",
       "norm_label": "\ud83d\udfe0-3 \u2014 pendiente de verificar en vivo, no descartado: \u00bfel mensaje de gina fue realmente por vencimiento, o hay un problema de configuracion?"
     },
@@ -4967,7 +4967,7 @@
       "source_location": "L420",
       "_origin": "ast",
       "id": "docs_auditoria_agente24siete_resuelto_con_gina_ya_no_est\u00e1_pendiente",
-      "community": 23,
+      "community": 22,
       "community_name": "Auditor\u00eda \u2014 agente24siete, el portero (sesi\u00f3n/autenticaci\u00f3n)",
       "norm_label": "resuelto con gina (ya no esta pendiente)"
     },
@@ -4978,7 +4978,7 @@
       "source_location": "L434",
       "_origin": "ast",
       "id": "docs_auditoria_agente24siete_pendiente_de_decidir_con_gina_antes_de_ejecutar",
-      "community": 23,
+      "community": 22,
       "community_name": "Auditor\u00eda \u2014 agente24siete, el portero (sesi\u00f3n/autenticaci\u00f3n)",
       "norm_label": "pendiente de decidir con gina antes de ejecutar"
     },
@@ -5198,7 +5198,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_auditoria_domuscrm",
-      "community": 21,
+      "community": 20,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
       "norm_label": "auditoria-domuscrm.md"
     },
@@ -5209,7 +5209,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_auditoria_domuscrm_auditor\u00eda_domuscrm_el_portero_y_el_alta_de_cuenta",
-      "community": 21,
+      "community": 20,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
       "norm_label": "auditoria \u2014 domuscrm, el portero y el alta de cuenta"
     },
@@ -5220,7 +5220,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "docs_auditoria_domuscrm_cr\u00edtico",
-      "community": 21,
+      "community": 20,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
       "norm_label": "\ud83d\udd34 critico"
     },
@@ -5231,7 +5231,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "docs_auditoria_domuscrm_1_fix_1_corregido_10_ago_2026_fix_2_sigue_pendiente_dos_gates_independientes_para_esta_cuenta_tiene_acceso_dan_respuestas_distintas_para_el_mismo_hecho_seg\u00fan_el_historial_del_navegador",
-      "community": 21,
+      "community": 20,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
       "norm_label": "\ud83d\udd34-1 \u2014 \ud83d\udd27 fix #1 corregido 10-ago-2026 (fix #2 sigue pendiente) \u2014 dos gates independientes para \"\u00bfesta cuenta tiene acceso?\" dan respuestas distintas para el mismo hecho, segun el historial del navegador"
     },
@@ -5242,7 +5242,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "docs_auditoria_domuscrm_importante",
-      "community": 21,
+      "community": 20,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
       "norm_label": "\ud83d\udfe0 importante"
     },
@@ -5253,7 +5253,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "docs_auditoria_domuscrm_1_corregido_10_ago_2026_commit_domuscrm_13d9176_la_pantalla_de_sin_empresa_no_tiene_marca_coincide_con_el_reporte_de_pantalla_en_blanco",
-      "community": 21,
+      "community": 20,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
       "norm_label": "\ud83d\udfe0-1 \u2014 \u2705 corregido 10-ago-2026, commit `domuscrm@13d9176` \u2014 la pantalla de \"sin empresa\" no tiene marca \u2014 coincide con el reporte de \"pantalla en blanco\""
     },
@@ -5264,7 +5264,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "docs_auditoria_domuscrm_2_parcialmente_corregido_10_ago_2026_ver_auditoria_portero_sso_md_11",
-      "community": 21,
+      "community": 20,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
       "norm_label": "\ud83d\udfe0-2 \u2014 \ud83d\udd27 parcialmente corregido 10-ago-2026 \u2014 ver `auditoria-portero-sso.md` \ud83d\udd34-11"
     },
@@ -5275,7 +5275,7 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "docs_auditoria_domuscrm_medio",
-      "community": 21,
+      "community": 20,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
       "norm_label": "\ud83d\udfe1 medio"
     },
@@ -5286,7 +5286,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "docs_auditoria_domuscrm_1_corregido_10_ago_2026_commit_domuscrm_407c277_formulario_crear_mi_cuenta_falta_un_campo_de_apellido_separado",
-      "community": 21,
+      "community": 20,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
       "norm_label": "\ud83d\udfe1-1 \u2014 \u2705 corregido 10-ago-2026, commit `domuscrm@407c277` \u2014 formulario \"crear mi cuenta\": falta un campo de apellido separado"
     },
@@ -5297,7 +5297,7 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "docs_auditoria_domuscrm_2_corregido_10_ago_2026_commit_domuscrm_407c277_las_dos_contrase\u00f1as_no_est\u00e1n_en_la_misma_fila_gina_ten\u00eda_raz\u00f3n_no_era_cach\u00e9_ni_mobile",
-      "community": 21,
+      "community": 20,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
       "norm_label": "\ud83d\udfe1-2 \u2014 \u2705 corregido 10-ago-2026, commit `domuscrm@407c277` \u2014 \"las dos contrasenas no estan en la misma fila\": gina tenia razon, no era cache ni mobile"
     },
@@ -5308,7 +5308,7 @@
       "source_location": "L204",
       "_origin": "ast",
       "id": "docs_auditoria_domuscrm_estado_10_ago_2026",
-      "community": 21,
+      "community": 20,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
       "norm_label": "estado 10-ago-2026"
     },
@@ -5319,7 +5319,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_auditoria_geo_sorsabsa",
-      "community": 26,
+      "community": 25,
       "community_name": "Auditor\u00eda \u2014 geo-sorsabsa",
       "norm_label": "auditoria-geo-sorsabsa.md"
     },
@@ -5330,7 +5330,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_auditoria_geo_sorsabsa_auditor\u00eda_geo_sorsabsa",
-      "community": 26,
+      "community": 25,
       "community_name": "Auditor\u00eda \u2014 geo-sorsabsa",
       "norm_label": "auditoria \u2014 geo-sorsabsa"
     },
@@ -5341,7 +5341,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "docs_auditoria_geo_sorsabsa_cr\u00edtico",
-      "community": 26,
+      "community": 25,
       "community_name": "Auditor\u00eda \u2014 geo-sorsabsa",
       "norm_label": "\ud83d\udd34 critico"
     },
@@ -5352,7 +5352,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "docs_auditoria_geo_sorsabsa_1_resolver_acepta_cualquier_url_sin_dominio_permitido_ni_autenticaci\u00f3n_ssrf_real_sin_control_de_abuso",
-      "community": 26,
+      "community": 25,
       "community_name": "Auditor\u00eda \u2014 geo-sorsabsa",
       "norm_label": "\ud83d\udd34-1 \u2014 \u2b1c `/resolver` acepta cualquier url, sin dominio permitido ni autenticacion \u2014 ssrf real, sin control de abuso"
     },
@@ -5363,7 +5363,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "docs_auditoria_geo_sorsabsa_bajo",
-      "community": 26,
+      "community": 25,
       "community_name": "Auditor\u00eda \u2014 geo-sorsabsa",
       "norm_label": "\ud83d\udd35 bajo"
     },
@@ -5374,7 +5374,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "docs_auditoria_geo_sorsabsa_1_corregido_10_ago_2026_el_propio_readme_del_servicio_dec\u00eda_que_nadie_lo_consum\u00eda_dato_desactualizado_desde_el_08_ago",
-      "community": 26,
+      "community": 25,
       "community_name": "Auditor\u00eda \u2014 geo-sorsabsa",
       "norm_label": "\ud83d\udd35-1 \u2014 \u2705 corregido 10-ago-2026 \u2014 el propio readme del servicio decia que nadie lo consumia, dato desactualizado desde el 08-ago"
     },
@@ -5385,7 +5385,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "docs_auditoria_geo_sorsabsa_resuelto_verificado_no_tocar",
-      "community": 26,
+      "community": 25,
       "community_name": "Auditor\u00eda \u2014 geo-sorsabsa",
       "norm_label": "resuelto, verificado, no tocar"
     },
@@ -5396,7 +5396,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "docs_auditoria_geo_sorsabsa_pendiente_de_decidir_con_gina_antes_de_ejecutar",
-      "community": 26,
+      "community": 25,
       "community_name": "Auditor\u00eda \u2014 geo-sorsabsa",
       "norm_label": "pendiente de decidir con gina antes de ejecutar"
     },
@@ -5407,7 +5407,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_auditoria_justired",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "auditoria-justired.md"
     },
@@ -5418,7 +5418,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_auditoria_justired_auditor\u00eda_justired_legaltech",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "auditoria \u2014 justired (legaltech)"
     },
@@ -5429,7 +5429,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "docs_auditoria_justired_cr\u00edtico",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "\ud83d\udd34 critico"
     },
@@ -5440,7 +5440,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "docs_auditoria_justired_1_el_panel_de_control_de_calidad_no_hace_nada_rls_bloquea_la_tabla_para_cualquier_usuario_la_ui_lo_esconde_con_un_\u00e9xito_falso",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "\ud83d\udd34-1 \u2014 \u2b1c el panel de control de calidad no hace nada: rls bloquea la tabla para cualquier usuario, la ui lo esconde con un \"exito\" falso"
     },
@@ -5451,7 +5451,7 @@
       "source_location": "L124",
       "_origin": "ast",
       "id": "docs_auditoria_justired_importante",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "\ud83d\udfe0 importante"
     },
@@ -5462,7 +5462,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "docs_auditoria_justired_1_ver_auditoria_portero_sso_md_11_no_duplicado_ac\u00e1",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "\ud83d\udfe0-1 \u2014 ver `auditoria-portero-sso.md` \ud83d\udd34-11 (no duplicado aca)"
     },
@@ -5473,7 +5473,7 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "docs_auditoria_justired_resuelto_verificado_no_tocar",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "resuelto, verificado, no tocar"
     },
@@ -5484,7 +5484,7 @@
       "source_location": "L155",
       "_origin": "ast",
       "id": "docs_auditoria_justired_pendiente_de_decidir_con_gina_antes_de_ejecutar",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "pendiente de decidir con gina antes de ejecutar"
     },
@@ -5495,7 +5495,7 @@
       "source_location": "L165",
       "_origin": "ast",
       "id": "docs_auditoria_justired_10_ago_2026_estado_real_ad\u00f3nde_debe_llegar_y_los_transversales_que_esta_auditor\u00eda_todav\u00eda_no_cubri\u00f3",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "10-ago-2026 \u2014 estado real, adonde debe llegar, y los transversales que esta auditoria todavia no cubrio"
     },
@@ -5506,7 +5506,7 @@
       "source_location": "L171",
       "_origin": "ast",
       "id": "docs_auditoria_justired_qu\u00e9_es_justired_hoy_de_verdad_confirmado_no_supuesto",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "que es justired hoy, de verdad (confirmado, no supuesto)"
     },
@@ -5517,7 +5517,7 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "docs_auditoria_justired_confirmado_con_datos_no_hay_ning\u00fan_rol_autenticado_en_justired_ni_siquiera_abogado_cliente",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "confirmado con datos: no hay ningun rol autenticado en justired, ni siquiera \"abogado\"/\"cliente\""
     },
@@ -5528,7 +5528,7 @@
       "source_location": "L208",
       "_origin": "ast",
       "id": "docs_auditoria_justired_transversales_no_auditado_hasta_hoy_hallazgo_real_encontrado_al_cerrar",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "\ud83d\udd35 transversales \u2014 no auditado hasta hoy, hallazgo real encontrado al cerrar"
     },
@@ -5539,7 +5539,7 @@
       "source_location": "L245",
       "_origin": "ast",
       "id": "docs_auditoria_justired_pendiente_para_la_pr\u00f3xima_sesi\u00f3n_en_orden",
-      "community": 17,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 JustiRed (legaltech)",
       "norm_label": "pendiente para la proxima sesion, en orden"
     },
@@ -5902,7 +5902,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_auditoria_qa_sorsabsa",
-      "community": 27,
+      "community": 26,
       "community_name": "Auditor\u00eda \u2014 qa_sorsabsa",
       "norm_label": "auditoria-qa-sorsabsa.md"
     },
@@ -5913,7 +5913,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_auditoria_qa_sorsabsa_auditor\u00eda_qa_sorsabsa",
-      "community": 27,
+      "community": 26,
       "community_name": "Auditor\u00eda \u2014 qa_sorsabsa",
       "norm_label": "auditoria \u2014 qa_sorsabsa"
     },
@@ -5924,7 +5924,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "docs_auditoria_qa_sorsabsa_medio",
-      "community": 27,
+      "community": 26,
       "community_name": "Auditor\u00eda \u2014 qa_sorsabsa",
       "norm_label": "\ud83d\udfe0 medio"
     },
@@ -5935,7 +5935,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "docs_auditoria_qa_sorsabsa_1_corregido_10_ago_2026_la_tabla_de_readme_md_no_sumaba_porque_el_conteo_de_domuscrm_estaba_mal",
-      "community": 27,
+      "community": 26,
       "community_name": "Auditor\u00eda \u2014 qa_sorsabsa",
       "norm_label": "\ud83d\udfe0-1 \u2014 \u2705 corregido 10-ago-2026 \u2014 la tabla de readme.md no sumaba porque el conteo de domuscrm estaba mal"
     },
@@ -5946,7 +5946,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "docs_auditoria_qa_sorsabsa_2_corregido_10_ago_2026_el_bloque_de_estado_de_todo_md_describ\u00eda_un_repo_de_hace_3_semanas_no_el_actual",
-      "community": 27,
+      "community": 26,
       "community_name": "Auditor\u00eda \u2014 qa_sorsabsa",
       "norm_label": "\ud83d\udfe0-2 \u2014 \u2705 corregido 10-ago-2026 \u2014 el bloque de estado de todo.md describia un repo de hace 3 semanas, no el actual"
     },
@@ -5957,7 +5957,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "docs_auditoria_qa_sorsabsa_3_corregido_10_ago_2026_un_check_de_justired_aceptaba_que_el_servidor_reventara_como_resultado_v\u00e1lido",
-      "community": 27,
+      "community": 26,
       "community_name": "Auditor\u00eda \u2014 qa_sorsabsa",
       "norm_label": "\ud83d\udfe0-3 \u2014 \u2705 corregido 10-ago-2026 \u2014 un check de justired aceptaba que el servidor reventara como resultado \"valido\""
     },
@@ -5968,7 +5968,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "docs_auditoria_qa_sorsabsa_verificado_sin_hallazgos",
-      "community": 27,
+      "community": 26,
       "community_name": "Auditor\u00eda \u2014 qa_sorsabsa",
       "norm_label": "verificado, sin hallazgos"
     },
@@ -5979,7 +5979,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "docs_auditoria_qa_sorsabsa_recomendaci\u00f3n_no_ejecutada_pendiente_de_que_gina_decida",
-      "community": 27,
+      "community": 26,
       "community_name": "Auditor\u00eda \u2014 qa_sorsabsa",
       "norm_label": "recomendacion, no ejecutada \u2014 pendiente de que gina decida"
     },
@@ -5990,7 +5990,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_color_y_contraste",
-      "community": 28,
+      "community": 27,
       "community_name": "Color de marca y contraste",
       "norm_label": "color-y-contraste.md"
     },
@@ -6001,7 +6001,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_color_y_contraste_color_de_marca_y_contraste",
-      "community": 28,
+      "community": 27,
       "community_name": "Color de marca y contraste",
       "norm_label": "color de marca y contraste"
     },
@@ -6012,7 +6012,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "docs_color_y_contraste_la_regla",
-      "community": 28,
+      "community": 27,
       "community_name": "Color de marca y contraste",
       "norm_label": "la regla"
     },
@@ -6023,7 +6023,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "docs_color_y_contraste_los_cuatro_tokens",
-      "community": 28,
+      "community": 27,
       "community_name": "Color de marca y contraste",
       "norm_label": "los cuatro tokens"
     },
@@ -6034,7 +6034,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "docs_color_y_contraste_cu\u00e1l_usar",
-      "community": 28,
+      "community": 27,
       "community_name": "Color de marca y contraste",
       "norm_label": "cual usar"
     },
@@ -6045,7 +6045,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "docs_color_y_contraste_componentes_que_ya_lo_aplican",
-      "community": 28,
+      "community": 27,
       "community_name": "Color de marca y contraste",
       "norm_label": "componentes que ya lo aplican"
     },
@@ -6056,7 +6056,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "docs_color_y_contraste_c\u00f3mo_comprobarlo",
-      "community": 28,
+      "community": 27,
       "community_name": "Color de marca y contraste",
       "norm_label": "como comprobarlo"
     },
@@ -6078,7 +6078,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_est\u00e1ndar_de_desarrollo_no_parchear_la_arquitectura",
-      "community": 22,
+      "community": 21,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "estandar de desarrollo \u2014 no parchear la arquitectura"
     },
@@ -6089,7 +6089,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_principio_fundamental",
-      "community": 22,
+      "community": 21,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "principio fundamental"
     },
@@ -6100,7 +6100,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_antes_de_cada_fix_responder_internamente",
-      "community": 22,
+      "community": 21,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "antes de cada fix \u2014 responder internamente"
     },
@@ -6111,7 +6111,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_se\u00f1ales_de_alarma_detenerse_al_estar_por_escribir",
-      "community": 22,
+      "community": 21,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "senales de alarma \u2014 detenerse al estar por escribir"
     },
@@ -6122,7 +6122,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_prohibido_compensar_defectos_de_c\u00f3digo_modificando_datos_reales",
-      "community": 22,
+      "community": 21,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "prohibido compensar defectos de codigo modificando datos reales"
     },
@@ -6133,7 +6133,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_funciona_no_es_lo_mismo_que_est\u00e1_bien_dise\u00f1ado",
-      "community": 22,
+      "community": 21,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "\"funciona\" no es lo mismo que \"esta bien disenado\""
     },
@@ -6144,7 +6144,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_responsabilidad_del_componente",
-      "community": 22,
+      "community": 21,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "responsabilidad del componente"
     },
@@ -6155,7 +6155,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_fuente_\u00fanica_de_verdad",
-      "community": 22,
+      "community": 21,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "fuente unica de verdad"
     },
@@ -6166,7 +6166,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_qu\u00e9_debe_presentarse_antes_de_tocar_c\u00f3digo",
-      "community": 22,
+      "community": 21,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "que debe presentarse antes de tocar codigo"
     },
@@ -6177,7 +6177,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_criterio_de_aceptaci\u00f3n",
-      "community": 22,
+      "community": 21,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "criterio de aceptacion"
     },
@@ -6188,7 +6188,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "docs_estandar_desarrollo_regla_final",
-      "community": 22,
+      "community": 21,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
       "norm_label": "regla final"
     },
@@ -6199,7 +6199,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "pendientes-ecosistema.md"
     },
@@ -6210,7 +6210,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "pendientes del ecosistema sorsabsa"
     },
@@ -6221,7 +6221,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_principio_que_gobierna_regla_dura",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "principio que gobierna (regla dura)"
     },
@@ -6232,7 +6232,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_1_resuelto_separar_auth_a_su_propio_proyecto_v\u00eda_oidc",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "1. \u2705 resuelto \u2014 separar auth a su propio proyecto (via oidc)"
     },
@@ -6243,7 +6243,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_2_hecho_justired_al_sso_central",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "2. \u2705 hecho \u2014 justired al sso central"
     },
@@ -6254,7 +6254,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_3_hecho_cutover_de_pagos_fuera_de_vercel",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "3. \u2705 hecho \u2014 cutover de pagos (fuera de vercel)"
     },
@@ -6265,7 +6265,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_4_hecho_notificaciones_sorsabsa_railway",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "4. \u2705 hecho \u2014 notificaciones-sorsabsa \u2192 railway"
     },
@@ -6276,7 +6276,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_5_hecho_rls_activado_en_las_4_tablas_expuestas_seguridad",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "5. \u2705 hecho \u2014 rls activado en las 4 tablas expuestas (seguridad)"
     },
@@ -6287,7 +6287,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_6_hecho_proyecto_supabase_hu\u00e9rfano_borrado",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "6. \u2705 hecho \u2014 proyecto supabase huerfano borrado"
     },
@@ -6298,7 +6298,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_7_sorsabsaforensic_fase_0_antes_de_railway",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "7. sorsabsaforensic \u2192 fase 0 antes de railway"
     },
@@ -6309,7 +6309,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_8_probar_condomanager_end_to_end_punta_blanca_siguiente_08_ago_2026",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "8. probar condomanager end-to-end (punta blanca)  \ud83d\udd34 siguiente \u2014 08-ago-2026"
     },
@@ -6320,7 +6320,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_9_hecho_auditor\u00eda_de_reuso_de_sistemas_compartidos",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "9. \u2705 hecho \u2014 auditoria de reuso de sistemas compartidos"
     },
@@ -6331,7 +6331,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_10_login_social_google_cerrado_facebook_funciona_revisi\u00f3n_de_meta_aprobada",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "10. \u2705 login social: google \u2705 cerrado \u2014 facebook \u2705 funciona, revision de meta aprobada"
     },
@@ -6342,7 +6342,7 @@
       "source_location": "L305",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_11_hecho_agente24siete_login_real_en_portal_cascar\u00f3n_viejo_borrado",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "11. \u2705 hecho \u2014 agente24siete: login real en /portal + cascaron viejo borrado"
     },
@@ -6353,7 +6353,7 @@
       "source_location": "L327",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_12_r2_desplegado_y_verificado_falta_el_clic_real_de_un_residente",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "12. \ud83d\udfe1 r2 desplegado y verificado \u2014 falta el clic real de un residente"
     },
@@ -6364,7 +6364,7 @@
       "source_location": "L342",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_13_hecho_geo_sorsabsa_service_desplegado_verificado_y_consumido_por_los_dos_periciales",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "13. \u2705 hecho \u2014 geo-sorsabsa/service desplegado, verificado y consumido por los dos periciales"
     },
@@ -6375,7 +6375,7 @@
       "source_location": "L401",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_14_hecho_iot_consume_el_portero_central_auth_sorsabsa",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "14. \u2705 hecho \u2014 iot consume el portero central (auth-sorsabsa)"
     },
@@ -6386,7 +6386,7 @@
       "source_location": "L573",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_15_whatsapp_de_agente24siete_todas_las_cuentas_del_portafolio_baneadas_dos_pistas_separadas",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "15. \ud83d\udd34 whatsapp de agente24siete: todas las cuentas del portafolio, baneadas \u2014 dos pistas separadas"
     },
@@ -6397,7 +6397,7 @@
       "source_location": "L660",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_16_estandarizar_pagos_suscripciones_referidos_en_todos_los_productos_justired_sin_nada_y_una_idea_de_cr\u00e9ditos_de_ia_todav\u00eda_sin_desarrollar",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "16. \ud83d\udfe1 estandarizar pagos/suscripciones/referidos en todos los productos \u2014 justired sin nada, y una idea de \"creditos de ia\" todavia sin desarrollar"
     },
@@ -6408,7 +6408,7 @@
       "source_location": "L875",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_17_gobernanza_de_correo_masivo_por_tenant_activaci\u00f3n_de_residentes_al\u00edcuotas_dise\u00f1o_acordado_infraestructura_sin_construir",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "17. \ud83d\udfe1 gobernanza de correo masivo por tenant (activacion de residentes, alicuotas) \u2014 diseno acordado, infraestructura sin construir"
     },
@@ -6419,7 +6419,7 @@
       "source_location": "L933",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_hecho_para_no_re_hacer",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "hecho (para no re-hacer)"
     },
@@ -6430,9 +6430,20 @@
       "source_location": "L944",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_18_resuelto_09_ago_2026_sin_patr\u00f3n_visual_compartido_entre_los_onboarding_propios_condomanager_domuscrm",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "18. \u2705 resuelto 09-ago-2026 \u2014 sin patron visual compartido entre los onboarding propios (condomanager, domuscrm)"
+    },
+    {
+      "label": "19. \ud83d\udfe1 qa_sorsabsa: sin guard autom\u00e1tico que impida que README.md y TODO.md se desincronicen \u2014 10-ago-2026",
+      "file_type": "document",
+      "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
+      "source_location": "L1024",
+      "_origin": "ast",
+      "id": "docs_pendientes_ecosistema_19_qa_sorsabsa_sin_guard_autom\u00e1tico_que_impida_que_readme_md_y_todo_md_se_desincronicen_10_ago_2026",
+      "community": 4,
+      "community_name": "Pendientes del ecosistema SORSABSA",
+      "norm_label": "19. \ud83d\udfe1 qa_sorsabsa: sin guard automatico que impida que readme.md y todo.md se desincronicen \u2014 10-ago-2026"
     },
     {
       "label": "PLAN-CONFIGURACION-CONDOMINIO.md",
@@ -6562,7 +6573,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_plan_desoldado",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "plan-desoldado.md"
     },
@@ -6573,7 +6584,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_plan_desoldado_plan_de_desoldado_del_ecosistema_sorsabsa",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "plan de desoldado del ecosistema sorsabsa"
     },
@@ -6584,7 +6595,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "docs_plan_desoldado_punto_de_partida_medido_el_31_jul_2026_no_recordado",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "punto de partida \u2014 medido el 31-jul-2026, no recordado"
     },
@@ -6595,7 +6606,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "docs_plan_desoldado_paso_0_sacar_el_plano_bloqueante_va_primero",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "paso 0 \u2014 sacar el plano \u26d4 bloqueante, va primero"
     },
@@ -6606,7 +6617,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "docs_plan_desoldado_estado_hecho_el_07_ago_2026_con_un_pendiente_real",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "estado \u2014 hecho el 07-ago-2026, con un pendiente real"
     },
@@ -6617,7 +6628,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "docs_plan_desoldado_cerrado_el_07_ago_2026_probado_en_proyecto_vac\u00edo_real_con_dos_bugs_reales_encontrados_y_arreglados",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "\u2705 cerrado el 07-ago-2026 \u2014 probado en proyecto vacio real, con dos bugs reales encontrados y arreglados"
     },
@@ -6628,7 +6639,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "docs_plan_desoldado_paso_1_identity_como_emisor_oidc",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "paso 1 \u2014 identity como emisor oidc"
     },
@@ -6639,7 +6650,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "docs_plan_desoldado_cerrado_el_07_ago_2026_login_oidc_real_de_punta_a_punta_token_verificado",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "\u2705 cerrado el 07-ago-2026 \u2014 login oidc real, de punta a punta, token verificado"
     },
@@ -6650,7 +6661,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "docs_plan_desoldado_paso_2_el_producto_conf\u00eda_en_identity",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "paso 2 \u2014 el producto confia en identity"
     },
@@ -6661,7 +6672,7 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "docs_plan_desoldado_estado_07_ago_2026_la_federaci\u00f3n_funciona_el_criterio_de_hecho_hay_que_leerlo_con_matices",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "estado \u2014 07-ago-2026: la federacion funciona; el criterio de \"hecho\" hay que leerlo con matices"
     },
@@ -6672,7 +6683,7 @@
       "source_location": "L257",
       "_origin": "ast",
       "id": "docs_plan_desoldado_auth_sorsabsa_reapuntado_commit_212f8b9_07_ago_2026",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "auth-sorsabsa reapuntado \u2014 commit `212f8b9`, 07-ago-2026"
     },
@@ -6683,7 +6694,7 @@
       "source_location": "L319",
       "_origin": "ast",
       "id": "docs_plan_desoldado_paso_3_cada_producto_a_su_propio_proyecto",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "paso 3 \u2014 cada producto a su propio proyecto"
     },
@@ -6694,7 +6705,7 @@
       "source_location": "L372",
       "_origin": "ast",
       "id": "docs_plan_desoldado_lo_que_no_se_hace_decidido_con_raz\u00f3n_escrita",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "lo que no se hace (decidido, con razon escrita)"
     },
@@ -6705,7 +6716,7 @@
       "source_location": "L385",
       "_origin": "ast",
       "id": "docs_plan_desoldado_pendiente_aparte_el_escaneo_de_justired_fall\u00f3_el_31_jul",
-      "community": 3,
+      "community": 4,
       "community_name": "Pendientes del ecosistema SORSABSA",
       "norm_label": "pendiente aparte \u2014 el escaneo de justired fallo el 31-jul"
     },
@@ -6881,7 +6892,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_plan_una_persona_en_m\u00e1s_de_un_condominio_condomanager",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "plan \u2014 una persona en mas de un condominio (condomanager)"
     },
@@ -6892,7 +6903,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_causa_ra\u00edz",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "causa raiz"
     },
@@ -6903,7 +6914,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_alcance_real_corregido_09_ago_2026",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "alcance real \u2014 corregido 09-ago-2026"
     },
@@ -6914,7 +6925,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_fase_0_confirmado_no_se_repite",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "fase 0 \u2014 confirmado, no se repite"
     },
@@ -6925,7 +6936,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_fase_0_5_gesti\u00f3n_de_asociaciones_resuelto_09_ago_2026_condomanager_8ebb812",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "fase 0.5 \u2014 gestion de asociaciones \u2014 \u2705 resuelto 09-ago-2026 (`condomanager@8ebb812`)"
     },
@@ -6936,7 +6947,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_fase_1_esquema_resuelto_09_ago_2026",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "fase 1 \u2014 esquema \u2014 \u2705 resuelto 09-ago-2026"
     },
@@ -6947,7 +6958,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_fase_2_rls_y_funciones_sql_resuelto_09_ago_2026_opci\u00f3n_b",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "fase 2 \u2014 rls y funciones sql \u2014 \u2705 resuelto 09-ago-2026 (opcion b)"
     },
@@ -6958,7 +6969,7 @@
       "source_location": "L256",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_fase_3_condominio_activo_un_solo_mecanismo",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "fase 3 \u2014 \"condominio activo\": un solo mecanismo"
     },
@@ -6969,7 +6980,7 @@
       "source_location": "L266",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_fase_4_backend",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "fase 4 \u2014 backend"
     },
@@ -6980,7 +6991,7 @@
       "source_location": "L275",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_fase_5_frontend",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "fase 5 \u2014 frontend"
     },
@@ -6991,7 +7002,7 @@
       "source_location": "L287",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_fase_6_selector",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "fase 6 \u2014 selector"
     },
@@ -7002,7 +7013,7 @@
       "source_location": "L295",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_fase_7_reconciliar_perfil",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "fase 7 \u2014 `reconciliar-perfil`"
     },
@@ -7013,7 +7024,7 @@
       "source_location": "L303",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_fase_8_validaci\u00f3n_de_punta_a_punta",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "fase 8 \u2014 validacion de punta a punta"
     },
@@ -7024,7 +7035,7 @@
       "source_location": "L313",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_orden_recomendado",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "orden recomendado"
     },
@@ -7035,7 +7046,7 @@
       "source_location": "L322",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_pr\u00f3ximo_paso",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "proximo paso"
     },
@@ -7046,7 +7057,7 @@
       "source_location": "L335",
       "_origin": "ast",
       "id": "docs_plan_multi_condominio_ap\u00e9ndice_utilidades_de_reset_para_la_ronda_manual",
-      "community": 14,
+      "community": 13,
       "community_name": "Plan \u2014 una persona en m\u00e1s de un condominio (CondoManager)",
       "norm_label": "apendice \u2014 utilidades de reset para la ronda manual"
     },
@@ -7057,7 +7068,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_graphify_ci",
-      "community": 24,
+      "community": 23,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "graphify-ci.md"
     },
@@ -7068,7 +7079,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_graphify_ci_grafo_de_conocimiento_graphify_generado_por_ci",
-      "community": 24,
+      "community": 23,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "grafo de conocimiento (graphify) generado por ci"
     },
@@ -7079,7 +7090,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "docs_graphify_ci_qu\u00e9_es",
-      "community": 24,
+      "community": 23,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "que es"
     },
@@ -7090,7 +7101,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "docs_graphify_ci_por_qu\u00e9_ci_y_no_un_hook_local",
-      "community": 24,
+      "community": 23,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "por que ci y no un hook local"
     },
@@ -7101,7 +7112,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "docs_graphify_ci_c\u00f3mo_funciona",
-      "community": 24,
+      "community": 23,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "como funciona"
     },
@@ -7112,7 +7123,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "docs_graphify_ci_convenci\u00f3n_de_gitignore",
-      "community": 24,
+      "community": 23,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "convencion de `.gitignore`"
     },
@@ -7123,7 +7134,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "docs_graphify_ci_estado_por_repo",
-      "community": 24,
+      "community": 23,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "estado por repo"
     },
@@ -7134,7 +7145,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "docs_graphify_ci_c\u00f3mo_ver_el_grafo",
-      "community": 24,
+      "community": 23,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "como ver el grafo"
     },
@@ -7145,7 +7156,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "docs_graphify_ci_a\u00f1adir_pages_a_un_repo_privado_opcional_requiere_github_pro",
-      "community": 24,
+      "community": 23,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "anadir pages a un repo privado (opcional, requiere github pro)"
     },
@@ -7156,7 +7167,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "docs_graphify_ci_bugs_resueltos_durante_el_piloto_lecciones",
-      "community": 24,
+      "community": 23,
       "community_name": "Grafo de conocimiento (graphify) generado por CI",
       "norm_label": "bugs resueltos durante el piloto (lecciones)"
     }
@@ -16317,6 +16328,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
+      "source_location": "L1024",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
+      "target": "docs_pendientes_ecosistema_19_qa_sorsabsa_sin_guard_autom\u00e1tico_que_impida_que_readme_md_y_todo_md_se_desincronicen_10_ago_2026",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
       "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast",
@@ -17118,5 +17140,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "464103dc79bf29ae0993d8137350920d20c28db8"
+  "built_at_commit": "3cb84ba1d08adae85f4364e3b59c8ea2ab21d0e8"
 }
