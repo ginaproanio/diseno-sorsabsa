@@ -1,34 +1,34 @@
 # Graph Report - diseno-sorsabsa  (2026-08-10)
 
 ## Corpus Check
-- 75 files · ~58,471 words
+- 75 files · ~58,998 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 577 nodes · 812 edges · 34 communities (31 shown, 3 thin omitted)
+- 578 nodes · 813 edges · 34 communities (31 shown, 3 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cb51ea63`
+- Built from commit: `b57daad8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- App.tsx
 - index.ts
+- App.tsx
 - Arquitectura del ecosistema SORSABSA
 - IconName
 - devDependencies
-- BrandProvider.tsx
 - Pendientes del ecosistema SORSABSA
+- BrandProvider.tsx
 - Plan — una persona en más de un condominio (CondoManager)
 - 🔴 CRÍTICO
 - Plan — Identificación de unidades configurable por condominio
 - compilerOptions
 - compilerOptions
-- devDependencies
 - Auditoría — CondoManager como aplicación (más allá del portero)
+- devDependencies
 - @sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA
 - package.json
 - NotificationBell.tsx
@@ -73,13 +73,13 @@
 
 ## Communities (34 total, 3 thin omitted)
 
-### Community 0 - "App.tsx"
-Cohesion: 0.06
-Nodes (35): App(), BRAND_KEYS, AtomShowcase(), ButtonMatrix(), SHADOW, VARIANTS, ColorPalette(), TOKEN_ORDER (+27 more)
+### Community 0 - "index.ts"
+Cohesion: 0.05
+Nodes (54): ButtonMatrix(), SHADOW, VARIANTS, DATA, AppShell(), AppShellProps, Avatar(), AvatarProps (+46 more)
 
-### Community 1 - "index.ts"
+### Community 1 - "App.tsx"
 Cohesion: 0.06
-Nodes (49): DATA, AppShell(), AppShellProps, Avatar(), AvatarProps, getInitials(), SIZE, ButtonProps (+41 more)
+Nodes (35): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), DomusLanding(), FEATURES (+27 more)
 
 ### Community 2 - "Arquitectura del ecosistema SORSABSA"
 Cohesion: 0.05
@@ -93,13 +93,13 @@ Nodes (29): CardStatusDemo(), SHADOW, TONES, IconCatalog(), NAMES, SHADOW, Card(
 Cohesion: 0.05
 Nodes (38): autoprefixer, postcss, dependencies, framer-motion, lucide-react, motion, react, react-dom (+30 more)
 
-### Community 5 - "BrandProvider.tsx"
-Cohesion: 0.10
-Nodes (28): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandConfig, BrandContext, BrandProvider(), brandToCssVars() (+20 more)
-
-### Community 6 - "Pendientes del ecosistema SORSABSA"
+### Community 5 - "Pendientes del ecosistema SORSABSA"
 Cohesion: 0.05
 Nodes (34): 10. ✅ Login social: Google ✅ cerrado — Facebook ✅ funciona, Revisión de Meta APROBADA, 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado, 12. 🟡 R2 desplegado y verificado — falta el clic real de un residente, 13. ✅ HECHO — geo-sorsabsa/service desplegado, verificado y consumido por los dos periciales, 14. ✅ HECHO — iot consume el portero central (auth-sorsabsa), 15. 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas, 16. 🟡 Estandarizar pagos/suscripciones/referidos en TODOS los productos — JustiRed sin nada, y una idea de "créditos de IA" todavía sin desarrollar, 17. 🟡 Gobernanza de correo masivo por tenant (activación de residentes, alícuotas) — diseño acordado, infraestructura sin construir (+26 more)
+
+### Community 6 - "BrandProvider.tsx"
+Cohesion: 0.12
+Nodes (23): BRAND_FONT_IMPORTS, BrandColors, BrandConfig, BrandContext, BrandProvider(), brandToCssVars(), contrastRatio(), darkenToContrast() (+15 more)
 
 ### Community 7 - "Plan — una persona en más de un condominio (CondoManager)"
 Cohesion: 0.07
@@ -121,13 +121,13 @@ Nodes (22): ../src/**/*.test.ts, ../src/**/*.test.tsx, vite.config.ts, compilerO
 Cohesion: 0.09
 Nodes (20): jest, @testing-library/jest-dom, compilerOptions, esModuleInterop, forceConsistentCasingInFileNames, jsx, lib, module (+12 more)
 
-### Community 12 - "devDependencies"
+### Community 12 - "Auditoría — CondoManager como aplicación (más allá del portero)"
+Cohesion: 0.12
+Nodes (17): 🔵-1 — ✅ Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo — RESUELTO 09-ago-2026, 🟠-1 — ✅ Chequeo de rol/autorización reimplementado en al menos 13 rutas, sin fuente única — RESUELTO 09-ago-2026, 🟠-2 — ✅ `resolverPostLogin`: un error de consulta se trata igual que "usuario sin perfiles todavía" — RESUELTO 09-ago-2026, 🔵-2 — ✅ Unidad fantasma auto-creada en cada registro de admin — RESUELTO 09-ago-2026, 🔵-3 — ✅ `codigo_predial` sin garantía de unicidad — RESUELTO 09-ago-2026, 🔴-3 — ✅ `registros_pendientes` y `campanas_masivas` sin GRANT ni RLS — service_role no podía usarlas — RESUELTO 09-ago-2026, 🟠-3 — ✅ Ubicación y Contacto escribían las mismas columnas sin saberlo — pérdida de datos real — RESUELTO 09-ago-2026, 🔵-4 — ✅ `deudas.rubro_id`: UI decía "opcional", la base exigía `NOT NULL`, y un `LEFT JOIN` faltante lo hacía peor — RESUELTO 09-ago-2026 (+9 more)
+
+### Community 13 - "devDependencies"
 Cohesion: 0.12
 Nodes (17): jest-environment-jsdom, devDependencies, jest, jest-environment-jsdom, @testing-library/jest-dom, ts-jest, @types/jest, @types/react (+9 more)
-
-### Community 13 - "Auditoría — CondoManager como aplicación (más allá del portero)"
-Cohesion: 0.12
-Nodes (16): 🔵-1 — ✅ Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo — RESUELTO 09-ago-2026, 🟠-1 — ✅ Chequeo de rol/autorización reimplementado en al menos 13 rutas, sin fuente única — RESUELTO 09-ago-2026, 🟠-2 — ✅ `resolverPostLogin`: un error de consulta se trata igual que "usuario sin perfiles todavía" — RESUELTO 09-ago-2026, 🔵-2 — ✅ Unidad fantasma auto-creada en cada registro de admin — RESUELTO 09-ago-2026, 🔵-3 — ✅ `codigo_predial` sin garantía de unicidad — RESUELTO 09-ago-2026, 🔴-3 — ✅ `registros_pendientes` y `campanas_masivas` sin GRANT ni RLS — service_role no podía usarlas — RESUELTO 09-ago-2026, 🟠-3 — ✅ Ubicación y Contacto escribían las mismas columnas sin saberlo — pérdida de datos real — RESUELTO 09-ago-2026, 🔵-4 — ✅ `deudas.rubro_id`: UI decía "opcional", la base exigía `NOT NULL`, y un `LEFT JOIN` faltante lo hacía peor — RESUELTO 09-ago-2026 (+8 more)
 
 ### Community 14 - "@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA"
 Cohesion: 0.15
@@ -174,7 +174,7 @@ Cohesion: 0.67
 Nodes (3): scripts, test, typecheck
 
 ## Knowledge Gaps
-- **288 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+283 more)
+- **289 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+284 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -185,13 +185,13 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.014) - this node is a cross-community bridge._
 - **Why does `Auditoría — portero SSO del ecosistema SORSABSA` connect `🔴 CRÍTICO` to `Plan — una persona en más de un condominio (CondoManager)`?**
   _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **Why does `BrandConfig` connect `BrandProvider.tsx` to `App.tsx`, `index.ts`?**
+- **Why does `BrandConfig` connect `BrandProvider.tsx` to `index.ts`, `App.tsx`?**
   _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _288 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.05737704918032787 - nodes in this community are weakly interconnected._
+  _289 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.060655737704918035 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05472636815920398 - nodes in this community are weakly interconnected._
+- **Should `App.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.058469945355191254 - nodes in this community are weakly interconnected._
 - **Should `Arquitectura del ecosistema SORSABSA` be split into smaller, more focused modules?**
   _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
