@@ -79,6 +79,40 @@ Punta Blanca = 1 fila en `asociaciones`, 5 condominios debajo. Sin esto,
 la Fase 6 sería otra (construir un selector nuevo para condominios sin
 asociación en común, en vez de destrabar el que existe).
 
+## Fase 0.5 — Gestión de asociaciones — ✅ RESUELTO 09-ago-2026 (`condomanager@8ebb812`)
+
+**Hueco encontrado por Gina, no anticipado en ninguna de las 8 fases
+originales:** confirmó la Fase 0 (Punta Blanca = 1 fila en
+`asociaciones`) y todas las fases siguientes construyen la lógica que
+**consume** `asociacion_id` (selector, login, `post-login.ts`) — pero
+ninguna construye dónde **crear** esa fila ni vincular los condominios.
+Gina lo encontró preguntando directamente "¿dónde especifico esto?" y
+no había dónde. Confirmado con grep antes de asumir: cero
+INSERT/UPDATE contra `asociaciones` en todo el repo, 0 filas en la
+tabla, Punta Blanca con `asociacion_id` NULL.
+
+**Decisión de Gina:** exclusivo de superadmin — un admin de condominio
+no puede autoasignarse a una asociación ajena, determina a qué
+condominios puede saltar alguien al iniciar sesión. Verificado antes de
+construir (no asumido): la RLS de `asociaciones` ya exigía
+`is_superadmin()` para escribir (política `asociaciones_write`,
+preexistente desde la Fase 1) — no hizo falta tocar seguridad, solo
+faltaba la pantalla.
+
+**Fix:** `panel/superadmin/asociaciones` (lista, con conteo de
+condominios por asociación) + `.../nuevo` (crear: nombre, slug
+autogenerado, color, sitio web, logo). En
+`panel/superadmin/condominios/[id]/editar` se agregó el select
+"Asociación" — ahí es donde se vincula un condominio, eligiendo la fila
+existente (no re-escribiendo el nombre, que con un typo crearía una
+asociación "distinta" que no une nada).
+
+Verificado: typecheck limpio, eslint 0 errores. Prueba transaccional
+contra la base real (asociación creada + condominio vinculado + conteo
+correcto, sin dejar datos). **Pendiente real:** la fila de Punta Blanca
+todavía no se creó ni se vincularon sus 5 condominios — la pantalla ya
+existe, falta que Gina la use.
+
 ## Fase 1 — Esquema — ✅ RESUELTO 09-ago-2026
 
 `perfiles` deja de tener `user_id` como llave primaria. Pasa a tener un
