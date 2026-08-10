@@ -11,6 +11,13 @@
  *
  * Animaciones opcionales por parte: `spring-sweep` y `fade-slide` se
  * reproducen una sola vez al entrar en pantalla (whileInView + once).
+ *
+ * Si la marca define `logoUrl` (ej. DomusCRM, 10-ago-2026), el isotipo se
+ * dibuja ANTES del texto, a la izquierda — mismo patrón que cualquier
+ * "ícono + nombre" de navbar. Alto atado a `1em` del propio Wordmark: crece
+ * o encoge con el `className` que le pase cada consumidor (text-lg, text-3xl…)
+ * sin necesitar un tamaño fijo en px. Marcas sin `logoUrl` (CondoManager,
+ * agente24siete) no cambian: siguen siendo solo texto.
  */
 
 import { motion } from 'motion/react';
@@ -55,9 +62,17 @@ export function Wordmark({ className = '' }: { className?: string }) {
 
   return (
     <span
-      className={`font-brand-heading font-extrabold tracking-tight ${className}`}
+      className={`inline-flex items-center gap-2 font-brand-heading font-extrabold tracking-tight ${className}`}
       style={{ fontFamily: 'var(--brand-heading-font)' }}
     >
+      {brand.logoUrl && (
+        <img
+          src={brand.logoUrl}
+          alt=""
+          aria-hidden="true"
+          className="inline-block h-[1em] w-auto shrink-0"
+        />
+      )}
       {parts.map((parte, i) => {
         const tone = (tones[i] ?? 'primary') as WordmarkTone;
         const anim = getAnimation(animations[i], i);
