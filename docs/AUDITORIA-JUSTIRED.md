@@ -159,3 +159,101 @@ antes de esta auditoría.
 - 🟠-1 es chico y seguro, mismo patrón ya probado en CondoManager y
   agente24siete — puede ejecutarse cuando Gina confirme, igual que el
   resto de logouts pendientes del ecosistema.
+
+---
+
+## 10-ago-2026 — Estado real, adónde debe llegar, y los transversales que esta auditoría todavía no cubrió
+
+Sesión cortada por límite de tokens antes de construir nada — esta
+sección deja documentado el mapa completo para retomar, sin perder lo
+ya entendido hoy.
+
+### Qué es JustiRed hoy, de verdad (confirmado, no supuesto)
+
+Gina, textual: *"justired se dedico a capturar leyes, de hecho sigue
+alimentando y grabando en r2 cloudflare, pero nada más, el sistema fue
+diseñado en figma, vino aca, usa el scraper pero nada más."* Coincide
+con el código: `scraper/` captura leyes reales y las sube (R2), un
+pipeline las deja en `justired.leyes`/`articulos`/
+`documentos_pendientes_revision` (**75 filas reales pendientes hoy**,
+verificado), y el sitio público (Index, Blog, LawyerProfile, Pricing,
+biblioteca legal) las muestra. **Ahí termina el sistema construido.** No
+existe ningún espacio de trabajo para la persona que debe revisar lo que
+el scraper capturó antes de que se publique — el curador de las leyes
+capturadas no tiene un lugar propio, ni como rol ni como pantalla.
+
+### Confirmado con datos: no hay NINGÚN rol autenticado en JustiRed, ni siquiera "abogado"/"cliente"
+
+`SELECT` sobre `information_schema.columns`/`pg_class` en el esquema
+`justired`: seis tablas (`leyes`, `articulos`, `articulos_embeddings`,
+`documentos_pendientes_revision`, `subscription_plans`,
+`lawyer_subscriptions`) — **ninguna es una tabla de personas/roles**.
+`lawyer_subscriptions` guarda `lawyer_name`/`lawyer_email`/
+`lawyer_phone` como texto plano, sin FK a `auth.users` — es un registro
+de pago para aparecer en el directorio, no una cuenta con rol. `useAuth()`
+(`hooks/useAuth.ts`) solo expone el usuario crudo de Supabase — no hay
+`rol`, no hay `perfil`, no hay forma de distinguir "abogado" de "cliente"
+de "curador" en ningún lado del sistema. Por eso `Calidad.tsx` (🔴-1) no
+tenía otra opción que gatear con `if (!user)` — no había nada más contra
+qué chequear.
+
+**A dónde debe llegar (diseño propuesto, no construido):** tabla
+`justired.staff` (`email`, `nombre`, `rol`, `activo` — mismo patrón que
+`usuarios` de agente24siete) + una Edge Function con `service_role` que
+valide contra esa tabla (mismo patrón que `justired-notifications-*`, ya
+construido y funcionando en este mismo repo) + `Calidad.tsx` (o su
+reemplazo) llamando a esa función en vez de tocar la tabla directo.
+Gina ya confirmó el diseño en el chat — falta solo ejecutar.
+
+### 🔵 Transversales — no auditado hasta hoy, hallazgo real encontrado al cerrar
+
+Pedido explícito de Gina: *"la auditoria no ha alcanzado los
+transversales."* Verificado, con evidencia concreta de que JustiRed
+corre un sistema de suscripción **paralelo**, no el transversal:
+
+- `justired.lawyer_subscriptions` tiene columnas
+  `payphone_transaction_id`/`payphone_client_transaction_id`/
+  `payphone_response` — **Payphone integrado directo**, sin pasar por
+  `pagos-sorsabsa` (el motor de cobros transversal que sí usan
+  CondoManager, DomusCRM y, desde el 09-ago, agente24siete).
+- `auth-sorsabsa/src/lib/entity-resolver.ts` (el que decide "quién paga"
+  para el gate de suscripción en `/auth/complete`) **no tiene ningún
+  caso para `'justired'`** — a diferencia de `domuscrm`/`condomanager`
+  (resuelven la empresa/condominio) o `agente24siete`/`iot`/`convertidor`
+  (bypass explícito). Sin caso propio, cae al `return { subject: userId
+  }` genérico: trata a la PERSONA que inicia sesión como la entidad que
+  paga, no a "el abogado" ni a "la suscripción de lawyer_subscriptions".
+- **Contradice una afirmación ya escrita en `ARQUITECTURA-ECOSISTEMA.md`**
+  (fila Referidos, sin fecha de verificación propia): *"[recompensa_dias]
+  le funciona a CondoManager/DomusCRM/JustiRed"* — asumía que JustiRed
+  usa `pagos.suscripciones` transversal. **Con lo encontrado hoy, esa
+  frase es dudosa** — JustiRed parece cobrar y llevar su propia
+  suscripción de abogados 100% local, sin relación con `pagos.suscripciones`.
+  No confirmado del todo (no se probó un pago real de abogado en vivo
+  hoy) — queda como hallazgo a verificar, no como hecho cerrado.
+
+**Por qué importa, en los mismos términos que motivó esta pregunta:**
+mismo riesgo de "desoldar" ya identificado para Créditos/Saldo de
+agente24siete en `ARQUITECTURA-ECOSISTEMA.md` §1 — un tercer sistema de
+cobro paralelo (pagos-sorsabsa, saldo de agente24siete, y ahora
+lawyer_subscriptions de JustiRed) es exactamente la clase de duplicación
+que `ESTANDAR-DESARROLLO.md` pide evitar, y potencialmente el motivo
+real (no confirmado hoy) de que el login por SSO de JustiRed pueda estar
+bloqueando o dejando pasar abogados por una razón que nadie diseñó a
+propósito.
+
+### Pendiente para la próxima sesión, en orden
+
+1. Verificar en vivo (con Gina) si un abogado real puede loguearse por
+   SSO a JustiRed hoy, y si el gate de suscripción de `/auth/complete`
+   lo bloquea o lo deja pasar — sin esto, el punto de arriba sigue siendo
+   hallazgo, no hecho confirmado.
+2. Decidir: ¿`lawyer_subscriptions` se queda como sistema propio (con
+   una razón de negocio real, ej. Payphone directo por algo específico
+   de abogados) o se migra a `pagos-sorsabsa` como el resto del
+   ecosistema? Requiere su propio análisis de 9 puntos — no ejecutar sin
+   eso.
+3. Construir el rol `justired.staff` + Edge Function + `Calidad.tsx`
+   funcional (🔴-1), una vez decidido el punto 6.1 original (quién es
+   curador).
+4. Resolver 🟠-1 (logout central), chico y seguro, puede ir en paralelo.
