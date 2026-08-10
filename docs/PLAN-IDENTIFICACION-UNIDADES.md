@@ -191,7 +191,26 @@ separados) que hay que rediseñar, no solo cambiar un label:
   SQL que Punta Blanca (ya en `CODIGO_PREDIAL`, código real
   `046-114-014`) sigue intacta — antes de este fix esa unidad se
   hubiera mostrado en blanco en estas 15 pantallas.
-- **Fase 3 — Bucket C (reportes/rubros-por-unidad):** rediseño de filtros.
+- **Fase 3 — ✅ RESUELTO 09-ago-2026 (`condomanager@4aa992c`) — Bucket C
+  (reportes/rubros-por-unidad):** el más grande de los 23, con su propia UI
+  de filtros — no era solo cambiar un label. El buscador tenía 3 inputs
+  fijos (Manzana/Lote/Cód. Predial) y un condominio en criterio `CASA` no
+  podía filtrar por su campo real. Se resolvió `criterio_identificacion_unidad`
+  una vez en `inicializar()` (mismo patrón del bucket B) y se rediseñó el
+  filtro a un solo input "Propiedad" que busca con OR-ilike sobre
+  manzana/lote/codigo_predial/casa a la vez — igual que el buscador del
+  módulo Unidades (Fase 1), porque cambiar el criterio no invalida los
+  otros campos en filas viejas, no hay que ocultarlas de la búsqueda. Orden
+  de tabla y export siguen el criterio activo (antes `.order("manzana")
+  .order("lote")` fijo). Título, card de detalle, fila de tabla y CSV usan
+  `identificadorUnidad()`; la card de detalle ahora solo muestra
+  manzana/lote/predial/casa cuando el dato existe (antes mostraba "Sin
+  manzana"/"Sin lote" siempre, aunque el condominio nunca haya usado esos
+  campos — mismo tipo de dato inventado que se viene evitando toda la
+  sesión). CSV general gana columna "Identificador" + "Casa". Verificado:
+  typecheck limpio, eslint 0 errores nuevos (2 warnings `exhaustive-deps`
+  preexistentes, no tocados). Confirmado con SQL que Punta Blanca
+  (`CODIGO_PREDIAL`, predial real `046-114-014`) sigue intacta.
 - **Fase 4 — Bucket D (residentes/importar):** matching por criterio en
   vez de manzana-lote fijo — el más riesgoso, se hace con más cuidado y
   pruebas.
