@@ -58,6 +58,7 @@ export const ICON_PATHS = {
   eyeOff: 'M3 3l18 18M10.6 10.6a2.5 2.5 0 0 0 3.5 3.5M9.9 5.1A10.9 10.9 0 0 1 12 5c6.5 0 10 7 10 7a13.2 13.2 0 0 1-3.1 3.9M6.2 6.2C3.5 8 2 12 2 12s1.8 4 5.4 6a10.7 10.7 0 0 0 4.6 1.9',
   keyRound: 'M8 14a4 4 0 1 0 0-8 4 4 0 1 0 0 8zM10.5 11.5L20 21M17 18l2-2M14 15l2-2',
   logIn: 'M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M15 16l4-4-4-4M19 12H9',
+  logOut: 'M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M17 8l4 4-4 4M21 12H11',
 } as const;
 
 export type IconName = keyof typeof ICON_PATHS;
