@@ -861,3 +861,46 @@ No implementado — queda anotado junto con el resto de este ítem.
 - ✅ Limpieza menor en agente24siete: fix duplicado en rama `auditoria/ciclo-operativo`
   (commit `4bc591b`) y un `git stash` sin aplicar ahí — `main` quedó correcto
   y desplegado, la rama vieja queda para revisar si se retoma ese repo.
+
+## 18. 🟡 Sin patrón compartido para formularios de alta (cuenta/empresa) — cada producto arma el suyo
+
+**Origen:** 09-ago-2026, Gina revisando `/register` de DomusCRM: "el
+formulario es bastante soso para la creación de una agencia inmobiliaria,
+no hay estandarización en este tipo de formularios". Verificado con código,
+no es solo percepción visual.
+
+**Lo que existe:** `@sorsabsa/ui` (este mismo repo, `diseno-sorsabsa`,
+publicado como paquete) es consumido por condomanager (`^0.1.10`),
+crm_inmobiliario/webs (`v0.1.38`), agente24siete (`^0.1.6`) y auth-sorsabsa
+(`v0.1.39`) — la regla dura del principio de este documento (usar los
+sistemas compartidos) sí se cumple a nivel de dependencia declarada.
+
+**El hueco real, con evidencia:**
+
+- El paquete solo tiene primitivos planos para formularios: `Input` (un
+  campo con label/ícono/error), `Card`, `Button`. No existe ningún
+  componente de agrupación (`FormSection`/fieldset), stepper/wizard, ni un
+  layout pensado para un formulario "grande" (alta de cuenta + alta de
+  empresa en un solo submit, como pide `ESTANDAR-DESARROLLO.md`: "dato
+  atómico → un solo insert", no dos altas separadas).
+- `crm_inmobiliario/webs/src/app/register/page.tsx` (DomusCRM, botón
+  "Crear mi cuenta" de la landing) sí usa `@sorsabsa/ui`
+  (`BrandProvider`/`Card`/`Input`/`Button`/`Icon`), pero arma la jerarquía
+  visual a mano con dos `<p>` de sección ("Tu cuenta" / "Tu agencia") sin
+  ningún componente que las agrupe — de ahí el "soso": todos los campos
+  con el mismo peso visual, sin separación real entre bloques.
+- `condomanager/app/register/page.tsx` (alta de admin + condominio, mismo
+  tipo de formulario) **ni siquiera usa `@sorsabsa/ui` para esta pantalla**
+  — importa `@/app/components/ui/Button` y `@/app/components/ui/PasswordInput`
+  locales, propios del proyecto, aunque condomanager sí depende del paquete
+  compartido para otras pantallas. Confirma que la falta de estándar no es
+  solo "el paquete es pobre": ni siquiera los dos proyectos que lo tienen
+  instalado lo usan igual para el mismo tipo de formulario.
+- No se revisó todavía agente24siete (si tiene un formulario equivalente)
+  ni si `PasswordInput` de condomanager debería fusionarse con el `Input`
+  de `@sorsabsa/ui` en vez de vivir duplicado.
+
+**No resuelto — pendiente decidir con Gina:** si el fix es (a) agregar a
+`@sorsabsa/ui` un componente de sección/agrupación para este tipo de
+formulario y adoptarlo en los productos que ya lo usan, o (b) algo más
+puntual solo para DomusCRM. No se tocó código todavía.
