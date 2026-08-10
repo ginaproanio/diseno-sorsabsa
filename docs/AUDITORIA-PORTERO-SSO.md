@@ -263,10 +263,13 @@ no arreglaba su login.
   recordar esto la próxima vez que un `vercel env pull` para una var
   Sensitive dé un error que no tiene sentido — no es que el valor
   guardado esté mal, es que el CLI nunca lo entrega.**
-- **Pendiente, no bloqueante:** Gina probando un mensaje real de WhatsApp
-  contra el número de Punta Blanca para confirmar el flujo completo en
-  vivo — el código y el backfill ya están verificados, esto es la
-  validación final de producto, no de infraestructura.
+- **Bloqueado, no por esto — ver #15 de `PENDIENTES-ECOSISTEMA.md`:**
+  la prueba en vivo (mandar un WhatsApp real a Punta Blanca) no se puede
+  hacer todavía porque TODAS las cuentas de WhatsApp del portafolio
+  siguen desactivadas por Meta (baneo, no relacionado con este hallazgo).
+  Código e infraestructura de 🔴-6 quedan **completos y verificados** sin
+  esa prueba — la validación de producto queda en espera de que #15 se
+  resuelva, no se vuelve a preguntar por esto hasta entonces.
 
 - **Archivo:** `auth-sorsabsa/scripts/invite-user.mjs` (el proceso) + `iot/auth_sso.py` (la consecuencia)
 - **Problema:** ningún componente decide "esta persona debe existir en identity, con estos atributos, con acceso a este producto" — lo decide quien corre el script a mano.

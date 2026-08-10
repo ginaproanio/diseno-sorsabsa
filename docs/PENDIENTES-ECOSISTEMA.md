@@ -865,9 +865,10 @@ un valor mal guardado, era la causa del `getaddrinfo ENOTFOUND base`
 que se persiguió un buen rato. Los valores reales solo se ven en el
 dashboard de Vercel, nunca por CLI.
 
-**Pendiente, no bloqueante:** Gina probando un mensaje real de WhatsApp
-contra Punta Blanca para cerrar la validación en vivo — infraestructura
-y código ya verificados.
+**Bloqueado por #15, no por esto:** la prueba en vivo (WhatsApp real a
+Punta Blanca) espera a que Meta reactive las cuentas — código e
+infraestructura de este punto quedan completos y verificados sin esa
+prueba. No volver a preguntar por esto hasta que #15 se resuelva.
 
 ---
 
