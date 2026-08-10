@@ -59,6 +59,13 @@ export const ICON_PATHS = {
   keyRound: 'M8 14a4 4 0 1 0 0-8 4 4 0 1 0 0 8zM10.5 11.5L20 21M17 18l2-2M14 15l2-2',
   logIn: 'M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M15 16l4-4-4-4M19 12H9',
   logOut: 'M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M17 8l4 4-4 4M21 12H11',
+  // Unico icono de marca externa del catalogo: el trazo clasico de Feather
+  // Icons para Facebook, que ya viene pensado como stroke/currentColor (no
+  // relleno), asi que encaja en el mismo modelo de dibujo que el resto sin
+  // tocar Icon.tsx. Nace del footer de los 4 productos (10-ago-2026) — antes
+  // cada uno importaba su propio Facebook de lucide-react o lo reinventaba
+  // suelto; lucide-react 1.x directamente ya no trae isotipos de marca.
+  facebook: 'M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z',
 } as const;
 
 export type IconName = keyof typeof ICON_PATHS;
