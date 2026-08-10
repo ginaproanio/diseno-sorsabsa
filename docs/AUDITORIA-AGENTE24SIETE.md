@@ -43,7 +43,7 @@ la fuente específica de agente24siete; 🔴-11 es el consolidado ecosistema.
 
 ## 🔴 CRÍTICO
 
-### 🔴-1 — 🔧 CONSTRUIDO 10-ago-2026, falta probar en vivo — El portero de agente24siete es 100% client-side — sin `middleware.ts`, a diferencia del patrón ya estabilizado en CondoManager
+### 🔴-1 — 🔧 CONSTRUIDO 10-ago-2026 (los 3 casos), falta probar en vivo — El portero de agente24siete es 100% client-side — sin `middleware.ts`, a diferencia del patrón ya estabilizado en CondoManager
 
 **1. Síntoma:** un usuario sin sesión válida (sin token, con token vencido,
 o con token de una cuenta sin cliente asociado) ve el shell COMPLETO del
@@ -145,14 +145,47 @@ con el -1":**
    runtime, bundle de Middleware generado (34.4 kB) — confirma que
    `tokenExpirado()` (usa `atob`) es compatible con el runtime del
    middleware, no solo con el navegador.
-3. ⬜ **`LoginGate` NO se tocó, a propósito.** El punto 7 de este mismo
-   hallazgo lo marca como "código que debe eliminarse", pero con el
-   riesgo ya declarado como medio y clientes reales de por medio, se
-   decidió dejarlo un ciclo más como red de seguridad — no cambia ningún
-   comportamiento (si el middleware deja pasar, `LoginGate` encuentra el
-   mismo token válido en `localStorage` y no hace nada; si el middleware
-   redirige, `LoginGate` ni llega a cargar). Se borra en un commit aparte
-   una vez que Gina confirme el punto 9 en vivo — no antes.
+3. ⬜ **`LoginGate` NO se tocó todavía (borrado), a propósito.** El punto 7
+   de este mismo hallazgo lo marca como "código que debe eliminarse",
+   pero con el riesgo ya declarado como medio y clientes reales de por
+   medio, se decidió dejarlo un ciclo más como red de seguridad. Se borra
+   en un commit aparte una vez que Gina confirme el punto 9 en vivo.
+
+**10-ago-2026, mismo día — Gina probó en vivo y encontró el hueco real:**
+entrando por el flujo completo (landing → Google → cuenta sin cliente
+asociado) el síntoma original volvió a aparecer — sidebar completo,
+"Sesión inválida o expirada" al lado, no una sola pantalla centrada. La
+prueba directa a `/portal` sin sesión sí funcionó bien (middleware
+redirige limpio); el caso que fallaba era el TERCERO que el punto 1 de
+este mismo hallazgo ya nombraba desde el inicio y que el fix original
+(middleware + `tokenExpirado`) nunca cubrió: **un token con forma válida
+y sin vencer, pero de una cuenta sin cliente/usuario asociado.**
+`middleware.ts` no puede resolver esto porque corre en Edge, sin acceso a
+un pool de Postgres — la única forma de saberlo es la misma consulta que
+ya hace `autenticarCliente`/`autenticarAdmin` (`clientes.auth_user_id` /
+`usuarios.email`).
+
+**Cerrado, commit `agente24siete@6325176`:**
+
+- `pages/api/portal/whoami.js` y `pages/api/admin/whoami.js` (nuevos):
+  reusan `autenticarCliente`/`autenticarAdmin` tal cual — no agregan
+  ninguna verificación nueva, solo exponen la que ya existía como un
+  endpoint liviano.
+- `LoginGate` (los dos): después del chequeo de vigencia (🟠-2), llama a
+  `whoami` con el mismo token. `autenticarCliente` responde 401 para los
+  tres casos ("Cuenta sin cliente asociado" incluido); `autenticarAdmin`
+  usa 403 para "cuenta no habilitada" — el chequeo del lado admin
+  contempla los dos códigos. Si la red falla (no un 401/403 explícito),
+  se deja pasar — una desconexión momentánea no es motivo para expulsar a
+  alguien que sí tiene sesión válida; cada llamada real sigue
+  verificando igual del lado del servidor.
+- Verificado con `next build` completo: los dos endpoints nuevos
+  aparecen registrados, sin errores de compilación.
+
+Con esto, los 3 casos que el punto 1 de este hallazgo nombraba desde el
+principio (sin token, token vencido, cuenta sin cliente asociado) quedan
+cubiertos ANTES de dibujar el shell. `LoginGate` sigue sin borrarse — el
+punto 7 sigue pendiente hasta la prueba en vivo.
 
 ---
 
@@ -295,16 +328,16 @@ secreto — son URLs públicas, se pueden pegar acá para revisar juntos).
 
 ## Pendiente de decidir con Gina antes de ejecutar
 
-- **10-ago-2026:** 🟠-1 (Salir), 🟠-2 (chequeo de vigencia en
-  `LoginGate`) y 🔴-1 (`middleware.ts` + cookie) construidos, commits
-  `agente24siete@c6f2578` y `agente24siete@89429ff`. typecheck y `next
-  build` completo limpios (sin suite de tests ni eslint configurados en
-  este repo — mismo estado que antes de este fix, no se tocó).
+- **10-ago-2026:** 🟠-1 (Salir), 🟠-2 (chequeo de vigencia) y 🔴-1
+  (`middleware.ts` + cookie + `whoami` para el tercer caso) construidos,
+  commits `agente24siete@c6f2578`, `agente24siete@89429ff` y
+  `agente24siete@6325176`. typecheck y `next build` completo limpios en
+  los tres.
 - **Único pendiente real de esta auditoría:** la validación EN VIVO de
-  🔴-1 (punto 9) — sin cookie, con cookie vencida, y con cookie válida,
-  en los dos paneles, contra clientes reales. Recién ahí se borra
-  `LoginGate.tsx` (punto 7, "código que debe eliminarse") — se dejó sin
-  tocar a propósito como red de seguridad hasta esa confirmación.
-- **🟠-3** sigue necesitando que Gina haga una prueba en vivo puntual
-  (login nuevo, probar de inmediato contra `/portal`) — puede resolverse
-  en la MISMA prueba que valida 🔴-1, no hace falta repetirla dos veces.
+  🔴-1 (punto 9), ahora con los 3 casos cubiertos — sin cookie, cookie
+  vencida, y cookie válida de una cuenta SIN cliente/usuario asociado
+  (el caso que Gina encontró que faltaba). Recién con esa confirmación se
+  borra `LoginGate.tsx` (punto 7, "código que debe eliminarse") — se dejó
+  a propósito como red de seguridad hasta entonces.
+- **🟠-3** se resuelve en la MISMA prueba que valida 🔴-1, no hace falta
+  repetirla.
