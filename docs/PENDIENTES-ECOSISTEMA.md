@@ -862,12 +862,25 @@ No implementado — queda anotado junto con el resto de este ítem.
   (commit `4bc591b`) y un `git stash` sin aplicar ahí — `main` quedó correcto
   y desplegado, la rama vieja queda para revisar si se retoma ese repo.
 
-## 18. 🟡 Sin patrón compartido para formularios de alta (cuenta/empresa) — cada producto arma el suyo
+## 18. 🟡 Sin patrón visual compartido entre los onboarding propios (condomanager, domuscrm)
 
 **Origen:** 09-ago-2026, Gina revisando `/register` de DomusCRM: "el
 formulario es bastante soso para la creación de una agencia inmobiliaria,
 no hay estandarización en este tipo de formularios". Verificado con código,
 no es solo percepción visual.
+
+**Corrección 09-ago-2026 (misma sesión):** este ítem se anotó primero como
+"cada producto arma su propio register" sin aclarar que **eso es correcto a
+propósito, no el hueco**. Verificado en `auth-sorsabsa/src/lib/apps.ts`:
+existe un `/auth/register` genérico en identity y **sí lo usan** agente24siete,
+justired y convertidor (apps sin `registerUrl`). Condomanager y DomusCRM
+tienen `registerUrl` configurado — el genérico se auto-redirige a su
+formulario propio, porque crear solo la identidad sin la empresa/condominio
+dejó una vez a una clienta real con cuenta huérfana, sin agencia y sin poder
+entrar (bug documentado en el comentario de `registerUrl`, motivó el
+mecanismo). **El hueco real es más angosto**: entre los formularios que sí
+tienen que ser propios (condomanager, domuscrm) no hay ningún patrón visual
+compartido — abajo el detalle.
 
 **Lo que existe:** `@sorsabsa/ui` (este mismo repo, `diseno-sorsabsa`,
 publicado como paquete) es consumido por condomanager (`^0.1.10`),
