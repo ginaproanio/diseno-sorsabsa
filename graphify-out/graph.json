@@ -5091,15 +5091,15 @@
       "norm_label": "\ud83d\udd34-5 \u2014 \u2705 agente24siete: nadie puede loguearse, la federacion con identity nunca se registro ahi \u2014 resuelto 09-ago-2026"
     },
     {
-      "label": "\ud83d\udd34-6 \u2014 \ud83d\udd27 DECISI\u00d3N TOMADA 09-ago-2026, en construcci\u00f3n \u2014 el bypass de \ud83d\udd34-5 desconecta el \u00fanico uso real de `pagos.suscripciones` \u2014 los d\u00edas ganados por el programa de referidos",
+      "label": "\ud83d\udd34-6 \u2014 \ud83d\udd27 CONSTRUIDO 09-ago-2026, falta backfill + verificaci\u00f3n en vivo \u2014 el bypass de \ud83d\udd34-5 desconecta el \u00fanico uso real de `pagos.suscripciones` \u2014 los d\u00edas ganados por el programa de referidos",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
       "source_location": "L181",
       "_origin": "ast",
-      "id": "docs_auditoria_portero_sso_6_decisi\u00f3n_tomada_09_ago_2026_en_construcci\u00f3n_el_bypass_de_5_desconecta_el_\u00fanico_uso_real_de_pagos_suscripciones_los_d\u00edas_ganados_por_el_programa_de_referidos",
+      "id": "docs_auditoria_portero_sso_6_construido_09_ago_2026_falta_backfill_verificaci\u00f3n_en_vivo_el_bypass_de_5_desconecta_el_\u00fanico_uso_real_de_pagos_suscripciones_los_d\u00edas_ganados_por_el_programa_de_referidos",
       "community": 8,
       "community_name": "\ud83d\udd34 CR\u00cdTICO",
-      "norm_label": "\ud83d\udd34-6 \u2014 \ud83d\udd27 decision tomada 09-ago-2026, en construccion \u2014 el bypass de \ud83d\udd34-5 desconecta el unico uso real de `pagos.suscripciones` \u2014 los dias ganados por el programa de referidos"
+      "norm_label": "\ud83d\udd34-6 \u2014 \ud83d\udd27 construido 09-ago-2026, falta backfill + verificacion en vivo \u2014 el bypass de \ud83d\udd34-5 desconecta el unico uso real de `pagos.suscripciones` \u2014 los dias ganados por el programa de referidos"
     },
     {
       "label": "\ud83d\udd34-2 / \ud83d\udd34-3 \u2014 \u2705 Fallback que trata \"no configurado\" como estado v\u00e1lido, en el motor de cobros \u2014 PAGOS_API_KEY rotada y verificada",
@@ -5776,7 +5776,7 @@
       "label": "17. \ud83d\udfe1 Gobernanza de correo masivo por tenant (activaci\u00f3n de residentes, al\u00edcuotas) \u2014 dise\u00f1o acordado, infraestructura sin construir",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L856",
+      "source_location": "L869",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_17_gobernanza_de_correo_masivo_por_tenant_activaci\u00f3n_de_residentes_al\u00edcuotas_dise\u00f1o_acordado_infraestructura_sin_construir",
       "community": 5,
@@ -5787,7 +5787,7 @@
       "label": "Hecho (para no re-hacer)",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L914",
+      "source_location": "L927",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_hecho_para_no_re_hacer",
       "community": 5,
@@ -5798,7 +5798,7 @@
       "label": "18. \u2705 RESUELTO 09-ago-2026 \u2014 Sin patr\u00f3n visual compartido entre los onboarding propios (condomanager, domuscrm)",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L925",
+      "source_location": "L938",
       "_origin": "ast",
       "id": "docs_pendientes_ecosistema_18_resuelto_09_ago_2026_sin_patr\u00f3n_visual_compartido_entre_los_onboarding_propios_condomanager_domuscrm",
       "community": 5,
@@ -14533,7 +14533,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_portero_sso_cr\u00edtico",
-      "target": "docs_auditoria_portero_sso_6_decisi\u00f3n_tomada_09_ago_2026_en_construcci\u00f3n_el_bypass_de_5_desconecta_el_\u00fanico_uso_real_de_pagos_suscripciones_los_d\u00edas_ganados_por_el_programa_de_referidos",
+      "target": "docs_auditoria_portero_sso_6_construido_09_ago_2026_falta_backfill_verificaci\u00f3n_en_vivo_el_bypass_de_5_desconecta_el_\u00fanico_uso_real_de_pagos_suscripciones_los_d\u00edas_ganados_por_el_programa_de_referidos",
       "confidence_score": 1.0
     },
     {
@@ -15002,7 +15002,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L856",
+      "source_location": "L869",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
@@ -15013,7 +15013,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L925",
+      "source_location": "L938",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
@@ -15123,7 +15123,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
-      "source_location": "L914",
+      "source_location": "L927",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
@@ -15825,5 +15825,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "219d53eb58a0666ba3002730e18b54b3bccd9918"
+  "built_at_commit": "4644cb84bdfbc6a767ca3c19ba01ca9bae8fd703"
 }
