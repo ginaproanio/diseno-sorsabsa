@@ -187,6 +187,48 @@ principio (sin token, token vencido, cuenta sin cliente asociado) quedan
 cubiertos ANTES de dibujar el shell. `LoginGate` sigue sin borrarse — el
 punto 7 sigue pendiente hasta la prueba en vivo.
 
+**10-ago-2026, mismo día, bug propio introducido por el fix de arriba —
+bucle infinito real, encontrado por Gina probando en vivo:**
+
+1. **Síntoma:** repitiendo el flujo (landing → Google → cuenta sin
+   cliente), el navegador quedó rebotando sin parar contra
+   `auth.sorsabsa.com/oauth/consent?authorization_id=...` — un bucle real,
+   no una sola pantalla con error.
+2. **Causa inmediata:** el fix de `whoami` (arriba) trataba CUALQUIER 401
+   (portal) o 401/403 (admin) igual: limpiar sesión y `irALogin()`.
+3. **Causa raíz:** "Cuenta sin cliente asociado"/"cuenta no habilitada"
+   son un estado del NEGOCIO, no de sesión — ningún login nuevo lo
+   arregla, porque la cuenta sigue sin cliente después de reautenticar.
+   Redirigir a login en ese caso desencadenó el bucle: identity ya tenía
+   la autorización de agente24siete consentida de una sesión anterior, así
+   que auto-aprobaba sin pedir credenciales (mismo comportamiento
+   documentado en `auth-sorsabsa/src/app/auth/logout/page.tsx`), volvía a
+   `/portal`, `whoami` fallaba otra vez por el mismo motivo real, y de
+   nuevo a login — sin fin.
+4. **Componente responsable:** `LoginGate.tsx` (portal y admin), la rama
+   que decide qué hacer después de un 401/403 de `whoami`.
+5. **Código afectado:** el mismo ya identificado arriba.
+6. **Fix, commit `agente24siete@b505379`:** `LoginGate` ahora lee el
+   cuerpo del error de `whoami` (`data.error === "Cuenta sin cliente
+   asociado"` en portal; `res.status === 403` en admin) y en ESE caso
+   muestra un estado terminal (pantalla centrada, sin sidebar, sin
+   volver a login) en vez de redirigir. "Sin token"/"token vencido" siguen
+   yendo a login igual que antes — ahí sí lo resuelve.
+7. **Código a eliminar — autocrítica:** el primer intento de este mismo
+   fix agregó un contador de "intentos de login" genérico en
+   `sessionStorage`, presentado como red de seguridad "por si la causa
+   era otra" — código para una causa **no identificada**, exactamente lo
+   que este documento prohíbe. Gina lo señaló directo ("no sabes que es
+   lo que pasa? esto es solución a medias") antes de que se publicara.
+   Se sacó por completo antes del commit final — no quedó rastro en el
+   código, solo en esta nota.
+8. **Riesgo de regresión:** bajo — el cambio queda acotado a la rama
+   exacta que causó el bucle; el resto del flujo (sin token, vencido) no
+   se tocó.
+9. **Validación pendiente, la hace Gina:** repetir el mismo flujo (landing
+   → Google → cuenta sin cliente) y confirmar que llega a una sola
+   pantalla centrada, sin volver a rebotar contra `auth.sorsabsa.com`.
+
 ---
 
 ## 🟠 IMPORTANTE
@@ -328,16 +370,18 @@ secreto — son URLs públicas, se pueden pegar acá para revisar juntos).
 
 ## Pendiente de decidir con Gina antes de ejecutar
 
-- **10-ago-2026:** 🟠-1 (Salir), 🟠-2 (chequeo de vigencia) y 🔴-1
-  (`middleware.ts` + cookie + `whoami` para el tercer caso) construidos,
-  commits `agente24siete@c6f2578`, `agente24siete@89429ff` y
-  `agente24siete@6325176`. typecheck y `next build` completo limpios en
-  los tres.
+- **10-ago-2026:** 🟠-1 (Salir), 🟠-2 (chequeo de vigencia), 🔴-1
+  (`middleware.ts` + cookie + `whoami` para el tercer caso) y el fix del
+  bucle real que ese último introdujo, construidos — commits
+  `agente24siete@c6f2578`, `agente24siete@89429ff`,
+  `agente24siete@6325176` y `agente24siete@b505379`. typecheck y `next
+  build` completo limpios en los cuatro.
 - **Único pendiente real de esta auditoría:** la validación EN VIVO de
-  🔴-1 (punto 9), ahora con los 3 casos cubiertos — sin cookie, cookie
-  vencida, y cookie válida de una cuenta SIN cliente/usuario asociado
-  (el caso que Gina encontró que faltaba). Recién con esa confirmación se
-  borra `LoginGate.tsx` (punto 7, "código que debe eliminarse") — se dejó
-  a propósito como red de seguridad hasta entonces.
+  🔴-1 (punto 9) — sin cookie, cookie vencida, y cuenta SIN
+  cliente/usuario asociado, confirmando esta vez que el último caso
+  termina en una sola pantalla y NO vuelve a rebotar contra
+  `auth.sorsabsa.com`. Recién con esa confirmación se borra
+  `LoginGate.tsx` (punto 7, "código que debe eliminarse") — se dejó a
+  propósito como red de seguridad hasta entonces.
 - **🟠-3** se resuelve en la MISMA prueba que valida 🔴-1, no hace falta
   repetirla.
