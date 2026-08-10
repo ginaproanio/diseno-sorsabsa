@@ -588,7 +588,7 @@ llegar a la causa real:
   no directo a su propio dominio — para no repetir este mismo problema en
   dos pasos.
 
-### 🔴-11 — ⬜ El portero está mal implementado en los 4 productos web, y de tres maneras distintas — auditoría completa 10-ago-2026
+### 🔴-11 — 🔧 DomusCRM corregido 10-ago-2026, agente24siete y JustiRed pendientes — El portero está mal implementado en los 4 productos web, y de tres maneras distintas
 
 **Origen:** Gina, tras el bug de agente24siete (🔴 en `AUDITORIA-AGENTE24SIETE.md`):
 *"por lo visto el portero esta mal implementado en todos los productos, cuando
@@ -607,7 +607,7 @@ botón de salir, y a dónde apunta?
 | Producto | `middleware.ts` | Qué valida | "No autorizado" se ve | Logout |
 | --- | --- | --- | --- | --- |
 | **CondoManager** | ✅ existe | Sesión real (`getUser()` contra Supabase — vigencia, no solo presencia) | Redirige antes de servir HTML — nunca se ve el panel | ✅ `SignOutButton.tsx` → `auth.sorsabsa.com/auth/logout` |
-| **DomusCRM** | ✅ existe (`webs/src/middleware.ts`) | Solo `request.cookies.has('sb-access-token')` — presencia, no vigencia | ❌ `LoginGate` se dibuja dentro de `AdminLayout`, que envuelve `{children}` con `<aside>` incondicional — sidebar completo visible con el mensaje adentro (mismo síntoma que reportó Gina en agente24siete) | ❌ no existe ningún botón en `NAV` (`admin/layout.tsx`) ni en ningún otro componente |
+| **DomusCRM** | ✅ existe (`webs/src/middleware.ts`) | ✅ **10-ago-2026:** ahora valida en vivo contra Supabase (`sesionVigente()`), no solo presencia — commit `domuscrm@13d9176` | ⚠️ el caso común (sesión vencida) ya no llega a esta pantalla, gracias al fix de arriba. Queda un caso residual sin tocar: `AdminLayout` sigue dibujando `<aside>` sin condición, así que si `LoginGate` dispara por otra razón (401 de la API por otro motivo) todavía se ve dentro del chasis | ✅ **10-ago-2026:** `SignOutButton.tsx` agregado al sidebar y al menú móvil, mismo commit |
 | **agente24siete** | ❌ no existe | Nada — el gate es 100% cliente (`LoginGate.tsx`, solo mira si hay *algún* string en `localStorage`) | ❌ igual que DomusCRM, chasis completo + error adentro (ver `AUDITORIA-AGENTE24SIETE.md` 🔴-1) | ❌ no existe |
 | **JustiRed** | N/A — SPA pura (Vite, sin servidor propio que intercepte antes del HTML) | `supabase.auth.getSession()`/`setSession()` del SDK oficial — vigencia real, correcto para su arquitectura | N/A — no tiene panel privado gateado, solo personaliza el navbar si hay sesión | ⚠️ el botón existe (`Navbar.tsx`, "Cerrar Sesión") pero `useAuth.ts::signOut()` llama solo `supabase.auth.signOut()` — nunca pasa por `auth.sorsabsa.com/auth/logout` |
 
@@ -638,14 +638,21 @@ productos están mal" con "todos necesitan el mismo fix" repetiría el error
 que esta misma auditoría existe para evitar (ver la cadena de 7 parches al
 inicio del documento).
 
-**Fix por producto (NINGUNO ejecutado — pendiente de confirmación de Gina,
-uno por uno, no en bloque):**
+**Fix por producto — DomusCRM corregido 10-ago-2026 (pedido de Gina: "en
+orden de prioridad domus vamos a empezar a corregir"), agente24siete y
+JustiRed siguen pendientes de confirmación, uno por uno, no en bloque:**
 
-- **DomusCRM:** (a) middleware valida `getUser()` real, no solo
-  `cookies.has()` — mismo patrón que CondoManager; (b) `AdminLayout` no
-  dibuja `<aside>` cuando `LoginGate` va a aparecer (o `LoginGate` ocupa
-  toda la pantalla, fuera del layout); (c) agregar botón "Salir" a `NAV`
-  con el mismo contrato central que `SignOutButton.tsx`.
+- **DomusCRM — ✅ (a) y (c) corregidos, commit `domuscrm@13d9176`:**
+  middleware ahora valida sesión real vía Supabase (`/auth/v1/user`, mismo
+  patrón que ya usaba `reconciliar-perfil/route.ts`, sin depender de
+  `@supabase/ssr` en el middleware); botón "Salir" agregado con el mismo
+  contrato central que `SignOutButton.tsx`, adaptado porque DomusCRM guarda
+  su sesión en cookies planas (no httpOnly), así que el botón también las
+  borra directo antes de redirigir. **(b) queda sin tocar, a propósito:**
+  con (a) corregido, el caso común que disparaba `LoginGate` dentro del
+  chasis ya no ocurre — cambiar cómo `AdminLayout` decide qué dibujar es
+  un cambio de forma para un caso ahora residual, no entró en el lote de
+  fixes chicos de hoy.
 - **agente24siete:** ver `AUDITORIA-AGENTE24SIETE.md` (🔴-1, 🟠-1, 🟠-2).
 - **JustiRed:** `useAuth.ts::signOut()` — antes de/en vez de
   `supabase.auth.signOut()`, redirigir a
@@ -840,9 +847,10 @@ propósito con regla de disparo escrita. 🔴-6 quedó ✅ resuelto y construido
 vivo de un mensaje real, bloqueada por el baneo de Meta a las cuentas de
 WhatsApp (ver `PENDIENTES-ECOSISTEMA.md` #15; no volver a preguntar esto
 hasta que ese bloqueo se levante). Quedan abiertos además, en orden de
-severidad: **🔴-11 (10-ago-2026, el más reciente — portero inconsistente en
-los 4 productos web, tres fallas distintas, ninguna corregida todavía,
-requiere confirmación de Gina producto por producto)**, 🟠-2 (empeorado el
+severidad: **🔴-11 (10-ago-2026 — portero inconsistente en los 4 productos
+web, tres fallas distintas; DomusCRM ya corregido el mismo día — middleware
+con validación real + botón de Salir, commit `domuscrm@13d9176` —,
+agente24siete y JustiRed siguen pendientes de confirmación de Gina)**, 🟠-2 (empeorado el
 09-ago: 3 nombres hardcodeados en vez de 2 — el fix declarativo sigue
 pendiente y ahora limpia más), 🟠-4, 🟡-2, 🟡-3 (debería poder eliminarse
 ahora que 🔴-1 está cerrado — no debería haber más cuentas nuevas fuera de

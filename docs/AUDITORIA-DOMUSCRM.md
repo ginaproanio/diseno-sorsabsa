@@ -27,7 +27,7 @@ repite, solo se referencia.
 
 ## 🔴 CRÍTICO
 
-### 🔴-1 — Dos gates independientes para "¿esta cuenta tiene acceso?" dan respuestas distintas para el mismo hecho, según el historial del navegador
+### 🔴-1 — 🔧 Fix #1 CORREGIDO 10-ago-2026 (fix #2 sigue pendiente) — Dos gates independientes para "¿esta cuenta tiene acceso?" dan respuestas distintas para el mismo hecho, según el historial del navegador
 
 **Síntoma, textual (Gina):** entra a la landing, presiona "Ingresar" → Google
 → inicia sesión con una cuenta real sin ninguna agencia asociada → llega a
@@ -82,24 +82,27 @@ causa que se escriba acá sería una suposición, no un hecho verificado.
 (no limpia el fragment) es la causa inmediata; el diseño de dos gates
 separados sin una única fuente de verdad es la causa de fondo.
 
-**Fix propuesto (NO ejecutado):**
+**Fix #1 — ✅ CORREGIDO 10-ago-2026, commit `auth-sorsabsa@a3e9c97`:**
+`window.history.replaceState(null, '', window.location.pathname + window.location.search)`
+agregado inmediatamente después de leer `access_token`/`refresh_token` del
+fragment, antes de `setSession()` — mismo patrón que ya usaba el callback
+de DomusCRM. Un "atrás" del navegador ya no encuentra tokens crudos
+reutilizables en la URL. typecheck limpio, jest 15/15 (de paso, corregido
+un valor de color de marca desactualizado en `login.test.tsx`, sin
+relación con este fix, encontrado al correr la suite).
 
-1. `auth/complete/page.tsx` — `window.history.replaceState(null, '', window.location.pathname + window.location.search)`
-   inmediatamente después de leer el fragment (mismo patrón que ya usa el
-   propio callback de DomusCRM), para que un "atrás" no vuelva a un estado
-   con tokens crudos reutilizables.
-2. Evaluar si el chequeo de "sin_suscripcion" (`auth/complete`) y el de
-   "sin_empresa" (DomusCRM) deberían fusionarse en un solo gate, o al menos
-   compartir un mismo vocabulario de error — hoy son dos preguntas que en
-   la práctica significan lo mismo para DomusCRM ("¿esta cuenta tiene
-   acceso real?") pero con dos textos y dos productos distintos
-   respondiendo. Requiere decisión de arquitectura, no es un fix chico.
+**Fix #2 — ⬜ sigue pendiente:** evaluar si el chequeo de "sin_suscripcion"
+(`auth/complete`) y el de "sin_empresa" (DomusCRM) deberían fusionarse en
+un solo gate, o al menos compartir un mismo vocabulario de error — hoy son
+dos preguntas que en la práctica significan lo mismo para DomusCRM ("¿esta
+cuenta tiene acceso real?") pero con dos textos y dos productos distintos
+respondiendo. Requiere decisión de arquitectura, no es un fix chico — no
+se toca sin su propio análisis.
 
-**Código a eliminar:** ninguno todavía — el fix #1 es aditivo.
+**Código a eliminar:** ninguno — el fix #1 fue aditivo.
 
-**Riesgo de regresión:** bajo para el fix #1 (una línea, ya probada en el
-propio repo). El fix #2 es un cambio de arquitectura y necesita su propio
-análisis antes de tocarlo.
+**Riesgo de regresión:** bajo, confirmado — una línea, mismo patrón ya
+probado en el propio repo, typecheck y tests limpios.
 
 **Validación:** repetir el flujo completo (login → error → atrás) y
 confirmar que la segunda vez ya no re-ejecuta el chequeo — debería quedar
@@ -110,7 +113,7 @@ con tokens viejos.
 
 ## 🟠 IMPORTANTE
 
-### 🟠-1 — La pantalla de "sin empresa" no tiene marca — coincide con el reporte de "pantalla en blanco"
+### 🟠-1 — ✅ CORREGIDO 10-ago-2026, commit `domuscrm@13d9176` — La pantalla de "sin empresa" no tiene marca — coincide con el reporte de "pantalla en blanco"
 
 - **Archivo:** `crm_inmobiliario/webs/src/app/auth/callback/page.tsx:122-137`
 - **Código:** el estado `sin_empresa` (y `error`) se renderiza dentro de un
@@ -124,20 +127,32 @@ con tokens viejos.
   No es cosmético: refuerza la sensación de "esto no funciona" en el
   instante exacto en que alguien decide si vale la pena escribirle al
   dueño de la agencia pidiendo una invitación.
-- **Fix propuesto (no ejecutado):** envolver los tres estados de
-  `Callback()` en el mismo `BrandProvider`/`Card` que ya usa `LoginGate.tsx`
-  del mismo repo — es el patrón que el propio proyecto ya tiene, no hay que
-  inventar nada nuevo.
-- **Riesgo:** bajo, es una página de solo lectura sin lógica de negocio.
+- **Fix ejecutado:** los tres estados de `Callback()` ahora envueltos en el
+  mismo `BrandProvider`/`Card` que ya usa `LoginGate.tsx` del mismo repo —
+  patrón ya existente, no se inventó nada nuevo. typecheck y jest limpios.
+- **Riesgo:** bajo, confirmado — página de solo lectura sin lógica de
+  negocio, sin cambios de comportamiento.
 
-### 🟠-2 — Ver `AUDITORIA-PORTERO-SSO.md` 🔴-11 (no duplicado acá)
+### 🟠-2 — 🔧 Parcialmente corregido 10-ago-2026 — Ver `AUDITORIA-PORTERO-SSO.md` 🔴-11
 
-El gate de sesión propiamente dicho de DomusCRM (`middleware.ts` que solo
-valida presencia de cookie, no vigencia; `AdminLayout` que dibuja el
-sidebar completo sin condición aunque `LoginGate` esté por aparecer; cero
-botón de "Salir" en la navegación) ya quedó documentado ahí el 10-ago-2026,
-como parte del consolidado de los 4 productos. Se referencia acá para que
-quien lea esta auditoría no la busque de nuevo.
+El gate de sesión propiamente dicho de DomusCRM ya quedó documentado ahí,
+como parte del consolidado de los 4 productos. Estado tras esta sesión:
+
+- ✅ `middleware.ts` ya no solo mira si `sb-access-token` existe — valida
+  la sesión en vivo contra Supabase (commit `domuscrm@13d9176`). Esto
+  cierra el camino más común hacia "sidebar completo + error adentro": una
+  sesión vencida ahora se corta ANTES de renderizar el panel, no cuando la
+  API responde 401 más tarde.
+- ✅ Botón de "Salir" agregado al sidebar y al menú móvil (mismo commit),
+  con el contrato central de logout — hasta hoy no existía ninguno.
+- ⬜ `AdminLayout` sigue dibujando el `<aside>` sin condición — quedó sin
+  tocar a propósito: con el middleware ya validando en vivo, el caso común
+  que disparaba `LoginGate` (sesión vencida) ya no llega a esta pantalla.
+  El caso residual (la API devuelve 401 por otra razón, con el middleware
+  ya conforme) sigue mostrando `LoginGate` dentro del chasis — más raro
+  ahora, pero no imposible. No se resolvió porque cambiar cómo
+  `AdminLayout` decide qué dibujar es un cambio de forma, no solo de
+  seguridad, y no estaba en el lote de fixes chicos y seguros de hoy.
 
 ---
 
