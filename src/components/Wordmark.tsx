@@ -73,6 +73,12 @@ export function Wordmark({ className = '' }: { className?: string }) {
           className="inline-block h-[1em] w-auto shrink-0"
         />
       )}
+      {/* Envoltorio SIN gap: el gap-2 de arriba es solo para separar el
+          isotipo del texto. Si las partes del wordmark ("Domus"+"CRM")
+          quedaran como hijos directos del flex de arriba, heredarían ESE
+          mismo gap entre ellas y el logo se vería "Domus CRM" en vez de
+          "DomusCRM" — un espacio que nunca debió existir (10-ago-2026). */}
+      <span className="inline-flex">
       {parts.map((parte, i) => {
         const tone = (tones[i] ?? 'primary') as WordmarkTone;
         const anim = getAnimation(animations[i], i);
@@ -138,6 +144,7 @@ export function Wordmark({ className = '' }: { className?: string }) {
           </span>
         );
       })}
+      </span>
     </span>
   );
 }
