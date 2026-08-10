@@ -230,8 +230,27 @@ separados) que hay que rediseñar, no solo cambiar un label:
   `BEGIN`/insert/select con la forma exacta de la query de la app,
   `ROLLBACK`, sin dejar datos (no existe todavía un condominio real en
   CASA ni en MANZANA_LOTE para probar contra datos reales).
-- **Fase 5 — Validación:** `lib/unidades/validar.ts`, typecheck, eslint,
-  pruebas transaccionales del trigger, verificación con Gina en vivo.
+- **Fase 5 — ✅ RESUELTO 09-ago-2026 — Validación:** `lib/unidades/validar.ts`
+  ya estaba rediseñado por completo — quedó hecho de paso dentro del commit
+  de Fase 1 (`condomanager@a90727c`), el plan solo no lo había marcado.
+  Confirmado que los 3 formularios que lo consumen (crear, importar CSV,
+  editar unidad) le pasan el criterio real resuelto, no uno hardcodeado.
+  Trigger de la base (`trg_validar_campo_identificador_unidad`) reafirmado
+  con una prueba transaccional más (rechaza el campo equivocado, acepta
+  el correcto, rollback sin dejar datos) — ya se había probado a fondo en
+  Fase 0 con 7 pruebas, esto es solo una reconfirmación final. Typecheck
+  del proyecto completo limpio. Eslint del proyecto completo: 65 warnings
+  preexistentes (`exhaustive-deps`, `<img>`, fuente custom — ninguno
+  nuevo) y 5 errores, los 5 preexistentes y sin relación con este plan (2
+  comillas sin escapar en `directiva/page.tsx` y `RubrosTable.tsx`, y el
+  error de configuración de regla ya confirmado antes en
+  `lib/facturacion/service.ts:657`) — no se tocaron.
+
+  **Con esto, `PLAN-IDENTIFICACION-UNIDADES.md` queda resuelto a nivel de
+  código (Fases 0-5, los 23 archivos del inventario). Falta únicamente la
+  verificación en vivo de Gina — clic real en el módulo Unidades, crear
+  un residente con importación CSV en un condominio de cada criterio —
+  que por naturaleza no se puede hacer desde acá.**
 
 ## Resuelto con Gina (ya no está pendiente)
 
