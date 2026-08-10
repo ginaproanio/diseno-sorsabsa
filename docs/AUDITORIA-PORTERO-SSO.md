@@ -271,33 +271,62 @@ no arreglaba su login.
   Código e infraestructura de 🔴-6 quedan **completos y verificados** sin
   esa prueba — la validación de producto queda en espera de que #15 se
   resuelva, no se vuelve a preguntar por esto hasta entonces.
-- **10-ago-2026 — auditoría de transversales completada, pedido explícito
-  de Gina ("no hicimos auditoria hasta la relación que establece con los
-  transversales"). Hallazgo real, verificado con código, no ejecutado
-  todavía:** con la suscripción real ya construida, el mecanismo de
-  premio (arriba, "el problema real") sigue sin conectar, mismo síntoma
-  que antes por una razón distinta. `agente24siete/pages/api/portal/
-  referidos.js` solo llama a `/api/referidos-resumen` (ver el propio
-  premio acumulado) y `/api/referidos-invitar` (mandar invitaciones) —
-  **nunca llama al paso que acredita el premio** (`extender-suscripcion`
-  o el mecanismo equivalente de "convertir", ver `referidos-registrar.js`:
-  *"este endpoint NO acredita recompensas: eso ocurre al CONVERTIR"*).
-  Grep completo de `agente24siete/pages/api` y `lib/`: ningún archivo
-  llama a ese paso. **Causa de fondo, distinta a DomusCRM:** DomusCRM
-  dispara la conversión desde su alta pública de cuenta
-  (`registro-agencia/route.ts`, lee `?ref=` del formulario de registro
-  self-service). agente24siete no tiene ese formulario — sus clientes los
-  da de alta un admin (`pages/api/admin/clientes.js`), no hay flujo
-  público de "invitado se registra solo con un código". El punto de
-  disparo que el resto del ecosistema usa **no existe en el modelo de
-  negocio de agente24siete**, no es que se haya olvidado conectarlo.
-  **No resuelto — necesita decisión de Gina:** ¿cuál es, en agente24siete,
-  el equivalente real de "invitado se convierte"? Candidatos sin decidir:
-  primera recarga de saldo real del referido, o que el admin marque el
-  alta como venida de una invitación al crear el cliente. Cualquiera de
-  los dos dispara `extender-suscripcion` con `producto: "agente24siete"`
-  igual que ya hace `referidos-registrar` para el resto — no hace falta
-  inventar un mecanismo nuevo, solo decidir el disparador y conectarlo.
+- **10-ago-2026 — auditoría de transversales, pedido explícito de Gina
+  ("no hicimos auditoria hasta la relación que establece con los
+  transversales"), extendida después a DomusCRM, CondoManager y JustiRed
+  aprovechando que salió muy barata en tokens. Primer hallazgo (parcial,
+  corregido más abajo):** `agente24siete/pages/api/portal/referidos.js`
+  solo llama a `/api/referidos-resumen` y `/api/referidos-invitar` —
+  nunca a un paso de "convertir". Igual en DomusCRM
+  (`referrals/route.ts`, mismo patrón, y sin ninguna ruta de upgrade-a-
+  pago en todo el repo). Se buscó el mismo paso en CondoManager asumiendo
+  que ahí sí estaría conectado (`registro-admin/route.ts` sí llama a
+  `referidos-registrar` en el alta) — y ahí apareció el hallazgo real,
+  más de fondo que el de arriba:
+- **La causa raíz no es de ningún producto — es que el paso de "convertir"
+  nunca se construyó en `pagos-sorsabsa`, para nadie.**
+  `ls pagos-sorsabsa/api | grep referido` → solo existen
+  `referidos-codigo.js`, `referidos-invitar.js`, `referidos-registrar.js`,
+  `referidos-resumen.js`. **No existe ningún endpoint de conversión.**
+  `referidos-registrar.js` (leído completo): inserta/actualiza
+  `pagos.referido_invitaciones` con `estado='registrado'` — nunca toca
+  `recompensa_dias`, nunca pone `estado='convertido'`. El propio
+  comentario del archivo lo admite: *"Este endpoint NO acredita
+  recompensas: eso ocurre al CONVERTIR"* — pero ese "CONVERTIR" no
+  corresponde a ningún archivo real. **`recompensa_dias` está en el
+  esquema de la tabla, se lee en `referidos-resumen.js`, pero no hay
+  ningún código en todo el ecosistema que alguna vez lo escriba.** Ni
+  CondoManager (el que se creía cerrado de punta a punta) tiene el
+  premio funcionando — nadie lo tiene, porque la pieza no existe.
+- **Corrige una afirmación ya escrita y pusheada hoy mismo** (en
+  `ARQUITECTURA-ECOSISTEMA.md`, fila Referidos): decía "solo CondoManager
+  tiene el premio conectado de punta a punta" — **no es cierto**, se
+  corrige en el mismo commit que esta nota.
+- **Hallazgo aparte, en JustiRed, verificado con código — matiza (no
+  descarta) lo que decía `AUDITORIA-JUSTIRED.md`:** `lawyer_subscriptions`
+  NO está 100% aislado de `pagos.suscripciones` como se sospechaba —
+  `justired-payments-iniciar` pasa `suscripcion: {plan, dias, sujeto}` a
+  `pagos-sorsabsa/api/iniciar`, y `api/confirmar.js` SÍ extiende
+  `pagos.suscripciones` automáticamente al confirmar el pago (mecanismo
+  genérico, no específico de JustiRed). **Pero el `sujeto` que manda es
+  `clientTransactionId`** — un string aleatorio nuevo en CADA pago
+  (`justired-${Date.now()}-${random}`), no una identidad estable del
+  abogado. Como `pagos.suscripciones` extiende por `(producto, sujeto)`,
+  cada pago mensual de un mismo abogado crea una fila nueva y
+  desconectada en vez de extender la suscripción existente — la
+  suscripción del abogado nunca se "acumula", cada mes es, para el
+  sistema, una entidad distinta que paga por primera vez. Bug real,
+  no ejecutado — el fix es usar un identificador estable del abogado
+  (ej. su email o un id propio en `lawyer_subscriptions`) como `sujeto`,
+  no el id de la transacción.
+- **Nada de esto se ejecutó — todo pendiente de decisión de Gina:**
+  (1) construir el endpoint de conversión en `pagos-sorsabsa` (el hueco
+  real, afecta a los 4 productos por igual); (2) decidir el evento de
+  "conversión" en agente24siete y DomusCRM, que hoy no tienen ni
+  siquiera el punto donde engancharlo (ver más abajo, sigue siendo un
+  hallazgo real aunque ya no sea "el único"); (3) corregir el `sujeto`
+  de `justired-payments-iniciar` para que las renovaciones de un abogado
+  se acumulen en la misma fila.
 
 - **Archivo:** `auth-sorsabsa/scripts/invite-user.mjs` (el proceso) + `iot/auth_sso.py` (la consecuencia)
 - **Problema:** ningún componente decide "esta persona debe existir en identity, con estos atributos, con acceso a este producto" — lo decide quien corre el script a mano.
