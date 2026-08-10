@@ -436,7 +436,10 @@ HTTP. Propuesta, sin empezar a implementar todavía:
 
 **✅ Desplegado y verificado en vivo, 08-ago-2026** —
 `https://geo-sorsabsa-production.up.railway.app` (proyecto Railway
-`passionate-grace`, root directory `service/`). `/`, `/distancia` y
+renombrado a `geo-sorsabsa` el 10-ago-2026 — nació como `passionate-grace`,
+el nombre autogenerado de Railway, sin renombrar; corregido al auditar el
+inventario real de Railway contra lo documentado aquí), root directory
+`service/`. `/`, `/distancia` y
 `/resolver` responden bien en producción, incluido el caso real con tilde
 sin codificar. Tropiezo real en el despliegue: el puerto indicado al
 generar el dominio público (`8010`, el de la Dockerfile) no coincidía con
@@ -451,6 +454,34 @@ el camino, no solo deduplicación: la extracción vieja de `iot` tomaba el
 centro del encuadre (`/@`) en vez de la coordenada del lugar (`!3d/!4d`) —
 ~22 metros de diferencia en la URL de prueba. `iot` reportaba la posición
 equivocada; ya no.
+
+**Pendiente, confirmado por Gina 10-ago-2026:** DomusCRM también debería
+consumir `geo-sorsabsa` — hoy no lo hace, solo `SorsabsaForensic` (en
+`c:/sorsabsa`) e `iot`. No construido — queda anotado como pendiente real,
+no como bug (DomusCRM nunca tuvo esta necesidad hasta ahora).
+
+### Auditoría del inventario de Railway, 10-ago-2026
+
+Pedido de Gina: *"el inventario de railway coincide con el ecosistema
+registrado?"* Verificado con `railway list` + `railway status` por
+proyecto (CLI, no supuesto) — 6 proyectos reales en la cuenta:
+
+| Proyecto Railway | Servicio(s) | Estado |
+|---|---|---|
+| `geo-sorsabsa` (ex `passionate-grace`, renombrado hoy) | `geo-sorsabsa` | ✅ coincide |
+| `SORSABSA-DATA` | `pagos-sorsabsa`, `notificaciones-sorsabsa`, Postgres | ✅ coincide |
+| `CONVERTIDOR` | `CONVERTIDOR` | ✅ coincide (ya documentado "no es producto hoy") |
+| `PERITAJES-IOT` | `iot` | ✅ coincide — sistema de Inspección Ocular Técnica de Susana y Patricio (confirmado por Gina; usuarios reales ya documentados en `AUDITORIA-PORTERO-SSO.md`) |
+| `contenido-sorsabsa` | `contenido-sorsabsa`, Postgres | ✅ coincide |
+| `ALTITUD-WEB` | `Altitudcatering` (`altitud.group`) | ⬜ **NO es SORSABSA — confirmado por Gina: es la web de un cliente aparte.** No requiere ninguna acción; se deja anotado acá para que una futura auditoría de Railway no lo vuelva a marcar como huérfano. |
+
+**Abierto, sin resolver — no confirmado por Gina todavía:**
+`voz-agente24siete.up.railway.app` (referenciado en
+`agente24siete/.env.example`, `VOZ_SERVER_URL`, el servidor de voz/Twilio)
+**no existe en ningún proyecto de esta cuenta de Railway** — probado en
+vivo, responde `404` de la propia Railway (ninguna app con ese nombre). O
+se dio de baja y el código quedó con la referencia vieja, o vive en otra
+cuenta — sin confirmar, no se asume ninguna de las dos.
 
 ### R2: quién ya migró y quién no
 
