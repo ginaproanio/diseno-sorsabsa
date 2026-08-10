@@ -1,7 +1,7 @@
 # Graph Report - diseno-sorsabsa  (2026-08-10)
 
 ## Corpus Check
-- 78 files · ~67,908 words
+- 78 files · ~68,492 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `594c8853`
+- Built from commit: `702594cd`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -89,7 +89,7 @@ Nodes (44): 1. Inventario, 2. Los dos planos, 3-bis. NO HAY DATOS DE CLIENTES. P
 
 ### Community 2 - "Plan — una persona en más de un condominio (CondoManager)"
 Cohesion: 0.05
-Nodes (36): 🔴-1 — 🔧 CONSTRUIDO 10-ago-2026 (los 3 casos), falta probar en vivo — El portero de agente24siete es 100% client-side — sin `middleware.ts`, a diferencia del patrón ya estabilizado en CondoManager, 🟠-1 — ✅ CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` — No existe botón de cerrar sesión en ningún panel — y la versión ingenua repetiría un bug ya corregido en CondoManager e identity, 🟠-2 — ✅ CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` — `LoginGate` valida presencia de token, nunca vigencia — deja pasar sesiones vencidas al shell completo, 🟠-3 — Pendiente de verificar en vivo, no descartado: ¿el mensaje de Gina fue realmente por vencimiento, o hay un problema de configuración?, Auditoría — agente24siete, el portero (sesión/autenticación), 🔴 CRÍTICO, 🟠 IMPORTANTE, Pendiente de decidir con Gina antes de ejecutar (+28 more)
+Nodes (36): 🟠-1 — ✅ CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` — No existe botón de cerrar sesión en ningún panel — y la versión ingenua repetiría un bug ya corregido en CondoManager e identity, 🔴-1 — ✅ RESUELTO Y VALIDADO EN VIVO 10-ago-2026 — El portero de agente24siete es 100% client-side — sin `middleware.ts`, a diferencia del patrón ya estabilizado en CondoManager, 🟠-2 — ✅ CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` — `LoginGate` valida presencia de token, nunca vigencia — deja pasar sesiones vencidas al shell completo, 🟠-3 — Pendiente de verificar en vivo, no descartado: ¿el mensaje de Gina fue realmente por vencimiento, o hay un problema de configuración?, Auditoría — agente24siete, el portero (sesión/autenticación), 🔴 CRÍTICO, 🟠 IMPORTANTE, Pendiente de decidir con Gina antes de ejecutar (+28 more)
 
 ### Community 3 - "devDependencies"
 Cohesion: 0.05
@@ -109,7 +109,7 @@ Nodes (20): DomusLanding(), FEATURES, SOCIAL, IconCatalog(), NAMES, SHADOW, Form
 
 ### Community 7 - "🔴 CRÍTICO"
 Cohesion: 0.06
-Nodes (31): 🔴-10 — ✅ Confirmar cuenta daba "No se pudo instalar la sesión" — RESUELTO 09-ago-2026, completa a 🔴-7, 🔴-11 — 🔧 DomusCRM corregido 10-ago-2026, agente24siete y JustiRed pendientes — El portero está mal implementado en los 4 productos web, y de tres maneras distintas, 🔴-12 — ⬜ agente24siete verifica su sesión contra el proyecto Supabase equivocado — causa real del bucle que 🔴-1/🟠-3 nunca cerraron, 🔴-1 — ✅ Alta de usuarios no gobernada: el pipeline de registro de cada producto no sabe que identity existe — RESUELTO 09-ago-2026, 🟡-1 — ✅ Eliminación manual de cuentas reales vía SQL directo — reconocido, no repetir, 🟠-1 — ✅ Excepción hardcodeada `app === 'iot'` en /auth/complete — RESUELTO 08-ago-2026, 🔵-1 — ⬜ `iot.redirectUrl` es una URL cruda de Railway, no dominio propio, 🔴-2 / 🔴-3 — ✅ Fallback que trata "no configurado" como estado válido, en el motor de cobros — PAGOS_API_KEY rotada y verificada (+23 more)
+Nodes (31): 🔴-10 — ✅ Confirmar cuenta daba "No se pudo instalar la sesión" — RESUELTO 09-ago-2026, completa a 🔴-7, 🔴-11 — 🔧 DomusCRM corregido 10-ago-2026, agente24siete y JustiRed pendientes — El portero está mal implementado en los 4 productos web, y de tres maneras distintas, 🔴-12 — ✅ RESUELTO Y VALIDADO EN VIVO 10-ago-2026 — agente24siete verificaba su sesión contra el proyecto Supabase equivocado — causa real del bucle que 🔴-1/🟠-3 nunca cerraron, 🔴-1 — ✅ Alta de usuarios no gobernada: el pipeline de registro de cada producto no sabe que identity existe — RESUELTO 09-ago-2026, 🟡-1 — ✅ Eliminación manual de cuentas reales vía SQL directo — reconocido, no repetir, 🟠-1 — ✅ Excepción hardcodeada `app === 'iot'` en /auth/complete — RESUELTO 08-ago-2026, 🔵-1 — ⬜ `iot.redirectUrl` es una URL cruda de Railway, no dominio propio, 🔴-2 / 🔴-3 — ✅ Fallback que trata "no configurado" como estado válido, en el motor de cobros — PAGOS_API_KEY rotada y verificada (+23 more)
 
 ### Community 8 - "Plan — Identificación de unidades configurable por condominio"
 Cohesion: 0.08
