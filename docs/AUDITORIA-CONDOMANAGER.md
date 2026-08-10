@@ -772,3 +772,14 @@ una capa distinta de "qué le mostramos a un usuario"; mezclar ambas
 hubiera sido forzar una reutilización que no encaja, no una limpieza
 real. Verificado: `tsc --noEmit` limpio, `eslint` 0 errores nuevos en
 los 20 archivos (solo warnings `exhaustive-deps` preexistentes).
+
+**Extendido a DomusCRM, mismo día (`domuscrm@1338477`):** revisado
+primero (sin tocar) a pedido de Gina; ella preguntó *"y por qué no
+debería ser así? no debería estar estandarizado?"* — correcto, se
+aplicó el mismo criterio. 3 archivos, 6 apariciones
+(`app/admin/team/page.tsx` ×4, `app/register/[token]/page.tsx`,
+`app/register/page.tsx`), ninguno con bug real (ya leían `data.error`).
+`app/api/referrals/route.ts` (servidor-a-servidor) y `lib/notify.ts`
+(solo `console.error`, nunca llega al usuario) tampoco se tocaron, mismo
+criterio de capas que en CondoManager. Bump a `@sorsabsa/ui@0.1.42`.
+Verificado: `tsc --noEmit` limpio.
