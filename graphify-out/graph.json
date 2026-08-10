@@ -5748,15 +5748,15 @@
       "norm_label": "hecho (para no re-hacer)"
     },
     {
-      "label": "18. \ud83d\udfe1 Sin patr\u00f3n compartido para formularios de alta (cuenta/empresa) \u2014 cada producto arma el suyo",
+      "label": "18. \ud83d\udfe1 Sin patr\u00f3n visual compartido entre los onboarding propios (condomanager, domuscrm)",
       "file_type": "document",
       "source_file": "docs/PENDIENTES-ECOSISTEMA.md",
       "source_location": "L865",
       "_origin": "ast",
-      "id": "docs_pendientes_ecosistema_18_sin_patr\u00f3n_compartido_para_formularios_de_alta_cuenta_empresa_cada_producto_arma_el_suyo",
+      "id": "docs_pendientes_ecosistema_18_sin_patr\u00f3n_visual_compartido_entre_los_onboarding_propios_condomanager_domuscrm",
       "community": 5,
       "community_name": "Pendientes del ecosistema SORSABSA",
-      "norm_label": "18. \ud83d\udfe1 sin patron compartido para formularios de alta (cuenta/empresa) \u2014 cada producto arma el suyo"
+      "norm_label": "18. \ud83d\udfe1 sin patron visual compartido entre los onboarding propios (condomanager, domuscrm)"
     },
     {
       "label": "PLAN-CONFIGURACION-CONDOMINIO.md",
@@ -14853,7 +14853,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_pendientes_ecosistema_pendientes_del_ecosistema_sorsabsa",
-      "target": "docs_pendientes_ecosistema_18_sin_patr\u00f3n_compartido_para_formularios_de_alta_cuenta_empresa_cada_producto_arma_el_suyo",
+      "target": "docs_pendientes_ecosistema_18_sin_patr\u00f3n_visual_compartido_entre_los_onboarding_propios_condomanager_domuscrm",
       "confidence_score": 1.0
     },
     {
@@ -15661,5 +15661,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "43e98fa4584cc5f6c56e0860a3f6b719e0f565fe"
+  "built_at_commit": "b38a2a8d501918f170c455e3a58f5a36fb1ecb02"
 }
