@@ -743,3 +743,27 @@ nullable"). Si aparece un caso nuevo, el método queda documentado acá
 para repetirlo: `information_schema.columns` con `is_nullable='NO' AND
 column_default IS NULL`, cruzado contra grep de `.insert(\{`/
 `.update(\{` en el árbol de páginas.
+
+---
+
+### 🔵-5 — NO RESUELTO, elevado 10-ago-2026 — extracción de mensaje de error de fetch duplicada en ~31 archivos
+
+**Origen:** encontrado en agente24siete (10-ago-2026), no en CondoManager
+directamente — Gina reportó un `HTTP 401` crudo mostrado al usuario en
+vez de un mensaje humano ("Cuenta sin cliente asociado"). Al construir
+el fix (`mensajeDeError`/`mensajeDeErrorData`, ahora en `@sorsabsa/ui`
+v0.1.42) se verificó si CondoManager tenía el mismo problema.
+
+**Diferencia real con agente24siete — esto NO es un bug acá:**
+CondoManager sí lee `data.error` en sus 46 apariciones (31 archivos,
+confirmado con grep) — el patrón `data.error || "mensaje de respaldo"`
+se repite, pero no descarta el mensaje real del backend como pasaba en
+agente24siete. Es duplicación de código, no un defecto de UX.
+
+**Oportunidad, no ejecutada:** ahora que `mensajeDeErrorData(data)`
+existe en el paquete compartido, estos 31 archivos podrían usarlo en
+vez de repetir `data.error || "..."` a mano — mismo beneficio que
+`identificadorUnidad()` tuvo para los 23 archivos de unidades. **No se
+tocó nada de CondoManager en esta pasada** — es una limpieza de
+duplicación pura, sin bug detrás, así que queda para cuando Gina decida
+priorizarla, no se hizo a ciegas.
