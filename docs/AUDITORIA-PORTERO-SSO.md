@@ -15,9 +15,10 @@ complete, logout, reset, update-password, register, entity-resolver,
 safe-redirect, redirect-allowed, entitlements, send-email hook, apps.ts,
 invite-user.mjs) + `iot` (auth_sso.py, editor.py) + comparación contra
 `condomanager` (SignOutButton, auth/callback) y `agente24siete/lib/adminAuth.js`
-como referencia del patrón ya establecido. **No auditado todavía:**
-domuscrm, justired, convertidor (código propio de cada uno, más allá de su
-entrada en apps.ts), pagos-sorsabsa en sí.
+como referencia del patrón ya establecido. **10-ago-2026:** agregado el
+gate propio (middleware/LoginGate/logout) de `domuscrm` (`crm_inmobiliario/webs`)
+y `justired` (`legaltech`) — ver 🔴-11. **No auditado todavía:** `convertidor`
+(no es producto hoy, ver `ARQUITECTURA-ECOSISTEMA.md`), pagos-sorsabsa en sí.
 
 Leyenda de estado: ⬜ pendiente · 🔧 en análisis (9 puntos presentados,
 sin código tocado) · ✅ corregido y verificado · ❌ descartado (no era un
@@ -587,6 +588,80 @@ llegar a la causa real:
   no directo a su propio dominio — para no repetir este mismo problema en
   dos pasos.
 
+### 🔴-11 — ⬜ El portero está mal implementado en los 4 productos web, y de tres maneras distintas — auditoría completa 10-ago-2026
+
+**Origen:** Gina, tras el bug de agente24siete (🔴 en `AUDITORIA-AGENTE24SIETE.md`):
+*"por lo visto el portero esta mal implementado en todos los productos, cuando
+te dije implementa lo único que hiciste fue conectarlo sin importar como se
+conectaba pero implementar es operar y esto no opera"*. Pidió explícitamente
+la auditoría completa, no soluciones parciales producto por producto. Esta
+entrada cierra el "no auditado todavía: domuscrm, justired" que quedaba
+abierto en la cabecera de este documento.
+
+**Método:** mismo chequeo en los 4 productos con panel/área privada:
+¿existe `middleware.ts` (gate servidor, antes de renderizar)? ¿valida
+presencia o vigencia real de la sesión? ¿el "no autorizado" reemplaza toda
+la pantalla o aparece dentro del chasis (sidebar) ya dibujado? ¿existe un
+botón de salir, y a dónde apunta?
+
+| Producto | `middleware.ts` | Qué valida | "No autorizado" se ve | Logout |
+| --- | --- | --- | --- | --- |
+| **CondoManager** | ✅ existe | Sesión real (`getUser()` contra Supabase — vigencia, no solo presencia) | Redirige antes de servir HTML — nunca se ve el panel | ✅ `SignOutButton.tsx` → `auth.sorsabsa.com/auth/logout` |
+| **DomusCRM** | ✅ existe (`webs/src/middleware.ts`) | Solo `request.cookies.has('sb-access-token')` — presencia, no vigencia | ❌ `LoginGate` se dibuja dentro de `AdminLayout`, que envuelve `{children}` con `<aside>` incondicional — sidebar completo visible con el mensaje adentro (mismo síntoma que reportó Gina en agente24siete) | ❌ no existe ningún botón en `NAV` (`admin/layout.tsx`) ni en ningún otro componente |
+| **agente24siete** | ❌ no existe | Nada — el gate es 100% cliente (`LoginGate.tsx`, solo mira si hay *algún* string en `localStorage`) | ❌ igual que DomusCRM, chasis completo + error adentro (ver `AUDITORIA-AGENTE24SIETE.md` 🔴-1) | ❌ no existe |
+| **JustiRed** | N/A — SPA pura (Vite, sin servidor propio que intercepte antes del HTML) | `supabase.auth.getSession()`/`setSession()` del SDK oficial — vigencia real, correcto para su arquitectura | N/A — no tiene panel privado gateado, solo personaliza el navbar si hay sesión | ⚠️ el botón existe (`Navbar.tsx`, "Cerrar Sesión") pero `useAuth.ts::signOut()` llama solo `supabase.auth.signOut()` — nunca pasa por `auth.sorsabsa.com/auth/logout` |
+
+**No es un bug copiado 4 veces — son tres fallas distintas, y confirma la
+sospecha de Gina sin ser una sola causa:**
+
+1. **Gate ausente por completo** (agente24siete): ni siquiera existe el
+   archivo. La causa raíz ya está en `AUDITORIA-AGENTE24SIETE.md` 🔴-1.
+2. **Gate presente pero incompleto** (DomusCRM): SÍ hay `middleware.ts`
+   real, corriendo en servidor, antes de renderizar — la mitad correcta del
+   patrón de CondoManager. Pero solo comprueba que la cookie *exista*, no
+   que siga siendo válida (`getUser()` nunca se llama ahí), y el layout de
+   abajo dibuja el sidebar sin condición — por eso una sesión vencida (no
+   ausente) reproduce el mismo síntoma "chasis + error adentro" que
+   agente24siete, aunque por una causa distinta y más angosta.
+3. **Logout local en vez de central** (JustiRed): el único de los 4 que SÍ
+   tiene botón de salir, pero repite —en un producto que la auditoría
+   original de esta cadena (arriba, "Fix 7") ya había encontrado y
+   corregido en otro lado— el bug de que un `signOut()` puramente local dejaba
+   viva la sesión de identity, causando auto-reingreso silencioso en el
+   siguiente login. JustiRed nunca tuvo su propio "Fix 7".
+
+**Lo que SÍ está bien y no hay que tocar:** el gate de JustiRed vía SDK de
+Supabase (`getSession`/`setSession`, con auto-refresh) es el patrón correcto
+para una SPA sin servidor propio — no necesita ni debe imitar
+`middleware.ts`, que no existe como concepto en Vite. Confundir "todos los
+productos están mal" con "todos necesitan el mismo fix" repetiría el error
+que esta misma auditoría existe para evitar (ver la cadena de 7 parches al
+inicio del documento).
+
+**Fix por producto (NINGUNO ejecutado — pendiente de confirmación de Gina,
+uno por uno, no en bloque):**
+
+- **DomusCRM:** (a) middleware valida `getUser()` real, no solo
+  `cookies.has()` — mismo patrón que CondoManager; (b) `AdminLayout` no
+  dibuja `<aside>` cuando `LoginGate` va a aparecer (o `LoginGate` ocupa
+  toda la pantalla, fuera del layout); (c) agregar botón "Salir" a `NAV`
+  con el mismo contrato central que `SignOutButton.tsx`.
+- **agente24siete:** ver `AUDITORIA-AGENTE24SIETE.md` (🔴-1, 🟠-1, 🟠-2).
+- **JustiRed:** `useAuth.ts::signOut()` — antes de/en vez de
+  `supabase.auth.signOut()`, redirigir a
+  `https://auth.sorsabsa.com/auth/logout?app=justired&next=<destino>`. Es
+  el fix más chico de los tres (una función), pero toca el flujo de sesión
+  de un producto en producción — confirmar con Gina antes de tocarlo, igual
+  que los demás.
+- **CondoManager:** ninguno — es la referencia.
+
+**Riesgo de tratarlo como "un solo fix para todos":** cada producto llegó a
+este estado por una razón de arquitectura distinta (SSR con middleware vs.
+SPA sin servidor), no por copiar código de otro. Un fix genérico (ej. "agregar
+`middleware.ts` a JustiRed") sería una solución que no aplica a esa
+arquitectura — exactamente el tipo de parche que ESTANDAR-DESARROLLO.md
+prohíbe.
+
 ---
 
 ## 🟠 ALTO
@@ -761,14 +836,18 @@ alcance de las herramientas de esta sesión): 🔴-8, el Send Email Hook de
 identity nunca se creó — todo correo automático de identity sale sin
 marca; falta además confirmar si `verticales_sorsabsa` sí lo tiene. Queda
 también 🔵-4 (traducción de errores duplicada entre repos), deferido a
-propósito con regla de disparo escrita. Quedan abiertos además, en orden
-de severidad: 🔴-6 (referidos de agente24siete sin premio real — requiere
-decisión de Gina, marcado importante), 🟠-2 (empeorado el 09-ago: 3
-nombres hardcodeados en vez de 2 — el fix declarativo sigue pendiente y
-ahora limpia más), 🟠-4, 🟡-2, 🟡-3 (debería poder eliminarse ahora que
-🔴-1 está cerrado — no debería haber más cuentas nuevas fuera de identity,
-pendiente de confirmar con uso real), 🔵-1, 🔵-2. El fix de código de
-🔴-2/3 (falla-cerrado explícito por entorno) sigue pendiente — solo se
+propósito con regla de disparo escrita. 🔴-6 quedó ✅ resuelto y construido (09-ago-2026) — solo falta la prueba en
+vivo de un mensaje real, bloqueada por el baneo de Meta a las cuentas de
+WhatsApp (ver `PENDIENTES-ECOSISTEMA.md` #15; no volver a preguntar esto
+hasta que ese bloqueo se levante). Quedan abiertos además, en orden de
+severidad: **🔴-11 (10-ago-2026, el más reciente — portero inconsistente en
+los 4 productos web, tres fallas distintas, ninguna corregida todavía,
+requiere confirmación de Gina producto por producto)**, 🟠-2 (empeorado el
+09-ago: 3 nombres hardcodeados en vez de 2 — el fix declarativo sigue
+pendiente y ahora limpia más), 🟠-4, 🟡-2, 🟡-3 (debería poder eliminarse
+ahora que 🔴-1 está cerrado — no debería haber más cuentas nuevas fuera de
+identity, pendiente de confirmar con uso real), 🔵-1, 🔵-2. El fix de código
+de 🔴-2/3 (falla-cerrado explícito por entorno) sigue pendiente — solo se
 resolvió la credencial perdida que bloqueaba verificarlo, no el patrón de
 fallback en sí. Pendiente aparte, bajo impacto: el cron
 `limpiar-no-confirmados` de CondoManager solo mira el proyecto de

@@ -31,6 +31,14 @@ estabilizado en CondoManager (`middleware.ts`,
 `app/components/SignOutButton.tsx`) y contra el contrato real de
 `auth-sorsabsa/src/app/auth/logout/page.tsx`, no contra suposiciones.
 
+**10-ago-2026 — extendido a los otros 3 productos web:** Gina, al ver este
+hallazgo, preguntó por qué habría de ser solo acá. Se auditó el mismo patrón
+en DomusCRM y JustiRed contra la misma referencia (CondoManager) — resultado
+en `AUDITORIA-PORTERO-SSO.md` 🔴-11: no es el mismo bug copiado, son tres
+fallas distintas (gate ausente acá, gate incompleto en DomusCRM, logout
+local en JustiRed). Los hallazgos de abajo (🔴-1, 🟠-1, 🟠-2) siguen siendo
+la fuente específica de agente24siete; 🔴-11 es el consolidado ecosistema.
+
 ---
 
 ## 🔴 CRÍTICO
