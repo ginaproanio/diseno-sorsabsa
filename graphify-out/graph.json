@@ -5060,15 +5060,15 @@
       "norm_label": "proximo paso (actualizado, al final del documento \u2014 ver tambien la nota de proximo paso mas arriba, en el cuerpo del documento)"
     },
     {
-      "label": "\ud83d\udd35-5 \u2014 NO RESUELTO, elevado 10-ago-2026 \u2014 extracci\u00f3n de mensaje de error de fetch duplicada en ~31 archivos",
+      "label": "\ud83d\udd35-5 \u2014 \u2705 RESUELTO 10-ago-2026 \u2014 extracci\u00f3n de mensaje de error de fetch duplicada en ~31 archivos",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
       "source_location": "L749",
       "_origin": "ast",
-      "id": "docs_auditoria_condomanager_5_no_resuelto_elevado_10_ago_2026_extracci\u00f3n_de_mensaje_de_error_de_fetch_duplicada_en_31_archivos",
+      "id": "docs_auditoria_condomanager_5_resuelto_10_ago_2026_extracci\u00f3n_de_mensaje_de_error_de_fetch_duplicada_en_31_archivos",
       "community": 11,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
-      "norm_label": "\ud83d\udd35-5 \u2014 no resuelto, elevado 10-ago-2026 \u2014 extraccion de mensaje de error de fetch duplicada en ~31 archivos"
+      "norm_label": "\ud83d\udd35-5 \u2014 \u2705 resuelto 10-ago-2026 \u2014 extraccion de mensaje de error de fetch duplicada en ~31 archivos"
     },
     {
       "label": "AUDITORIA-PORTERO-SSO.md",
@@ -14506,7 +14506,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_condomanager_pr\u00f3ximo_paso_actualizado_al_final_del_documento_ver_tambi\u00e9n_la_nota_de_pr\u00f3ximo_paso_m\u00e1s_arriba_en_el_cuerpo_del_documento",
-      "target": "docs_auditoria_condomanager_5_no_resuelto_elevado_10_ago_2026_extracci\u00f3n_de_mensaje_de_error_de_fetch_duplicada_en_31_archivos",
+      "target": "docs_auditoria_condomanager_5_resuelto_10_ago_2026_extracci\u00f3n_de_mensaje_de_error_de_fetch_duplicada_en_31_archivos",
       "confidence_score": 1.0
     },
     {
@@ -15952,5 +15952,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "fb685218ebee5de9b6718bab761bda676017ff2e"
+  "built_at_commit": "77f74f29d321749e1cbc76575a62a23e33eb449a"
 }
