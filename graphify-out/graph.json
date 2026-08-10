@@ -5269,37 +5269,37 @@
       "norm_label": "\ud83d\udfe1 medio"
     },
     {
-      "label": "\ud83d\udfe1-1 \u2014 \u2b1c Formulario \"Crear mi cuenta\": falta un campo de apellido separado",
+      "label": "\ud83d\udfe1-1 \u2014 \u2705 CORREGIDO 10-ago-2026, commit `domuscrm@407c277` \u2014 Formulario \"Crear mi cuenta\": falta un campo de apellido separado",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-DOMUSCRM.md",
       "source_location": "L161",
       "_origin": "ast",
-      "id": "docs_auditoria_domuscrm_1_formulario_crear_mi_cuenta_falta_un_campo_de_apellido_separado",
+      "id": "docs_auditoria_domuscrm_1_corregido_10_ago_2026_commit_domuscrm_407c277_formulario_crear_mi_cuenta_falta_un_campo_de_apellido_separado",
       "community": 16,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
-      "norm_label": "\ud83d\udfe1-1 \u2014 \u2b1c formulario \"crear mi cuenta\": falta un campo de apellido separado"
+      "norm_label": "\ud83d\udfe1-1 \u2014 \u2705 corregido 10-ago-2026, commit `domuscrm@407c277` \u2014 formulario \"crear mi cuenta\": falta un campo de apellido separado"
     },
     {
-      "label": "\ud83d\udfe1-2 \u2014 \u2b1c Reporte \"las dos contrase\u00f1as no est\u00e1n en la misma fila\" \u2014 no reproducido en el c\u00f3digo, necesita una captura",
+      "label": "\ud83d\udfe1-2 \u2014 \u2705 CORREGIDO 10-ago-2026, commit `domuscrm@407c277` \u2014 \"Las dos contrase\u00f1as no est\u00e1n en la misma fila\": Gina ten\u00eda raz\u00f3n, no era cach\u00e9 ni mobile",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-DOMUSCRM.md",
-      "source_location": "L178",
+      "source_location": "L175",
       "_origin": "ast",
-      "id": "docs_auditoria_domuscrm_2_reporte_las_dos_contrase\u00f1as_no_est\u00e1n_en_la_misma_fila_no_reproducido_en_el_c\u00f3digo_necesita_una_captura",
+      "id": "docs_auditoria_domuscrm_2_corregido_10_ago_2026_commit_domuscrm_407c277_las_dos_contrase\u00f1as_no_est\u00e1n_en_la_misma_fila_gina_ten\u00eda_raz\u00f3n_no_era_cach\u00e9_ni_mobile",
       "community": 16,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
-      "norm_label": "\ud83d\udfe1-2 \u2014 \u2b1c reporte \"las dos contrasenas no estan en la misma fila\" \u2014 no reproducido en el codigo, necesita una captura"
+      "norm_label": "\ud83d\udfe1-2 \u2014 \u2705 corregido 10-ago-2026, commit `domuscrm@407c277` \u2014 \"las dos contrasenas no estan en la misma fila\": gina tenia razon, no era cache ni mobile"
     },
     {
-      "label": "Pendiente de decidir con Gina antes de ejecutar",
+      "label": "Estado 10-ago-2026",
       "file_type": "document",
       "source_file": "docs/AUDITORIA-DOMUSCRM.md",
-      "source_location": "L198",
+      "source_location": "L204",
       "_origin": "ast",
-      "id": "docs_auditoria_domuscrm_pendiente_de_decidir_con_gina_antes_de_ejecutar",
+      "id": "docs_auditoria_domuscrm_estado_10_ago_2026",
       "community": 16,
       "community_name": "Auditor\u00eda \u2014 DomusCRM, el portero y el alta de cuenta",
-      "norm_label": "pendiente de decidir con gina antes de ejecutar"
+      "norm_label": "estado 10-ago-2026"
     },
     {
       "label": "AUDITORIA-PORTERO-SSO.md",
@@ -14898,6 +14898,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/AUDITORIA-DOMUSCRM.md",
+      "source_location": "L204",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_auditoria_domuscrm_auditor\u00eda_domuscrm_el_portero_y_el_alta_de_cuenta",
+      "target": "docs_auditoria_domuscrm_estado_10_ago_2026",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/AUDITORIA-DOMUSCRM.md",
       "source_location": "L114",
       "weight": 1.0,
       "_origin": "ast",
@@ -14914,17 +14925,6 @@
       "_origin": "ast",
       "source": "docs_auditoria_domuscrm_auditor\u00eda_domuscrm_el_portero_y_el_alta_de_cuenta",
       "target": "docs_auditoria_domuscrm_medio",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/AUDITORIA-DOMUSCRM.md",
-      "source_location": "L198",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "docs_auditoria_domuscrm_auditor\u00eda_domuscrm_el_portero_y_el_alta_de_cuenta",
-      "target": "docs_auditoria_domuscrm_pendiente_de_decidir_con_gina_antes_de_ejecutar",
       "confidence_score": 1.0
     },
     {
@@ -14968,18 +14968,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_domuscrm_medio",
-      "target": "docs_auditoria_domuscrm_1_formulario_crear_mi_cuenta_falta_un_campo_de_apellido_separado",
+      "target": "docs_auditoria_domuscrm_1_corregido_10_ago_2026_commit_domuscrm_407c277_formulario_crear_mi_cuenta_falta_un_campo_de_apellido_separado",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/AUDITORIA-DOMUSCRM.md",
-      "source_location": "L178",
+      "source_location": "L175",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_auditoria_domuscrm_medio",
-      "target": "docs_auditoria_domuscrm_2_reporte_las_dos_contrase\u00f1as_no_est\u00e1n_en_la_misma_fila_no_reproducido_en_el_c\u00f3digo_necesita_una_captura",
+      "target": "docs_auditoria_domuscrm_2_corregido_10_ago_2026_commit_domuscrm_407c277_las_dos_contrase\u00f1as_no_est\u00e1n_en_la_misma_fila_gina_ten\u00eda_raz\u00f3n_no_era_cach\u00e9_ni_mobile",
       "confidence_score": 1.0
     },
     {
@@ -16436,5 +16436,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8105452c5c12bc1efad7b1909cd2e1ecef010cc0"
+  "built_at_commit": "bf198dc3268fade9c01062059074ced53690b77d"
 }
