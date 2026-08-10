@@ -862,7 +862,7 @@ No implementado — queda anotado junto con el resto de este ítem.
   (commit `4bc591b`) y un `git stash` sin aplicar ahí — `main` quedó correcto
   y desplegado, la rama vieja queda para revisar si se retoma ese repo.
 
-## 18. 🟡 Sin patrón visual compartido entre los onboarding propios (condomanager, domuscrm)
+## 18. ✅ RESUELTO 09-ago-2026 — Sin patrón visual compartido entre los onboarding propios (condomanager, domuscrm)
 
 **Origen:** 09-ago-2026, Gina revisando `/register` de DomusCRM: "el
 formulario es bastante soso para la creación de una agencia inmobiliaria,
@@ -913,7 +913,31 @@ sistemas compartidos) sí se cumple a nivel de dependencia declarada.
   ni si `PasswordInput` de condomanager debería fusionarse con el `Input`
   de `@sorsabsa/ui` en vez de vivir duplicado.
 
-**No resuelto — pendiente decidir con Gina:** si el fix es (a) agregar a
-`@sorsabsa/ui` un componente de sección/agrupación para este tipo de
-formulario y adoptarlo en los productos que ya lo usan, o (b) algo más
-puntual solo para DomusCRM. No se tocó código todavía.
+**Resuelto — se eligió (a):** componente compartido primero, adoptado en
+los dos onboarding propios.
+
+- `diseno-sorsabsa@ca4efa0` (`@sorsabsa/ui@0.1.40`): `FormSection` nuevo —
+  agrupa un bloque de campos con título (+ ícono opcional) y borde, en vez
+  del `<p>` suelto de antes.
+- `diseno-sorsabsa@acf31a8` (`@sorsabsa/ui@0.1.41`): `Input` gana
+  `type="password"` con botón mostrar/ocultar integrado (2 íconos nuevos,
+  `eye`/`eyeOff`, en el catálogo propio) — estandariza algo que
+  CondoManager reimplementaba a mano (`PasswordInput` local) y que DomusCRM
+  no tenía en absoluto (sin ningún toggle).
+- `condomanager@6535381`: `/register` reescrito con
+  `Card`/`Input`/`Button`/`FormSection`/`Icon` de `@sorsabsa/ui` — antes ni
+  siquiera usaba el paquete compartido en esta pantalla, aunque el resto
+  del proyecto sí (y ya está envuelto en `BrandProvider` desde
+  `app/layout.tsx`, así que las clases `brand-*` ya funcionaban ahí, solo
+  no se usaban). Campos agrupados en "Tu cuenta"/"Tu condominio". El
+  `PasswordInput` local se deja intacto — sigue en uso en otras 5
+  pantallas, no se tocó ahí. De paso se encontró y quitó `useRouter()`
+  muerto (declarado, nunca usado). Lógica de submit intacta byte a byte,
+  confirmado con diff.
+- `domuscrm@aa34dc1`: `/register` adopta `FormSection` en sus dos
+  secciones y gana el toggle de contraseña gratis (ya usaba
+  `type="password"`, no hizo falta tocar el JSX para eso).
+
+Verificado en los 3 repos: `tsc --noEmit` limpio, `eslint` sin errores
+nuevos, `jest` 18/18 en `diseno-sorsabsa`. No se tocó ningún endpoint ni
+payload de submit — solo presentación.
