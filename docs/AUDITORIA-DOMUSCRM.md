@@ -158,52 +158,59 @@ como parte del consolidado de los 4 productos. Estado tras esta sesión:
 
 ## 🟡 MEDIO
 
-### 🟡-1 — ⬜ Formulario "Crear mi cuenta": falta un campo de apellido separado
+### 🟡-1 — ✅ CORREGIDO 10-ago-2026, commit `domuscrm@407c277` — Formulario "Crear mi cuenta": falta un campo de apellido separado
 
-- **Archivo:** `crm_inmobiliario/webs/src/app/register/page.tsx:18-26`
-- **Código:** `FormData` solo tiene `nombreCompleto: string` — un único
-  campo de texto libre, sin separar nombre de apellido.
-- **Por qué importa:** cualquier lugar del sistema que necesite tratar el
-  apellido por separado (saludos formales, ordenar por apellido en listas
-  de equipo, exportes) no puede hacerlo sin parsear un string libre — un
-  problema que un segundo campo evita desde el origen.
-- **Fix propuesto (no ejecutado):** dividir en `nombre` + `apellido` en el
-  formulario y en `/api/registro-agencia`; sigue siendo "un solo insert
-  atómico" como pide `ESTANDAR-DESARROLLO.md`, solo con un campo más.
-- **Riesgo:** bajo — es alta de cuenta nueva, no migra datos existentes.
-  Si `domus.users`/`company_users` ya tiene una columna `full_name` en vez
-  de `first_name`/`last_name`, el fix incluye esa migración — a confirmar
-  antes de tocar código.
+- **Archivo:** `crm_inmobiliario/webs/src/app/register/page.tsx`
+- **Confirmado antes de tocar código:** `domus.users`/`registros_pendientes`
+  solo tienen `full_name` (una sola columna, `supabase/migrations/00000000000000_baseline_schema.sql`)
+  — nada abajo espera `first_name`/`last_name` separados hoy.
+- **Fix:** el formulario ahora pide `nombre` + `apellido` (en fila, mismo
+  patrón que las contraseñas), y se concatenan en `nombreCompleto` justo
+  antes de enviar a `/api/registro-agencia` — **cero cambios en el API ni
+  en el esquema**, cero riesgo de migración. Si en el futuro algo necesita
+  el apellido por separado de verdad, ahí sí se justifica tocar la base.
+- **Riesgo:** confirmado bajo — typecheck y jest limpios, un solo insert
+  atómico como pide `ESTANDAR-DESARROLLO.md`.
 
-### 🟡-2 — ⬜ Reporte "las dos contraseñas no están en la misma fila" — no reproducido en el código, necesita una captura
+### 🟡-2 — ✅ CORREGIDO 10-ago-2026, commit `domuscrm@407c277` — "Las dos contraseñas no están en la misma fila": Gina tenía razón, no era caché ni mobile
 
-- **Archivo:** `crm_inmobiliario/webs/src/app/register/page.tsx:124-127`
-- **Código actual:** `<div className="grid grid-cols-2 gap-3">` envolviendo
-  ambos campos de contraseña — están codificados para verse en la misma
-  fila, sin ningún breakpoint que los apile en mobile (`grid-cols-2` sin
-  prefijo aplica en cualquier ancho de pantalla).
-- **Por qué no se cierra como "confirmado":** el código dice una cosa, el
-  reporte de Gina dice otra — no se descarta el reporte, se pide evidencia
-  para no perseguir un bug que quizás no está donde se supone. Candidatos:
-  (a) estaba viendo una versión cacheada del sitio antes del último
-  deploy (`domuscrm@1338477`, 10-ago-2026); (b) en una pantalla angosta
-  las dos columnas se ven tan comprimidas (ícono + label + hint de un solo
-  campo) que parecen dos filas aunque técnicamente sean una — un problema
-  real, pero de legibilidad en mobile, no de layout roto.
-- **Pendiente de Gina:** una captura de pantalla del formulario tal como lo
-  ve, o confirmar si recargó forzado (`Ctrl+Shift+R`) antes de mirar.
+- **Causa real, confirmada con la captura de Gina + el CSS servido en
+  producción (no adivinada):** `crm_inmobiliario/webs/src/app/globals.css`
+  tenía una regla `.grid` propia (línea 56, cuadrícula de tarjetas de
+  propiedad) que **nunca se borró** cuando ese layout migró a `.ei-grid`
+  (línea 123, mismo propósito). `.grid` choca de nombre con la utilidad
+  `.grid` de Tailwind (`display:grid`) — misma especificidad (una sola
+  clase), y en el CSS compilado la regla propia aparecía DESPUÉS de
+  `.grid-cols-2`, así que ganaba la cascada y pisaba
+  `grid-template-columns` con `repeat(auto-fill, minmax(260px,1fr))` en
+  vez de `repeat(2, minmax(0,1fr))` — con el ancho del formulario, eso
+  colapsa a una sola columna. Verificado bajando el CSS real de
+  `www.domuscrm.app` y comparando el orden de las dos reglas byte a byte.
+- **Alcance real, más ancho de lo que parecía:** esta colisión pisaba
+  CUALQUIER `grid grid-cols-N` **sin** prefijo de breakpoint en todo el
+  sitio, no solo el formulario de registro — `admin/properties/page.tsx:243`
+  (`grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4`, el grid de
+  propiedades del panel) tenía el mismo problema en su layout base/mobile.
+  Se corrige solo con este fix, sin tocar ese archivo.
+- **Fix:** se borró la regla `.grid` de `globals.css` — confirmado sin
+  ningún consumidor real (`grep` de `className="grid"` bare: cero
+  resultados en todo `src/`). No se renombró porque no hacía falta
+  conservarla.
+- **Riesgo:** confirmado bajo — typecheck y jest limpios; el layout de
+  tarjetas de propiedad sigue intacto porque usa `.ei-grid`, nunca `.grid`.
 
 ---
 
-## Pendiente de decidir con Gina antes de ejecutar
+## Estado 10-ago-2026
 
-- 🔴-1 fix #1 (limpiar el fragment en `auth/complete`) es chico y seguro,
-  aplica independiente de todo lo demás — podría ejecutarse ya.
-- 🔴-1 fix #2 (fusionar o unificar el vocabulario de los dos gates) es un
-  cambio de arquitectura — necesita su propio análisis, no mezclarlo con
-  el fix chico.
-- 🟠-1 (marca en la pantalla de "sin empresa") es chico y seguro.
-- 🟡-1 (nombre/apellido) necesita confirmar primero si hay que migrar una
-  columna existente.
-- 🟡-2 necesita una captura de Gina antes de tocar nada — evidencia antes
-  que código, mismo principio que 🟠-3 de `AUDITORIA-AGENTE24SIETE.md`.
+Corregidos hoy, en orden de prioridad ("vamos a empezar a corregir" /
+"necesito estabilizarlo"): middleware con validación real, botón de Salir,
+replay bug de `auth/complete`, marca en "sin empresa", colisión de `.grid`
+(contraseñas + el mismo bug en `admin/properties`), y nombre/apellido
+separado. Commits: `domuscrm@13d9176`, `auth-sorsabsa@a3e9c97`,
+`domuscrm@407c277`.
+
+**Único pendiente real de esta auditoría:** 🔴-1 fix #2 — fusionar o
+unificar el vocabulario de los dos gates de suscripción/empresa. Sigue
+siendo un cambio de arquitectura, no un fix chico — necesita su propio
+análisis antes de tocarlo, no se mezcla con el resto.
