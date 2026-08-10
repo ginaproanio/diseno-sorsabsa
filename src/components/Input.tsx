@@ -6,9 +6,14 @@
  * ring primario al enfocar) con: label integrado, ícono opcional (catálogo
  * propio, no lucide-react), mensaje de error estético y accesibilidad
  * completa (aria-invalid, aria-describedby).
+ *
+ * `type="password"` agrega automáticamente el botón de mostrar/ocultar —
+ * antes cada producto lo reimplementaba a mano (CondoManager tenía su
+ * propio `PasswordInput` local, DomusCRM no tenía toggle). Ver
+ * PENDIENTES-ECOSISTEMA.md #18.
  */
 
-import { forwardRef, useId, type InputHTMLAttributes } from 'react';
+import { forwardRef, useId, useState, type InputHTMLAttributes } from 'react';
 import { Icon, type IconName } from '../icons/Icon';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -19,12 +24,14 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { label, icon, error, hint, className = '', id, ...rest },
+  { label, icon, error, hint, className = '', id, type, ...rest },
   ref,
 ) {
   const autoId = useId();
   const inputId = id ?? autoId;
   const messageId = `${inputId}-message`;
+  const [visible, setVisible] = useState(false);
+  const isPassword = type === 'password';
 
   return (
     <div className="w-full font-brand">
@@ -46,11 +53,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         <input
           ref={ref}
           id={inputId}
+          type={isPassword ? (visible ? 'text' : 'password') : type}
           aria-invalid={error ? true : undefined}
           aria-describedby={error || hint ? messageId : undefined}
           className={`w-full rounded-brand border bg-brand-surface py-2.5 text-brand-text ` +
             `placeholder:text-brand-muted/70 transition-colors focus:outline-none focus:ring-2 ` +
-            `${icon ? 'pl-9 pr-3 ' : 'px-3 '}` +
+            `${icon ? 'pl-9 ' : 'pl-3 '}${isPassword ? 'pr-9 ' : 'pr-3 '}` +
             `${
               error
                 ? 'border-brand-destructive focus:ring-brand-destructive/30'
@@ -58,6 +66,17 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             } ${className}`}
           {...rest}
         />
+        {isPassword && (
+          <button
+            type="button"
+            onClick={() => setVisible((v) => !v)}
+            tabIndex={-1}
+            aria-label={visible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted transition-colors hover:text-brand-text"
+          >
+            <Icon name={visible ? 'eyeOff' : 'eye'} size={16} />
+          </button>
+        )}
       </div>
       {(error || hint) && (
         <p
