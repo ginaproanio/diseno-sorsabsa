@@ -229,6 +229,69 @@ bucle infinito real, encontrado por Gina probando en vivo:**
    → Google → cuenta sin cliente) y confirmar que llega a una sola
    pantalla centrada, sin volver a rebotar contra `auth.sorsabsa.com`.
 
+**10-ago-2026, mismo día — el bucle SEGUÍA después del fix de arriba.**
+Gina, directo: *"aunque sea por otra causa???? no sabes que es lo que
+pasa? no logras identificarla? esto es solución a medias, no seguiste
+el ESTANDAR-DESARROLLO.md"* — señalando, con razón, que el fix anterior
+había agregado un contador de reintentos "por si la causa era otra" SIN
+identificar ninguna otra causa real. Se sacó ese contador por completo
+(no quedó código, solo esta nota) y se investigó la causa real en vez de
+seguir parcheando síntomas:
+
+1. **Síntoma:** el bucle seguía — `agente24siete.app/portal` mostraba
+   "Redirigiendo al acceso…" indefinidamente, rebotando entre `/portal` y
+   `auth.sorsabsa.com`.
+2. **Causa inmediata, encontrada leyendo código, no supuesta:**
+   `auth-sorsabsa/src/lib/safe-redirect.ts:21` hace `new URL(requested)`.
+   `LoginGate` mandaba `next` como ruta RELATIVA (`/portal`) — `new URL()`
+   **tira excepción** con una ruta relativa (no hay base para
+   resolverla). El `catch` de esa función trata cualquier excepción como
+   "malformado" y devuelve siempre `config.redirectUrl`, el destino por
+   defecto — nunca el `/portal` real que se había pedido.
+3. **Causa raíz:** en `auth-sorsabsa/auth/complete/page.tsx`, cuando el
+   destino resuelto es exactamente `redirectUrl` (`sinDestinoEspecifico`),
+   se usa `callbackUrl` en su lugar — que en `apps.ts`, para
+   agente24siete, apuntaba a `https://www.agente24siete.app/auth/callback`
+   (CON `www.`), mientras `redirectUrl`/`allowedHosts[0]` es
+   `https://agente24siete.app` (SIN `www.`). Son dos orígenes distintos
+   a nivel de navegador — `localStorage` y las cookies sin `domain`
+   explícito NO se comparten entre ellos. El token quedaba instalado en
+   `www.agente24siete.app`, pero la navegación real seguía en
+   `agente24siete.app` (sin www, como se ve en la barra de direcciones de
+   la captura de Gina) — cada vuelta a `/portal` encontraba el origen
+   "vacío", volvía a pedir login, y el ciclo se repetía indefinido. Este
+   patrón de `next` relativo rompiendo `safe-redirect` es EXCLUSIVO de
+   agente24siete: CondoManager y DomusCRM arman su `next` como URL
+   absoluta (`window.location.origin + ...`) en el código equivalente —
+   nunca tocaron esta rama rota.
+4. **Componente responsable:** `LoginGate.tsx` (agente24siete, construye
+   el `next` relativo) y `apps.ts` (auth-sorsabsa, `callbackUrl`
+   desalineado) — dos causas, en dos repos, que se combinan para producir
+   el síntoma.
+5. **Código afectado:** `app/portal/LoginGate.tsx`,
+   `app/admin/LoginGate.tsx`, `app/auth/callback/page.tsx` (agente24siete);
+   `src/lib/apps.ts` (auth-sorsabsa).
+6. **Fix, commits `agente24siete@87c5216` y `auth-sorsabsa@d693e0a`:**
+   `next` ahora viaja absoluto (`origin + pathname + search`) — nunca cae
+   al fallback. `auth/callback` ajustado para leer `esPortal` del
+   `pathname` de una URL absoluta (antes comparaba con
+   `next.startsWith('/portal')`, que dejaba de matchear con un `next`
+   absoluto). `callbackUrl` corregido para coincidir con `redirectUrl`
+   (sin `www`), como defensa adicional aunque el fix principal ya evita
+   que ese fallback se dispare.
+7. **Código a eliminar:** ninguno nuevo — el contador de la iteración
+   anterior ya se había sacado por completo antes de este commit.
+8. **Riesgo de regresión:** bajo — cambia el FORMATO de `next` (relativo
+   → absoluto) pero no la lógica de negocio; verificado que
+   `resolveSafeRedirect` y `esPortal` manejan el nuevo formato
+   correctamente por lectura de código, y `next build` completo
+   compiló limpio en los dos repos (confirmado por el listado real de
+   rutas en la salida, no solo el código de salida).
+9. **Validación pendiente, la hace Gina:** repetir el flujo completo
+   (login normal, y el caso de cuenta sin cliente) y confirmar que ya NO
+   rebota — ni entre `/portal` y `auth.sorsabsa.com`, ni por el motivo
+   original de 🟠-2/`whoami`.
+
 ---
 
 ## 🟠 IMPORTANTE
@@ -371,17 +434,18 @@ secreto — son URLs públicas, se pueden pegar acá para revisar juntos).
 ## Pendiente de decidir con Gina antes de ejecutar
 
 - **10-ago-2026:** 🟠-1 (Salir), 🟠-2 (chequeo de vigencia), 🔴-1
-  (`middleware.ts` + cookie + `whoami` para el tercer caso) y el fix del
-  bucle real que ese último introdujo, construidos — commits
+  (`middleware.ts` + cookie + `whoami` para el tercer caso), el fix del
+  bucle de "cuenta sin cliente", y la causa real del bucle que persistía
+  (`next` relativo + `callbackUrl` desalineado) — commits
   `agente24siete@c6f2578`, `agente24siete@89429ff`,
-  `agente24siete@6325176` y `agente24siete@b505379`. typecheck y `next
-  build` completo limpios en los cuatro.
+  `agente24siete@6325176`, `agente24siete@b505379`,
+  `agente24siete@87c5216` y `auth-sorsabsa@d693e0a`. typecheck y `next
+  build` completo limpios en todos.
 - **Único pendiente real de esta auditoría:** la validación EN VIVO de
   🔴-1 (punto 9) — sin cookie, cookie vencida, y cuenta SIN
-  cliente/usuario asociado, confirmando esta vez que el último caso
-  termina en una sola pantalla y NO vuelve a rebotar contra
-  `auth.sorsabsa.com`. Recién con esa confirmación se borra
-  `LoginGate.tsx` (punto 7, "código que debe eliminarse") — se dejó a
-  propósito como red de seguridad hasta entonces.
+  cliente/usuario asociado, confirmando esta vez que ningún caso vuelve
+  a rebotar contra `auth.sorsabsa.com`. Recién con esa confirmación se
+  borra `LoginGate.tsx` (punto 7, "código que debe eliminarse") — se dejó
+  a propósito como red de seguridad hasta entonces.
 - **🟠-3** se resuelve en la MISMA prueba que valida 🔴-1, no hace falta
   repetirla.
