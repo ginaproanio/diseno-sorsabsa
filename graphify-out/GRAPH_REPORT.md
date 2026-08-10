@@ -1,7 +1,7 @@
 # Graph Report - diseno-sorsabsa  (2026-08-10)
 
 ## Corpus Check
-- 78 files · ~65,321 words
+- 78 files · ~65,631 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `40bfa0fd`
+- Built from commit: `8105452c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -108,7 +108,7 @@ Nodes (34): 10. ✅ Login social: Google ✅ cerrado — Facebook ✅ funciona, 
 
 ### Community 8 - "🔴 CRÍTICO"
 Cohesion: 0.07
-Nodes (30): 🔴-10 — ✅ Confirmar cuenta daba "No se pudo instalar la sesión" — RESUELTO 09-ago-2026, completa a 🔴-7, 🔴-11 — ⬜ El portero está mal implementado en los 4 productos web, y de tres maneras distintas — auditoría completa 10-ago-2026, 🔴-1 — ✅ Alta de usuarios no gobernada: el pipeline de registro de cada producto no sabe que identity existe — RESUELTO 09-ago-2026, 🟡-1 — ✅ Eliminación manual de cuentas reales vía SQL directo — reconocido, no repetir, 🟠-1 — ✅ Excepción hardcodeada `app === 'iot'` en /auth/complete — RESUELTO 08-ago-2026, 🔵-1 — ⬜ `iot.redirectUrl` es una URL cruda de Railway, no dominio propio, 🔴-2 / 🔴-3 — ✅ Fallback que trata "no configurado" como estado válido, en el motor de cobros — PAGOS_API_KEY rotada y verificada, 🟠-2 — ⬜ Bypass de entitlements hardcodeado por nombre de producto (+22 more)
+Nodes (30): 🔴-10 — ✅ Confirmar cuenta daba "No se pudo instalar la sesión" — RESUELTO 09-ago-2026, completa a 🔴-7, 🔴-11 — 🔧 DomusCRM corregido 10-ago-2026, agente24siete y JustiRed pendientes — El portero está mal implementado en los 4 productos web, y de tres maneras distintas, 🔴-1 — ✅ Alta de usuarios no gobernada: el pipeline de registro de cada producto no sabe que identity existe — RESUELTO 09-ago-2026, 🟡-1 — ✅ Eliminación manual de cuentas reales vía SQL directo — reconocido, no repetir, 🟠-1 — ✅ Excepción hardcodeada `app === 'iot'` en /auth/complete — RESUELTO 08-ago-2026, 🔵-1 — ⬜ `iot.redirectUrl` es una URL cruda de Railway, no dominio propio, 🔴-2 / 🔴-3 — ✅ Fallback que trata "no configurado" como estado válido, en el motor de cobros — PAGOS_API_KEY rotada y verificada, 🟠-2 — ⬜ Bypass de entitlements hardcodeado por nombre de producto (+22 more)
 
 ### Community 9 - "Plan — Identificación de unidades configurable por condominio"
 Cohesion: 0.08
@@ -140,7 +140,7 @@ Nodes (11): dependencies, motion, description, motion, license, main, name, priv
 
 ### Community 16 - "Auditoría — DomusCRM, el portero y el alta de cuenta"
 Cohesion: 0.18
-Nodes (10): 🔴-1 — Dos gates independientes para "¿esta cuenta tiene acceso?" dan respuestas distintas para el mismo hecho, según el historial del navegador, 🟡-1 — ⬜ Formulario "Crear mi cuenta": falta un campo de apellido separado, 🟠-1 — La pantalla de "sin empresa" no tiene marca — coincide con el reporte de "pantalla en blanco", 🟡-2 — ⬜ Reporte "las dos contraseñas no están en la misma fila" — no reproducido en el código, necesita una captura, 🟠-2 — Ver `AUDITORIA-PORTERO-SSO.md` 🔴-11 (no duplicado acá), Auditoría — DomusCRM, el portero y el alta de cuenta, 🔴 CRÍTICO, 🟠 IMPORTANTE (+2 more)
+Nodes (10): 🟠-1 — ✅ CORREGIDO 10-ago-2026, commit `domuscrm@13d9176` — La pantalla de "sin empresa" no tiene marca — coincide con el reporte de "pantalla en blanco", 🔴-1 — 🔧 Fix #1 CORREGIDO 10-ago-2026 (fix #2 sigue pendiente) — Dos gates independientes para "¿esta cuenta tiene acceso?" dan respuestas distintas para el mismo hecho, según el historial del navegador, 🟡-1 — ⬜ Formulario "Crear mi cuenta": falta un campo de apellido separado, 🟠-2 — 🔧 Parcialmente corregido 10-ago-2026 — Ver `AUDITORIA-PORTERO-SSO.md` 🔴-11, 🟡-2 — ⬜ Reporte "las dos contraseñas no están en la misma fila" — no reproducido en el código, necesita una captura, Auditoría — DomusCRM, el portero y el alta de cuenta, 🔴 CRÍTICO, 🟠 IMPORTANTE (+2 more)
 
 ### Community 17 - "NotificationBell.tsx"
 Cohesion: 0.24
