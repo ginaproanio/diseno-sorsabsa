@@ -163,21 +163,30 @@ general). Ni un valor de razón social/nombre comercial/dirección se
 repite en ningún lado — solo un link de texto a Datos Fiscales/Perfil
 del condominio, sin mostrar los valores.
 
-### Fase 3 — Reagrupar el sidebar
+### Fase 3 — ✅ RESUELTO 09-ago-2026 (`condomanager@2d9c0a9`) — Reagrupar el sidebar
 
 Sin bug de por medio, es la parte de "eficiencia del menú" que preguntó
-Gina. Propuesta de grupos (a confirmar con ella antes de tocar
-`DashboardShell.tsx`):
+Gina. Antes de tocar código se le explicó en texto plano (sin código) el
+estado real del sidebar y la propuesta, porque la primera vez no pudo
+evaluarla en abstracto — con eso confirmó.
 
-- **Identidad y legal**: Perfil del condominio (Fase 1), Datos Fiscales
-  (ex-Legales), Facturación, Medios de Pago, Módulos/Suscripción
-  (Marketplace), Notificaciones.
-- **Operación**: Rubros y Cobros, Morosidad, Reportes, Config. Residentes.
-- **Cuenta**: Seguridad — se muda desde `Parametrización`.
+Grupos finales (Gina pidió "Identidad", no "Identidad y legal"):
 
-Cambia solo el sidebar (`DashboardShell.tsx`), ninguna lógica de página
-se toca en esta fase salvo mover el `<SidebarLink>` de Seguridad de un
-bloque a otro.
+- **Identidad**: Perfil del condominio, Legales, Facturación, Medios de
+  Pago, Notificaciones. Marketplace/Suscripción queda fuera — ya era un
+  ítem independiente del acordeón, no parte de Configuración/
+  Parametrización (verificado en el código antes de escribir esto, la
+  primera versión de este plan lo tenía mal incluido).
+- **Operación**: Rubros y Cobros, Morosidad, Reportes, Residentes.
+- **Cuenta**: Seguridad — el único ítem que cambia de grupo, se muda
+  desde `Parametrización`.
+
+Cambió solo el sidebar (`DashboardShell.tsx`): título de los 2
+acordeones (`Configuración`→`Identidad`, `Parametrización`→`Operación`)
+más un tercero nuevo (`Cuenta`), `AdminSection` y
+`getAdminSectionFromPath` actualizados para que el acordeón correcto
+siga abriéndose solo según la URL. Ninguna ruta ni pantalla se tocó.
+Verificado: typecheck limpio, eslint 0 errores/warnings.
 
 ### Fase 4 — Verificación y cierre
 
