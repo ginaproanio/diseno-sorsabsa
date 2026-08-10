@@ -671,24 +671,45 @@ persona que loguea), cada producto llama `crear-trial` en su alta.
 
 | Producto | `entity-resolver.ts` | `crear-trial` en el alta | Referidos | Pago de suscripción self-service |
 | --- | --- | --- | --- | --- |
-| CondoManager | ✅ `resolve_condominio_for_user` | ✅ `registro-admin` | ✅ `/admin/referidos` | ❌ solo "Contactar a Ventas" (mailto) |
-| DomusCRM | ✅ `resolve_company_for_user` | ✅ `registro-agencia` | ✅ `api/referrals` | ❌ mismo gap |
+| CondoManager | ✅ `resolve_condominio_for_user` | ✅ `registro-admin` | ✅ `/admin/referidos` | ✅ RESUELTO 09-ago-2026 (`condomanager@0175814`) |
+| DomusCRM | ✅ `resolve_company_for_user` | ✅ `registro-agencia` | ✅ `api/referrals` | ❌ mismo gap — no se tocó todavía, no existe ni la pantalla |
 | agente24siete | ✅ bypass (modelo real es saldo, no suscripción — ver `AUDITORIA-PORTERO-SSO.md` 🔴-6) | N/A (no aplica) | ✅ `/portal/referidos`, pero el premio (días de suscripción) no conecta con nada real | ✅ `/portal/recargas` (esto SÍ es self-service, pero es saldo, no plan) |
 | JustiRed | ❌ sin caso, cae al fallback (`subject: userId`) | ❌ no existe ninguna llamada | ❌ nada | ❌ nada — **tampoco hay página de registro propia** |
 
-**Pendiente, decisión de Gina, 09-ago-2026: el pago de la suscripción DEBE
-ser self-service, no "Contactar a Ventas".** Hoy CondoManager y DomusCRM
-resuelven ese gap con un simple `mailto:` — un admin de condominio o una
-inmobiliaria no tiene forma de pagar/renovar su plan sin escribir a
-soporte y esperar. `pagos-sorsabsa` ya tiene lo necesario para esto sin
-construir nada nuevo del lado del motor: `/api/iniciar` (Capa 1, cuenta
-propia de SORSABSA vía `PAYPHONE_TOKEN`/`PAYPHONE_STORE_ID`) acepta
-`suscripcion: { plan, dias, sujeto }`, que al aprobarse extiende
-`pagos.suscripciones` automáticamente (`api/confirmar.js`,
-`extenderSuscripcion`) — es la MISMA pieza que ya usa `/portal/recargas`
-de agente24siete, solo que ahí se usa para saldo. Falta construir la
-pantalla — un botón de pago real en `suscripcion/page.tsx` de CondoManager
-y su equivalente en DomusCRM, en vez del `mailto:` — no un servicio nuevo.
+**✅ RESUELTO para CondoManager, 09-ago-2026 (`condomanager@0175814`) — el
+pago de la suscripción DEBE ser self-service, no "Contactar a Ventas".**
+Hasta ahora CondoManager y DomusCRM resolvían ese gap con un simple
+`mailto:` — un admin de condominio o una inmobiliaria no tenía forma de
+pagar/renovar su plan sin escribir a soporte y esperar. `pagos-sorsabsa`
+ya tenía lo necesario para esto sin construir nada nuevo del lado del
+motor: `/api/iniciar` (Capa 1, cuenta propia de SORSABSA vía
+`PAYPHONE_TOKEN`/`PAYPHONE_STORE_ID`) acepta `suscripcion: { plan, dias,
+sujeto }`, que al aprobarse extiende `pagos.suscripciones`
+automáticamente (`api/confirmar.js`, `extenderSuscripcion`) — es la MISMA
+pieza que ya usa `/portal/recargas` de agente24siete, solo que ahí se usa
+para saldo.
+
+`POST /api/admin/suscripcion` (nuevo) llama a `/api/iniciar` con los 3
+planes ya publicados en la landing ($29/$79/$149 — precio resuelto en el
+servidor, nunca confiado del cliente), sin `entidadId` (Capa 1, no
+confundir con la Capa 2 que usa el condominio para cobrar a sus propios
+residentes). `suscripcion.sujeto = condominio_id` — el mismo que ya
+consulta el GET de ese archivo vía `/api/entitlements` — a propósito, para
+NO repetir el bug real ya documentado más abajo en este mismo punto:
+`justired-payments-iniciar` manda un id de transacción descartable como
+`sujeto`, así que ningún pago ahí puede reconciliarse con una sesión real
+después. `suscripcion/page.tsx` gana una sección "Elige tu plan" con los
+3 planes y un botón "Pagar y activar" que redirige a PayPhone. Verificado:
+typecheck y eslint limpios; no se hizo una llamada real a PayPhone (habría
+generado un intento de cobro real en la cuenta de Gina) — las mismas
+credenciales ya las usa el GET de ese archivo, en producción, confirmado
+funcionando.
+
+**Sigue pendiente: el equivalente en DomusCRM.** No se tocó en esta pasada
+— hoy DomusCRM ni siquiera tiene una pantalla de suscripción/facturación
+propia (se buscó, no existe; solo `admin/profile` para datos de la
+agencia). Construirla es alcance nuevo, no una edición como la de
+CondoManager.
 
 **Pendiente de analizar, planteado por Gina, 09-ago-2026: ¿es correcto que
 `suscripciones` viva DENTRO de `pagos-sorsabsa`, o debería ser su propio
