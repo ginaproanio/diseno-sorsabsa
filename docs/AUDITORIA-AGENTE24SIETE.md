@@ -134,7 +134,7 @@ un flash del shell), y que el tercero funciona igual que hoy.
 
 ## 🟠 IMPORTANTE
 
-### 🟠-1 — No existe botón de cerrar sesión en ningún panel — y la versión ingenua repetiría un bug ya corregido en CondoManager e identity
+### 🟠-1 — ✅ CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` — No existe botón de cerrar sesión en ningún panel — y la versión ingenua repetiría un bug ya corregido en CondoManager e identity
 
 **1. Síntoma:** ni `/portal` ni `/admin` tienen ninguna opción de "Salir"
 en el sidebar. Confirmado con grep (`logout|Salir|cerrar sesi|removeItem`
@@ -191,7 +191,7 @@ credenciales de nuevo (no auto-aprueba en silencio) — esa es la prueba
 real de que cierra las DOS sesiones, no solo la apariencia de haber
 salido.
 
-### 🟠-2 — `LoginGate` valida presencia de token, nunca vigencia — deja pasar sesiones vencidas al shell completo
+### 🟠-2 — ✅ CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` — `LoginGate` valida presencia de token, nunca vigencia — deja pasar sesiones vencidas al shell completo
 
 **1. Síntoma:** el caso puntual que reportó Gina — token de horas atrás,
 `LoginGate` lo acepta igual, el sidebar se dibuja, recién la llamada a
@@ -271,10 +271,15 @@ secreto — son URLs públicas, se pueden pegar acá para revisar juntos).
 
 ## Pendiente de decidir con Gina antes de ejecutar
 
-- **Orden:** 🟠-1 (Salir) y 🟠-2 (chequeo de vigencia en `LoginGate`) son
-  chicos y seguros, se pueden hacer ya. 🔴-1 (`middleware.ts` +
-  cookie) es la solución de fondo pero es un cambio de arquitectura real
-  del flujo de login de los dos paneles — necesita su propia sesión de
-  trabajo, no mezclarse con los parches chicos.
-- **🟠-3** necesita que Gina haga una prueba en vivo puntual antes de
-  saber si hay algo más que arreglar ahí.
+- **10-ago-2026:** 🟠-1 (Salir) y 🟠-2 (chequeo de vigencia en
+  `LoginGate`) corregidos, commit `agente24siete@c6f2578`. typecheck
+  limpio (sin suite de tests ni eslint configurados en este repo — mismo
+  estado que antes de este fix, no se tocó).
+- **Único pendiente real de esta auditoría:** 🔴-1 (`middleware.ts` +
+  cookie) — la solución de fondo, pero es un cambio de arquitectura real
+  del flujo de login de los dos paneles, con clientes reales (Punta
+  Blanca) — necesita su propia sesión de trabajo y confirmación explícita
+  de Gina antes de tocarlo, no se mezcla con los parches chicos.
+- **🟠-3** sigue necesitando que Gina haga una prueba en vivo puntual
+  (login nuevo, probar de inmediato contra `/portal`) antes de saber si
+  hay algo más que arreglar ahí, más allá de lo que 🟠-2 ya cubre.
