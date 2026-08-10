@@ -49,6 +49,7 @@ export { NotificationBell, type Notificacion, type NotificationBellProps } from 
 export { Tag, type TagProps } from './components/Tag';
 export { Avatar, type AvatarProps } from './components/Avatar';
 export { SectionHeader, type SectionHeaderProps } from './components/SectionHeader';
+export { FormSection, type FormSectionProps } from './components/FormSection';
 export { Toast, type ToastProps } from './components/Toast';
 export { SegmentedControl, type SegmentedControlProps, type SegmentedOption } from './components/SegmentedControl';
 export { AppShell, type AppShellProps } from './components/AppShell';
