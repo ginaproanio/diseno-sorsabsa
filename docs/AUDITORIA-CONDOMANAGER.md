@@ -639,6 +639,79 @@ SELECT: el condominio real ya tiene su "Cargos varios" (`INGRESO`,
 
 ---
 
+### 🟠-4 — Los módulos SaaS por-condominio se activan sin ningún cobro real — NO RESUELTO, elevado a la auditoría 09-ago-2026
+
+**Origen:** Gina, revisando cómo CondoManager maneja suscripciones (tras
+el fix de 🟠-3-bis / pago self-service del plan general, ítem #16 de
+`PENDIENTES-ECOSISTEMA.md`): "tampoco se dijo nada en auditoría,
+documéntalo ahí". No es un hallazgo nuevo — ya estaba honestamente
+autodocumentado en `condomanager/docs/modulos.md` §11/§18, pero nunca
+se había cruzado hacia acá ni hacia `PENDIENTES-ECOSISTEMA.md`, así que
+no aparecía en ningún lugar que Gina revisara de forma centralizada.
+
+**1. Síntoma:** en `suscripcion/page.tsx`, `activarModulo()` (Recaudación,
+Comunicados, Contabilidad, etc.) inserta/actualiza `condominio_modulos`
+con `estado: "ACTIVO"` y `trial_expira = ahora + trial_dias` — un
+`INSERT`/`UPDATE` directo a Supabase, sin llamar a `pagos-sorsabsa` en
+ningún punto. Un admin puede "activar" cualquier módulo add-on
+indefinidamente, en tandas de período de prueba, sin que nunca se
+genere un cargo real.
+
+**2. Causa inmediata:** el botón "Activar (N días prueba)" solo
+implementa la capa de **entitlement** (¿tiene derecho a usarlo?), nunca
+la de **billing** (¿está pagado?) — son capas distintas y el código solo
+construyó una.
+
+**3. Causa raíz — ya reconocida por el propio proyecto, no un hallazgo
+ciego:** `condomanager/docs/modulos.md` §11 ("Modelo de 3 capas") ya
+documenta esto como estado conocido: *Feature flag* ✅, *Entitlement*
+⚠️ "falta enforcement", **Billing ❌ "falta"**. La tabla "Estado
+honesto" (§18) es aún más explícita: *"Expiración automática de
+prueba: ❌ Pendiente — `trial_expira` guardado, no aplicado"* y
+*"Facturación / metering: ❌ Pendiente — sin medición ni cargos"*.
+Es decir: el propio equipo ya sabía que faltaba el cobro — lo que
+faltaba era que ese conocimiento llegara a un documento que Gina
+consulta para decidir prioridades del ecosistema.
+
+**4. Componente responsable:** `condominio_modulos` (entitlement local) +
+la ausencia de una llamada a `pagos-sorsabsa/api/iniciar` (Capa 1, mismo
+mecanismo que ya usa la suscripción del plan general desde el ítem #16 de
+`PENDIENTES-ECOSISTEMA.md`) cuando el trial de un módulo vence.
+
+**5. Código afectado:**
+
+- `app/(dashboard)/panel/admin/configuracion/suscripcion/page.tsx` —
+  `activarModulo()`/`desactivarModulo()`.
+- `app/(dashboard)/components/DashboardShell.tsx` — sí verifica
+  `trial_expira > ahora` para ocultar el módulo del menú una vez vencido
+  (confirmado en código, esto SÍ funciona), pero ocultar el menú es UX,
+  no seguridad: `docs/modulos.md` §12 ya advierte *"Sin esto,
+  'Desactivar' solo esconde el menú: la data y las rutas siguen
+  accesibles por URL/API"* — no se verificó en esta pasada si las rutas
+  de cada módulo (`app/api/modulos/**`) ya aplican
+  `is_modulo_activo()`/`assertModuloActivo()` en servidor o si eso
+  también sigue pendiente; **queda sin confirmar, no asumir ninguna de
+  las dos.**
+
+**6. Fix propuesto (ya diseñado en `docs/modulos.md`, no inventado
+acá):** al vencer `trial_expira`, mover `condominio_modulos.estado` a
+`VENCIDO` (la máquina de estados de §13 ya contempla ese valor) y
+ofrecer el mismo botón de pago self-service Capa 1 que ya existe para
+el plan general — mismo patrón, mismo `producto: "condomanager"`, pero
+con `sujeto` compuesto (condominio + módulo) en vez de solo el
+condominio, para no pisar la suscripción del plan general en
+`pagos.suscripciones`.
+
+**7. Código a eliminar:** ninguno todavía — no se tocó código en este
+hallazgo, es solo la elevación del hallazgo a este documento.
+
+**8. Riesgo de regresión:** N/A, no resuelto todavía.
+
+**9. Validación:** N/A. Queda como pendiente abierto — agregarlo también
+a `PENDIENTES-ECOSISTEMA.md` si Gina decide priorizarlo.
+
+---
+
 ## Próximo paso (actualizado, al final del documento — ver también la nota de Próximo paso más arriba, en el cuerpo del documento)
 
 **✅ Barrido sistemático ejecutado 09-ago-2026** (el pendiente de más
