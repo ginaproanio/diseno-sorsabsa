@@ -43,7 +43,7 @@ la fuente específica de agente24siete; 🔴-11 es el consolidado ecosistema.
 
 ## 🔴 CRÍTICO
 
-### 🔴-1 — El portero de agente24siete es 100% client-side — sin `middleware.ts`, a diferencia del patrón ya estabilizado en CondoManager
+### 🔴-1 — 🔧 CONSTRUIDO 10-ago-2026, falta probar en vivo — El portero de agente24siete es 100% client-side — sin `middleware.ts`, a diferencia del patrón ya estabilizado en CondoManager
 
 **1. Síntoma:** un usuario sin sesión válida (sin token, con token vencido,
 o con token de una cuenta sin cliente asociado) ve el shell COMPLETO del
@@ -121,14 +121,38 @@ dos lugares, exactamente lo que la ESTANDAR-DESARROLLO prohíbe).
 **8. Riesgo de regresión:** medio — toca el flujo de login de los dos
 paneles (cliente y admin) de un producto en producción, con clientes
 reales (Punta Blanca). Probar en los dos roles, con token ausente, token
-vencido, y token válido, antes de considerar esto cerrado. **No
-ejecutar sin que Gina confirme el alcance** — es más grande que un fix
-de UI.
+vencido, y token válido, antes de considerar esto cerrado.
 
-**9. Validación:** simular los 3 casos (sin cookie, cookie vencida,
-cookie válida) contra `/portal` y `/admin`, confirmar que el HTML servido
-en los dos primeros casos es directamente el de la página de login (no
-un flash del shell), y que el tercero funciona igual que hoy.
+**9. Validación — pendiente, la hace Gina:** simular los 3 casos (sin
+cookie, cookie vencida, cookie válida) contra `/portal` y `/admin`,
+confirmar que el HTML servido en los dos primeros casos es directamente
+el de la página de login (no un flash del shell), y que el tercero
+funciona igual que hoy.
+
+**10-ago-2026, construido, commit `agente24siete@89429ff` — Gina: "avanza
+con el -1":**
+
+1. ✅ `app/auth/callback` guarda el token TAMBIÉN en cookie
+   (`a24_cliente_token`/`a24_admin_token`, misma llave que ya usaba
+   `localStorage` — eso no cambió, sigue siendo la fuente del header
+   `Authorization` para `pages/api/**`).
+2. ✅ `middleware.ts` nuevo (matcher `/portal/*` y `/admin/*`): lee la
+   cookie del panel correspondiente, si falta o `tokenExpirado()` da
+   `true` (mismo chequeo de `exp` que ya usa `LoginGate`, sin verificar
+   firma — eso lo sigue haciendo cada API route vía `jose`/JWKS) redirige
+   a `auth.sorsabsa.com/auth/login` ANTES de servir el HTML. Verificado
+   con `next build` completo (no solo `tsc`), compila limpio en Edge
+   runtime, bundle de Middleware generado (34.4 kB) — confirma que
+   `tokenExpirado()` (usa `atob`) es compatible con el runtime del
+   middleware, no solo con el navegador.
+3. ⬜ **`LoginGate` NO se tocó, a propósito.** El punto 7 de este mismo
+   hallazgo lo marca como "código que debe eliminarse", pero con el
+   riesgo ya declarado como medio y clientes reales de por medio, se
+   decidió dejarlo un ciclo más como red de seguridad — no cambia ningún
+   comportamiento (si el middleware deja pasar, `LoginGate` encuentra el
+   mismo token válido en `localStorage` y no hace nada; si el middleware
+   redirige, `LoginGate` ni llega a cargar). Se borra en un commit aparte
+   una vez que Gina confirme el punto 9 en vivo — no antes.
 
 ---
 
@@ -271,15 +295,16 @@ secreto — son URLs públicas, se pueden pegar acá para revisar juntos).
 
 ## Pendiente de decidir con Gina antes de ejecutar
 
-- **10-ago-2026:** 🟠-1 (Salir) y 🟠-2 (chequeo de vigencia en
-  `LoginGate`) corregidos, commit `agente24siete@c6f2578`. typecheck
-  limpio (sin suite de tests ni eslint configurados en este repo — mismo
-  estado que antes de este fix, no se tocó).
-- **Único pendiente real de esta auditoría:** 🔴-1 (`middleware.ts` +
-  cookie) — la solución de fondo, pero es un cambio de arquitectura real
-  del flujo de login de los dos paneles, con clientes reales (Punta
-  Blanca) — necesita su propia sesión de trabajo y confirmación explícita
-  de Gina antes de tocarlo, no se mezcla con los parches chicos.
+- **10-ago-2026:** 🟠-1 (Salir), 🟠-2 (chequeo de vigencia en
+  `LoginGate`) y 🔴-1 (`middleware.ts` + cookie) construidos, commits
+  `agente24siete@c6f2578` y `agente24siete@89429ff`. typecheck y `next
+  build` completo limpios (sin suite de tests ni eslint configurados en
+  este repo — mismo estado que antes de este fix, no se tocó).
+- **Único pendiente real de esta auditoría:** la validación EN VIVO de
+  🔴-1 (punto 9) — sin cookie, con cookie vencida, y con cookie válida,
+  en los dos paneles, contra clientes reales. Recién ahí se borra
+  `LoginGate.tsx` (punto 7, "código que debe eliminarse") — se dejó sin
+  tocar a propósito como red de seguridad hasta esa confirmación.
 - **🟠-3** sigue necesitando que Gina haga una prueba en vivo puntual
-  (login nuevo, probar de inmediato contra `/portal`) antes de saber si
-  hay algo más que arreglar ahí, más allá de lo que 🟠-2 ya cubre.
+  (login nuevo, probar de inmediato contra `/portal`) — puede resolverse
+  en la MISMA prueba que valida 🔴-1, no hace falta repetirla dos veces.
