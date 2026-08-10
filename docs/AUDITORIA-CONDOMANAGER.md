@@ -746,7 +746,7 @@ column_default IS NULL`, cruzado contra grep de `.insert(\{`/
 
 ---
 
-### 🔵-5 — NO RESUELTO, elevado 10-ago-2026 — extracción de mensaje de error de fetch duplicada en ~31 archivos
+### 🔵-5 — ✅ RESUELTO 10-ago-2026 — extracción de mensaje de error de fetch duplicada en ~31 archivos
 
 **Origen:** encontrado en agente24siete (10-ago-2026), no en CondoManager
 directamente — Gina reportó un `HTTP 401` crudo mostrado al usuario en
@@ -760,10 +760,15 @@ confirmado con grep) — el patrón `data.error || "mensaje de respaldo"`
 se repite, pero no descarta el mensaje real del backend como pasaba en
 agente24siete. Es duplicación de código, no un defecto de UX.
 
-**Oportunidad, no ejecutada:** ahora que `mensajeDeErrorData(data)`
-existe en el paquete compartido, estos 31 archivos podrían usarlo en
-vez de repetir `data.error || "..."` a mano — mismo beneficio que
-`identificadorUnidad()` tuvo para los 23 archivos de unidades. **No se
-tocó nada de CondoManager en esta pasada** — es una limpieza de
-duplicación pura, sin bug detrás, así que queda para cuando Gina decida
-priorizarla, no se hizo a ciegas.
+**Resuelto, mismo día (`condomanager@b032922`):** Gina pidió aprovechar
+y corregirlo. De los ~32 sitios que hacían `data.error || "..."`
+encontrados con grep, **20 archivos (24 apariciones) eran cliente
+hacia usuario** — se migraron a `mensajeDeErrorData(data, fallback)` /
+`mensajeDeError(res, fallback)`, mismo helper que ya resolvió el bug
+real de agente24siete. **Los otros 5 (`app/api/**/route.ts`) NO se
+tocaron a propósito** — son llamadas servidor-a-servidor (CondoManager
+llamando a pagos-sorsabsa, o construyendo su propia respuesta de error),
+una capa distinta de "qué le mostramos a un usuario"; mezclar ambas
+hubiera sido forzar una reutilización que no encaja, no una limpieza
+real. Verificado: `tsc --noEmit` limpio, `eslint` 0 errores nuevos en
+los 20 archivos (solo warnings `exhaustive-deps` preexistentes).
