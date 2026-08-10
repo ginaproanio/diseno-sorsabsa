@@ -3926,7 +3926,7 @@
       "label": "IconName",
       "file_type": "code",
       "source_file": "src/icons/icon-paths.ts",
-      "source_location": "L63",
+      "source_location": "L64",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -13337,7 +13337,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/icons/icon-paths.ts",
-      "source_location": "L63",
+      "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_icons_icon_paths",
@@ -15952,5 +15952,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e6865ae6a7d3e2b6d90123f6b8ff46570034052e"
+  "built_at_commit": "f36597d7a4f4d3b81ba9214d95b6a815027eb41c"
 }
