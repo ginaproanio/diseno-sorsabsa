@@ -1020,3 +1020,16 @@ los dos onboarding propios.
 Verificado en los 3 repos: `tsc --noEmit` limpio, `eslint` sin errores
 nuevos, `jest` 18/18 en `diseno-sorsabsa`. No se tocó ningún endpoint ni
 payload de submit — solo presentación.
+
+## 19. 🟡 qa_sorsabsa: sin guard automático que impida que README.md y TODO.md se desincronicen — 10-ago-2026
+
+Auditoría (`AUDITORIA-QA-SORSABSA.md`) encontró y corrigió 3 hallazgos
+reales (conteo de checks mal sumado, TODO.md con 3 semanas de atraso,
+un assert que aceptaba un 500 como válido) — los 3 nacían de que nada
+obliga a que README.md y TODO.md digan lo mismo. Se dejó una nota
+("el conteo vive en README.md") pero eso depende de que alguien la
+respete. Propuesta sin construir: un check de CI que compare
+`grep -c '^###' checks/*.http` contra el total que dice README.md y
+falle el build si no coinciden. No se hizo porque es una decisión de
+alcance — ¿vale la pena un guard más para un repo de 4 archivos de
+texto? — que le toca decidir a Gina, no meterla sin que la pida.
