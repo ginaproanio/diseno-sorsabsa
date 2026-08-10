@@ -1,16 +1,16 @@
 # Graph Report - diseno-sorsabsa  (2026-08-10)
 
 ## Corpus Check
-- 77 files · ~63,789 words
+- 78 files · ~65,321 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 593 nodes · 831 edges · 34 communities (31 shown, 3 thin omitted)
+- 604 nodes · 842 edges · 35 communities (32 shown, 3 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e80f74bc`
+- Built from commit: `40bfa0fd`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -21,8 +21,8 @@
 - Arquitectura del ecosistema SORSABSA
 - Plan — una persona en más de un condominio (CondoManager)
 - devDependencies
-- Pendientes del ecosistema SORSABSA
 - BrandProvider.tsx
+- Pendientes del ecosistema SORSABSA
 - 🔴 CRÍTICO
 - Plan — Identificación de unidades configurable por condominio
 - compilerOptions
@@ -31,6 +31,7 @@
 - devDependencies
 - @sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA
 - package.json
+- Auditoría — DomusCRM, el portero y el alta de cuenta
 - NotificationBell.tsx
 - Grafo de conocimiento (graphify) generado por CI
 - peerDependencies
@@ -57,10 +58,10 @@
 10. `Estándar de desarrollo — no parchear la arquitectura` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `TokenAudit()` --calls--> `useBrand()`  [EXTRACTED]
-  showcase/src/components/TokenAudit.tsx → src/brand/BrandProvider.tsx
 - `resolveEffectiveColors()` --calls--> `brandToCssVars()`  [EXTRACTED]
   showcase/src/resolveColors.ts → src/brand/BrandProvider.tsx
+- `TokenAudit()` --calls--> `useBrand()`  [EXTRACTED]
+  showcase/src/components/TokenAudit.tsx → src/brand/BrandProvider.tsx
 - `App()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
   showcase/src/App.tsx → showcase/src/resolveColors.ts
 - `ColorPalette()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
@@ -71,7 +72,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (34 total, 3 thin omitted)
+## Communities (35 total, 3 thin omitted)
 
 ### Community 0 - "index.ts"
 Cohesion: 0.05
@@ -83,7 +84,7 @@ Nodes (32): CardStatusDemo(), SHADOW, TONES, DomusLanding(), FEATURES, SOCIAL, I
 
 ### Community 2 - "App.tsx"
 Cohesion: 0.08
-Nodes (29): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented() (+21 more)
+Nodes (27): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), NotImplemented() (+19 more)
 
 ### Community 3 - "Arquitectura del ecosistema SORSABSA"
 Cohesion: 0.05
@@ -97,13 +98,13 @@ Nodes (36): 🔴-1 — El portero de agente24siete es 100% client-side — sin `
 Cohesion: 0.05
 Nodes (38): autoprefixer, postcss, dependencies, framer-motion, lucide-react, motion, react, react-dom (+30 more)
 
-### Community 6 - "Pendientes del ecosistema SORSABSA"
+### Community 6 - "BrandProvider.tsx"
+Cohesion: 0.10
+Nodes (28): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandConfig, BrandContext, BrandProvider(), brandToCssVars() (+20 more)
+
+### Community 7 - "Pendientes del ecosistema SORSABSA"
 Cohesion: 0.05
 Nodes (34): 10. ✅ Login social: Google ✅ cerrado — Facebook ✅ funciona, Revisión de Meta APROBADA, 11. ✅ HECHO — agente24siete: login real en /portal + cascarón viejo borrado, 12. 🟡 R2 desplegado y verificado — falta el clic real de un residente, 13. ✅ HECHO — geo-sorsabsa/service desplegado, verificado y consumido por los dos periciales, 14. ✅ HECHO — iot consume el portero central (auth-sorsabsa), 15. 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas, 16. 🟡 Estandarizar pagos/suscripciones/referidos en TODOS los productos — JustiRed sin nada, y una idea de "créditos de IA" todavía sin desarrollar, 17. 🟡 Gobernanza de correo masivo por tenant (activación de residentes, alícuotas) — diseño acordado, infraestructura sin construir (+26 more)
-
-### Community 7 - "BrandProvider.tsx"
-Cohesion: 0.10
-Nodes (26): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandContext, BrandProvider(), contrastRatio(), darkenToContrast() (+18 more)
 
 ### Community 8 - "🔴 CRÍTICO"
 Cohesion: 0.07
@@ -137,44 +138,48 @@ Nodes (12): ⚠️ Bumpear la versión en cada cambio real (16 jul 2026, inciden
 Cohesion: 0.17
 Nodes (11): dependencies, motion, description, motion, license, main, name, private (+3 more)
 
-### Community 16 - "NotificationBell.tsx"
+### Community 16 - "Auditoría — DomusCRM, el portero y el alta de cuenta"
+Cohesion: 0.18
+Nodes (10): 🔴-1 — Dos gates independientes para "¿esta cuenta tiene acceso?" dan respuestas distintas para el mismo hecho, según el historial del navegador, 🟡-1 — ⬜ Formulario "Crear mi cuenta": falta un campo de apellido separado, 🟠-1 — La pantalla de "sin empresa" no tiene marca — coincide con el reporte de "pantalla en blanco", 🟡-2 — ⬜ Reporte "las dos contraseñas no están en la misma fila" — no reproducido en el código, necesita una captura, 🟠-2 — Ver `AUDITORIA-PORTERO-SSO.md` 🔴-11 (no duplicado acá), Auditoría — DomusCRM, el portero y el alta de cuenta, 🔴 CRÍTICO, 🟠 IMPORTANTE (+2 more)
+
+### Community 17 - "NotificationBell.tsx"
 Cohesion: 0.24
 Nodes (8): MOCK, NotificationDemo(), Notificacion, NotificationBell(), NotificationBellProps, TYPE_COLOR, TYPE_ICON, useOnClickOutside()
 
-### Community 17 - "Grafo de conocimiento (graphify) generado por CI"
+### Community 18 - "Grafo de conocimiento (graphify) generado por CI"
 Cohesion: 0.20
 Nodes (9): Añadir Pages a un repo privado (opcional, requiere GitHub Pro), Bugs resueltos durante el piloto (lecciones), Convención de `.gitignore`, Cómo funciona, Cómo ver el grafo, Estado por repo, Grafo de conocimiento (graphify) generado por CI, Por qué CI y no un hook local (+1 more)
 
-### Community 18 - "peerDependencies"
+### Community 19 - "peerDependencies"
 Cohesion: 0.20
 Nodes (10): framer-motion, react, react-dom, framer-motion, react, react-dom, peerDependencies, framer-motion (+2 more)
 
-### Community 19 - "Color de marca y contraste"
+### Community 20 - "Color de marca y contraste"
 Cohesion: 0.29
 Nodes (6): Color de marca y contraste, Componentes que ya lo aplican, Cuál usar, Cómo comprobarlo, La regla, Los cuatro tokens
 
-### Community 20 - "vercel.json"
+### Community 21 - "vercel.json"
 Cohesion: 0.40
 Nodes (4): buildCommand, framework, installCommand, outputDirectory
 
-### Community 21 - "files"
+### Community 22 - "files"
 Cohesion: 0.50
 Nodes (4): files, src, README.md, tailwind-preset.cjs
 
-### Community 22 - "lucide-react"
+### Community 23 - "lucide-react"
 Cohesion: 0.67
 Nodes (3): lucide-react, lucide-react, lucide-react
 
-### Community 23 - "exports"
+### Community 24 - "exports"
 Cohesion: 0.67
 Nodes (3): exports, ./preset, ./tokens.css
 
-### Community 24 - "scripts"
+### Community 25 - "scripts"
 Cohesion: 0.67
 Nodes (3): scripts, test, typecheck
 
 ## Knowledge Gaps
-- **296 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+291 more)
+- **302 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+297 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -182,16 +187,16 @@ Nodes (3): scripts, test, typecheck
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Auditoría — portero SSO del ecosistema SORSABSA` connect `🔴 CRÍTICO` to `Plan — una persona en más de un condominio (CondoManager)`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Why does `Arquitectura del ecosistema SORSABSA` connect `Arquitectura del ecosistema SORSABSA` to `Pendientes del ecosistema SORSABSA`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Why does `Auditoría — CondoManager como aplicación (más allá del portero)` connect `Auditoría — CondoManager como aplicación (más allá del portero)` to `Plan — una persona en más de un condominio (CondoManager)`?**
-  _High betweenness centrality (0.010) - this node is a cross-community bridge._
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _296 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _302 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.0525879917184265 - nodes in this community are weakly interconnected._
 - **Should `DomusLanding.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.062040816326530614 - nodes in this community are weakly interconnected._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.08156028368794327 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08115942028985507 - nodes in this community are weakly interconnected._
