@@ -13635,7 +13635,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/Wordmark.tsx",
-      "source_location": "L78",
+      "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_wordmark_wordmark",
@@ -16942,5 +16942,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "95f6bdbb5a175a905bd19472af2db5ca56211686"
+  "built_at_commit": "59d0ae6758b5f61bbaea5d513fbca258958f03c8"
 }
