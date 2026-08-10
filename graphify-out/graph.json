@@ -5825,21 +5825,21 @@
       "norm_label": "fase 2 \u2014 \u2705 resuelto 09-ago-2026 (`condomanager@e9dcf0f`)"
     },
     {
-      "label": "Fase 3 \u2014 Reagrupar el sidebar",
+      "label": "Fase 3 \u2014 \u2705 RESUELTO 09-ago-2026 (`condomanager@2d9c0a9`) \u2014 Reagrupar el sidebar",
       "file_type": "document",
       "source_file": "docs/PLAN-CONFIGURACION-CONDOMINIO.md",
       "source_location": "L166",
       "_origin": "ast",
-      "id": "docs_plan_configuracion_condominio_fase_3_reagrupar_el_sidebar",
+      "id": "docs_plan_configuracion_condominio_fase_3_resuelto_09_ago_2026_condomanager_2d9c0a9_reagrupar_el_sidebar",
       "community": 3,
       "community_name": "Est\u00e1ndar de desarrollo \u2014 no parchear la arquitectura",
-      "norm_label": "fase 3 \u2014 reagrupar el sidebar"
+      "norm_label": "fase 3 \u2014 \u2705 resuelto 09-ago-2026 (`condomanager@2d9c0a9`) \u2014 reagrupar el sidebar"
     },
     {
       "label": "Fase 4 \u2014 Verificaci\u00f3n y cierre",
       "file_type": "document",
       "source_file": "docs/PLAN-CONFIGURACION-CONDOMINIO.md",
-      "source_location": "L182",
+      "source_location": "L191",
       "_origin": "ast",
       "id": "docs_plan_configuracion_condominio_fase_4_verificaci\u00f3n_y_cierre",
       "community": 3,
@@ -5850,7 +5850,7 @@
       "label": "Orden recomendado",
       "file_type": "document",
       "source_file": "docs/PLAN-CONFIGURACION-CONDOMINIO.md",
-      "source_location": "L193",
+      "source_location": "L202",
       "_origin": "ast",
       "id": "docs_plan_configuracion_condominio_orden_recomendado",
       "community": 3,
@@ -5861,7 +5861,7 @@
       "label": "Pendiente de decidir con Gina antes de ejecutar",
       "file_type": "document",
       "source_file": "docs/PLAN-CONFIGURACION-CONDOMINIO.md",
-      "source_location": "L201",
+      "source_location": "L210",
       "_origin": "ast",
       "id": "docs_plan_configuracion_condominio_pendiente_de_decidir_con_gina_antes_de_ejecutar",
       "community": 3,
@@ -15014,7 +15014,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PLAN-CONFIGURACION-CONDOMINIO.md",
-      "source_location": "L193",
+      "source_location": "L202",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_plan_configuracion_condominio_plan_reordenar_configuraci\u00f3n_parametrizaci\u00f3n_de_condomanager",
@@ -15025,7 +15025,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PLAN-CONFIGURACION-CONDOMINIO.md",
-      "source_location": "L201",
+      "source_location": "L210",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_plan_configuracion_condominio_plan_reordenar_configuraci\u00f3n_parametrizaci\u00f3n_de_condomanager",
@@ -15062,14 +15062,14 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_plan_configuracion_condominio_fases",
-      "target": "docs_plan_configuracion_condominio_fase_3_reagrupar_el_sidebar",
+      "target": "docs_plan_configuracion_condominio_fase_3_resuelto_09_ago_2026_condomanager_2d9c0a9_reagrupar_el_sidebar",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PLAN-CONFIGURACION-CONDOMINIO.md",
-      "source_location": "L182",
+      "source_location": "L191",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_plan_configuracion_condominio_fases",
@@ -15639,5 +15639,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "0d29fb8f05629d0be985d60e86a1b7bb4d64d138"
+  "built_at_commit": "99847f4f4e0cd6321bdc223bff7833420a9c6b09"
 }
