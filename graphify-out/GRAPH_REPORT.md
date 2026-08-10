@@ -1,7 +1,7 @@
 # Graph Report - diseno-sorsabsa  (2026-08-10)
 
 ## Corpus Check
-- 79 files · ~70,835 words
+- 79 files · ~71,172 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9258ebdd`
+- Built from commit: `112629a6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
