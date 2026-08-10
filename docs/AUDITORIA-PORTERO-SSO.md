@@ -178,7 +178,7 @@ no arreglaba su login.
   `auth-sorsabsa` commit `4478657`. Verificado en vivo: la misma cuenta
   de prueba ahora da `200 {"active":true,"bypass":true}`.
 
-### 🔴-6 — ⬜ IMPORTANTE, marcado por Gina: el bypass de 🔴-5 desconecta el único uso real de `pagos.suscripciones` — los días ganados por el programa de referidos
+### 🔴-6 — 🔧 DECISIÓN TOMADA 09-ago-2026, en construcción — el bypass de 🔴-5 desconecta el único uso real de `pagos.suscripciones` — los días ganados por el programa de referidos
 
 - **Encontrado:** 09-ago-2026, explicado por Gina al justificar por qué el
   login SÍ debía validar contra la suscripción — no era arbitrario.
@@ -205,15 +205,34 @@ no arreglaba su login.
   todas formas: un cliente sin suscripción/saldo necesita poder entrar
   igual para recargar o para invitar referidos — bloquearlo en el login
   bloquea el propio programa que se quiere premiar.
-- **Fix pendiente de decidir (requiere a Gina — qué debe otorgar
-  exactamente un día de suscripción ganado):** conectar
-  `pagos.suscripciones` a algo real DENTRO de agente24siete en vez del
-  login — candidatos, a definir: (a) `registrarConsumo` aplica
-  `markup_uso = 1` (sin recargo) mientras la suscripción esté activa,
-  (b) los días ganados se traducen a saldo acreditado directo (mismo
-  mecanismo que `webhook-recarga`), (c) desbloquean `negocios_incluidos`
-  extra del plan. Sin esta decisión, el programa de referidos de
-  agente24siete no tiene ningún premio real hoy.
+- **Decisión de Gina, 09-ago-2026 (ninguno de los 3 candidatos de
+  abajo — más simple):** agente24siete debe tener una suscripción REAL,
+  igual que el resto de los productos — no una que module el markup del
+  saldo (candidato a), ni que se traduzca a saldo (candidato b), ni que
+  desbloquee cupos del plan (candidato c). Dos capas independientes,
+  compuestas, no una sustituyendo a la otra: **suscripción = si el
+  cliente tiene cuenta activa** (igual que CondoManager/DomusCRM/
+  JustiRed), **saldo = consumo de IA, recargable en cualquier momento**
+  (ya funciona, no se toca). Con esto, un día ganado por referir vuelve
+  a significar exactamente lo mismo que en cualquier otro producto:
+  un día más antes de que la suscripción venza — sin inventar una
+  conversión especial para agente24siete. Ver `ARQUITECTURA-ECOSISTEMA.md`
+  §1 (fila Suscripciones) para el modelo de 3 primitivos completo
+  (Suscripciones + Créditos/Saldo + Referidos) y `PENDIENTES-ECOSISTEMA.md`
+  #16 para el plan de construcción.
+- *(Candidatos descartados, dejados para no repetir el análisis si se
+  reconsidera):* (a) `registrarConsumo` aplica `markup_uso = 1` (sin
+  recargo) mientras la suscripción esté activa, (b) los días ganados se
+  traducen a saldo acreditado directo (mismo mecanismo que
+  `webhook-recarga`), (c) desbloquean `negocios_incluidos` extra del
+  plan.
+- **Pendiente de definir, ya en construcción — qué bloquea exactamente
+  una suscripción vencida/inexistente:** no revertir el bypass del login
+  (🔴-5) sigue siendo correcto — un cliente sin suscripción activa debe
+  poder entrar igual para recargar saldo o invitar referidos, bloquearlo
+  ahí bloquea el propio programa que se quiere premiar. El gate real va
+  DENTRO de agente24siete (ej. `registrarConsumo`/enviar mensajes por
+  IA), no en el login SSO.
 
 - **Archivo:** `auth-sorsabsa/scripts/invite-user.mjs` (el proceso) + `iot/auth_sso.py` (la consecuencia)
 - **Problema:** ningún componente decide "esta persona debe existir en identity, con estos atributos, con acceso a este producto" — lo decide quien corre el script a mano.

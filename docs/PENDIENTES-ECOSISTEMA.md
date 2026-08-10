@@ -812,6 +812,45 @@ va a chocar con "Sin suscripción activa" sin poder pagar nada — vale la
 pena que Gina lo sepa antes de anunciar o vender JustiRed a un cliente
 real.
 
+**09-ago-2026 — análisis de arquitectura pedido por Gina: "¿referidos es
+un sistema independiente, o me toca desoldarlo después?"** Verificado a
+fondo, con evidencia (schema real de `pagos-sorsabsa`, código de
+`agente24siete/lib/saldo.js`). Conclusión completa en
+`ARQUITECTURA-ECOSISTEMA.md` §1 (filas Suscripciones/Referidos/Créditos)
+— resumen:
+
+- **Referidos SÍ es transversal de verdad** — `producto`/`sujeto`
+  opacos, sin FK a ningún producto, un producto nuevo lo adopta sin
+  tocar `pagos-sorsabsa`. El acoplamiento no está en el sistema, está en
+  su premio (`recompensa_dias` asume que todo producto mide valor en
+  días de suscripción).
+- **Créditos/Saldo NO es transversal — ahí está el hueco real.** Hoy
+  vive 100% local en `agente24siete` (`movimientos_saldo`, keyed por
+  `cliente_id`, con `markup_uso` de sus propias tablas `clientes`/
+  `planes` mezclado adentro). Si mañana otro producto necesita créditos
+  prepagados, hoy tocaría reinventarlo o migrar agente24siete
+  después — el riesgo de "desoldar" que Gina preguntaba, confirmado
+  real, no hipotético.
+- **Modelo propuesto, aprobado por Gina:** 3 primitivos independientes
+  en `pagos-sorsabsa`, todos con el mismo patrón `producto`/`sujeto`
+  opaco — Suscripciones (gate de acceso recurrente, ya existe),
+  Créditos/Saldo (consumo prepagado, generalizar desde agente24siete —
+  no construido todavía), Referidos (ya existe, premia con días de
+  suscripción, sin necesitar saber de créditos).
+
+**Decisión de Gina sobre agente24siete, mismo día — resuelve
+`AUDITORIA-PORTERO-SSO.md` 🔴-6 (quedaba "pendiente de decidir"):**
+*"agente24siete debe ir por suscripción, y si se acaba el saldo puede
+comprar saldo"* — no son modelos que compiten, son capas que se
+complementan (mismo patrón que Anthropic/OpenAI: plan base + créditos
+consumibles aparte). Hoy agente24siete no tiene ninguna de las dos
+capas realmente conectadas: el login la bypasea por completo (🔴-5,
+correcto, no revertir) y `pagos.suscripciones` no tiene ningún
+consumidor real en la app (🔴-6). **En construcción, 09-ago-2026** — ver
+`AUDITORIA-PORTERO-SSO.md` 🔴-6 para el detalle de qué se descartó (3
+candidatos que mezclaban suscripción con saldo) y por qué el gate real
+va dentro de agente24siete, no en el login SSO.
+
 ---
 
 ## 17. 🟡 Gobernanza de correo masivo por tenant (activación de residentes, alícuotas) — diseño acordado, infraestructura sin construir
