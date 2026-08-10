@@ -671,6 +671,111 @@ prohíbe.
 
 ---
 
+### 🔴-12 — ⬜ agente24siete verifica su sesión contra el proyecto Supabase equivocado — causa real del bucle que 🔴-1/🟠-3 nunca cerraron
+
+**Origen:** pedido explícito de Gina, 10-ago-2026, después de que el fix de
+🔴-1 (middleware + `whoami`) no rompiera el bucle real: *"necesito que...
+hagas una auditoria a c:/auth-sorsabsa para saber que esta pasando en
+sorsabsa-identity con tanta metida de mano, porque estas personalizando
+para cada producto bien pudo algo estar mal fixeado."* Tenía razón: había
+algo mal fixeado, y no era chico.
+
+**1. Síntoma:** después de corregir `AUDITORIA-AGENTE24SIETE.md` 🔴-1
+(completo, con los 3 casos) y el bug de `next` relativo, el login seguía
+en bucle. La consola del navegador mostró el dato decisivo:
+`GET https://www.agente24siete.app/api/portal/whoami 401`.
+
+**2. Causa inmediata:** `lib/clienteAuth.js`/`lib/adminAuth.js` verifican
+el JWT con `jwtVerify(token, JWKS, { issuer: ISSUER, ... })` donde
+`ISSUER = \`${process.env.SUPABASE_URL}/auth/v1\``. **Esa variable, en
+Vercel, apuntaba (por indicación mía, en esta misma sesión, antes de este
+hallazgo) al proyecto propio de agente24siete (`nwcqaginlnzjlkgwifas`).**
+El token real que llega a `/auth/callback` nunca fue emitido por ese
+proyecto — `jwtVerify` rechaza cualquier token cuyo `iss` no coincida
+exactamente, así que TODO login, sin importar cuántas veces se reintente,
+iba a fallar con "Sesión inválida o expirada" — el 🟠-3 que quedó abierto
+desde el principio de esta auditoría, nunca diferenciado hasta ahora.
+
+**3. Causa raíz, verificada con datos, no supuesta:**
+
+- `auth-sorsabsa/src/lib/identity.ts` (comentario del propio autor): *"Hoy
+  solo condomanager lo tiene dado de alta [el proveedor OIDC] — domus y
+  justired son schemas del mismo proyecto, así que quedan cubiertos
+  igual."* Y `auth-sorsabsa/.env.example`: `NEXT_PUBLIC_SUPABASE_URL=
+  https://twkuidnjwhopbjnrhnxp.supabase.co` (verticales_sorsabsa,
+  el proyecto de CondoManager) — es EL ÚNICO proyecto con
+  `custom:sorsabsa-identity` registrado como proveedor OIDC. `/auth/login`
+  inicia `signInWithOAuth` ahí, no en el proyecto de cada producto.
+- Cuando ese login federa contra `sorsabsa-identity`
+  (`gyqgorgfstffbgazhbnb`) y vuelve, la sesión que se instala y se
+  traspasa por el fragment a CADA producto —incluido agente24siete— es
+  **siempre una sesión de `verticales_sorsabsa`**, con `iss =
+  https://twkuidnjwhopbjnrhnxp.supabase.co/auth/v1`.
+- **Verificado con una consulta real a las dos bases:**
+  `nwcqaginlnzjlkgwifas.auth.users` — CERO filas para
+  `gina.proanio76@gmail.com`. `twkuidnjwhopbjnrhnxp.auth.users` — SÍ
+  existe, `last_sign_in_at` coincidiendo al segundo con la prueba en vivo
+  de Gina. La cuenta federada real nunca vivió en el proyecto propio de
+  agente24siete — vive en `verticales_sorsabsa`, como el resto del
+  ecosistema.
+- **Por qué nadie lo había notado hasta ahora:** CondoManager, DomusCRM y
+  JustiRed son *schemas dentro del mismo proyecto* `verticales_sorsabsa` —
+  para ellos, "verificar contra el proyecto correcto" es automático, ni
+  siquiera es una decisión. **agente24siete es el único producto del
+  ecosistema con un proyecto Supabase propio y separado
+  (`nwcqaginlnzjlkgwifas`)** — el único lugar donde "¿contra qué proyecto
+  verifico el JWT?" es una pregunta real, y la única respuesta que existía
+  en código (un comentario, no una fuente de verdad) estaba mal.
+- **El comentario que indujo el error, corregido hoy:**
+  `agente24siete/lib/supabaseAdminIdentity.js` decía *"proveedor OIDC
+  registrado en el proyecto propio nwcqaginlnzjlkgwifas"* — copiado del
+  mismo texto de `identity.ts` sin ajustar a la realidad de agente24siete.
+  Ese comentario fue la fuente directa de mi propio error hoy: configuré
+  `SUPABASE_URL`/`SUPABASE_JWKS_URL` de agente24siete contra su proyecto
+  propio, confiando en un comentario en vez de verificar contra la fuente
+  real (`identity.ts` + `.env.example` + datos). Exactamente el error que
+  ESTANDAR-DESARROLLO.md pide evitar: "dos componentes deciden distinto
+  sobre el mismo concepto" (§ Fuente única de verdad) — acá se resolvió
+  confiando en el componente equivocado.
+
+**4. Componente responsable:** `agente24siete/lib/clienteAuth.js` y
+`lib/adminAuth.js` (verifican contra el proyecto equivocado); el
+comentario de `supabaseAdminIdentity.js` que lo indujo, ya corregido
+(commit `agente24siete@7f2d945`).
+
+**5. Código afectado:** ninguno de lógica — es exclusivamente
+configuración (`SUPABASE_URL`/`SUPABASE_JWKS_URL` en Vercel, proyecto
+`agente24siete`) más el comentario ya corregido.
+
+**6. Fix — NO ejecutado, valores verificados y listos:**
+
+| Variable | Valor correcto |
+| --- | --- |
+| `SUPABASE_URL` | `https://twkuidnjwhopbjnrhnxp.supabase.co` |
+| `SUPABASE_JWKS_URL` | `https://twkuidnjwhopbjnrhnxp.supabase.co/auth/v1/.well-known/jwks.json` |
+
+Verificado que el endpoint JWKS responde 200. **Esto reemplaza al valor
+que esta misma sesión indicó pegar antes** (`nwcqaginlnzjlkgwifas`),
+confirmado incorrecto con los datos de arriba.
+
+**7. Código a eliminar:** ninguno.
+
+**8. Riesgo de regresión:** bajo — es corregir una variable de
+configuración a un valor verificado con datos reales, no un cambio de
+lógica. El comentario que indujo el valor equivocado ya no existe.
+
+**9. Validación pendiente, la hace Gina cuando decida retomar:** pegar los
+dos valores en Vercel (Production y Preview), redeploy, y repetir el login
+completo una vez — con esto, sumado a los fixes ya construidos hoy
+(middleware, `whoami`, `next` absoluto), el bucle debería cerrarse del
+todo.
+
+**Nota aparte, no bloqueante:** esto también resuelve 🟠-3 de
+`AUDITORIA-AGENTE24SIETE.md`, que había quedado como "no diferenciado" —
+ahora sí: era (b), un problema de configuración, no vencimiento natural.
+
+---
+
 ## 🟠 ALTO
 
 ### 🟠-1 — ✅ Excepción hardcodeada `app === 'iot'` en /auth/complete — RESUELTO 08-ago-2026
