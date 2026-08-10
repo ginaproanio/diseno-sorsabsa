@@ -178,7 +178,7 @@ no arreglaba su login.
   `auth-sorsabsa` commit `4478657`. Verificado en vivo: la misma cuenta
   de prueba ahora da `200 {"active":true,"bypass":true}`.
 
-### 🔴-6 — 🔧 CONSTRUIDO 09-ago-2026, falta backfill + verificación en vivo — el bypass de 🔴-5 desconecta el único uso real de `pagos.suscripciones` — los días ganados por el programa de referidos
+### 🔴-6 — ✅ RESUELTO 09-ago-2026 (falta solo probar en vivo un mensaje real) — el bypass de 🔴-5 desconecta el único uso real de `pagos.suscripciones` — los días ganados por el programa de referidos
 
 - **Encontrado:** 09-ago-2026, explicado por Gina al justificar por qué el
   login SÍ debía validar contra la suscripción — no era arbitrario.
@@ -226,13 +226,47 @@ no arreglaba su login.
   traducen a saldo acreditado directo (mismo mecanismo que
   `webhook-recarga`), (c) desbloquean `negocios_incluidos` extra del
   plan.
-- **Pendiente de definir, ya en construcción — qué bloquea exactamente
-  una suscripción vencida/inexistente:** no revertir el bypass del login
-  (🔴-5) sigue siendo correcto — un cliente sin suscripción activa debe
-  poder entrar igual para recargar saldo o invitar referidos, bloquearlo
-  ahí bloquea el propio programa que se quiere premiar. El gate real va
-  DENTRO de agente24siete (ej. `registrarConsumo`/enviar mensajes por
-  IA), no en el login SSO.
+- **Qué bloquea exactamente una suscripción vencida/inexistente —
+  decidido y construido:** no se revirtió el bypass del login (🔴-5) —
+  sigue correcto, un cliente sin suscripción activa debe poder entrar
+  igual para recargar saldo o invitar referidos. El gate real quedó
+  DENTRO de agente24siete: `lib/brain.js`, `generarRespuesta()` consulta
+  `pagos.suscripciones` (vía `tieneSuscripcionActiva()`, nuevo en
+  `lib/pagosCliente.js`) ANTES de llamar a Claude — si no está activa, no
+  se gasta ni se cobra, se responde `SUSCRIPCION_INACTIVA_MESSAGE`
+  (`config/prompts.js`) en vez de generar una respuesta real.
+- **Construido (`agente24siete@57cfd58`):** alta nueva llama
+  `crear-trial` (15 días); `tieneSuscripcionActiva()` falla-cerrado
+  (niega por defecto si no puede verificar, mismo principio que ya
+  declara `pagos-sorsabsa/api/entitlements.js` y que ya usa CondoManager
+  para este mismo chequeo). Script `scripts/backfill-suscripciones.mjs`
+  para los clientes que ya existían (dry-run por defecto, `--confirm`
+  para escribir, idempotente).
+- **Backfill corrido en vivo, 09-ago-2026, por Gina:** `1 clientes
+  encontrados... [backfillado, 365d] 4 — COMITE PRO MEJORAS SECTOR 46 DE
+  PUNTA BLANCA... Resumen: 0 ya activos, 1 backfillados, 0 fallidos.` El
+  único cliente real de agente24siete (Punta Blanca, que además de
+  CondoManager también es cliente de agente24siete) tiene ahora su fila
+  real en `pagos.suscripciones`, sin que se le cortara el servicio.
+- **Hallazgo aparte, en el camino — 3 variables de entorno marcadas
+  "Sensitive" en Vercel bloquearon el proceso más de lo esperado:**
+  `DATABASE_URL`, `PAGOS_API_URL` y `PAGOS_API_KEY` de `agente24siete`
+  estaban marcadas "Sensitive" en Vercel — `vercel env pull` nunca
+  entrega el valor real de una variable Sensitive, siempre baja el
+  placeholder literal `"[SENSITIVE]"`, sin avisarlo (no hay ningún error
+  ni warning distinto a como se ve un valor real). Causó una ronda larga
+  de diagnóstico persiguiendo un `getaddrinfo ENOTFOUND base` que en
+  realidad era pg intentando parsear la palabra `[SENSITIVE]` como
+  cadena de conexión. Gina reemplazó los 3 valores a mano (leyéndolos
+  del propio dashboard de Vercel, que sí los revela) tanto en el archivo
+  local como en Vercel Production/Preview, con redeploy. **Vale la pena
+  recordar esto la próxima vez que un `vercel env pull` para una var
+  Sensitive dé un error que no tiene sentido — no es que el valor
+  guardado esté mal, es que el CLI nunca lo entrega.**
+- **Pendiente, no bloqueante:** Gina probando un mensaje real de WhatsApp
+  contra el número de Punta Blanca para confirmar el flujo completo en
+  vivo — el código y el backfill ya están verificados, esto es la
+  validación final de producto, no de infraestructura.
 
 - **Archivo:** `auth-sorsabsa/scripts/invite-user.mjs` (el proceso) + `iot/auth_sso.py` (la consecuencia)
 - **Problema:** ningún componente decide "esta persona debe existir en identity, con estos atributos, con acceso a este producto" — lo decide quien corre el script a mano.
