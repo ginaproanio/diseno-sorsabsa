@@ -126,9 +126,9 @@ sesión de código):**
    llave. Hacer esto DESPUÉS del paso 2, no antes (orden documentado en
    `geo-sorsabsa/service/README.md`), para no dejar a los dos consumidores
    recibiendo 401 mientras se actualizan.
-4. Los 3 repos tienen los cambios en el working tree, sin commit todavía
-   — a propósito, sin pedir confirmación de Gina antes de commitear no se
-   asume que se quiere.
+4. ✅ Commiteados 15-ago-2026, confirmado por Gina — `geo-sorsabsa` `694579a`,
+   `iot` `8fe7b74`, `SorsabsaForensic` `cd6d23a`, este doc + el tracker
+   en `diseno-sorsabsa` `029c104`. Ninguno pushed todavía (solo local).
 
 ---
 

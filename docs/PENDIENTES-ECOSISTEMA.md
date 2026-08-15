@@ -406,22 +406,24 @@ desde el servidor de Railway, único servicio transversal del ecosistema sin
 llave (el resto sigue el patrón de `pagos-sorsabsa`:
 `PAGOS_API_KEY_<PRODUCTO>`).**
 
-- **Código hecho 15-ago-2026** (retomado de la auditoría, sin cambiar el
-  fix ya diseñado ahí): `geo_core.py::host_permitido` restringe a
+- **Código hecho y commiteado 15-ago-2026** (retomado de la auditoría, sin
+  cambiar el fix ya diseñado ahí): `geo_core.py::host_permitido` restringe a
   dominios reales de Google Maps, chequeado en la entrada y en cada salto
   de redirección; `main.py::autenticar_producto` exige
   `Authorization: Bearer` por producto (`GEO_API_KEY_IOT`/
-  `GEO_API_KEY_SORSABSAFORENSIC`). `iot` y `SorsabsaForensic` ya mandan el
-  header. Verificado con la app real (ASGI, sin red) + `tests/test_geo_core.py`
-  11/11 (3 nuevos) + `py_compile` limpio en los 3 repos. Detalle completo
-  y las pruebas exactas en `AUDITORIA-GEO-SORSABSA.md` 🔴-1.
+  `GEO_API_KEY_SORSABSAFORENSIC`). `geo-sorsabsa` commit `694579a`.
+  `iot` (commit `8fe7b74`) y `SorsabsaForensic` (commit `cd6d23a`) ya
+  mandan el header. Verificado con la app real (ASGI, sin red) +
+  `tests/test_geo_core.py` 11/11 (3 nuevos) + `py_compile` limpio en los 3
+  repos. Detalle completo y las pruebas exactas en
+  `AUDITORIA-GEO-SORSABSA.md` 🔴-1. Este doc: `diseno-sorsabsa` commit
+  `029c104`.
 - **⏳ Falta lo operativo, no es trabajo de código:** generar las 2 llaves
   reales y cargarlas en Railway — primero `GEO_API_KEY` en `iot`/
   `SorsabsaForensic`, recién después `GEO_API_KEY_IOT`/
   `GEO_API_KEY_SORSABSAFORENSIC` en `geo-sorsabsa` y desplegar (orden en
-  `geo-sorsabsa/service/README.md`, evita una ventana de 401). **Los 3
-  repos tienen los cambios sin commitear todavía** — no se commiteó sin
-  que Gina lo pida.
+  `geo-sorsabsa/service/README.md`, evita una ventana de 401). Ninguno de
+  los 4 commits se pushed todavía (solo local).
 
 ## 14. ✅ HECHO — iot consume el portero central (auth-sorsabsa)
 
