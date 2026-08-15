@@ -61,6 +61,7 @@ compartidos del ecosistema"*. SorsabsaForensic es hoy el único que no lo hace.
 | **`notificaciones-sorsabsa`** | Avisar que un informe terminó (los procesadores tardan) |
 | **R2 (`sorsabsa-expedientes`)** | Los expedientes. **No** el volumen de Railway: `ARQUITECTURA-ECOSISTEMA.md` dice "los expedientes no van en el disco de la aplicación" |
 | **`geo-sorsabsa`** | Ya lo consume (commit `f40b08d`) |
+| **`CONVERTIDOR`** | ⬜ **Pendiente — señalado por Gina 15-ago-2026: "es un producto que debe ser consumido por SorsabsaForensic".** Corre en Railway (`convertidor-production-7ca8.up.railway.app`) con Tesseract/EasyOCR dentro. Encaje natural: el procesador `documento` hoy renderiza un PDF a imágenes con PyMuPDF pero **no hace OCR** — el texto de un documento escaneado no queda buscable ni citable en el informe. Sin evaluar todavía cómo se conecta |
 
 **Nada de esto se construye de nuevo.** Un "login propio" o un "cobro propio"
 acá sería el error que el tracker previene explícitamente.
@@ -126,11 +127,11 @@ luminancia, limitaciones— no se toca.**
 
 ## 4. Fases
 
-### Fase 0 — Rotar la llave y borrar `/ui` ⬜
+### Fase 0 — Rotar la llave y borrar `/ui` ✅ **HECHA 15-ago-2026**
 
-La `API_KEY` del despliegue actual quedó expuesta en el historial de una
-conversación. Se rota, y se borra la página `/ui` que se improvisó el
-15-ago-2026: no debe quedar algo a medias que parezca el producto.
+`sorsabsaforensic@6ac66c0`. Llave rotada vía `railway variable set --stdin`
+(no pasó por el chat ni por el historial de comandos) y la página `/ui`
+borrada. **Verificado en vivo:** `/ui` → 404, llave vieja → 401.
 
 ### Fase 1 — SSO central ⬜
 
@@ -142,7 +143,44 @@ quien sabe reconocer una acreditación válida, y automatizarlo sin criterio
 sería un fallback que convierte "no verificado" en "válido"
 (`ESTANDAR-DESARROLLO.md`).
 
-### Fase 2 — El motor del informe fuera de Qt ⬜ **← la fase crítica**
+### Fase 2 — El motor del informe fuera de Qt ✅ **HECHA Y VERIFICADA 15-ago-2026**
+
+**Resultado de la prueba de aceptación** (`sorsabsaforensic@82ddbec`):
+
+```
+entregado : 65 páginas, 55.979.693 bytes
+regenerado: 65 páginas, 55.979.688 bytes
+idénticas píxel a píxel               : 63/65
+difieren SOLO en la fecha de generación:  2  (portada y ficha, por diseño)
+difieren de verdad                     :  0
+```
+
+`report_panel.py` pasó de 5.249 a 889 líneas; el motor vive en
+`core/report/generador.py`. El código se movió por rangos de líneas exactos
+con el parser (`ast`), sin retipear. `ReportPanel` **hereda** de
+`GeneradorInforme`, así que la app de escritorio y el servicio web usan el
+mismo objeto de método — no hay dos copias que puedan divergir. La prueba
+quedó como `tools/verificar_informe_identico.py` para poder repetirla.
+
+**3 bugs reales que encontró esa prueba** (y por eso el criterio era
+"idéntico", no "parecido"):
+
+1. La extracción movió los métodos pero no los **atributos de clase**;
+   `PROPOSITOS` quedó atrás y el generador reventaba.
+2. `_extraer_cuerpo_html` quedó fuera por un **falso positivo del
+   clasificador**: marcaba "Qt" por la mención a `QTextEdit` en su
+   *docstring*, cuando el cuerpo es regex puro. Reclasificado por tokens,
+   ignorando comentarios y literales de texto.
+3. 🔴 **El más grave:** `_cargar_perito()` hacía
+   `Path(__file__).parent.parent / "peritos"`. Desde `gui_pyqt/` eso daba la
+   raíz; desde `core/report/` daba `core/peritos`, que no existe. **El
+   informe se generaba igual pero SIN los datos de la perito** — sin nombre,
+   sin cédula, sin número del Consejo de la Judicatura, con la profesión por
+   defecto "Perito Forense". Un informe pericial sin identificar a quien lo
+   suscribe. Corregido con `RAIZ_PROYECTO`, una constante con nombre, para
+   que mover un archivo no vuelva a romperlo en silencio.
+
+### ~~Fase 2~~ — planteo original (queda como referencia)
 
 `gui_pyqt/report_panel.py` (5.248 líneas) → `core/report/`:
 
