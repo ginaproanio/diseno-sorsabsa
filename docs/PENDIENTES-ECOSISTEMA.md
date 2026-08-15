@@ -91,6 +91,74 @@ Es PyQt5 (app de escritorio), no un servicio. Antes de Railway: poblar
 `core/orchestrator.py` (vacío), sacar el renderizador de informe fuera de Qt,
 quitar rutas absolutas, Dockerfile. Ver `PLAN_MATERIALIZACION.md` §2.
 
+**Objetivo explícito, 15-ago-2026 (Gina):** que SorsabsaForensic deje de
+correr en su computadora — hoy vive 100% local (disco + app de escritorio).
+
+**Corrección de Gina, misma sesión — no es "solo sube 019-25 completo",
+es más angosto: ningún caso se sube completo.** Cada expediente en
+`c:/sorsabsa/expedientes_forenses/2026/<caso>/` tiene 5 subcarpetas
+(`01_evidencias`/`02_procesamiento`/`03_informes`/`04_imagenes`/
+`05_varios`); de todo eso, **lo único que debe quedar por caso es el PDF
+del último informe entregado**, dentro de `03_informes/` — ni la
+evidencia cruda, ni el procesamiento intermedio, ni las imágenes, ni los
+archivos sueltos.
+
+Verificado contra el disco real (no es teórico) — hoy son **12 casos,
+3018 archivos, 2.0 GB** (el respaldo de R2 ya hecho, ver "Hecho", quedó
+en 2296/1.5 GB — desactualizado, ~722 archivos de más se generaron
+después). Si se aplica la regla de Gina (solo el último PDF de
+`03_informes/` por caso), el total baja a **~102 MB** — la diferencia es
+sobre todo `caso-096-2026-TCE` (862 MB, 1068 archivos) que tiene UN solo
+PDF real (54 MB) y el resto son variantes de depuración del generador de
+informes (`informe.json.antes-*` — 40+ copias, `error_pdf.log`, etc.), no
+evidencia que haga falta conservar.
+
+Dos hallazgos al identificar "el último PDF" que vale dejar anotados para
+quien lo automatice:
+
+- **No confiar en el nombre del archivo, usar la fecha real de
+  modificación.** `CASO-20260730/03_informes/` tiene dos PDF:
+  `Informe-30-07-2026_16-07-05.pdf` (nombre con hora, pero grabado más
+  temprano) e `Informe-30-07-2026.pdf` (nombre sin hora, pero grabado 36
+  minutos después — el real último). Ordenar por nombre de archivo da el
+  resultado equivocado ahí.
+- **`Caso UMET/` no tiene ningún PDF en `03_informes/`** — solo 4 `.md`
+  de planificación (`cotizacion.md`, `plan.md`, `requisitos.md`,
+  `solicitud.md`) en `05_varios/`. Parece una cotización que nunca llegó
+  a ejecutarse, no un caso con informe entregado — no hay nada que subir
+  de ahí, a menos que Gina diga lo contrario.
+
+**✅ Ejecutado 15-ago-2026 — motivo real: Gina entrega esta computadora,
+tiene que borrar el disco.** Decidido en el momento: no hace falta
+conservar nada más que los informes entregados — se cierra la duda de
+arriba, el disco local NO se conserva aparte.
+
+1. `Caso UMET/` — **borrado por completo** (no tenía informe, solo
+   cotización que nunca se ejecutó).
+2. Extraído el último PDF real (por fecha de modificación, no por
+   nombre) de los 11 casos restantes → carpeta
+   `c:/sorsabsa/expedientes_forenses/INFORMES-FINALES-2026/` (11
+   archivos, 103 MB).
+3. **Subido a R2, cubo `sorsabsa-expedientes`, prefijo
+   `informes-finales/2026/<caso>.pdf`** — verificado bajando 3 de vuelta
+   (`caso-096-2026-TCE`, `Proceso Arbitral No. 019-25`, `CASO-20260730`),
+   no solo confiando en el "Upload complete" de la consola. Ver
+   `ARQUITECTURA-ECOSISTEMA.md` → "Cómo conectarse a Cloudflare/R2" para
+   cómo se hizo (`wrangler`, ya autenticado, sin pedirle llaves a Gina).
+4. `SorsabsaForensic` (código) — 2 commits que solo existían local
+   (`cd6d23a` el fix de seguridad de geo-sorsabsa, `7babe1e` trabajo
+   nuevo sin terminar de auditar: lector EWF, examen de etiquetas
+   forenses, análisis de audio) **pusheados a GitHub**, repo privado
+   confirmado, `git status` limpio.
+
+**Sigue pendiente, sin tocar:** la evidencia cruda/procesamiento de los
+11 casos (1.9 GB) queda solo en el disco que se va a borrar — a
+propósito, es justo lo que Gina decidió no conservar. `Proceso Arbitral
+No. 019-25` sigue siendo el único caso activo: mientras se trabaja, su
+carpeta completa vive donde corresponda (hoy disco, después el servicio
+en Railway de este mismo punto) — no se redujo a un solo PDF porque
+todavía no se entregó.
+
 ## 8. Probar CondoManager end-to-end (Punta Blanca)  🔴 SIGUIENTE — 08-ago-2026
 
 Nunca se verificó el flujo real: admin entra, crea condominio, carga

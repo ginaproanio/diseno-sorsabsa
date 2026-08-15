@@ -495,12 +495,50 @@ porque solo lista los cubos de Supabase:
 | CondoManager, certificados/firmas | `condomanager-certificados`, `condomanager-firmas` | Supabase Storage, sin migrar |
 | DomusCRM, `webs/api/upload` | fotos de inmueble (público) | Supabase Storage (`property-media`) — sigue con el tope de 4MB del §4; el patrón R2 existe en `backend/src/lib/storage.ts` pero ese backend no sirve tráfico real todavía |
 | JustiRed, scraper | PDFs de leyes | ✅ **R2** directo (`legaltech/scraper/r2.py`, boto3) — esto NO es nuevo de hoy, ya funcionaba antes de este documento. El cubo Supabase `justired-legal-documents` (§4, 0 objetos) parece un cascarón sin usar |
-| SorsabsaForensic | expedientes periciales (1.5GB, 2296 archivos) | ✅ **R2 privado**, respaldados e íntegros (`PENDIENTES-ECOSISTEMA.md`, "Hecho") |
+| SorsabsaForensic | expedientes periciales, cubo `sorsabsa-expedientes` (privado) | ✅ Backup completo viejo (2296 archivos/1.62GB, desactualizado — ver `PENDIENTES-ECOSISTEMA.md` #7) + `informes-finales/2026/<caso>.pdf` (11 PDF, ~103MB, subido 15-ago-2026 — solo el último informe entregado por caso, no la evidencia cruda) |
+
+### Cómo conectarse a Cloudflare/R2 desde una sesión de Claude Code — ✅ SÍ SE PUEDE, verificado 15-ago-2026
+
+**No repetir "no puedo conectarme a Cloudflare" — se puede, y así es:**
+no hay MCP de Cloudflare instalado en estas sesiones (a diferencia de
+GitHub/Supabase/Vercel, que sí tienen conector), pero **`wrangler` (el CLI
+oficial de Cloudflare) ya está instalado y autenticado por OAuth** con la
+cuenta `gina.proanio76@gmail.com` — mismo principio que `gh` con GitHub, no
+hace falta pedirle a Gina ninguna llave de API. Confirmado con
+`wrangler whoami` (token con scopes de R2, D1, Workers, etc.) y usado en
+vivo para subir y verificar archivos reales en `sorsabsa-expedientes`.
+
+Comandos que sí funcionan (probados, no supuestos):
+
+```bash
+wrangler r2 bucket list                    # lista los cubos de la cuenta
+wrangler r2 bucket info <bucket>           # object_count/bucket_size — OJO: estas dos
+                                            # cifras se actualizan con RETRASO, no en vivo;
+                                            # no usarlas para confirmar que una subida
+                                            # funcionó, usar `object get` para eso.
+wrangler r2 object put <bucket>/<key> --file=<ruta> --content-type=<mime> --remote
+wrangler r2 object get <bucket>/<key> --file=<ruta-destino> --remote
+wrangler r2 object delete <bucket>/<key> --remote
+```
+
+**Límite real, no cosmético:** `wrangler r2 object` NO tiene subcomando
+`list` (solo `get`/`put`/`delete`, confirmado con `--help`) — para saber
+qué claves existen dentro de un cubo hay que conocerlas de antes (por
+convención de ruta) o llevar un índice aparte; no hay forma de "explorar"
+el cubo a ciegas con wrangler solo. Si hace falta listado real, la
+alternativa es boto3 (S3-compatible, como usa `legaltech/scraper/r2.py`)
+con credenciales de token de API — eso sí soporta `list_objects_v2`.
+
+Cubos reales en la cuenta (`wrangler r2 bucket list`, 15-ago-2026):
+`condomanager-inmuebles`, `justired-registros-oficiales`,
+`sorsabsa-expedientes`.
 
 ### API tokens de R2 activos — ✅ dados por Gina 08-ago-2026
 
-Vistos directo en el dashboard de Cloudflare (no hay MCP de Cloudflare para
-verificarlo por API desde acá — esto es lo que ella reportó, tal cual):
+Esto es la vía alternativa (boto3/S3, para servicios como
+`legaltech/scraper/r2.py` que corren fuera de una sesión de Claude Code,
+en Railway) — no la única vía, ver arriba. Vistos directo en el dashboard
+de Cloudflare (a mano, no con wrangler):
 
 | Token | Aplicado a | Permiso | Emitido | Estado |
 |---|---|---|---|---|
