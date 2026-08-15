@@ -133,15 +133,77 @@ luminancia, limitaciones— no se toca.**
 (no pasó por el chat ni por el historial de comandos) y la página `/ui`
 borrada. **Verificado en vivo:** `/ui` → 404, llave vieja → 401.
 
-### Fase 1 — SSO central ⬜
+### Fase 1 — SSO central ✅ **HECHA Y VERIFICADA 15-ago-2026**
 
-`sorsabsaforensic` registrado en `auth-sorsabsa`. Dos roles. El alta de
-perito exige subir la credencial (número de calificación del Consejo de la
-Judicatura + vencimiento — el mismo dato que ya modela `peritos/` y
-`gui_pyqt/perito_dialog.py`). **La verificación la hace Gina a mano**: es
-quien sabe reconocer una acreditación válida, y automatizarlo sin criterio
-sería un fallback que convierte "no verificado" en "válido"
-(`ESTANDAR-DESARROLLO.md`).
+Gina lo pidió y tenía razón: *"por qué no incorporas auth-sorsabsa? antes
+siempre me hacías la observación que todo sistema que entra al ecosistema
+debe incorporar auth"*. La llave compartida provisional **ya no existe**:
+una contraseña única para todo el que entrara es exactamente lo que el
+portero existe para evitar, y quien suscribe un informe pericial tiene que
+ser una persona identificada.
+
+**Contra qué proyecto se verifica.** Contra `verticales_sorsabsa`
+(`twkuidnjwhopbjnrhnxp`), **no** contra `sorsabsa-identity` — el dato de
+arquitectura fijado el 10-ago-2026 (`ARQUITECTURA-ECOSISTEMA.md` §1,
+`AUDITORIA-PORTERO-SSO.md` 🔴-12). Confundirlo costó una sesión entera de
+bucles en agente24siete. Consecuencia práctica: **no hubo que crear ni
+configurar nada en Supabase**, fue solo código.
+
+**Quién puede entrar: el registro de peritos, no una lista en el código.**
+`ESTANDAR-DESARROLLO.md` marca `if email == "..."` como señal de alarma —
+si la respuesta a "¿por qué el sistema necesita conocer esto?" es
+autorización, debe haber una fuente de datos. Esa fuente **ya existía**:
+`PERITOS_DIR`, que además es donde vive el número del Consejo de la
+Judicatura. Tener perfil ES ser perito. El emparejamiento es por **email**,
+el claim OIDC estándar: un campo custom en `user_metadata` no sobrevive a
+la federación, y confiar en él causó un bucle real en IOT el 09-ago-2026.
+
+**Lo que NO se verifica en el login: el pago.** A propósito, y siguiendo el
+criterio que `entity-resolver.ts` ya dejó escrito para agente24siete: *"El
+gate correcto para este producto no es «¿tiene suscripción?» — es «¿tiene
+saldo?», y ESE chequeo vive dentro del producto, al consumir, no en el
+login."* SorsabsaForensic cobra por consumo ($80 el caso, $20-30 el
+insumo), no por suscripción: preguntar por una suscripción mensual
+bloquearía al 100 % de sus usuarios. Se registró como tal en
+`entity-resolver.ts`.
+
+Cambios: `auth-sorsabsa/src/lib/apps.ts` (alta del producto) ·
+`entity-resolver.ts` (modelo de cobro) · `SorsabsaForensic/core/sso.py`
+(nuevo) · `api.py` (`/auth/callback` GET+POST, `/auth/logout`) ·
+`web/index.html` (sin formulario de llave).
+
+**Sin puerta trasera de pruebas.** La comprobación automática no puede
+loguearse contra el portero real, pero el servicio **no** lleva un
+`MODO_PRUEBA` —bastaría desplegar con esa variable puesta para dejarlo
+abierto—. El atajo vive en `tools/_servidor_de_prueba.py`, fuera del
+servicio, usando `dependency_overrides` de FastAPI.
+
+#### Lo que hay que hacer FUERA del código
+
+**`sorsabsa@hotmail.com` no existe en el portero.** Comprobado en
+`auth.users` de `gyqgorgfstffbgazhbnb`: las cuentas reales son
+`gina.proanio76@gmail.com`, `sorsabsa@gmail.com` y
+`gina.proanio@hotmail.com`. Pero Gina fijó el criterio (15-ago-2026):
+*"sorsabsa@hotmail.com es la cuenta que consta registrada ante el consejo
+de la judicatura, por ende con esta se debe usar para mis peritajes"* —
+quien firma debe ser quien está registrado ante el CJ. Así que **la cuenta
+se registra en el portero**, no se cambia el perfil:
+`https://auth.sorsabsa.com/auth/register`. El perfil de perito ya declara
+ese correo, así que registrarse alcanza para quedar autorizada.
+
+**Orden de despliegue, no es indistinto:** primero `auth-sorsabsa` (Vercel)
+y después SorsabsaForensic. Al revés, `app=sorsabsaforensic` todavía no
+existe en el portero desplegado, cae en `APPS.default` y el login termina
+en `sorsabsa.com` en vez de volver al producto.
+
+#### Pendiente que abre esta fase
+
+Con **dos o más** peritos registrados, `GeneradorInforme._cargar_perito()`
+toma el PRIMER perfil de la carpeta, no el de quien está trabajando: el
+informe saldría firmado por otra persona. Hoy no es un defecto —hay un
+solo perfil— y `/api/perito` ya usa la identidad de la sesión. Se resuelve
+junto con el alta de peritos de la Fase 5, y **no puede quedarse sin
+resolver** cuando entre el segundo perito.
 
 ### Fase 2 — El motor del informe fuera de Qt ✅ **HECHA Y VERIFICADA 15-ago-2026**
 
@@ -197,22 +259,80 @@ quedó como `tools/verificar_informe_identico.py` para poder repetirla.
 firmó. Sin eso no se avanza a la Fase 3. Es un documento que va a un
 tribunal: no se da por bueno "parecido".
 
-### Fase 3 — Las tres pestañas ⬜
+### Fase 3 — Las tres pestañas ✅ **HECHA Y VERIFICADA 15-ago-2026**
 
-Reproducir la interfaz real, no una simplificación:
+Reproducir la interfaz real, no una simplificación.
 
-- **Casos** — panel lateral: listar, crear, abrir. `es_expediente()` reconoce
-  un caso por su ESTRUCTURA, no por su nombre (ya resuelto en el código).
-- **📎 Evidencias** — los **15 tipos** con sus formularios, generados desde
-  `TIPOS_EVIDENCIA` (ya es un esquema declarativo), más los 4 bloques
-  dinámicos: rangos de WhatsApp (fecha/hora), rangos de transcripción,
-  fotogramas (con propósito: acredita edición/ubicación/contenido) y puntos
-  de georreferenciación. Más "Editar" y "Vaciar caso" (que **nunca** toca
-  `05_varios`).
-- **⚙️ Procesadores** — ejecutar con log en vivo. El `QThread` + señales pasa
-  a una cola con SSE; `set_progress_callback()` ya existe en cada procesador.
-- **📄 Informe** — las 13 secciones, ficha del caso, medio de preservación,
-  perfil del perito, factura, y el PDF de la Fase 2.
+#### 3.a Navegación: gestión ≠ ejecución (pedido de Gina, 15-ago-2026)
+
+El primer intento dejaba la columna «CASOS» fija a la izquierda y el trabajo
+comprimido al lado. Gina lo rechazó con un criterio que vale para todo el
+producto:
+
+> «Casos = módulo de gestión/navegación. Caso abierto = contexto actual.
+> Evidencias / Procesadores / Informe = espacio de ejecución de la pericia.»
+
+No es esconder la columna con CSS: son **dos estados de navegación**.
+
+| Estado | Qué se ve |
+|---|---|
+| Sin caso abierto | El módulo de casos ocupa la pantalla: buscar, crear, abrir, borrar |
+| Con caso abierto | Espacio de trabajo al 100 % del ancho. Del caso queda un chip `CASO · PRUEBA001` y el botón **Cambiar caso** |
+| Cambiar caso | El mismo módulo se abre como panel ENCIMA (con velo) y se cierra solo al elegir |
+
+Medido en el navegador: el área de trabajo del informe usa **1364 de 1600 px
+(85 %)** con el riel de secciones abierto, y **1600 px (100 %)** al plegarlo.
+El módulo de casos **nunca** resta ancho: se superpone.
+
+#### 3.b Editor de texto enriquecido — requisito, no mejora futura
+
+Sobre `contenteditable` + `execCommand` con `styleWithCSS`, **sin librería
+externa**: el HTML que se guarda es el mismo que WeasyPrint imprime, y un
+peritaje no puede depender de que un CDN sirva un `.js`. Una librería con
+modelo propio (Quill/ProseMirror) guardaría JSON, no el HTML que el
+generador ya sabe componer.
+
+Negrita · cursiva · subrayado · tachado · listas numeradas y con viñetas ·
+sangrías · 4 alineaciones · tipo y tamaño de fuente (en **pt**, la unidad de
+la hoja A4) · color de texto y resaltado · títulos y cita · **tablas con
+edición** (fila/columna arriba-abajo-izquierda-derecha, quitar, encabezado,
+ancho total, bordes) · **imágenes** subidas al caso, con ancho y alineación ·
+pegar con formato desde Word · deshacer/rehacer · guardar (Ctrl+S) · ver y
+corregir el HTML.
+
+Las dos secciones que **no** son texto libre siguen siendo formulario, como
+en la app de escritorio: `2. Ficha del caso` y `10. Medio de preservación`
+(con su lista de fotos). Más los tres diálogos del panel de Qt: factura de
+honorarios, capturas de video y **perito que firma** — este último es nuevo:
+muestra nombre, cédula y credencial del CJ **antes** de generar el PDF,
+porque un informe sin perito sale igual y el PDF no lo advierte.
+
+#### 3.c Tres fallos silenciosos que salieron al operar la interfaz
+
+Los tres se ven bien en pantalla y salen mal impresos. Ninguno lo detectó la
+prueba de API: aparecieron manejando el navegador de verdad.
+
+1. **`insertHTML` borra los estilos en línea que considera redundantes** con
+   el CSS de la página. La tabla se guardaba con `<td>` pelado: bordes
+   dibujados por la hoja de estilos de la web, **ausentes en el PDF**. Se
+   reponen por DOM y `normalizarTablas()` corre también antes de guardar.
+2. **`insertHTML` de un bloque `<table>` con el cursor dentro de un `<p>`
+   parte la estructura**: el `<tbody>` quedaba como HERMANO de la tabla
+   (`<tbody>…</tbody><table></table>`). Al volver a la sección la tabla
+   estaba vacía y las filas sueltas. Ahora la tabla se construye por DOM y
+   se inserta como hijo directo del editor.
+3. Consecuencia del anterior: `celda.closest('table')` devolvía `null`,
+   `refrescarContexto()` reventaba al posicionar la barra y **ningún botón
+   de tabla respondía** — la barra aparecía, pero muerta.
+
+#### 3.d Cómo se verifica
+
+`prueba_ui.py` levanta uvicorn, abre Chromium y **opera la interfaz**: crea
+el caso, escribe, aplica negrita, inserta lista, tabla e imagen, guarda,
+recarga y comprueba que todo vuelve del servidor; después genera el PDF y
+mira **dentro** con PyMuPDF: que el texto esté, que la tabla se dibuje con
+sus bordes (57 trazos) y que la imagen esté incrustada. 40 comprobaciones,
+cero errores de JavaScript.
 
 ### Fase 4 — Procesadores, **priorizados por uso real medido** ⬜
 
@@ -272,6 +392,62 @@ es provisional y queda anotado como deuda.
 **Ya subido y verificado (15-ago-2026):** `informes-finales/2026/<caso>.pdf`,
 11 PDF, 103 MB — el último informe entregado de cada caso cerrado. El resto
 de la evidencia cruda no se conserva (decisión de Gina).
+
+## 5-bis. Pendientes levantados por Gina el 15-ago-2026
+
+Anotados, **no** empezados. Se ejecutan en este orden dentro del plan.
+
+### 5-bis.1 — Foliación automática del PDF final ⬜
+
+Regla que fijó Gina, textual: **un folio es una HOJA FÍSICA completa —recto
+y verso—, no una página del PDF.**
+
+- El número va **solo en el recto**, esquina superior derecha.
+- Correlativo desde la primera hoja: `1 (UNO)`, `2 (DOS)`, … `35 (TREINTA Y
+  CINCO)` — en cifra y en letra.
+- Hoja 1 = folio 1, hoja 2 = folio 2, aunque cada hoja tenga contenido en
+  las dos caras. **El verso NO pasa a ser el folio siguiente.**
+- **CD/DVD/USB:** la hoja de identificación del soporte recibe el folio que
+  le toque por su ubicación. Si el contenido del CD queda en el **verso**
+  del folio 6, sigue siendo folio 6 — **no se traslada** a la hoja
+  siguiente solo para que quede junto al número. Se respeta el orden
+  físico y documental del expediente.
+- Se aplica sobre el **PDF definitivo**, con todos los anexos ya
+  incorporados y ordenados. El PDF descargado ya sale foliado, sin
+  intervención manual.
+
+Nota técnica para cuando se implemente: el generador compone en A4 a una
+cara, así que "hoja física" implica decidir el mapeo página→hoja (impresión
+a doble faz). Esa correspondencia hay que fijarla con Gina **antes** de
+escribir código: es lo que decide si la página 2 del PDF es el verso del
+folio 1 o el recto del folio 2.
+
+### 5-bis.2 — Correos de confirmación: llegan de Supabase, en inglés y sin marca ⬜
+
+Gina: *"el mail de confirmación llegó por Supabase y en inglés. ¿Por qué se
+consume de esa forma? CondoManager presenta su marca por correo, por ende
+nunca llega en inglés y menos sin marca."*
+
+Tiene razón y el ecosistema ya lo resolvió: `auth-sorsabsa` tiene
+`src/app/api/auth-hook/send-email` y plantillas en `src/emails/` — el Send
+Email Hook de Supabase, que sustituye el correo por defecto por uno propio,
+en español y con la marca de la app. **El registro de SorsabsaForensic no
+lo está usando**, o el hook no cubre el alta genérica. Hay que comprobar
+cuál de las dos cosas es antes de tocar nada — no duplicar plantillas.
+
+### 5-bis.3 — SorsabsaForensic no está en el Showcase ⬜
+
+Falta integrarlo, como el resto de los productos.
+
+### 5-bis.4 — Notificaciones: consumir `notificaciones-sorsabsa` ⬜
+
+La campana ya está en la barra superior (15-ago-2026) como punto de
+integración, y **declara que no está conectada** en vez de mostrar un cero
+—"sin avisos" y "el servicio no responde" se ven igual, y confundirlos es
+como se pierde el aviso de que un informe terminó—. Falta consumir el
+transversal. Regla dura: este producto **no implementa avisos propios**.
+
+---
 
 ## 6. Mejoras acordadas — mejorar la lógica, no perderla
 

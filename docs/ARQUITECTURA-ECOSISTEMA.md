@@ -529,6 +529,51 @@ el cubo a ciegas con wrangler solo. Si hace falta listado real, la
 alternativa es boto3 (S3-compatible, como usa `legaltech/scraper/r2.py`)
 con credenciales de token de API — eso sí soporta `list_objects_v2`.
 
+#### Lo que wrangler NO puede hacer: crear el token que necesita un contenedor
+
+Distinguir dos cosas que se confunden fácil (Gina, 15-ago-2026: *"para mí
+ya hay un r2, ¿me estás pidiendo otro?"* — no, no era otro cubo):
+
+| | Qué es | Quién lo puede crear |
+|---|---|---|
+| **Cubo** (`sorsabsa-expedientes`) | Dónde viven los objetos | `wrangler r2 bucket create` ✅ |
+| **Token de API S3** (`R2_ACCESS_KEY_ID` + `R2_SECRET_ACCESS_KEY`) | La credencial para leer/escribir **desde un servidor** | **Solo el panel de Cloudflare** ❌ |
+
+El OAuth de `wrangler` sirve para que una sesión opere el cubo, pero **no
+se puede convertir en la credencial que un contenedor necesita en runtime**,
+y `wrangler` no tiene comando para emitirla (el scope del token OAuth no
+incluye crear tokens de API). Un servicio en Railway tiene solo dos caminos:
+
+1. **Token de API S3** con alcance a UN cubo — se crea a mano una vez, en
+   *R2 → Manage API tokens*, y se guarda en las variables del servicio con
+   los nombres ya estándar del ecosistema: `R2_ACCOUNT_ID`,
+   `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`.
+2. **Un Worker con binding de R2** delante del cubo (el Worker no necesita
+   token: Cloudflare le da acceso por `[[r2_buckets]]`). Se puede desplegar
+   desde la sesión —el OAuth sí tiene `workers (write)`—, pero agrega un
+   componente que mantener y necesita su propio secreto de servicio.
+
+Por defecto, la opción 1: menos piezas.
+
+#### Regla dura: un token por producto — no se comparten
+
+**Cada producto usa su propia credencial de R2, con alcance a su propio
+cubo.** No se reutiliza el token de otro producto "porque ya existe".
+
+Nace de un error concreto (15-ago-2026): se propuso que SorsabsaForensic
+usara el token de R2 de CondoManager. Gina lo paró: *"no tienes por qué
+tocar ni mezclar productos, mañana un producto se da de baja y jodes otro,
+ni siquiera el negocio de informática forense tiene algo que ver con
+condomanager ni con justired"*. Tiene razón y es exactamente lo que
+`PLAN-DESOLDADO.md` existe para eliminar: rotar esa credencial o dar de
+baja CondoManager habría tumbado el peritaje, sin ninguna relación de
+negocio entre los dos.
+
+**Lo único que se comparte entre productos son los transversales**, y son
+estos, no otros: `auth-sorsabsa`, `pagos-sorsabsa`,
+`notificaciones-sorsabsa`, `geo-sorsabsa` y el `Convertidor`. Todo lo
+demás —cubos, bases, credenciales, dominios— es de un solo producto.
+
 Cubos reales en la cuenta (`wrangler r2 bucket list`, 15-ago-2026):
 `condomanager-inmuebles`, `justired-registros-oficiales`,
 `sorsabsa-expedientes`.

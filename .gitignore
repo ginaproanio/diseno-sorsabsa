@@ -11,6 +11,9 @@ graphify-out/*
 
 .vercel
 
+# Claves locales (ej. MAGNIFIC_API_KEY para scripts/magnific-upscale.mjs)
+.env.local
+
 # Instalaciones locales de skills (Claude Code) — no son parte del proyecto
 .agents/
 .claude/

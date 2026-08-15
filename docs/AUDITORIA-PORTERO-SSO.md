@@ -946,6 +946,36 @@ volver a ser necesario.
 `iot/editor.py:63-66`. Mismo síntoma que 🟠-4, para datos de negocio (PDF)
 en vez de autenticación. Se resuelve junto con 🟠-4 si se migra a tabla.
 
+### 🟡-4 — ✅ CORREGIDO 15-ago-2026 — El registro del portero pedía "Nombre completo": el arreglo se hizo en un producto y no en el compartido
+
+- **Archivo:** `auth-sorsabsa/src/app/auth/register/page.tsx`
+- **Cómo apareció:** Gina, al ir a registrar su cuenta para
+  SorsabsaForensic: *"sigue pidiendo nombre completo, cuando debe pedir
+  nombres y apellidos, corrige esto en el portero, **no sé cuántas veces lo
+  he dicho**"*.
+- **Por qué se repetía:** porque ya estaba resuelto… en otro lado.
+  `AUDITORIA-DOMUSCRM.md` 🟡-1 lo corrigió el 10-ago-2026
+  (`domuscrm@407c277`) en el registro de DomusCRM, con el criterio ya
+  aceptado. El portero —que es **la puerta de entrada de todos los
+  productos**— nunca lo recibió. Arreglar el síntoma en el producto que lo
+  expuso y no en el mecanismo común es exactamente el patrón que
+  `ESTANDAR-DESARROLLO.md` señala; acá se ve el costo: la usuaria lo pidió
+  varias veces porque cada vez lo veía en una pantalla distinta.
+- **Fix:** mismo patrón que DomusCRM, sin inventar uno nuevo. Dos campos en
+  fila (`Nombres` / `Apellidos`) que se concatenan en `full_name` justo
+  antes del `signUp` — **cero cambios de esquema, cero migración**.
+  Se sigue guardando un solo `full_name` a propósito: es lo que Supabase
+  expone como claim `name` en la federación OIDC. Un `nombres`/`apellidos`
+  en `user_metadata` no viajaría a los productos — la misma trampa que
+  `identidad_iot` (🔴-2).
+- **Por qué importa más que la estética:** partir un nombre después es
+  ambiguo. "Gina Silvana Proaño Espinosa" puede ser dos nombres y dos
+  apellidos, o uno y tres. En Ecuador los dos apellidos son la norma, y en
+  un informe pericial el nombre de quien suscribe no admite adivinanzas.
+- **Verificado:** typecheck limpio y la página abierta en el navegador —
+  los campos son `Nombres`, `Apellidos`, `Correo electrónico`, `Contraseña`,
+  sin errores de JavaScript.
+
 ### 🟡-3 — ⬜ Reset dual (via=identity/via=producto) normaliza el problema en vez de resolverlo
 `auth-sorsabsa/src/app/auth/reset/page.tsx`. Honesto y no filtra
 información, pero parte de aceptar como normal que una cuenta real exista
