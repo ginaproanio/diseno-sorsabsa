@@ -436,6 +436,64 @@ DLL de Windows) bajo CoreCLR — sin confirmar que corra en Linux.
 DLL de Windows) bajo CoreCLR — sin confirmar que corra en Linux. Hoy el
 servicio los rechaza con un error explícito.
 
+### Fase 4-bis — Lo que enseñó la primera corrida REAL ✅ **15-ago-2026**
+
+Gina procesó un WhatsApp de verdad en `PRUEBA001` —251 mensajes, 27 imágenes
+y **32 notas de voz**— y le dio error. **El procesamiento no había fallado:
+seguía corriendo.** Lo que se cayó fue su petición HTTP. Tres defectos, y el
+tercero era de diseño:
+
+1. **El servicio entero quedaba mudo mientras procesaba.** `procesar` y
+   `generar_pdf` estaban declarados `async def` sin un solo `await` dentro:
+   FastAPI corre un `async def` en el bucle de eventos, así que el trabajo
+   síncrono lo bloqueaba para todos —su pantalla, `/api/salud`, cualquier
+   otra sesión—. Medido contra un trabajo de 6 s: `/api/salud` tardaba
+   **5,06 s**; como `def` normal, **0,10 s**.
+
+2. **Una hora de trabajo dentro de una petición HTTP.** Cada nota de voz
+   tarda entre 1,5 y 3 minutos en la CPU de Railway; 32 notas pasan de la
+   hora. Ninguna petición sobrevive a eso. Ahora `POST /procesar` **arranca
+   y contesta en el acto** (0,06 s medido) y el avance se sigue por
+   `estado.json`. El progreso no hubo que inventarlo: **todos los
+   procesadores ya lo escribían** para la barra de la app de escritorio; la
+   web no lo miraba.
+
+3. **El avance se habría quedado clavado en «70% Procesando adjuntos…»** una
+   hora entera: el estado se guardaba una sola vez al entrar en la fase, y el
+   «nota 5/32» solo iba al log. Ahora se guarda en cada nota, repartiendo el
+   tramo 70-80. Es lo que distingue un trabajo avanzando de uno colgado —y
+   aprovecha también a la app de escritorio, que lee el mismo archivo.
+
+Además, revisando esa corrida salieron **tres campos del formulario que no
+llegaban al procesador**, todos del mismo tipo: no fallan, entregan de más o
+de menos dentro de un informe pericial.
+
+- `rangos` no estaba mapeado en WhatsApp, y es el **único** camino por el que
+  la interfaz manda sus fechas (su formulario no tiene fecha_desde/hasta,
+  tiene el bloque «Fechas/horas a extraer»). El rango pedido se ignoraba y el
+  anexo salía con el **chat completo**.
+- `fechas_especificas` no estaba mapeado en Correo. Su etiqueta dice *«tienen
+  prioridad sobre Fecha desde/hasta»*: se descartaba la instrucción más
+  precisa a favor de la más amplia.
+- Los campos de **texto** que el procesador recibe como **lista** se pasaban
+  crudos. `for e in "pdf"` recorre CARACTERES: el filtro buscaba `.p`, `.d`
+  y `.f`, no encontraba nada y **vaciaba el anexo**.
+- Y cinco tipos ofrecen «o indique una URL» que no llegaba a ninguna parte.
+
+`tools/verificar_argumentos_procesadores.py` compara lo que el formulario
+ofrece contra lo que el registro traduce y contra la firma real de
+`procesar()`. **Encontró el caso de Correo, que no se estaba buscando.**
+
+> **Si se generó algún informe con filtros de fecha en WhatsApp o Correo
+> antes del 15-ago-2026, ese anexo puede contener más de lo pedido.**
+> Conviene revisarlo antes de firmar.
+
+**Pendiente conocido:** un reintento **repite todas las transcripciones**. No
+hay caché por archivo, así que cortar un trabajo de 32 notas y relanzarlo
+vuelve a empezar de cero. Guardar cada transcripción atada al **hash** del
+archivo lo arreglaría; se deja para hacerlo con cuidado, porque una
+transcripción cacheada tiene que ser defendible en la pericia.
+
 ### Fase 5 — Cobro y perfil público ⬜
 
 `pagos-sorsabsa`: $80 desbloquea un caso (perito), $20–30 desbloquean una
@@ -496,9 +554,34 @@ en español y con la marca de la app. **El registro de SorsabsaForensic no
 lo está usando**, o el hook no cubre el alta genérica. Hay que comprobar
 cuál de las dos cosas es antes de tocar nada — no duplicar plantillas.
 
-### 5-bis.3 — SorsabsaForensic no está en el Showcase ⬜
+### 5-bis.3 — SorsabsaForensic en el Showcase ✅ **HECHO 15-ago-2026**
 
-Falta integrarlo, como el resto de los productos.
+Décima marca de `src/brand/brands.ts`, visible en el showcase junto a las
+otras nueve. Verificado en el navegador contra la app construida: la marca
+aparece, el panel abre sin errores de JS y el informe de contraste sale
+**AAA en los tres pares** (texto sobre fondo 14,93:1, texto sobre superficie
+16,22:1, texto del botón primario 10,36:1).
+
+**No estrena paleta, y es a propósito.** Viste la institucional —antracita
+`#423F44` + verde `#70C051`— porque el informe pericial lo firma la perito
+bajo la marca SORSABSA; darle colores propios habría sido inventarle una
+identidad que el producto no tiene. Lo suyo es el wordmark
+(`SORSABSA` + `Forensic`) y una paleta **semántica de estado** que la marca
+institucional no declaraba: un procesador puede correr, faltarle una
+dependencia, o **correr entregando menos de lo debido** (imagen forense sin
+`exiftool` deja el examen de etiquetas sin practicar). Sin ese tercer estado
+la pantalla miente en una de las dos direcciones. Se exporta como
+`ESTADOS_FORENSIC`.
+
+**Hallazgo para el sistema de diseño.** La auditoría del showcase lleva
+marcando `--brand-accent-ink` (*texto accesible sobre el acento*) como
+PENDIENTE para todo el ecosistema. SorsabsaForensic ya lo tenía resuelto en
+su CSS de producción: sobre el verde `#70C051`, texto blanco da **2,25:1 y
+no pasa AA**; el producto usa `#10240a` y da **7,31:1, AAA**. Queda escrito
+en `brands.ts` para que, cuando se agregue el token, se parta de un valor
+probado en vez de elegirlo a ojo. No se añadió el campo ahora porque
+`BrandColors` no lo tiene y agregarlo toca a las diez marcas: es decisión
+del sistema de diseño, no de este producto.
 
 ### 5-bis.4 — Notificaciones: consumir `notificaciones-sorsabsa` ⬜
 

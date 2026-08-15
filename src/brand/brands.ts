@@ -254,7 +254,67 @@ export const BRANDS: Record<string, BrandConfig> = {
     fontImport:
       'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
   },
+
+  // SorsabsaForensic — materialización de evidencia digital para pericias
+  // (materializacion.sorsabsa.com). Extraído de su interfaz real,
+  // SorsabsaForensic/web/index.html, 15-ago-2026.
+  //
+  // NO estrena paleta: viste la institucional de arriba (antracita + verde),
+  // porque el informe pericial lo firma la perito bajo la marca SORSABSA y
+  // darle colores propios habría sido inventar una identidad que el producto
+  // no tiene. Lo suyo es el wordmark —"SORSABSA" + "Forensic"— y una paleta
+  // semántica que la institucional no declaraba y este producto sí necesita:
+  // un procesador puede estar listo, faltarle una dependencia, o correr
+  // dando menos de lo debido, y esos tres estados tienen que distinguirse a
+  // simple vista. Los tres valores salen del CSS que ya está en producción.
+  sorsabsaforensic: {
+    name: 'sorsabsaforensic',
+    displayName: 'SORSABSA Forensic',
+    wordmark: { first: 'SORSABSA', second: 'Forensic', tones: ['primary', 'accent'] },
+    colors: {
+      primary: '#423F44',            // antracita institucional
+      accent: '#70C051',             // verde institucional
+      surface: '#FFFFFF',
+      background: '#F6F5F7',         // --fondo
+      text: '#212022',
+      muted: '#6B676E',              // --tenue
+      border: '#E3E1E4',             // --borde
+      destructive: '#B3261E',        // --alerta: el procesador no corre
+    },
+    radius: '0.375rem',              // 6px, el de sus botones
+    // Sin fuente decorativa: la interfaz usa la del sistema y el informe PDF
+    // compone en Arial/Helvetica por requisito de la pericia. Declarar una
+    // fuente de marca sería inventarla.
+    //
+    // TINTA SOBRE EL ACENTO: este producto ya resolvió en su CSS lo que la
+    // auditoría del showcase lleva marcando `--brand-accent-ink: PENDIENTE`
+    // para todo el ecosistema. El verde #70C051 es claro: texto blanco encima
+    // da 2,25:1 y NO pasa AA. La interfaz usa #10240a (verde casi negro) y da
+    // 7,31:1 — AAA. Medido, no estimado.
+    //
+    // No se declara como campo porque `BrandColors` no tiene todavía dónde
+    // ponerlo, y añadírselo toca a las diez marcas: es una decisión del
+    // sistema de diseño, no de este producto. Queda escrito acá para que el
+    // día que se agregue el token exista un valor probado en producción del
+    // que partir, en vez de volver a elegirlo a ojo.
+  },
 };
+
+/**
+ * Colores de ESTADO de SorsabsaForensic, fuera de `BrandColors` porque no
+ * son identidad: son semántica de producto. Se declaran para que el showcase
+ * los enseñe y para que nadie los vuelva a elegir a ojo en otra pantalla.
+ *
+ * El matiz que importa: "corre" y "no corre" no bastan. Un procesador puede
+ * correr y entregar MENOS de lo debido —imagen forense sin `exiftool` deja
+ * el examen de etiquetas sin practicar— y eso no es verde ni rojo. Sin el
+ * tercer estado, la pantalla miente en una de las dos direcciones.
+ */
+export const ESTADOS_FORENSIC = {
+  ok: { color: '#2F6B17', fondo: '#EAF7E4', significa: 'corre y entrega completo' },
+  parcial: { color: '#8A6100', fondo: '#FFF8E1', significa: 'corre, pero le falta algo opcional y el resultado sale con menos' },
+  alerta: { color: '#B3261E', fondo: '#FDECEB', significa: 'no corre: le falta una dependencia' },
+} as const;
 
 /** Marca por parámetro (?app=…) con fallback institucional (nunca falla). */
 export function getBrand(app: string | null | undefined): BrandConfig {

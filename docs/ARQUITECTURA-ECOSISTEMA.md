@@ -21,6 +21,7 @@ trabajo lo redescubría desde cero — a veces rompiendo algo en el intento.
 | DomusCRM | `crm_inmobiliario` (remoto: `domuscrm`) | Vercel | ⚠️ despliega; base pausada |
 | CondoManager | `condomanager` | Vercel | ❓ solo se revisó su landing |
 | JustiRed | `legaltech` | Vercel | ✅ SPA sano; su motor de OCR no vive aquí |
+| SORSABSA Forensic | `sorsabsaforensic` | **Railway** | ✅ en `materializacion.sorsabsa.com`; 6 de 16 procesadores corriendo, cobro sin implementar (Fase 5) |
 
 > **Convertidor — NO es producto hoy (decisión 2026-07-30).** Nació y sigue
 > siendo herramienta interna para el trabajo forense/pericial (OCR de evidencia
@@ -119,8 +120,16 @@ navegadores headless, conexiones persistentes.
 |---|---|
 | Convertidor backend | `pytesseract` (binario Tesseract) + `easyocr` (arrastra PyTorch) ✅ |
 | Scraper de JustiRed | `playwright` = Chromium, ~150MB ✅ |
-| SORSABSA Forensic | pericial, hoy local ❓ |
+| SORSABSA Forensic | `ffmpeg` + whisper/torch + `exiftool`; trabajos de más de una hora ✅ |
 | IoT | conexiones persistentes ❓ |
+
+> **SORSABSA Forensic ya NO es local (15-ago-2026).** Corre en Railway, en
+> `materializacion.sorsabsa.com`, con volumen para los expedientes, R2 para el
+> registro de peritos y el portero central para entrar. Es el caso que mejor
+> demuestra por qué este plano tiene que existir: la imagen lleva ~0,9 GB de
+> whisper y torch (CPU), y un WhatsApp real con 32 notas de voz transcribe
+> durante más de una hora — nada de eso cabe en una función serverless.
+> Detalle y estado por procesador en `PLAN-SORSABSAFORENSIC-WEB.md`.
 
 **Se comunican por HTTP.** El frontend en Vercel llama al backend en el
 contenedor. No hay que mover la capa web: hay que **añadir** la segunda.
