@@ -85,11 +85,90 @@ todo. Cerrado 08-ago-2026, aplicado en vivo vía Supabase MCP y verificado con
 real: ya no existe. El org `SORSABSA_Corp` tiene 3 proyectos: `condomanager`,
 `sorsabsa-identity`, `agente24siete`.
 
-## 7. SorsabsaForensic → Fase 0 antes de Railway
+## 7. 🟡 SorsabsaForensic → Fase 0 arrancada de verdad, no completa — servicio de correo en Railway, el resto sigue local
 
-Es PyQt5 (app de escritorio), no un servicio. Antes de Railway: poblar
+Es PyQt5 (app de escritorio), no un servicio. Fase 0 original: poblar
 `core/orchestrator.py` (vacío), sacar el renderizador de informe fuera de Qt,
 quitar rutas absolutas, Dockerfile. Ver `PLAN_MATERIALIZACION.md` §2.
+
+**✅ Hecho y verificado en producción, 15-ago-2026** — motivo real: Gina
+entrega la computadora donde corre `main.py`, no puede seguir dependiendo
+de ella. Se armó un Railway project que ya existía (`Sorsabsa Foresics`,
+`31cb8934-57ce-46e0-80bb-e2368c5e9546`, conectado a
+`github.com/ginaproanio/sorsabsaforensic`) pero que **crasheaba en bucle**
+desde el 08-ago sin que nadie lo notara: Railpack adivinaba y corría
+`main.py` (el entrypoint de PyQt5) dentro de un contenedor sin pantalla —
+`ImportError: libGL.so.1`, confirmado en los logs reales antes de tocar
+nada.
+
+- `core/orchestrator.py` poblado — lógica de casos idéntica a
+  `gui_pyqt/case_panel.py` (misma estructura de 5 carpetas, misma función
+  `es_expediente`) pero sin Qt, más el dispatch a `CorreoProcessor` (la
+  MISMA clase que usa la app de escritorio, no reimplementada).
+  `CASOS_DIR` configurable por env var.
+- `api.py` nuevo — FastAPI, `Authorization: Bearer <API_KEY>` (el servicio
+  no arranca sin `API_KEY` seteada, sin modo abierto por defecto). Crear/
+  listar/borrar casos, subir evidencia de correo, procesar, listar/
+  descargar informes. UI mínima en `/ui` (una página HTML servida por el
+  mismo servicio, sin build aparte) para operar sin curl/Postman.
+- `Dockerfile` + `requirements-api.txt` — hace explícito que corre
+  `api.py`, no `main.py`; subset de dependencias sin PyQt5/weasyprint/
+  torch/whisper/playwright (no hacen falta para esto).
+- 🔴 **Bug real encontrado y arreglado en el camino, mismo patrón que ya
+  había pasado con geo-sorsabsa (`ARQUITECTURA-ECOSISTEMA.md` §4-bis):**
+  el primer despliegue devolvía 502 — puerto fijo (`8000`) en el
+  Dockerfile en vez de leer el `$PORT` real que asigna Railway en
+  runtime. Corregido (forma shell del `CMD`, expande `${PORT}`).
+- **Infra armada vía Railway CLI** (ya autenticado en sesión, igual que
+  con GitHub/`gh`): `API_KEY` generada y seteada, volumen persistente de
+  5GB montado en `/data` (`CASOS_DIR=/data/expedientes` — sin esto,
+  cualquier caso creado se perdía en el próximo deploy), dominio público
+  generado (`sorsabsaforensic-production.up.railway.app`).
+- **Verificado de punta a punta contra producción real, no solo local**:
+  crear caso → subir un `.eml` sintético → procesar → hash SHA-256 +
+  datos extraídos correctos, todo en el volumen persistente
+  (`/data/expedientes/...`) → confirmado en `GET /casos`. Caso de prueba
+  borrado después con el endpoint `DELETE /casos/{nombre}` (agregado
+  porque `railway volume files` pide una llave SSH que no está
+  configurada — más simple y más útil en general que resolver eso).
+
+**⚠️ Alcance real, acotado a propósito — no es la Fase 0 completa:**
+
+1. **Solo `correo` (.msg/.eml).** Es lo único que el caso activo necesita
+   hoy (`Proceso Arbitral No. 019-25` → "Correos electrónicos", ver su
+   `03_informes/datos_estructurados.json`). Los otros 14 procesadores de
+   la app de escritorio (whatsapp, facebook, instagram, tiktok, youtube,
+   video, red_x, documento, georeferencia, imagen_forense,
+   materializacion_video, web_social, gsheets, analisis_audio) no están
+   portados — varios (facebook/instagram/tiktok) además necesitan las
+   sesiones de navegador logueadas que solo existen en el disco que se va
+   a borrar, un problema aparte de este.
+2. **`.pst`/`.ost` rechazados a propósito, no soportados todavía.**
+   Necesitan `pythonnet` + `XstReader.Api.dll` (una DLL de Windows) vía
+   CoreCLR — sin confirmar que corra en el contenedor Linux. El servicio
+   los rechaza con un error explícito en vez de intentarlo y fallar peor
+   adentro.
+3. **El PDF final NO se genera desde el servicio todavía.**
+   `gui_pyqt/report_panel.py` (~5000 líneas, ~40 métodos
+   `_anexo_*_html` que sí parecen portables + la orquestación final que
+   arma `html_completo` y llama a weasyprint) es candidato a extraerse,
+   pero es trabajo grande y este servicio corre el ANÁLISIS forense
+   (extraer correos, hashear, dejar constancia) — no se apuró una
+   extracción sin verificar en un generador de documentos que va a un
+   tribunal. Por ahora, el PDF del informe sigue siendo local.
+4. **Volumen de Railway, no R2** — decisión pragmática por tiempo, no la
+   arquitectura final: la regla dura del ecosistema
+   (`ARQUITECTURA-ECOSISTEMA.md`: "los expedientes y las fotos no van en
+   el disco de la aplicación") dice que esto debería vivir en R2, como
+   `sorsabsa-expedientes`. Migrar de disco de Railway a R2 queda
+   pendiente, anotado para no perderlo — no bloqueaba lo urgente de hoy.
+
+**Corrección de Gina, misma sesión — no es "solo sube 019-25 completo",
+es más angosto: ningún caso se sube completo.** Cada expediente en
+`c:/sorsabsa/expedientes_forenses/2026/<caso>/` tiene 5 subcarpetas
+(`01_evidencias`/`02_procesamiento`/`03_informes`/`04_imagenes`/
+`05_varios`); de todo eso, **lo único que debe quedar por caso es el PDF
+del último informe entregado**, dentro de `03_informes/` — ni la
 
 **Objetivo explícito, 15-ago-2026 (Gina):** que SorsabsaForensic deje de
 correr en su computadora — hoy vive 100% local (disco + app de escritorio).
