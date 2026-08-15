@@ -345,7 +345,7 @@ carpetas de `02_procesamiento/`), no supuesto:
 | **Análisis de audio** | **8** | B | `ffmpeg` + numpy + matplotlib ✅ |
 | **WhatsApp** | **5** | B | whisper (notas de voz) ✅ |
 | **TikTok** | **5** | C | navegador |
-| Imagen forense | 1 | B | `exiftool` |
+| Imagen forense | 1 | B | nada obligatorio; `exiftool` es opcional ✅ |
 | Facebook | 1 | C | navegador |
 | Documento escaneado | 1 | A | PyMuPDF |
 | Google Sheets, Disco, Celular, Instagram, YouTube, Red X, Georreferenciación | 0 | — | — |
@@ -362,10 +362,11 @@ arrancar, sin mirar los 11 cerrados. Es el procesador con **cero usos
 históricos**. No es trabajo perdido (el caso 019-25 sí es de correos), pero no
 era la prioridad. Mirar el uso real antes de priorizar, no inferirlo.
 
-#### Grupo B — hecho el 15-ago-2026, con tres correcciones al propio plan
+#### Grupo B — COMPLETO el 15-ago-2026, con cuatro correcciones al propio plan
 
 Corren en el servicio web: **Correo, Materialización de video, Análisis de
-audio, WhatsApp y Transcripción de video** (5). Lo que se encontró al portarlos:
+audio, WhatsApp, Imagen forense y Transcripción de video** (6 de 16), que
+cubren **23 de los 30 usos reales**. Lo que se encontró al portarlos:
 
 1. **«Análisis de audio» NO necesita whisper.** Esta tabla decía `ffmpeg +
    whisper` y era falso: ese procesador no transcribe una palabra. Mide la
@@ -386,6 +387,21 @@ audio, WhatsApp y Transcripción de video** (5). Lo que se encontró al portarlo
    la cadena `analisis_audio`). Con el nombre por defecto el anexo habría
    desaparecido del PDF sin un solo error. Por eso el procesador declara
    `carpeta` y el orquestador la respeta.
+
+4. **«Imagen forense» tampoco necesitaba `exiftool` para correr.** Lee
+   `.E01/.Ex01/.iso/.img/.dd` con su propio lector de EWF en Python puro, sin
+   llamar a ningún binario. `exiftool` solo alimenta el examen de etiquetas de
+   metadatos, que ya comprobaba `shutil.which` y se declara NO practicado si
+   falta. Marcarlo obligatorio habría **deshabilitado un procesador que
+   funciona**: la mentira en la dirección contraria. Se declara con
+   `opcionales: {binario: qué se pierde}` y la pantalla lo dice ANTES de
+   ejecutar, con etiqueta ámbar. Se instala igual (~25 MB): es un paso del
+   método pericial. Verificado sobre un ISO real del caso 096-2026-TCE (solo
+   lectura): 8 archivos, ExifTool 13.58, 2 limitaciones declaradas.
+
+**El patrón, en las cuatro:** la dependencia se anotó en esta tabla sin abrir
+el procesador. Tres de cuatro estaban mal. Antes de instalar nada, leer qué
+importa y qué llama el código.
 
 Además: `matplotlib` no la declaraba nadie y dibuja las 3 gráficas del anexo
 (sin ella el informe salía sin su gráfica principal, con `generada: False` y
@@ -409,7 +425,7 @@ descargado en la primera pericia.
 
 | Grupo | Procesadores | Qué necesita el contenedor |
 |---|---|---|
-| **B (primero)** | Materialización de video, Análisis de audio, WhatsApp, Transcripción de video, Imagen forense | `ffmpeg`, `ffprobe`, `exiftool`, whisper/torch — imagen pesada |
+| **B ✅ hecho** | Materialización de video, Análisis de audio, WhatsApp, Transcripción de video, Imagen forense | `ffmpeg`, `ffprobe`, `exiftool`, whisper/torch — imagen pesada |
 | **C (después)** | TikTok, Facebook, Instagram, YouTube, Red X, capturas de georreferenciación | Playwright + xvfb (modo B: + noVNC) |
 | **A (ya resuelto)** | Correo ✅, Documento escaneado, Google Sheets, Disco, Celular | Nada especial |
 
