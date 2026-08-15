@@ -341,9 +341,9 @@ carpetas de `02_procesamiento/`), no supuesto:
 
 | Procesador | Usos reales | Grupo | Necesita |
 |---|---|---|---|
-| **Materialización de video** | **9** | B | `ffmpeg` |
-| **Análisis de audio** | **8** | B | `ffmpeg` + whisper |
-| **WhatsApp** | **5** | B | whisper (notas de voz) |
+| **Materialización de video** | **9** | B | `ffmpeg` ✅ |
+| **Análisis de audio** | **8** | B | `ffmpeg` + numpy + matplotlib ✅ |
+| **WhatsApp** | **5** | B | whisper (notas de voz) ✅ |
 | **TikTok** | **5** | C | navegador |
 | Imagen forense | 1 | B | `exiftool` |
 | Facebook | 1 | C | navegador |
@@ -361,6 +361,51 @@ como primer paso "porque el caso activo lo necesita" — deducido de UN caso sin
 arrancar, sin mirar los 11 cerrados. Es el procesador con **cero usos
 históricos**. No es trabajo perdido (el caso 019-25 sí es de correos), pero no
 era la prioridad. Mirar el uso real antes de priorizar, no inferirlo.
+
+#### Grupo B — hecho el 15-ago-2026, con tres correcciones al propio plan
+
+Corren en el servicio web: **Correo, Materialización de video, Análisis de
+audio, WhatsApp y Transcripción de video** (5). Lo que se encontró al portarlos:
+
+1. **«Análisis de audio» NO necesita whisper.** Esta tabla decía `ffmpeg +
+   whisper` y era falso: ese procesador no transcribe una palabra. Mide la
+   señal —piso de ruido, picos, flujo espectral, clics, cortes, zonas mudas—
+   para sostener si el audio fue editado. Su `get_config()` siempre declaró
+   `ffmpeg, ffprobe, numpy`. Costó **31 MB de numpy**, no los ~900 MB de
+   whisper. Nadie había leído el procesador antes de anotarle la dependencia.
+2. **No es un tipo de evidencia: es un segundo análisis sobre el video.** En
+   los 8 expedientes reales `e-001_analisis_audio` convive con
+   `e-001_materialización_de_video` y su `ruta_origen` apunta al mismo .mp4,
+   con la misma huella SHA-256. Darle tipo propio habría obligado a subir el
+   archivo dos veces y roto esa huella compartida. Se resolvió con
+   `sobre: [...]` en el registro y un botón extra en la tarjeta de la
+   evidencia. **Nada en el código lo instanciaba** —ni la app de escritorio—:
+   se corría a mano.
+3. **La carpeta de salida decide si el anexo existe.** El informe encuentra
+   los anexos por el NOMBRE de la carpeta (`_carpetas_analisis_audio` busca
+   la cadena `analisis_audio`). Con el nombre por defecto el anexo habría
+   desaparecido del PDF sin un solo error. Por eso el procesador declara
+   `carpeta` y el orquestador la respeta.
+
+Además: `matplotlib` no la declaraba nadie y dibuja las 3 gráficas del anexo
+(sin ella el informe salía sin su gráfica principal, con `generada: False` y
+nadie mirando); la clave `Facebook` del registro nunca coincidía con el tipo
+`Facebook Post`; y `Celular`/`Disco` decían "sin portar" cuando en realidad
+**no se procesan** — se describen en el informe.
+
+Verificado de punta a punta con un video construido con ediciones conocidas
+(silencio digital de 2 s + dos empalmes): los detectó los 5 marcadores, las 3
+gráficas se generaron, ambos procesadores compartieron huella de adquisición,
+y el **anexo salió en el PDF** (11 páginas, 110 imágenes, 0 avisos). WhatsApp
+se probó con un export real con dos notas de voz: transcritas correctas, con
+su SHA-256 cada una.
+
+**Coste en la imagen:** torch (CPU, no CUDA) 516 MB, llvmlite 108, numba 27,
+numpy 31, matplotlib 32, yt-dlp 22 y el modelo `base` de whisper 139 ≈ **0,9
+GB**. Con `pip install torch` a secas habrían sido ~2,5 GB de librerías de GPU
+para una máquina sin GPU: el Dockerfile lo instala contra
+`download.pytorch.org/whl/cpu`. El modelo va **horneado en la imagen**, no
+descargado en la primera pericia.
 
 | Grupo | Procesadores | Qué necesita el contenedor |
 |---|---|---|
