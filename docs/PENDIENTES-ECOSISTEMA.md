@@ -87,6 +87,12 @@ real: ya no existe. El org `SORSABSA_Corp` tiene 3 proyectos: `condomanager`,
 
 ## 7. 🟡 SorsabsaForensic → Fase 0 arrancada de verdad, no completa — servicio de correo en Railway, el resto sigue local
 
+**➡️ El plan completo vive en [`PLAN-SORSABSAFORENSIC-WEB.md`](PLAN-SORSABSAFORENSIC-WEB.md)
+(15-ago-2026) — este punto es el resumen, el plan manda.** Incluye el modelo
+de negocio ($80/caso perito · $20–30/unidad público), los tres modos de acceso
+a las plataformas con cobertura medida en vivo, y la regla dura: `core/`
+(13.683 líneas, cero imports de Qt) no se reescribe.
+
 Es PyQt5 (app de escritorio), no un servicio. Fase 0 original: poblar
 `core/orchestrator.py` (vacío), sacar el renderizador de informe fuera de Qt,
 quitar rutas absolutas, Dockerfile. Ver `PLAN_MATERIALIZACION.md` §2.
