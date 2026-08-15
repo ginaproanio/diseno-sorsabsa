@@ -17,7 +17,7 @@ no auditado, no lo necesita.
 
 ## 🔴 CRÍTICO
 
-### 🔴-1 — ⬜ `/resolver` acepta cualquier URL, sin dominio permitido ni autenticación — SSRF real, sin control de abuso
+### 🔴-1 — 🟡 CORREGIDO EN CÓDIGO 15-ago-2026, FALTA DESPLEGAR — `/resolver` acepta cualquier URL, sin dominio permitido ni autenticación — SSRF real, sin control de abuso
 
 **1. Síntoma:** `POST /resolver` recibe `{"entrada": "<cualquier texto>"}`.
 Si `entrada` empieza con `http://`/`https://`, el servicio hace una
@@ -81,6 +81,55 @@ se rechaza con 4xx sin intentar la petición HTTP (probarlo con una URL a
 un servicio interno, no a internet real), y que los dos consumidores
 reales siguen funcionando con la llave nueva.
 
+**✅ Código hecho, 15-ago-2026 — implementado tal como se propuso arriba,
+nada distinto sobre la marcha:**
+
+- `geo-sorsabsa/service/geo_core.py` — `host_permitido(url)` (lógica pura,
+  sin llaves): host debe ser `google.com`/`maps.google.com`/
+  `maps.app.goo.gl`/`goo.gl` o subdominio real de alguno (probado que
+  `googlemaps.evil.com`/`google.com.evil.com`/`notgoogle.com` no cuelan).
+  Se llama en DOS lugares: `main.py` antes de tocar `geo_core` (rechaza sin
+  red) y `resolver_enlace()` en CADA salto de redirección (si un enlace
+  que empieza permitido redirige fuera del allowlist, se corta ahí, no
+  solo al principio).
+- `geo-sorsabsa/service/main.py` — `autenticar_producto` (dependency de
+  FastAPI): exige `Authorization: Bearer <clave>` contra
+  `GEO_API_KEY_IOT`/`GEO_API_KEY_SORSABSAFORENSIC`, aplicado a `/resolver`
+  y `/distancia`. `/` (salud) sigue sin auth, a propósito — no expone nada.
+- `iot/report_service.py::_maps_replace` y
+  `SorsabsaForensic/.../georeferencia/processor.py` (los dos métodos
+  `_resolver_via_servicio`/`_distancia_via_servicio`) mandan el header ya
+  — leen `GEO_API_KEY` (sin sufijo, mismo patrón que `PAGOS_API_KEY` en los
+  consumidores de pagos-sorsabsa) y lo omiten si está vacío (no rompen si
+  todavía no tienen la variable puesta — simplemente van a recibir 401 del
+  servicio nuevo una vez que ese despliegue exija la llave).
+- Verificado end-to-end contra la app real (ASGI, sin red): sin
+  `Authorization` → 401; con clave inválida → 401; URL a
+  `169.254.169.254` (metadata interna) con clave válida → 422 sin
+  intentar la petición; coordenadas directas (no URL) → 200; `/distancia`
+  sin auth → 401, con auth → 200; `/` sin auth → 200. `tests/test_geo_core.py`
+  11/11 (3 nuevos: `host_permitido` acepta/rechaza, y
+  `resolver_enlace` rechaza sin tocar la red). `py_compile` limpio en los
+  3 repos.
+
+**🟡 Falta lo operativo, nada de esto se hizo (fuera de alcance de una
+sesión de código):**
+
+1. Generar las dos llaves reales (cualquier secreto aleatorio largo sirve
+   — no hay un formato especial).
+2. Cargar `GEO_API_KEY` en Railway de `iot` y de `SorsabsaForensic` (si
+   corre ahí) con esas llaves — el código ya manda el header si la
+   variable existe, así que este paso no rompe nada mientras
+   `geo-sorsabsa` no la exija todavía.
+3. Cargar `GEO_API_KEY_IOT`/`GEO_API_KEY_SORSABSAFORENSIC` en Railway de
+   `geo-sorsabsa` y desplegar — recién ahí el servicio empieza a exigir la
+   llave. Hacer esto DESPUÉS del paso 2, no antes (orden documentado en
+   `geo-sorsabsa/service/README.md`), para no dejar a los dos consumidores
+   recibiendo 401 mientras se actualizan.
+4. Los 3 repos tienen los cambios en el working tree, sin commit todavía
+   — a propósito, sin pedir confirmación de Gina antes de commitear no se
+   asume que se quiere.
+
 ---
 
 ## 🔵 BAJO
@@ -125,8 +174,13 @@ esta auditoría (`geo-sorsabsa/service/README.md`).
 
 ## Pendiente de decidir con Gina antes de ejecutar
 
-- 🔴-1 necesita coordinar 3 repos (`geo-sorsabsa` + los 2 consumidores) —
-  no es un fix de un archivo, aunque el cambio en sí sea chico.
+- 🔴-1: código hecho 15-ago-2026 en los 3 repos (ver detalle en la sección
+  del hallazgo arriba) — lo que falta es puramente operativo: generar 2
+  llaves, cargarlas en Railway (3 proyectos) en el orden documentado en
+  `geo-sorsabsa/service/README.md`, y confirmar los commits (nada se
+  commiteó todavía, sin pedirlo).
 - Al conectar DomusCRM a `geo-sorsabsa` (ya pendiente, ver
   `ARQUITECTURA-ECOSISTEMA.md`), debería nacer YA con autenticación —
-  no agregarla después como un tercer consumidor sin llave.
+  ahora es automático: sin sumar `GEO_API_KEY_DOMUSCRM` a
+  `_claves_validas()` en `main.py`, DomusCRM recibiría 401 igual que
+  cualquier llamador sin llave. No agregarla "después" como excepción.

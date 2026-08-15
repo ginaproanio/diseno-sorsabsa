@@ -5,7 +5,7 @@ aparece. Fuente de arquitectura: `ARQUITECTURA-ECOSISTEMA.md`. El plan paso a
 paso del desoldado vive en [`PLAN-DESOLDADO.md`](PLAN-DESOLDADO.md) — este doc
 es la lista de trabajo suelto, no el plan en sí.
 
-Última actualización: 2026-08-08.
+Última actualización: 2026-08-15.
 
 ## Principio que gobierna (regla dura)
 
@@ -397,6 +397,31 @@ dos generan informes que sostienen afirmaciones ante tribunal. Detalle en
   - Los dos probados de punta a punta contra
     `https://geo-sorsabsa-production.up.railway.app` real, no mocks.
     `python -m py_compile` limpio en ambos.
+
+**🟡 10-ago-2026 — auditoría del servicio (`AUDITORIA-GEO-SORSABSA.md`)
+encontró un 🔴 CRÍTICO que este punto no reflejaba: `/resolver` y
+`/distancia` no exigían autenticación de ningún tipo, y `/resolver` seguía
+CUALQUIER URL que le mandaran (no solo enlaces de Google Maps) — SSRF real
+desde el servidor de Railway, único servicio transversal del ecosistema sin
+llave (el resto sigue el patrón de `pagos-sorsabsa`:
+`PAGOS_API_KEY_<PRODUCTO>`).**
+
+- **Código hecho 15-ago-2026** (retomado de la auditoría, sin cambiar el
+  fix ya diseñado ahí): `geo_core.py::host_permitido` restringe a
+  dominios reales de Google Maps, chequeado en la entrada y en cada salto
+  de redirección; `main.py::autenticar_producto` exige
+  `Authorization: Bearer` por producto (`GEO_API_KEY_IOT`/
+  `GEO_API_KEY_SORSABSAFORENSIC`). `iot` y `SorsabsaForensic` ya mandan el
+  header. Verificado con la app real (ASGI, sin red) + `tests/test_geo_core.py`
+  11/11 (3 nuevos) + `py_compile` limpio en los 3 repos. Detalle completo
+  y las pruebas exactas en `AUDITORIA-GEO-SORSABSA.md` 🔴-1.
+- **⏳ Falta lo operativo, no es trabajo de código:** generar las 2 llaves
+  reales y cargarlas en Railway — primero `GEO_API_KEY` en `iot`/
+  `SorsabsaForensic`, recién después `GEO_API_KEY_IOT`/
+  `GEO_API_KEY_SORSABSAFORENSIC` en `geo-sorsabsa` y desplegar (orden en
+  `geo-sorsabsa/service/README.md`, evita una ventana de 401). **Los 3
+  repos tienen los cambios sin commitear todavía** — no se commiteó sin
+  que Gina lo pida.
 
 ## 14. ✅ HECHO — iot consume el portero central (auth-sorsabsa)
 
@@ -1033,3 +1058,32 @@ respete. Propuesta sin construir: un check de CI que compare
 falle el build si no coinciden. No se hizo porque es una decisión de
 alcance — ¿vale la pena un guard más para un repo de 4 archivos de
 texto? — que le toca decidir a Gina, no meterla sin que la pida.
+
+## 20. ⏳ Magnific (Freepik) — script listo, falta la API key real
+
+Origen: 15-ago-2026, Gina pidió conectar con Magnific (el upscaler de
+imágenes, hoy parte de Freepik) para mejorar/escalar imágenes puntuales. No
+hay MCP server de Magnific instalado — se resolvió como script contra su
+API REST.
+
+- ✅ Script hecho: `c:\diseno-sorsabsa\scripts\magnific-upscale.mjs` — sube
+  una imagen local en base64, crea la tarea
+  (`POST https://api.magnific.com/v1/ai/image-upscaler`,
+  header `x-magnific-api-key`), espera el resultado (polling) y descarga la
+  imagen mejorada.
+- ⏳ **Falta la key real.** Se consigue en la cuenta de freepik.com/api
+  (habilita también Magnific).
+- **Corrección sobre dónde ponerla, para no exponerla:** la key NO va en
+  `c:\diseno-sorsabsa\.env.local.example` — ese archivo es la plantilla y
+  SÍ se commitea a git; una key real ahí queda expuesta en el historial para
+  siempre, aunque se borre después. Va en
+  **`c:\diseno-sorsabsa\.env.local`** (mismo nombre, sin `.example`) — ya
+  está en `.gitignore`, nunca se commitea. Paso: copiar
+  `.env.local.example` → `.env.local` y completar `MAGNIFIC_API_KEY=` con
+  la key real ahí.
+- **Sin verificar en vivo todavía:** el endpoint de creación de tarea está
+  confirmado contra `docs.magnific.com`; el de polling
+  (`GET .../{task_id}`) sigue el patrón estándar del resto de la API de
+  IA de Freepik/Magnific pero no se probó con una key real. Si al primer
+  uso da 404 en el polling, revisar `docs.magnific.com/api-reference/image-upscaler-creative`
+  y ajustar `POLL_URL` en el script.
