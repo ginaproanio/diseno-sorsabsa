@@ -176,13 +176,42 @@ Reproducir la interfaz real, no una simplificación:
 - **📄 Informe** — las 13 secciones, ficha del caso, medio de preservación,
   perfil del perito, factura, y el PDF de la Fase 2.
 
-### Fase 4 — Procesadores, por grupo de dependencias ⬜
+### Fase 4 — Procesadores, **priorizados por uso real medido** ⬜
+
+**Medido el 15-ago-2026 sobre los 11 expedientes reales** (contando las
+carpetas de `02_procesamiento/`), no supuesto:
+
+| Procesador | Usos reales | Grupo | Necesita |
+|---|---|---|---|
+| **Materialización de video** | **9** | B | `ffmpeg` |
+| **Análisis de audio** | **8** | B | `ffmpeg` + whisper |
+| **WhatsApp** | **5** | B | whisper (notas de voz) |
+| **TikTok** | **5** | C | navegador |
+| Imagen forense | 1 | B | `exiftool` |
+| Facebook | 1 | C | navegador |
+| Documento escaneado | 1 | A | PyMuPDF |
+| Google Sheets, Disco, Celular, Instagram, YouTube, Red X, Georreferenciación | 0 | — | — |
+| **Correo** | **0** | A | ya corre |
+
+**Conclusión que reordena el plan:** video + audio + WhatsApp = **22 de 30
+usos reales**, y los tres son del **grupo B** (`ffmpeg` + whisper), no del
+grupo del navegador. El orden correcto es **B → C → A**, no el A → B → C que
+tenía la versión anterior de este documento.
+
+**Corrección anotada:** el 15-ago-2026 se construyó el procesador de correo
+como primer paso "porque el caso activo lo necesita" — deducido de UN caso sin
+arrancar, sin mirar los 11 cerrados. Es el procesador con **cero usos
+históricos**. No es trabajo perdido (el caso 019-25 sí es de correos), pero no
+era la prioridad. Mirar el uso real antes de priorizar, no inferirlo.
 
 | Grupo | Procesadores | Qué necesita el contenedor |
 |---|---|---|
-| **A** | Correo, Documento escaneado, Google Sheets, Disco, Celular | Nada — ya corre |
-| **B** | Transcripción de video, Materialización de video, Análisis de audio, Imagen forense | `ffmpeg`, `ffprobe`, `exiftool` + whisper/torch (imagen pesada) |
-| **C** | Facebook, Instagram, TikTok, YouTube, Red X, capturas de georreferenciación | Playwright + xvfb (modo B: + noVNC) |
+| **B (primero)** | Materialización de video, Análisis de audio, WhatsApp, Transcripción de video, Imagen forense | `ffmpeg`, `ffprobe`, `exiftool`, whisper/torch — imagen pesada |
+| **C (después)** | TikTok, Facebook, Instagram, YouTube, Red X, capturas de georreferenciación | Playwright + xvfb (modo B: + noVNC) |
+| **A (ya resuelto)** | Correo ✅, Documento escaneado, Google Sheets, Disco, Celular | Nada especial |
+
+`.pst`/`.ost` quedan aparte: necesitan `pythonnet` + `XstReader.Api.dll` (una
+DLL de Windows) bajo CoreCLR — sin confirmar que corra en Linux.
 
 `.pst`/`.ost` quedan aparte: necesitan `pythonnet` + `XstReader.Api.dll` (una
 DLL de Windows) bajo CoreCLR — sin confirmar que corra en Linux. Hoy el
@@ -303,9 +332,45 @@ dándole diagnósticos inventados con formato de autoridad).
 Los que **sí** son legítimos y se pueden consultar: `mvt-project/mvt`,
 `yogsec/Digital-Forensics-Tools`, `garudaproject/digital-forensics-tools`.
 
-## 10. Decisiones pendientes
+## 10. Plazo real y calendario
 
-- **¿Cuándo entrega la máquina?** Cambia todo el orden de las fases.
+**Gina entrega el equipo alrededor del 15-sep-2026 (un mes).** Confirmado el
+15-ago-2026, junto con un dato que quita la urgencia destructiva: **el sistema
+local sigue instalado y no se borró**, así que durante todo el mes tiene una
+herramienta de trabajo funcionando. Eso permite hacer las cosas bien en vez de
+a las apuradas — pero el respaldo caduca con la máquina.
+
+| Semana | Qué |
+|---|---|
+| **1** (15–22 ago) | Fase 0 (rotar llave, borrar `/ui`) + arranque de Fase 2: extraer los ~40 `_anexo_*_html` a `core/report/` |
+| **2** (22–29 ago) | Fase 2 completa + **verificación del PDF idéntico** contra `caso-096-2026-TCE`. Si no sale idéntico, se resuelve acá y el resto se corre |
+| **3** (29 ago–5 sep) | Fase 3 (las tres pestañas) + Fase 1 (SSO, ~1 día: el patrón ya existe de `iot`) |
+| **4** (5–12 sep) | Procesadores **grupo B**: video, audio, WhatsApp. Contenedor con `ffmpeg` + whisper |
+| **Colchón** (12–15 sep) | TikTok (grupo C) si alcanza, y ajustes |
+
+**Queda fuera del mes, y hay que decirlo ahora:** el resto del grupo C
+(Facebook, Instagram, YouTube, Red X, georreferenciación) y la **Fase 5
+completa (cobro y perfil público)**. El servicio comercial no es lo que
+sostiene el trabajo de Gina; su herramienta de perito sí. Ese es el criterio
+de corte si algo tiene que caerse.
+
+## 11. Dominio
+
+**`materializacion.sorsabsa.com`** — decidido por Gina, sin dominios genéricos
+de Railway. Registrado en Railway el 15-ago-2026 (custom domain
+`e5d83743-c0b6-4a48-be47-9e362e9673cd`).
+
+El DNS de `sorsabsa.com` vive en **Hostinger** (`ns1/ns2.dns-parking.com`), no
+en Cloudflare — los registros los crea Gina en su panel, no se pueden crear
+desde acá. Mismo mecanismo que ya usó para `auth.sorsabsa.com` → Vercel.
+
+| Tipo | Nombre | Valor |
+|---|---|---|
+| CNAME | `materializacion` | `u3hswmuy.up.railway.app` |
+| TXT | `_railway-verify.materializacion` | `railway-verify=a2463ecbbb1a45c27819d45f1585b751f7fead418442b40b4372acb579986394` |
+
+## 12. Decisiones pendientes
+
 - **¿La captura de pantalla del modo A se ofrece donde funciona sin cuenta
   (YouTube), o el perfil público se queda solo con canal oficial + material
   aportado?**
