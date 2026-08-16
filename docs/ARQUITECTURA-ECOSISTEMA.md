@@ -661,6 +661,7 @@ de Cloudflare (a mano, no con wrangler):
 
 | Token | Aplicado a | Permiso | Emitido | Estado |
 |---|---|---|---|---|
+| `sorsabsaforensic-railway` | `sorsabsa-expedientes` | Object Read & Write | 15-ago-2026 | Active |
 | `condomanager-vercel` | `condomanager-inmuebles` | Object Read & Write | 08-ago-2026 | Active |
 | `R2 Account Token` | `justired-registros-oficiales` | Object Read & Write | 31-jul-2026 | Active |
 
@@ -670,9 +671,24 @@ No es el mismo bucket que `justired-legal-documents` de la tabla de Supabase
 Storage del §4 (ese es el cascarón vacío sin usar); son dos cubos distintos,
 uno por plataforma.
 
-Solo dos tokens activos, uno por consumidor real (CondoManager, JustiRed) —
-ninguno de más pagando sin uso, al menos en R2. DomusCRM no tiene token
-todavía porque no ha migrado (arriba).
+Tres tokens activos, uno por consumidor real (SorsabsaForensic, CondoManager,
+JustiRed) — ninguno de más pagando sin uso, al menos en R2. DomusCRM no tiene
+token todavía porque no ha migrado (arriba).
+
+**Corrección 16-ago-2026:** esta tabla decía "solo dos tokens" y listaba dos.
+Gina mostró la pantalla real de Cloudflare y hay **tres**: faltaba
+`sorsabsaforensic-railway`, emitido el 15-ago-2026 sobre `sorsabsa-expedientes`
+— el mismo día en que se decidió que SorsabsaForensic NO usara el token de
+CondoManager (la regla de arriba). O sea: la regla se aplicó y el token se
+emitió, pero el registro se quedó sin actualizar. `wrangler` no sirve para
+detectarlo: puede listar cubos, no tokens.
+
+**Convertidor no tiene cubo ni token en R2** (verificado el 16-ago-2026 con
+`wrangler r2 bucket list` y contra la pantalla de tokens): los cubos son
+`sorsabsa-expedientes`, `condomanager-inmuebles` y
+`justired-registros-oficiales`, y nada más. Hoy no lo necesita —convierte en
+memoria y no guarda nada—, pero sí lo necesita el alojamiento que se está
+evaluando: ver [`ALMACENAMIENTO-COSTOS.md`](ALMACENAMIENTO-COSTOS.md).
 
 **Conclusión:** R2 no es "un plan futuro sin empezar" — tres de cinco flujos
 ya corren ahí. Lo que falta es DomusCRM (el de mayor volumen esperado, ~3000
