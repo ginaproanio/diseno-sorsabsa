@@ -267,6 +267,39 @@ export const BRANDS: Record<string, BrandConfig> = {
   // un procesador puede estar listo, faltarle una dependencia, o correr
   // dando menos de lo debido, y esos tres estados tienen que distinguirse a
   // simple vista. Los tres valores salen del CSS que ya está en producción.
+  // Convertidor. Decisión de Gina, 16-ago-2026: *"convertidor sube al showcase
+  // y debe usar los mismos colores de sorsabsa forensic porque es parte del
+  // ecosistema de sorsabsa"*.
+  //
+  // La paleta es LA MISMA que `sorsabsaforensic` (abajo), a propósito y no por
+  // copiar-pegar sin pensar: los dos son herramientas del trabajo pericial, y
+  // el Convertidor nació justamente como el OCR de la evidencia escaneada de
+  // SorsabsaForensic (ARQUITECTURA-ECOSISTEMA.md §2). Lo que NO comparte es la
+  // identidad: wordmark propio, porque son dos productos y una persona que
+  // convierte un PDF no está usando el sistema forense.
+  //
+  // El día que esta paleta cambie hay que cambiarla en los dos — no se
+  // referencia a la otra marca a propósito: `BRANDS` es un objeto de datos
+  // planos que se lee de un vistazo, y una marca que herede de otra obliga a
+  // saltar para saber de qué color es. Queda anotado acá, que es donde va a
+  // mirar quien la toque.
+  convertidor: {
+    name: 'convertidor',
+    displayName: 'SORSABSA Convertidor',
+    wordmark: { first: 'SORSABSA', second: 'Convertidor', tones: ['primary', 'accent'] },
+    colors: {
+      primary: '#423F44',            // antracita institucional
+      accent: '#70C051',             // verde institucional
+      surface: '#FFFFFF',
+      background: '#F6F5F7',
+      text: '#212022',
+      muted: '#6B676E',
+      border: '#E3E1E4',
+      destructive: '#B3261E',
+    },
+    radius: '0.375rem',
+  },
+
   sorsabsaforensic: {
     name: 'sorsabsaforensic',
     displayName: 'SORSABSA Forensic',

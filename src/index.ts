@@ -54,6 +54,7 @@ export { Toast, type ToastProps } from './components/Toast';
 export { SegmentedControl, type SegmentedControlProps, type SegmentedOption } from './components/SegmentedControl';
 export { AppShell, type AppShellProps } from './components/AppShell';
 export { SinAcceso, type SinAccesoProps } from './components/SinAcceso';
+export { FooterEcosistema, type FooterEcosistemaProps } from './components/FooterEcosistema';
 export { useOnClickOutside } from './hooks/useOnClickOutside';
 export { mensajeDeError, mensajeDeErrorData } from './lib/apiError';
 export { urlDeSalida, salirDelEcosistema } from './lib/portero';
