@@ -5,6 +5,35 @@ el alojamiento permanente… necesito incluso ver costos de almacenamiento,
 método de almacenamiento, una cosa es mi espacio y otra de los clientes por
 producto"*.
 
+> ## ⚖️ DECISIÓN TOMADA, 16-ago-2026 — el Convertidor NO vende espacio
+>
+> Gina, después de leer este análisis: *"convertidor en freemium no se queda, se
+> descarga y se borra, espacio para convertidor no, que sea la **capacidad de
+> conversión** lo que se vende"*.
+>
+> **Queda decidido así, y este documento sostiene esa decisión con sus propios
+> números** (§0 y §7 apuntaban justamente ahí):
+>
+> - **No se crea el cubo `convertidor-clientes`.** El §1 tipo C —"espacio
+>   vendido"— **no se implementa en el Convertidor**. La sección se conserva
+>   porque el modelo de los tres tipos sigue siendo válido para el ecosistema, y
+>   porque el día que otro producto quiera vender espacio, acá está la cuenta
+>   hecha.
+> - **Se vende capacidad**, que es lo que el producto YA cobra: tamaño de
+>   archivo (5 vs 50 MB), OCR, formatos HTML/JSON y lote. No hay que construir
+>   un modelo de negocio nuevo — hay que dejar de construir el que sobraba.
+> - **Lo que sigue vigente de este documento:** §2 (Railway procesa, R2 guarda —
+>   y la subida directa que destraba el techo de 4,5 MB de Vercel), §4 aplicado
+>   al cómputo en vez del disco, y §6 pasos 1 y 2, que ahora son **lo único**
+>   que bloquea el archivo grande.
+> - **Lo que muere con esta decisión:** las decisiones 1, 2 y 4 del §5 (cuánto
+>   espacio, qué pasa al cancelar, si se vende en otros productos) y los pasos
+>   3, 4 y 5 del §6 (cubo, ciclo de vida, cuota).
+>
+> **Lo que NO desaparece, y hay que resolver igual** — está detallado al final,
+> en §8: sigue haciendo falta una ventana de descarga y sigue haciendo falta
+> recordar una conversión pagada.
+
 Este documento **no reemplaza a [`ARQUITECTURA-ECOSISTEMA.md`](ARQUITECTURA-ECOSISTEMA.md)**:
 ahí vive la decisión de plataforma (Vercel = frontends · Railway = contenedores
 y binarios · R2 = objetos · Supabase = solo identidad) y la regla de *un cubo y
@@ -302,3 +331,71 @@ Verificadas el 16-ago-2026:
 > políticas de privacidad leídas de punta a punta: sirven para fijar el orden de
 > magnitud del mercado, y conviene confirmarlos en la fuente antes de usarlos en
 > material comercial comparativo.
+
+---
+
+## 8 · Lo que la decisión de "no guardar" NO resuelve
+
+Añadido el 16-ago-2026, después de la decisión de arriba. Son dos cosas que
+suenan a almacenamiento pero no lo son, y por eso no se van con él.
+
+### 8.1 · "Se descarga y se borra" igual necesita una ventana de descarga
+
+Entre que el motor termina y que la persona hace clic en *Descargar* pasa
+tiempo: la conversión de un PDF escaneado grande con OCR **no termina dentro de
+una petición HTTP**. Alguien cierra la pestaña, vuelve, el celular pierde
+señal. Así que hay que responder: **¿cuánto tiempo vive el resultado?**
+
+Eso **no es vender espacio** — es el mismo *"borramos a las 2 horas"* de
+iLovePDF, que no es una política de almacenamiento sino la ventana de descarga.
+Guardarlo cero minutos no es una opción: obliga a que la descarga sea parte de
+la misma petición y hace que un corte de red pierda una conversión ya pagada.
+
+Recomendación: **1 hora, borrado automático por regla de ciclo de vida.** Es la
+más corta del mercado comparable (iLovePDF 2 h, Smallpdf 1 h sin cuenta) y
+mantiene la promesa que Gina quiere hacer: *no nos quedamos con tu documento*.
+
+Costo: nulo. Un resultado de 20 MB durante 1 hora son 0,000027 GB-mes,
+$0,0000004. No es una cifra que haya que optimizar.
+
+Dónde: un cubo `convertidor-transito` con la regla de vida más corta que R2
+permite, **o** el volumen de Railway si la descarga sale por el mismo motor
+(ahí el egress de $0,05/GB sí cuenta, pero a 20 MB por conversión son $0,001).
+La diferencia es menor; se elige junto con §6 paso 2.
+
+**Un cubo de tránsito no contradice la decisión: está vacío por diseño.** Nadie
+tiene "su carpeta", no hay cuota, no hay qué devolver al cancelar y no hay dato
+que borrar a pedido, porque a la hora ya no está.
+
+### 8.2 · Una conversión pagada hay que recordarla
+
+La Decisión 2 de [`PENDIENTES-ECOSISTEMA.md`](PENDIENTES-ECOSISTEMA.md) 21-bis
+**se achica muchísimo pero no desaparece**: ya no es "dónde viven los archivos
+del cliente" sino **"cómo se recuerda que esta persona pagó una conversión que
+todavía no usó"**.
+
+Sigue haciendo falta porque el pago vuelve por una redirección y la conversión
+ocurre después. Y sobre todo porque **la conversión puede fallar**: sin nada
+anotado, un cobro aprobado seguido de un OCR que revienta deja a la persona
+pagando por nada y a Gina atendiendo el reclamo a mano. Es exactamente la
+objeción que este documento ya le hacía a la opción "se paga y se convierte en
+el acto".
+
+Pero lo que hay que guardar ahora es **una fila diminuta** —quién, cuánto pagó,
+si ya la usó— no archivos. Eso cabe en el Supabase que el producto ya usa para
+identidad y **no necesita cubo, ni token de R2, ni cuota, ni ciclo de vida.**
+
+### 8.3 · Con esto, "capacidad de conversión" tiene un costo que sí crece con el uso
+
+El almacenamiento se pagaba por mes y crecía con los clientes **aunque no
+usaran nada**. El cómputo se paga por segundo y crece **con el uso real**: un
+plan Pro "sin límite de conversiones" es una promesa cuyo costo sube cuando el
+cliente la aprovecha. A los precios de Railway ($0,0278/vCPU-hora) un OCR de
+cinco minutos cuesta $0,0023 y hacen falta ~3.900 conversiones de esas para
+gastar los $9 de una suscripción, así que **hay muchísimo margen** — pero el
+riesgo cambia de forma: ya no es el que se va, es el que se queda y usa mucho.
+
+Y por eso el paso 1 del §6 —**autenticar el motor de Railway**— deja de ser
+higiene y pasa a ser lo que protege el margen: hoy `api.convertidor.sorsabsa.com`
+acepta cualquier POST sin credencial, así que el cómputo que ahora ES el
+producto está abierto a quien encuentre la URL.

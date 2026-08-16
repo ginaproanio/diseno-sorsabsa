@@ -1418,7 +1418,33 @@ Con B tomada, lo mecánico ya se hizo (`convertidor@96ae4e2`):
 
 ---
 
-#### DECISIÓN 2 — ⬜ ABIERTA: dónde vive el crédito del pago único
+#### DECISIÓN 2 — 🔄 REPLANTEADA 16-ago-2026: ya no es de almacenamiento
+
+> **Gina decidió que el Convertidor NO vende espacio:** *"convertidor en
+> freemium no se queda, se descarga y se borra, espacio para convertidor no,
+> que sea la capacidad de conversión lo que se vende"*. Ver
+> [`ALMACENAMIENTO-COSTOS.md`](ALMACENAMIENTO-COSTOS.md), decisión de cabecera.
+>
+> **Con eso, las tres opciones de la tabla de abajo quedan sin objeto** — no
+> hay crédito de bytes que guardar en ningún lado. Se conservan porque el
+> análisis de costos sigue sirviendo si otro producto vende espacio.
+>
+> **Lo que queda de esta decisión, mucho más chico:** una conversión pagada hay
+> que recordarla igual, porque el pago vuelve por una redirección y la
+> conversión ocurre después — y sobre todo porque la conversión puede fallar y
+> sin nada anotado el cobro queda aprobado y el servicio no prestado. Pero lo
+> que se guarda ahora es **una fila** (quién, cuánto pagó, si ya la usó), no
+> archivos: cabe en el Supabase que el producto ya usa para identidad, **sin
+> cubo, sin token de R2, sin cuota y sin ciclo de vida**. Detalle en
+> `ALMACENAMIENTO-COSTOS.md` §8.2.
+>
+> **Y aparece una que no estaba:** cuánto vive el resultado listo para
+> descargar. No es almacenamiento —es la ventana de descarga, lo mismo que el
+> "borramos a las 2 horas" de iLovePDF— pero hay que elegir un número, porque
+> cero minutos obliga a que la descarga sea parte de la misma petición y un
+> corte de red pierde una conversión ya pagada. Recomendado: 1 hora. §8.1.
+
+##### El análisis original (espacio como producto), conservado
 
 **Lo que Gina pidió:** *"pago por suscripción **o un solo pago por la
 conversión de un archivo más grande de los 5mb**"*. Lo primero ya funciona;
