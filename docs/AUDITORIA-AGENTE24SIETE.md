@@ -389,7 +389,7 @@ camino feliz.
 uno con `exp` en el pasado para la prueba), confirmar que `LoginGate` NO
 deja pasar y redirige limpio, sin dibujar el sidebar.
 
-### 🟠-3 — Pendiente de verificar en vivo, no descartado: ¿el mensaje de Gina fue realmente por vencimiento, o hay un problema de configuración?
+### 🟠-3 — ✅ RESUELTO 10-ago-2026 (era la hipótesis (b): configuración) — ¿el mensaje de Gina fue realmente por vencimiento, o hay un problema de configuración?
 
 **1. Síntoma:** `jwtVerify` respondió "Sesión inválida o expirada" para
 un login de Google reciente.
@@ -415,6 +415,206 @@ revisar el valor real de `SUPABASE_JWKS_URL`/`SUPABASE_URL` en Vercel
 contra el proyecto `nwcqaginlnzjlkgwifas` (ninguno de los dos es
 secreto — son URLs públicas, se pueden pegar acá para revisar juntos).
 
+**✅ Respuesta, 10-ago-2026 — era (b), configuración, no vencimiento
+natural.** `AUDITORIA-PORTERO-SSO.md` 🔴-12 lo cerró: agente24siete
+verificaba el JWT contra su PROPIO proyecto Supabase
+(`nwcqaginlnzjlkgwifas`) cuando quien realmente emite la sesión del login
+por SSO es `verticales_sorsabsa`. El encabezado de este hallazgo siguió
+diciendo "pendiente de verificar" hasta el 16-ago-2026 aunque la sección
+de cierre de este mismo documento ya daba la respuesta — corregido acá
+para que las dos partes digan lo mismo.
+
+### 🟠-4 — ⬜ "Salir" borra el `localStorage` pero deja viva la cookie de sesión — el gate del SERVIDOR sigue viendo sesión válida hasta 60 minutos después de cerrarla. Encontrado 16-ago-2026
+
+**1. Síntoma:** después del clic en "Salir", volver a `/portal` (o
+`/admin`) hace que `middleware.ts` —el gate del servidor, la pieza que
+🔴-1 construyó justamente para decidir antes de servir HTML— deje pasar
+la petición y sirva la página: para él la sesión sigue vigente. Recién
+`LoginGate`, ya en el navegador, encuentra el `localStorage` vacío y
+rebota al portero. Nadie llega a ver datos ajenos (cada llamada a
+`pages/api/**` sigue exigiendo el `Authorization: Bearer` que salió del
+`localStorage` borrado), pero el JWT sigue existiendo en el navegador
+—legible por cualquier JS del origen, y enviado en cada petición— hasta
+60 minutos después de que la persona creyó haber salido.
+
+**2. Causa inmediata:** `components/SignOutButton.tsx:16` hace solo
+`localStorage.removeItem(tokenKey)`. La cookie `a24_cliente_token` /
+`a24_admin_token` no se toca.
+
+**3. Causa raíz — dos fixes del mismo día que nunca se cruzaron:** el
+botón (🟠-1, commit `c6f2578`) se escribió cuando agente24siete guardaba
+la sesión SOLO en `localStorage`, y su propio comentario lo dice como
+justificación: *"agente24siete guarda su sesión en localStorage, no en
+cookies"*. Horas más tarde, el fix de 🔴-1 (commit `89429ff`) agregó la
+cookie precisamente para que el middleware pudiera decidir del lado del
+servidor — y nadie volvió al logout. Esa frase quedó falsa el mismo día
+en que se escribió. La regla correcta ya existe en el repo:
+`limpiarSesionLocal()` borra las dos cosas… escrita dos veces, una en
+cada `LoginGate`, y el logout no usa ninguna. Es la duplicación de la
+misma regla en tres lugares que `ESTANDAR-DESARROLLO.md` marca — el fix
+no es "agregarle una línea al botón".
+
+**4. Componente responsable:** `components/SignOutButton.tsx`, más la
+ausencia de un único lugar donde viva "cerrar la sesión local".
+
+**5. Código afectado:** `components/SignOutButton.tsx`;
+`app/portal/LoginGate.tsx::limpiarSesionLocal` y
+`app/admin/LoginGate.tsx::limpiarSesionLocal` (las dos copias).
+
+**6. Fix propuesto:** extraer `limpiarSesionLocal(tokenKey)` a un módulo
+único (`lib/sesion.ts`) y llamarlo desde los tres lugares. Si solo se
+parcha el botón, quedan tres copias de la regla y el próximo cambio en
+cómo se guarda la sesión vuelve a dejar una atrás — que es exactamente
+lo que pasó acá.
+
+**7. Código que debe eliminarse:** las dos definiciones locales de
+`limpiarSesionLocal`, y el comentario de `SignOutButton.tsx:7-10` que
+afirma que la sesión no vive en cookies.
+
+**8. Riesgo de regresión:** bajo — borrar de más al salir no puede dejar
+a nadie adentro, y el camino de login no se toca.
+
+**9. Validación:** entrar a `/portal`, clic en "Salir", y en DevTools →
+Application → Cookies confirmar que `a24_cliente_token` ya no existe (hoy
+sigue ahí). Después volver a `agente24siete.app/portal`: debe redirigir
+al portero sin que el servidor llegue a servir la página.
+
+### 🟠-5 — ⬜ El `next` de agente24siete no apunta a su propio `/auth/callback`: el login solo termina por una cadena de fallbacks, con una vuelta entera de más por el portero. Encontrado 16-ago-2026
+
+**1. Síntoma:** ninguno visible hoy — el login funciona, y por eso este
+hallazgo no sale de una pantalla sino de leer el flujo completo. Lo que
+hay es una vuelta entera de más por `auth.sorsabsa.com` en cada login que
+arranca `LoginGate`, y una dependencia invertida: el flujo termina
+**porque** el `next` del middleware está mal formado. Corregir eso solo
+—dejarlo absoluto, la forma que 🔴-1 estableció como correcta— reinstala
+el bucle infinito del 10-ago.
+
+**2. Causa inmediata, verificada leyendo los cuatro archivos, no supuesta:**
+
+- `LoginGate` (portal y admin) manda `next = <origen><ruta protegida>`
+  (ej. `https://www.agente24siete.app/portal`). Ese host SÍ está en
+  `allowedHosts`, así que `resolveSafeRedirect` lo honra y
+  `auth/complete` entrega los tokens ahí:
+  `https://www.agente24siete.app/portal#access_token=…`. **Ninguna página
+  de `/portal` lee el fragment** — el único archivo del repo que lo hace
+  es `app/auth/callback/page.tsx` (grep de `access_token` sobre todo
+  `app/`: 1 solo resultado). Los tokens se pierden en esa vuelta.
+- Esa misma navegación vuelve a pasar por `middleware.ts`, que no
+  encuentra cookie (la borró `limpiarSesionLocal()` justo antes de salir)
+  y redirige otra vez al portero — ahora con `next` RELATIVO (`/portal`).
+  Ahí `new URL('/portal')` tira excepción, `resolveSafeRedirect` cae a
+  `redirectUrl`, `auth/complete` detecta `sinDestinoEspecifico` y usa
+  `callbackUrl`, y recién ahí los tokens aterrizan en `/auth/callback`,
+  que sí sabe instalarlos. Segunda vuelta: sesión puesta, login termina.
+
+**3. Causa raíz:** el contrato del portero es que `next` apunte a la
+única página del producto que sabe canjear el fragment. CondoManager lo
+cumple explícitamente (`app/login/page.tsx:166-174`: arma
+`<origen>/auth/callback` y mete el destino real como query
+`?redirect=&condominio=&asociacion=`, con la URL del portero centralizada
+en `lib/auth/sso.ts`). agente24siete apunta `next` a la página protegida
+en sí, y por eso necesita el fallback para funcionar. Encima sus dos
+emisores de `next` están en formatos distintos: `LoginGate` absoluto
+(desde `87c5216`) y `middleware.ts` relativo (desde `89429ff` — `git log
+-- middleware.ts` tiene un único commit: el fix del `next` absoluto tocó
+los dos `LoginGate` y el callback, y nunca volvió por el middleware).
+
+- **Efecto colateral, por lectura de código + comportamiento
+  especificado del navegador (el fragment se hereda cuando el `Location`
+  del redirect no trae uno propio); no verificado en vivo todavía:** en
+  esa vuelta extra el redirect del middleware sale desde una URL que
+  todavía tiene el fragment con los tokens, así que
+  `auth.sorsabsa.com/auth/login` los recibe y llama
+  `identityClient.auth.setSession()` con ellos
+  (`auth-sorsabsa/src/app/auth/login/page.tsx:98-105`) — tokens del
+  proyecto de agente24siete contra el cliente de identity. Es la misma
+  combinación que el comentario de `condomanager/app/login/page.tsx:63-72`
+  documenta como fallida (*"setSession rechaza tokens de un proyecto
+  Supabase distinto al del cliente"*). El resultado de esa llamada no se
+  mira. Es lo primero a revisar si alguna vez el login vuelve a pedir
+  contraseña sin motivo.
+
+**4. Componente responsable:** `app/portal/LoginGate.tsx`,
+`app/admin/LoginGate.tsx` y `middleware.ts` — los tres construyen `next`
+a mano, ninguno apunta a `/auth/callback`.
+
+**5. Código afectado:** esos tres, más `app/auth/callback/page.tsx` (hoy
+deduce el panel y el destino del `next` que viaja en el fragment).
+
+**6. Fix propuesto:** una sola función (`lib/sso.ts`, misma pieza que
+`condomanager/lib/auth/sso.ts`) que arme
+`next = <origen>/auth/callback?destino=<ruta>`, usada por los tres
+emisores. `/auth/callback` decide panel y redirección por `destino`, no
+por el `next` del fragment. Con eso el destino siempre lo honra
+`resolveSafeRedirect` (host ya en la allowlist), nunca se toca el
+fallback de `callbackUrl`, y desaparece la vuelta extra. `/auth/callback`
+queda fuera del `matcher` del middleware, como ya está hoy.
+
+> ⚠️ **El fix parcial que NO hay que hacer:** "poner el `next` del
+> middleware absoluto, para que sea igual al de `LoginGate`". Eso hace
+> que `resolveSafeRedirect` honre `https://www.agente24siete.app/portal`
+> en las DOS vueltas: los tokens caen siempre en una página que no los
+> lee, el middleware nunca encuentra cookie, y como identity
+> auto-aprueba la autorización ya consentida, el ciclo no termina nunca.
+> Es el bucle infinito del 10-ago otra vez, por una causa distinta.
+
+**7. Código que debe eliminarse:** las tres construcciones de `next` a
+mano (los dos `irALogin()` y el bloque del middleware) y el respaldo de
+`app/auth/callback/page.tsx:31-36` para el `next` relativo, que existe
+solo para sostener este camino.
+
+**8. Riesgo de regresión:** medio — toca los tres puntos de entrada de
+sesión de un producto en producción con clientes reales (Punta Blanca).
+`middleware.ts` corre en Edge: la función compartida no puede arrastrar
+nada de Node (mismo cuidado que ya se tuvo con `tokenExpirado`).
+
+**9. Validación:** los tres casos de siempre (sin token, token vencido,
+cuenta sin cliente) en los dos paneles, más el conteo de saltos: con el
+fix, un login que arranca en `/portal` debe pasar UNA sola vez por
+`auth.sorsabsa.com` — hoy pasa dos, visible en la pestaña Network del
+navegador con "Preserve log" activado.
+
+---
+
+## 🟡 MEDIO
+
+### 🟡-1 — ⬜ El `refresh_token` se descarta: la sesión dura 60 minutos y se "renueva" con una vuelta completa por el portero. Encontrado 16-ago-2026
+
+**1. Síntoma:** cada ~60 minutos de uso continuo la persona es rebotada
+al portero. Hoy se ve como un parpadeo (identity auto-aprueba la
+autorización ya consentida), pero si la sesión de identity venció
+también, aparece el formulario de login en medio del trabajo, sin que
+nada lo haya provocado.
+
+**2. Causa inmediata:** `app/auth/callback/page.tsx:23` lee solo
+`access_token` del fragment; el `refresh_token` que `auth/complete` manda
+al lado se ignora, y la cookie se instala con `max-age=3600` fijo, sin
+relación con el `exp` real del token.
+
+**3. Causa raíz:** agente24siete no usa el cliente de Supabase para
+sostener su sesión — es el patrón "JWKS stateless" de FASE 3, legítimo y
+ya documentado (ver la sección "Resuelto con Gina"). Pero ese patrón no
+trae renovación incluida y nadie la escribió. CondoManager no tiene el
+problema porque su SDK renueva solo.
+
+**4. Componente responsable:** `app/auth/callback/page.tsx` — es quien
+recibe y tira el `refresh_token`.
+
+**5. Código afectado:** ese archivo, más donde viva la renovación.
+
+**6. Fix propuesto — no decidido a propósito, hay dos caminos y no dan
+lo mismo:** (a) guardar el `refresh_token` y renovar contra el proyecto
+emisor antes de que venza, o (b) aceptar la vuelta por el portero COMO el
+mecanismo de renovación — y entonces 🟠-5 hay que arreglarlo primero, para
+que esa vuelta sea un solo salto silencioso y no dos. Elegir antes de
+escribir código: 🟠-5 cambia el costo real de (b).
+
+**7-8.** N/A hasta decidir.
+
+**9. Validación:** dejar `/portal` abierto más de una hora con una sesión
+real y registrar qué pasa exactamente al minuto 60 — hoy no está
+observado, solo deducido del código.
+
 ---
 
 ## Resuelto con Gina (ya no está pendiente)
@@ -433,6 +633,16 @@ secreto — son URLs públicas, se pueden pegar acá para revisar juntos).
 
 ## Pendiente de decidir con Gina antes de ejecutar
 
+- **16-ago-2026 — tres hallazgos nuevos, ninguno tocado todavía.** Salieron
+  de revisar el estado real del código contra lo que este documento daba por
+  cerrado, no de una pantalla nueva: 🟠-4 (el logout no borra la cookie que
+  el middleware sí mira), 🟠-5 (el `next` no apunta al `/auth/callback`
+  propio: el login termina por una cadena de fallbacks, con una vuelta de
+  más) y 🟡-1 (el `refresh_token` se tira). Los tres con su análisis de 9
+  puntos arriba. Orden sugerido: **🟠-4 primero** (chico, cerrado, riesgo
+  bajo, y es una sesión que sigue viva después de "Salir"), 🟠-5 después
+  (más grande y con una trampa explícita anotada), y 🟡-1 al final porque su
+  costo depende de cómo quede 🟠-5.
 - **10-ago-2026:** 🟠-1 (Salir), 🟠-2 (chequeo de vigencia), 🔴-1
   (`middleware.ts` + cookie + `whoami` para el tercer caso), el fix del
   bucle de "cuenta sin cliente", y la causa real del bucle que persistía
@@ -462,6 +672,19 @@ secreto — son URLs públicas, se pueden pegar acá para revisar juntos).
   verificación de JWT antes de hoy. **Corregido:** `DATABASE_URL`
   reemplazada por la cadena del "Transaction pooler" de Supabase.
   Detalle completo en `AUDITORIA-PORTERO-SSO.md` 🔴-12.
+- **Dato verificado en producción hoy (16-ago-2026) que corrige el
+  razonamiento escrito en 🔴-1:** `curl` real contra
+  `https://agente24siete.app/portal` responde **308 → `www.agente24siete.app`**.
+  O sea el origen canónico en producción es **www**, no el apex (es una
+  configuración de dominio en Vercel: no hay ninguna redirección en
+  `vercel.json` ni en `next.config.mjs`). `apps.ts` tiene hoy
+  `redirectUrl`/`callbackUrl` apuntando al apex — funciona igual porque el
+  navegador conserva el fragment al seguir un 308, así que los tokens
+  llegan a www de todos modos, y `allowedHosts` ya cubre los dos hosts. Se
+  anota porque el análisis de 🔴-1 razonó sobre la premisa contraria ("la
+  navegación real seguía en `agente24siete.app`"): si alguna vez el apex
+  pasa a servirse directo, sin la redirección, los dos orígenes se separan
+  de nuevo y ese bug renace.
 - **Corrección sobre el plan original — `LoginGate.tsx` NO se borra.** El
   punto 7 de este hallazgo decía eliminarlo "una vez que el middleware
   cubra su función" — eso era cierto para el chequeo de vigencia (🟠-2),
