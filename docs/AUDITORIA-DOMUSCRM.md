@@ -240,7 +240,18 @@ como parte del consolidado de los 4 productos. Estado tras esta sesión:
   ellos afirma que ningún resultado del resolver puede volver a contener un
   sujeto fabricado.
 
-### 🟠-4 — ✅ CORREGIDO 15-ago-2026, commit `domuscrm@479ea1b` — El panel le decía "Iniciar sesión" a alguien que ya tenía la sesión iniciada
+### 🟠-4 — ✅ CORREGIDO 15-ago-2026, commit `domuscrm@479ea1b`; la pantalla pasa al componente compartido 16-ago-2026 (`domuscrm@449e7c3`) — El panel le decía "Iniciar sesión" a alguien que ya tenía la sesión iniciada
+
+> **16-ago-2026 — `AccesoDenegado.tsx` ya no es propio.** El relevamiento de
+> `AUDITORIA-PORTERO-SSO.md` 🟠-7 encontró que este mismo caso terminaba de
+> seis maneras distintas en el ecosistema. **Esta era la mejor de las seis y
+> fue la referencia para armar el componente compartido** (`SinAcceso` de
+> `@sorsabsa/ui`) — y aun así se reemplazó: el estándar solo existe si nadie
+> conserva la suya. El componente queda como la capa que traduce el motivo de
+> DomusCRM (sin acceso / rol insuficiente) a esa pantalla, con lo propio del
+> producto en los argumentos: qué cookies limpiar, y el destino de salida —
+> que acá es el subdominio o dominio del inquilino, no `domuscrm.app`, y es
+> la única excepción documentada del estándar.
 
 - **Archivos:** `crm_inmobiliario/webs/src/lib/auth-guard.ts` + los ~15
   llamadores del panel.

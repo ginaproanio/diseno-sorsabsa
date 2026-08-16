@@ -1262,3 +1262,35 @@ API REST.
   IA de Freepik/Magnific pero no se probó con una key real. Si al primer
   uso da 404 en el polling, revisar `docs.magnific.com/api-reference/image-upscaler-creative`
   y ajustar `POLL_URL` en el script.
+
+## 21. 🟡 Convertidor: vuelve a ser producto, con el motor y la web separados — 16-ago-2026
+
+**El estado y la decisión viven en [`ARQUITECTURA-ECOSISTEMA.md`](ARQUITECTURA-ECOSISTEMA.md)
+(§ Convertidor) — este punto es solo la lista de trabajo que quedó.** La
+decisión del 30-jul ("no es producto hoy") quedó superada: Gina pidió ver la
+funcionalidad y, como no puede correr nada local (entrega la máquina), se
+desplegó. Hoy la web está en `convertidor.sorsabsa.com` (Vercel) y el motor
+en `api.convertidor.sorsabsa.com` (Railway), los dos públicos y con
+certificado válido.
+
+Es un producto **API-first**: motor transversal (lo consume el scraper de
+JustiRed) y app vertical sobre esa misma API. Nombrarlo así importa porque
+las dos mitades se despliegan, versionan y cobran distinto.
+
+Pendiente, en orden de lo que bloquea a lo que se ve:
+
+1. **Verificación del plan del lado del SERVIDOR.** Hoy no existe: el
+   servidor hacía `const isPro = forceOcr` —el plan salía de una casilla que
+   manda el navegador— y eso se eliminó sin reemplazarlo, porque fingir la
+   verificación es peor. **Bloquea todo el cobro**, incluido el pago único
+   por archivo grande que pidió Gina: hay que consultar `/api/entitlements`
+   desde la ruta, no desde el cliente.
+2. **Catálogo de herramientas** (lo que Gina describe como *"algo como
+   ilovepdf.com"*): hoy la web expone UNA sola conversión (PDF → Markdown)
+   aunque el motor entrega `txt`/`md`/`csv`. No hay dónde elegir qué hacer.
+3. **Portero**: su `signOut()` es local, no pasa por el logout central —
+   `AUDITORIA-PORTERO-SSO.md` 🟠-9. Es el único de los seis productos que
+   todavía no adoptó el estándar.
+4. **Notificaciones**: no consume `notificaciones-sorsabsa`.
+5. **Pagos**: suscripción o pago único por conversión de archivos sobre
+   5 MB — depende del punto 1.

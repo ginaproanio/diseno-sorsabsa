@@ -494,6 +494,13 @@ al portero sin que el servidor llegue a servir la página.
 ⬜ **Falta el punto 9, lo hace Gina** — la comprobación que cierra esto no
 es que compile: es ver la cookie desaparecer del navegador al salir.
 
+**Actualización del mismo día (`agente24siete@c7102bf`):** `limpiarSesionLocal`
+sigue viviendo en `lib/sesion.ts` y sigue siendo lo único propio de este
+producto, pero ya no la llama un logout escrito acá: la llama
+`salirDelEcosistema` de `@sorsabsa/ui` como su función de limpieza. O sea el
+fix de este hallazgo se conserva entero; lo que cambió es quién arma la URL
+del portero (ver 🟠-6 y `AUDITORIA-PORTERO-SSO.md` 🟠-7).
+
 ### 🟠-5 — ⬜ El `next` de agente24siete no apunta a su propio `/auth/callback`: el login solo termina por una cadena de fallbacks, con una vuelta entera de más por el portero. Encontrado 16-ago-2026
 
 **1. Síntoma:** ninguno visible hoy — el login funciona, y por eso este
@@ -588,6 +595,65 @@ cuenta sin cliente) en los dos paneles, más el conteo de saltos: con el
 fix, un login que arranca en `/portal` debe pasar UNA sola vez por
 `auth.sorsabsa.com` — hoy pasa dos, visible en la pestaña Network del
 navegador con "Preserve log" activado.
+
+### 🟠-6 — ✅ CORREGIDO Y ESTANDARIZADO 16-ago-2026 — La pantalla terminal encerraba a la persona: sin salir, sin volver a la web, sin poder pedir el alta
+
+**Escrito el 16-ago-2026, tarde:** este hallazgo se corrigió y se commiteó
+(`agente24siete@9512c52`) **antes** de quedar registrado acá, y tres archivos
+del código lo citaban por número (`app/portal/LoginGate.tsx`,
+`app/admin/LoginGate.tsx`, `@sorsabsa/ui/src/components/SinAcceso.tsx`)
+apuntando a una sección que no existía. Se detectó cruzando las citas del
+código contra los números reales de cada auditoría. Queda escrito.
+
+**1. Síntoma:** Gina, probando en vivo el login con su cuenta sin cliente
+asociado: *"quiero ingresar y me deja encerrada en: Cuenta sin cliente
+asociado… no me dice salir e iría a la web nuevamente y crear una cuenta, me
+deja aquí."* La pantalla no tenía **ninguna** acción.
+
+**2. Causa inmediata:** el estado terminal renderiza ANTES de `children`, así
+que el sidebar —único lugar donde vivía "Salir" (🟠-1)— no existe en esa
+pantalla, y la tarjeta no tenía acciones propias.
+
+**3. Causa raíz:** el fix del bucle (`b505379`, ver 🔴-1) resolvió la mitad
+del problema —dejar de reintentar un login que nunca va a funcionar— y no la
+otra: **qué puede HACER la persona ahí.** Se convirtió un bucle infinito en
+una pantalla sin salida. Y el "Salir" no es cosmético en este caso: la sesión
+local ya está limpia, pero la de identity sigue viva y auto-aprueba la misma
+cuenta, así que un enlace pelado a la web dejaría el próximo "Ingresar"
+volviendo justo ahí.
+
+**4. Componente responsable:** la rama del estado terminal de los dos
+`LoginGate`.
+
+**5. Código afectado:** `app/portal/LoginGate.tsx`, `app/admin/LoginGate.tsx`,
+`components/SignOutButton.tsx`, `lib/sesion.ts`.
+
+**6. Fix — en dos pasos, y el primero estuvo mal:**
+
+1. **`agente24siete@9512c52`** agregó botones a esta pantalla y un
+   `cerrarSesionCentral` propio en `lib/sesion.ts`. Desbloqueó a Gina, pero
+   era **una variante más**: cada producto del ecosistema resolvía este mismo
+   caso a su manera. Gina lo señaló en el acto: *"te había pedido que el
+   portero maneje un estándar, pero en cada producto le haces trabajar de
+   formas diferentes, entonces no hay estándar."*
+2. **`agente24siete@c7102bf`** lo reemplazó por `<SinAcceso>` de
+   `@sorsabsa/ui` v0.1.49+ — la pantalla y el contrato de salida compartidos
+   por todo el ecosistema (`AUDITORIA-PORTERO-SSO.md` 🟠-7). Este repo solo
+   aporta el texto de su regla de negocio.
+
+**7. Código que debe eliminarse — ya eliminado:** el `cerrarSesionCentral` de
+`lib/sesion.ts` (vivió unas horas) y las dos tarjetas propias. También sobró
+el botón "Solicitar una cuenta" que había agregado el paso 1: con la regla de
+Gina —*"un botón para salir, lo que le lleva a la web si es que la tiene"*—
+salir ya deja a la persona en la landing, donde vive ese formulario.
+
+**8. Riesgo de regresión:** bajo — es agregar acciones a una pantalla que no
+tenía ninguna; no toca el gate ni el camino feliz.
+
+**9. Validación — la hace Gina:** desde la pantalla "Cuenta sin cliente
+asociado", clic en "Salir" → debe llegar a `agente24siete.app`, y un login
+nuevo debe **pedir credenciales** (prueba de que cerró también la sesión de
+identity, no solo la apariencia de haber salido).
 
 ---
 
