@@ -5,5 +5,8 @@ module.exports = {
     '^.+\\.tsx?$': ['ts-jest', { tsconfig: { jsx: 'react-jsx' } }],
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  testMatch: ['<rootDir>/src/**/*.test.tsx'],
+  // .ts además de .tsx: hasta hoy solo corrían las pruebas de componentes, así
+  // que un test de una función pura (src/lib/**) se escribía y jest lo
+  // ignoraba en silencio — peor que no tenerlo.
+  testMatch: ['<rootDir>/src/**/*.test.ts?(x)'],
 };
