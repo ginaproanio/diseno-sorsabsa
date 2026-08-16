@@ -269,9 +269,22 @@ Ninguna es técnica; las cuatro son de negocio y son de Gina.
 
 El orden importa porque cada paso destraba el siguiente:
 
-1. **Autenticar el motor de Railway.** Hoy `api.convertidor.sorsabsa.com` acepta
-   cualquier POST sin credencial. Mientras siga así, no se puede abrir al
-   navegador ni cobrar por usarlo.
+1. ✅ **Autenticar el motor de Railway — HECHO 16-ago-2026**
+   (`convertidor@1d38b2a`, `legaltech@4279fbc`). `POST /convert` exige
+   `Authorization: Bearer` y **falla cerrado**: sin `CONVERTIDOR_API_KEY` en el
+   servidor, toda petición muere con 500 en vez de dejar el motor abierto.
+   `GET /` sigue sin credencial porque es el healthcheck de Railway.
+
+   Verificado contra producción: sin credencial `401`, con credencial
+   incorrecta `401`, con la correcta convierte, y la web sigue funcionando
+   porque Vercel manda la cabecera sola. Variable cargada en Railway y en
+   Vercel (sensible, nunca `NEXT_PUBLIC_`).
+
+   **Falta una sola cosa, y no la puedo hacer yo** (el token de GitHub da 403
+   sobre Actions secrets): crear el secreto `CONVERTIDOR_API_KEY` en
+   `ginaproanio/legaltech`, con el mismo valor que la variable del servicio
+   CONVERTIDOR en Railway. Sin eso, el scan de JustiRed de las 08:00 UTC
+   convierte cero documentos y lo dice con 401 en el log.
 2. **Subida directa con URL firmada** (patrón de CondoManager). Es lo que
    elimina el techo de 4,5 MB de Vercel — sin esto, nada de lo demás sirve.
 3. **Cubo `convertidor-clientes` + su token propio** (a mano en el panel de
