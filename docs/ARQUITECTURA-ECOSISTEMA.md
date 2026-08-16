@@ -23,6 +23,69 @@ trabajo lo redescubría desde cero — a veces rompiendo algo en el intento.
 | JustiRed | `legaltech` | Vercel | ✅ SPA sano; su motor de OCR no vive aquí |
 | SORSABSA Forensic | `sorsabsaforensic` | **Railway** | ✅ en `materializacion.sorsabsa.com`; 6 de 16 procesadores corriendo, cobro sin implementar (Fase 5) |
 
+> ### ⚠️ Convertidor — la decisión de 2026-07-30 quedó SUPERADA el 2026-08-16
+>
+> **Lo vigente es esto; el párrafo de abajo se conserva como historial.** Gina
+> pidió ver la funcionalidad (*"yo necesito ver la funcionalidad, y ahora
+> mismo no la veo"*) y, al no poder correr nada local —entrega la máquina—,
+> se desplegó. **Hoy el Convertidor está arriba, público y con dominios
+> propios:**
+>
+> | Qué | Dónde | Dominio propio | Estado |
+> |---|---|---|---|
+> | Web (Next.js) | **Vercel**, proyecto `convertidor`, root `frontend/` | `convertidor.sorsabsa.com` (A → `76.76.21.21`) | ✅ público, certificado válido |
+> | Motor (FastAPI + Tesseract/EasyOCR) | **Railway**, proyecto `CONVERTIDOR` | `api.convertidor.sorsabsa.com` (CNAME → `d7ssiol5.up.railway.app`) | ✅ verificado, certificado válido |
+>
+> DNS en Hostinger, nameservers sin tocar. Las URLs genéricas
+> (`convertidor-production-7ca8.up.railway.app`) se reemplazaron en el README
+> del repo y en JustiRed (`scraper/.env.example`, `scraper/README.md`,
+> `docs/biblioteca-legal.md`). **Falta**: el secret `CONVERTIDOR_API_URL` de
+> GitHub Actions de `legaltech` (el `gh` de la sesión no tiene permiso sobre
+> secrets — lo cambia Gina en Settings → Secrets and variables → Actions).
+>
+> **Por qué los 10/10 despliegues fallaban** (lo que el párrafo de abajo dejó
+> anotado sin causa): dos motivos reales, los dos corregidos en
+> `convertidor@606b07d5` — el `vercel.json` declaraba un servicio `backend`
+> que es un contenedor Python con binarios, no una función serverless; y el
+> repo tenía **154 archivos de build (`frontend/.next`) commiteados**, que el
+> `.gitignore` ya excluía pero seguían trackeados (gitignore no destrackea lo
+> que ya entró).
+>
+> **Tres defectos reales encontrados al probarlo, corregidos
+> (`convertidor@fe5542bb`):** (1) había **dos motores** —el real en Railway y
+> otro reimplementado en JavaScript dentro de la web, que corría en el camino
+> por defecto y fallaba con PDFs que el real convierte bien—; (2) `force_ocr`
+> **nunca llegaba** (el motor lo lee como parámetro de URL y la web lo mandaba
+> en el cuerpo: el interruptor de OCR, que es la función que se cobra, no
+> hacía nada); (3) `maxDuration` estaba declarado a la manera del Pages
+> Router, ignorado en App Router, así que un escaneado grande se cortaba por
+> timeout. Detalle completo en el mensaje de ese commit.
+>
+> **Sigue sin resolverse, anotado sin fingir que está hecho:** el servidor
+> hacía `const isPro = forceOcr`, o sea el plan salía de una casilla que manda
+> el navegador. Se eliminó esa suposición (queda un techo duro de 50MB), pero
+> **la verificación real del plan contra `/api/entitlements` del lado del
+> servidor no está escrita.**
+>
+> **Lo que falta para que sea el producto que Gina describe** (*"algo como
+> ilovepdf.com"*): hoy la web expone **una sola herramienta** (PDF →
+> Markdown), aunque el motor entrega `txt`/`md`/`csv`. No hay catálogo donde
+> elegir qué hacer. Y falta integrar portero (su `signOut` es local, ver
+> `AUDITORIA-PORTERO-SSO.md` 🟠-9), notificaciones y pagos —suscripción o pago
+> único por archivo grande.
+>
+> **Cómo nombrar lo que es** (pregunta de Gina): es un producto **API-first**
+> — un motor con API propia que consumen otros productos (JustiRed hoy;
+> SorsabsaForensic como origen del caso de uso) *y* una app propia de cara al
+> usuario que consume esa misma API. Transversal el motor, vertical la app.
+> Mismo modelo que iLovePDF/iLoveAPI o Cloudinary.
+>
+> **Marca:** desde el 16-ago-2026 tiene la suya (`BRANDS.convertidor`,
+> `@sorsabsa/ui` v0.1.51) — **misma paleta que SorsabsaForensic** por decisión
+> de Gina, con wordmark propio. Aparece sola en el showcase.
+>
+> <details><summary>Historial — la decisión del 2026-07-30, ya superada</summary>
+>
 > **Convertidor — NO es producto hoy (decisión 2026-07-30).** Nació y sigue
 > siendo herramienta interna para el trabajo forense/pericial (OCR de evidencia
 > escaneada). Hay un frontend Next.js (tienda, plan Pro, pagos) construido con la
@@ -35,6 +98,8 @@ trabajo lo redescubría desde cero — a veces rompiendo algo en el intento.
 > servicio `backend` del `vercel.json`, que es lo que rompía el build). Hoy queda
 > solo el backend OCR (§2), en contenedor (Railway) o local, invocado directo.
 > **No re-desplegar en Vercel por ahora.**
+>
+> </details>
 
 ### Transversales (no se venden solos — cruzan todos los verticales)
 
