@@ -969,6 +969,140 @@ era (b), un problema de configuración, no vencimiento natural.
   regla de negocio escrita en el componente no siga afirmando algo que el
   sistema no cumple.
 
+### 🟠-7 — 🔧 El portero no tenía estándar del lado del CONSUMIDOR: el mismo rechazo terminaba de seis maneras — encontrado 16-ago-2026
+
+**Origen — Gina, después de quedar encerrada en agente24siete:** *"te había
+pedido que el portero maneje un estándar, pero en cada producto le haces
+trabajar de formas diferentes, entonces no hay estándar, el portero al día de
+hoy ya debería estar listo... son varios sistemas por revisar y hasta ahora
+no salimos del portero"*. Tenía razón, y la propia sesión lo probó: el fix de
+ese encierro (`AUDITORIA-AGENTE24SIETE.md` 🟠-6) empezó siendo una variante
+más, propia de ese producto.
+
+**1. Síntoma:** el caso "tenés sesión válida, pero no tenés lugar en este
+producto" terminaba distinto en cada uno. Relevado leyendo los seis repos:
+
+| Producto | Pantalla | Salidas que ofrecía |
+|---|---|---|
+| DomusCRM | `AccesoDenegado.tsx` propio | Salir (logout central) + "Ver la web pública" |
+| CondoManager | dentro de `DashboardShell.tsx`, muestra el email | "Cerrar sesión" (sin `next`) + "Reintentar" |
+| agente24siete | propia, en cada `LoginGate` | **ninguna** — encerraba a la persona |
+| IOT | ninguna: `requires_sso_auth` mandaba al login igual que si no hubiera sesión | ninguna; y el rechazo del callback ofrecía "Volver a intentar" → login |
+| Convertidor | no filtra por cuenta | su `signOut()` es **local**, no pasa por el logout central |
+| auth-sorsabsa | `payment_blocked` en `/auth/complete` | "Ir a pagos" + volver al login (con la sesión de identity ya cerrada) |
+
+**2. Causa inmediata:** cada producto escribió su propia pantalla, su propio
+botón y su propia URL de logout.
+
+**3. Causa raíz:** el portero **sí** está estandarizado —un allowlist, un
+`/auth/login`, un `/auth/logout`, un `/auth/complete`—; lo que nunca se
+estandarizó es el lado del consumidor. `@sorsabsa/ui` repartía el chasis
+(Card, Button, marca) pero no la pantalla ni la regla, así que cada caso
+nuevo se arreglaba en un repo y los otros cinco quedaban igual. **Ese hueco
+vivía en `diseno-sorsabsa`, no en los productos.**
+
+**4. Componente responsable:** el paquete compartido.
+
+**5. Código afectado:** `@sorsabsa/ui` + los seis consumidores.
+
+**6. Regla, dictada por Gina y ahora implementada una sola vez:** *"si tiene
+landing page debería dar mensaje de que no tiene cuenta y un botón para
+salir, lo que le lleva a la web si es que la tiene; si no tiene web sale al
+login"*. **No hace falta programarla por producto:** ya está en `apps.ts`
+como `redirectUrl`, y `/auth/logout` la aplica cuando **no** se le manda
+`next` — web propia si la tiene (`condomanager.vip`, `agente24siete.app`,
+`domuscrm.app`, `www.justired.com`), la app misma si no (IOT, Convertidor),
+que al no encontrar sesión manda al login.
+
+**Construido — `@sorsabsa/ui` v0.1.49 (`diseno-sorsabsa@ab0fa9c`, tag
+publicado):**
+
+- `src/components/SinAcceso.tsx` — la pantalla terminal compartida. El
+  producto solo aporta el texto de SU regla de negocio y, si existe de
+  verdad, un segundo destino útil.
+- `src/lib/portero.ts` — `urlDeSalida(app)` / `salirDelEcosistema(app,
+  limpiar?)`. **No acepta destino**, y hay un test que cuida justo eso: el
+  día que alguien le agregue un `next`, cada producto vuelve a decidir por su
+  cuenta y se rompe el estándar sin que falle nada a la vista.
+- Regla dura de la pantalla: **nunca ofrecer "volver a intentar el login"**.
+  La cuenta sigue sin lugar después de reautenticar, y con identity
+  auto-aprobando la autorización ya consentida, ese reintento ES el bucle.
+
+**7. Código eliminado:** en agente24siete, sus dos pantallas terminales
+propias y el `cerrarSesionCentral` que había durado unas horas (una quinta
+forma de armar la misma URL).
+
+**8. Riesgo de regresión:** bajo por producto (la pantalla no está en el
+camino feliz), pero son seis repos: se adopta de a uno, verificando.
+
+**9. Validación:** por producto, entrar con una cuenta sin lugar ahí y
+confirmar que se ve la misma pantalla, que "Salir" lleva a la web (o al
+login si no hay web), y que un login nuevo **pide credenciales** — la prueba
+real de que cerró también la sesión de identity.
+
+**Estado de adopción:**
+
+- ✅ **agente24siete** — `agente24siete@c7102bf` + `da58090`. `tsc` y
+  `next build` verificados contra el tag publicado, no contra una copia
+  local.
+- ✅ **IOT** — `iot@4400bee`. No puede consumir el componente (Flask/Jinja,
+  otro stack): se comparte la regla y el contrato de salida, no el código.
+  Detalle en 🟠-8.
+- ⬜ **CondoManager, DomusCRM, Convertidor** — sin tocar.
+
+### 🟠-8 — ✅ CORREGIDO 16-ago-2026, commit `iot@4400bee` — IOT trataba "esta cuenta no opera IOT" como "no hay sesión"
+
+**Corrección sobre el diagnóstico inicial, escrita a propósito:** al reportar
+esto dije que IOT estaba en un **bucle infinito** en producción. **No lo
+estaba.** El ciclo automático ya se había cortado el 08-ago-2026 en
+`/auth/callback`, que para y muestra el motivo. Lo que quedaba era real pero
+menor: el ciclo a un clic.
+
+1. **Síntoma:** una cuenta con sesión válida que no está en
+   `IDENTIDADES_POR_EMAIL` (o sea, cualquiera que no sea Patricio o Susana)
+   no veía ninguna explicación de por qué no entra, y la única acción que se
+   le ofrecía —"Volver a intentar"— la devolvía a la misma pantalla: identity
+   auto-aprueba la autorización ya consentida, así que reautenticar entra con
+   la MISMA cuenta rechazada.
+2. **Causa inmediata:** `identidad_actual()` devolvía `None` para dos estados
+   distintos ("no hay sesión" y "hay sesión, sin acceso") y
+   `requires_sso_auth` mandaba al portero en los dos.
+3. **Causa raíz:** la misma de fondo que el bucle de agente24siete del
+   10-ago — confundir un estado de SESIÓN con uno de NEGOCIO. Reautenticar
+   arregla el primero y nunca el segundo.
+4. **Componente responsable:** `iot_system/app/auth_sso.py`.
+5. **Código afectado:** ese archivo, `editor.py` (el botón del callback) y
+   una plantilla nueva.
+6. **Fix:** `estado_de_sesion()` devuelve `SIN_SESION` / `SIN_ACCESO` /
+   `CON_ACCESO`; solo el primero va al portero, el segundo renderiza
+   `templates/sin_acceso.html` con un 403. La versión API pasa a 403 (no 401)
+   en ese caso — mismo par de códigos que ya usan agente24siete y DomusCRM.
+   El botón del callback pasa de "Volver a intentar" (login) a "Salir"
+   (logout central).
+7. **Código eliminado:** ninguno; `identidad_actual()` se conserva apoyada en
+   la función nueva porque la usan 7 lugares de `editor.py`.
+8. **Riesgo de regresión:** bajo — el camino de quien SÍ tiene acceso no
+   cambia.
+9. **Validación:** `py_compile` limpio y render real de la plantilla con
+   Jinja (con y sin email), comprobando que lleva el logout central, que NO
+   lleva `next` y que no ofrece volver al login. **Falta la prueba en vivo**:
+   entrar a IOT con una cuenta ajena y ver la pantalla. Requiere desplegar a
+   Railway — ojo con el antecedente de que su auto-deploy no se disparó solo
+   (ver #14 de `PENDIENTES-ECOSISTEMA.md`).
+
+### 🟠-9 — ⬜ El "salir" de Convertidor no pasa por el logout central — encontrado 16-ago-2026
+
+- **Archivo:** `convertidor/frontend/src/hooks/useAuth.ts` — `signOut()` hace
+  solo `supabase.auth.signOut()`.
+- **Es el mismo bug ya corregido tres veces** (CondoManager 🟠-5, JustiRed
+  🔴-11, agente24siete 🟠-1): cierra la sesión del producto y deja viva la de
+  identity, que auto-aprueba el siguiente login sin pedir credenciales — o
+  sea "cerrar sesión" no permite entrar con otra cuenta.
+- **Fix:** `salirDelEcosistema('convertidor', …)` de `@sorsabsa/ui` v0.1.49,
+  igual que el resto. Su `signIn()` en cambio ya está bien (manda `next` a su
+  propio `/auth/callback`, el patrón correcto).
+- **Riesgo:** bajo. **Sin implementar todavía.**
+
 ### 🟠-3 — ✅ Autorización duplicada en dos archivos de IOT — CORREGIDO 09-ago-2026
 
 - **Archivos:** `iot/auth_sso.py` (`identidad_actual`) y `iot/editor.py` (`auth_callback_verify`)
