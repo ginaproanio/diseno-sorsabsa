@@ -188,16 +188,22 @@ más un tercero nuevo (`Cuenta`), `AdminSection` y
 siga abriéndose solo según la URL. Ninguna ruta ni pantalla se tocó.
 Verificado: typecheck limpio, eslint 0 errores/warnings.
 
-### Fase 4 — Verificación y cierre
+### Fase 4 — Verificación y cierre — 🔧 casi cerrada (15-ago-2026)
 
-- `npx tsc --noEmit` + `npx eslint` sobre todos los archivos tocados.
-- SQL antes/después: confirmar que ningún condominio real perdió datos en
-  la fusión (comparar columnas relevantes pre y post migración).
-- Validación en vivo: Gina reingresa a "Perfil del condominio" y a
-  "Facturación", confirma que ve sus datos actuales tal cual estaban.
-- Actualizar `AUDITORIA-CONDOMANAGER.md` con el hallazgo del bug de
-  pérdida de datos (Ubicación/Contacto) como una entrada 🔵 más, con el
-  commit de `condomanager` que lo resuelve.
+- ✅ `npx tsc --noEmit`: limpio sobre el proyecto completo (reverificado
+  15-ago-2026).
+- ✅ Entrada en la auditoría: ya existe —
+  [AUDITORIA-CONDOMANAGER.md](AUDITORIA-CONDOMANAGER.md) 🟠-3, "Ubicación y
+  Contacto escribían las mismas columnas sin saberlo — pérdida de datos
+  real", marcada RESUELTO 09-ago-2026. Se anotó como pendiente acá por
+  duplicado; ya estaba hecho.
+- ✅ SQL antes/después de la Fase 2: verificado en su momento — el
+  condominio real tenía `nombre_comercial`/`direccion` completos y
+  `nombre_facturacion`/`direccion_facturacion` nunca se habían llenado, así
+  que no hubo nada que respaldar ni migrar.
+- ⬜ **Único pendiente real:** validación en vivo — Gina entra a "Perfil del
+  condominio" y a "Facturación" y confirma que ve sus datos actuales tal
+  cual estaban.
 
 ## Orden recomendado
 
@@ -207,9 +213,13 @@ consecuencia legal en la factura) → Fase 3 (reordenar sidebar, cosmético,
 se puede hacer junto con 1 y 2 en el mismo PR o después, no tiene apuro) →
 Fase 4 en cada fase, no solo al final.
 
-## Pendiente de decidir con Gina antes de ejecutar
+## Decidido y ejecutado (ya no está pendiente)
 
-- ¿Fase 3 (reagrupar sidebar) se hace en el mismo lote que 1 y 2, o
-  después, por separado?
-- Nombre final de los grupos del sidebar ("Identidad y legal" /
-  "Operación" / "Cuenta" son una propuesta, no una decisión).
+Esta sección preguntaba dos cosas que la Fase 3 ya resolvió y ejecutó el
+09-ago-2026; se cierran acá el 15-ago-2026 para que el documento no invite
+a rediscutirlas:
+
+- **¿Fase 3 en el mismo lote que 1 y 2?** No: fue por separado, en
+  `condomanager@2d9c0a9`, después de explicarle el sidebar en texto plano.
+- **Nombre de los grupos:** Gina eligió **Identidad** (no "Identidad y
+  legal") / **Operación** / **Cuenta**.

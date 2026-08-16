@@ -261,8 +261,17 @@ separados) que hay que rediseñar, no solo cambiar un label:
   alfanumérico (Algarrobos de la Viña pone número, otros condominios
   ponen texto), por eso el tipo es `text`, no `integer`.
 
-## Pendiente de confirmar con Gina antes de ejecutar
+## Estado — 15-ago-2026
 
-- Orden de fases: propuesto 0→1→2→3→4→5 en ese orden porque cada fase
-  depende de que la anterior exista, pero se puede pausar entre fases
-  para probar en vivo.
+**Plan cerrado a nivel de código.** Fases 0 a 5 ejecutadas y verificadas
+(09-ago-2026), los 23 archivos del inventario. Typecheck del proyecto
+confirmado limpio de nuevo el 15-ago-2026.
+
+Lo único que queda es la verificación en vivo, que por naturaleza no se
+puede hacer desde acá: entrar al módulo Unidades, crear una unidad y
+importar residentes por CSV en un condominio de cada criterio.
+
+La sección "Pendiente de confirmar con Gina antes de ejecutar" que estaba
+acá preguntaba por el orden de las fases — se sacó el 15-ago-2026 porque
+las fases ya se ejecutaron en ese orden. Un pendiente que ya ocurrió no es
+un pendiente: es ruido que invita a rediscutir algo cerrado.

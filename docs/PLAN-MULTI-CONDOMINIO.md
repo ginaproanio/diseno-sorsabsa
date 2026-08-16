@@ -19,9 +19,14 @@ porque el selector que ya existe (`selector-condominios`,
 `selector-asociaciones`) fue diseñado para ese caso — no hay que construir
 una pantalla nueva, hay que destrabar la que ya está.
 
-**Estado:** ⬜ Fase 1 sin empezar. Nada de este plan se implementa sin
-pasar antes por el análisis de 9 puntos de `ESTANDAR-DESARROLLO.md` en
-cada fase — este documento es el mapa, no el permiso para tocar código.
+**Estado (15-ago-2026):** ✅ Fases 0, 0.5, 1, 2 y 3 · ⬜ Fases 4, 5, 6, 7, 8.
+Nada de este plan se implementa sin pasar antes por el análisis de 9 puntos
+de `ESTANDAR-DESARROLLO.md` en cada fase — este documento es el mapa, no el
+permiso para tocar código.
+
+⚠️ **Antes de tocar la Fase 7 o de crear el primer perfil doble, leer
+"Próximo paso" al final:** hay 60 `.single()` sobre `perfiles` que fallan
+—no devuelven la primera fila, fallan— en cuanto alguien tenga dos.
 
 ---
 
@@ -253,15 +258,71 @@ del servidor tendría que reenviar como este header — hoy nada en
 `lib/supabase/server.ts` lo hace todavía). Eso es trabajo de Fase 3 en
 adelante, no de esta fase.
 
-## Fase 3 — "Condominio activo": un solo mecanismo
+## Fase 3 — "Condominio activo": un solo mecanismo — ✅ RESUELTO 15-ago-2026
 
-Pieza que falta hoy por completo: nada sabe "en cuál condominio está
-parada esta persona ahora mismo" porque nunca hizo falta. Se resuelve una
-sola vez — una cookie (`condominio_activo`), fijada cuando la persona
-elige en el selector — y la consumen **los dos lados** (Fase 4 y 5), no
-cada uno por su cuenta. Es la fuente única de verdad de esta parte del
-plan; sin esto, el backend y el frontend inventarían cada uno su propia
-forma de saber "cuál" y volveríamos a duplicar.
+Pieza que faltaba por completo: nada sabía "en cuál condominio está parada
+esta persona ahora mismo" porque nunca hizo falta. Se resuelve una sola vez
+— una cookie (`condominio_activo`) — y la consumen **los dos lados**
+(Fase 4 y 5), no cada uno por su cuenta.
+
+**Decisión de Gina (15-ago-2026): cookie legible por el navegador**, no
+httpOnly y no el condominio en la URL. Lo que la sostiene no es comodidad:
+**se verificó en el SQL de la Fase 2 que el valor no puede otorgar acceso.**
+`current_rol()`/`current_condominio_id()`/`current_residente_id()` filtran
+siempre `WHERE user_id = auth.uid()` y usan la GUC únicamente en el
+`ORDER BY` — o sea, el valor elige *entre las filas propias* de esa persona.
+Poner a mano el UUID de un condominio ajeno no hace coincidir ninguna fila
+suya y el orden cae a una propia igual. Una cookie httpOnly habría agregado
+una ruta de servidor y un contexto nuevo para proteger algo que el SQL ya
+protege. La opción de "condominio en la URL" (enlaces compartibles) se
+descartó por costo: reescribe el ruteo del panel entero.
+
+**Implementado (`condomanager@70f5e1f`):**
+
+- `lib/condominio-activo.ts` — la fuente única: nombre de cookie, nombre de
+  header (`x-condominio-activo`, atado por comentario al de la migración de
+  la Fase 2 para que no se separen), duración (30 días), y los cuatro
+  helpers (leer/fijar/limpiar/armar header).
+- `lib/supabase/server.ts` — reenvía el header. Es el único lugar donde el
+  servidor crea un cliente Supabase, así que con eso **toda** consulta del
+  servidor lo lleva y las 41 políticas RLS empiezan a resolver por
+  condominio sin que ninguna se toque.
+- `lib/supabase/client.ts` — el gemelo del navegador (de ahí consultan las
+  52 páginas). **Se inyecta con un `fetch` propio, no con `global.headers`**:
+  `headers` se congela al crear el cliente, y varias páginas —entre ellas
+  `panel/page.tsx`— crean el suyo a nivel de módulo, o sea antes de que la
+  persona elija. Con el header congelado, cambiar de condominio habría
+  seguido consultando el anterior hasta recargar: exactamente el bug
+  silencioso de "veo los datos del otro condominio" que esta fase existe
+  para hacer imposible.
+- Quién la escribe: `panel/page.tsx` (el embudo por el que ya pasaban tanto
+  el post-login como el selector vía `?condominio=<slug>`; ya resolvía el id
+  y ya confirmaba que la persona tiene perfil ahí — solo faltaba que el
+  hecho sobreviviera al siguiente click) y `selector-condominios`, que es el
+  momento explícito de la elección. Con un solo perfil se fija sola, sin
+  pedirle a nadie que elija algo que no tiene alternativa.
+- Quién la borra: los dos logout (`components/SignOutButton.tsx` y
+  `DashboardShell.tsx`). Dura 30 días a propósito, así que sin esto la
+  próxima persona en la misma computadora arrancaría con el condominio de
+  la anterior ya elegido.
+
+**Riesgo que ni el typecheck ni el build detectan, verificado aparte:** el
+navegador manda un header nuevo hacia otro origen (`*.supabase.co`), así que
+la consulta pasa por un preflight CORS — si Supabase no lo permitiera,
+**todas** las consultas del navegador fallarían, y ninguna herramienta
+estática lo avisa. La Fase 2 se había probado con `curl`, que no hace
+preflight. Comprobado ahora contra el endpoint real:
+
+```text
+OPTIONS /rest/v1/perfiles
+  Access-Control-Request-Headers: x-condominio-activo,apikey,authorization
+→ 200, access-control-allow-headers: x-condominio-activo,apikey,authorization
+```
+
+Verificado además: typecheck del proyecto limpio, eslint 0 en los 7
+archivos tocados, `next build` OK. **Sin probar en vivo todavía** — y no se
+puede probar del todo hasta la Fase 4/5, porque hoy `.single()` sigue
+fallando con dos perfiles (ver abajo).
 
 ## Fase 4 — Backend
 
@@ -321,14 +382,25 @@ paralelo desde la Fase 1, no como un paso al final.
 
 ## Próximo paso
 
-**Fase 1 y Fase 2 cerradas y verificadas** (09-ago-2026,
-`condomanager@04a4ec6`) — la base ya soporta que una persona tenga perfil
-en más de un condominio, y ni una de las 41 políticas RLS existentes se
-tocó. Sigue Fase 3: decidir la forma exacta del cookie "condominio
-activo" (nombre, cuándo se fija, cuánto dura) — de esa forma dependen
-Fase 4 (backend, incluye hacer que `lib/supabase/server.ts` reenvíe el
-header `x-condominio-activo` que la Fase 2 ya sabe leer) y Fase 5
-(frontend). Nada de eso implementado todavía.
+**Fases 1, 2 y 3 cerradas.** La base soporta perfiles múltiples, las 41
+políticas RLS resuelven por condominio activo sin haberse tocado, y el
+mecanismo que las alimenta está construido de punta a punta.
+
+**Sigue la Fase 4, y con ella el riesgo real de este plan.** Medido en el
+código el 15-ago-2026 (los números del alcance de arriba quedaron cortos):
+
+- **52 páginas** del dashboard consultan `perfiles` (el plan decía 45)
+- **14 rutas** de API lo consultan directo + **14** vía `requireRole`
+- **60 llamadas a `.single()` sobre `perfiles`** en todo el repo
+
+Ese 60 es la medida real: `.single()` no devuelve la primera fila, **falla**
+con más de una. La Fase 1 hizo *posible* el segundo perfil; el día que
+exista el primero, esos 60 lugares empiezan a devolver error a la vez.
+
+De ahí una regla de secuencia que este plan tiene que respetar sí o sí:
+**no crear el primer segundo-perfil, ni subir el censo de Punta Blanca
+(Fase 7), hasta que 4 y 5 estén hechas.** Hoy no hay ningún caso real, así
+que no hay nada roto — pero el margen es exactamente ese.
 
 ---
 
