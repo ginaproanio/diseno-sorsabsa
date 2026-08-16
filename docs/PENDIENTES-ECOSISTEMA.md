@@ -1292,11 +1292,29 @@ Pendiente, en orden de lo que bloquea a lo que se ve:
 
 ---
 
-## 21-bis. 🔴 Lo que bloquea el cobro del Convertidor — analizado 16-ago-2026
+## 21-bis. 🟠 Lo que bloquea el cobro del Convertidor — analizado y resuelto a medias, 16-ago-2026
 
 Análisis pedido por Gina (*"analiza lo que bloquea el cobro"*), siguiendo
-`ESTANDAR-DESARROLLO.md`. **Sin implementar: acá está el diagnóstico y la
-decisión que falta, no el fix.**
+`ESTANDAR-DESARROLLO.md`.
+
+> **ESTADO — leer esto primero**
+>
+> - ✅ **Decisión 1 tomada por Gina y aplicada:** el gate freemium, opción B
+>   (modo nuevo en `apps.ts`). `auth-sorsabsa@ad61eef` + `convertidor@96ae4e2`.
+>   Incluye la verificación del plan del lado del servidor y el `sujeto`
+>   estable en el pago, que son los cortes 1, 2 y 3 de la tabla de abajo.
+> - ⬜ **Decisión 2 sin tomar:** dónde vive el crédito del **pago único** por
+>   archivo grande (corte 4). Es lo que Gina dejó apuntado por no alcanzar en
+>   esta etapa.
+> - ⚠️ **SIN DESPLEGAR al momento de escribir esto.** Los dos commits van
+>   juntos y en ese orden: primero el portero, después Convertidor. Desplegar
+>   solo Convertidor deja el plan Pro inalcanzable (el portero todavía
+>   respondería sin campo `plan`). No se subió en el momento porque Gina
+>   estaba verificando los logins de todos los productos y `auth-sorsabsa`
+>   despliega solo en cada push.
+>
+> El diagnóstico se conserva entero abajo, no se reescribe: es lo que explica
+> por qué la solución tiene la forma que tiene.
 
 ### 1 · Síntoma
 
@@ -1361,7 +1379,11 @@ su cuenta lo que el portero existe para unificar.
 
 ### 6 · Solución de raíz (no parche)
 
-**Decisión pendiente de Gina — dos formas, se recomienda la B:**
+#### DECISIÓN 1 — ✅ TOMADA POR GINA, 16-ago-2026: opción B
+
+*"esto me suena bien aplicalo: un tercer modo freemium en apps.ts"*.
+Implementada en `auth-sorsabsa@ad61eef` y `convertidor@96ae4e2`. Las dos
+opciones se conservan escritas porque explican por qué el código quedó así:
 
 - **A · Convertidor pregunta por su cuenta.** Sigue `sin_cobro` en el login y
   el producto consulta el plan aparte. Rápido, pero deja a un producto
@@ -1379,38 +1401,87 @@ su cuenta lo que el portero existe para unificar.
   `plan !== "free"`. Quien lo escribió esperaba un campo `plan` que el backend
   nunca produjo.
 
-Con B resuelto, lo demás es mecánico y tiene referencia buena en el repo:
+Con B tomada, lo mecánico ya se hizo (`convertidor@96ae4e2`):
 
-- **`/api/pagos/iniciar`** debe exigir la sesión, sacar el usuario del token
-  (nunca del body) y mandar `correo: user.email` y
-  `suscripcion: { plan: 'pro', dias: 30, sujeto: user.id }`. El `sujeto` tiene
-  que ser **el mismo id** que `/api/entitlements` va a buscar después.
-  `condomanager/app/api/admin/suscripcion/route.ts:129-139` lo hace bien y su
-  comentario nombra el bug exacto a evitar: JustiRed mandaba un sujeto nuevo
-  en cada pago, así que ningún login futuro lo encontraba (punto #16).
-- **`/api/convert`** debe leer la sesión y consultar el plan del lado del
-  servidor. El chequeo del cliente se queda para la experiencia, pero deja de
-  ser la autoridad.
-- **Pago único** — es otra figura, no una suscripción: no extiende un período,
-  autoriza UNA conversión. Necesita `CALLBACKS_POR_PRODUCTO.convertidor` en
-  `pagos-sorsabsa/api/confirmar.js` (hoy solo están agente24siete y
-  condomanager-recaudación), un webhook en Convertidor y **un lugar donde
-  guardar el crédito**. Convertidor no tiene base propia: usa Supabase solo
-  para identidad. Dónde vive ese crédito es la segunda decisión que falta.
+- ✅ **`/api/pagos/iniciar`** exige la sesión, saca el usuario del token (nunca
+  del body) y manda `correo` y
+  `suscripcion: { plan: 'pro', dias: 30, sujeto: user.id }`. El `sujeto` es
+  **el mismo id** que `/api/entitlements` busca después.
+  `condomanager/app/api/admin/suscripcion/route.ts:129-139` fue la referencia,
+  y su comentario nombra el bug evitado: JustiRed mandaba un sujeto nuevo en
+  cada pago, así que ningún login futuro lo encontraba (punto #16).
+- ✅ **`/api/convert`** lee la sesión y consulta el plan del lado del servidor
+  (`convertidor/frontend/src/lib/sesion-servidor.ts`). El chequeo del cliente
+  se queda para la experiencia, pero dejó de ser la autoridad.
+- ✅ **Límites y precio en un solo módulo** (`lib/planes.ts`). Eran tres copias
+  que ya se contradecían.
 
-### 7 · Código a eliminar
+---
+
+#### DECISIÓN 2 — ⬜ ABIERTA: dónde vive el crédito del pago único
+
+**Lo que Gina pidió:** *"pago por suscripción **o un solo pago por la
+conversión de un archivo más grande de los 5mb**"*. Lo primero ya funciona;
+esto no.
+
+**Por qué no es "lo mismo pero más chico":** una suscripción se guarda en
+`pagos.suscripciones` y se responde con una fecha (`periodo_fin > now()`). Un
+pago único **no extiende un período: autoriza UNA conversión**, y eso es un
+saldo que se consume. `pagos-sorsabsa` ya sabe cobrarlo (una fila en `pagos`
+sin metadata de suscripción); lo que no existe es quién lo recuerda ni quién lo
+descuenta.
+
+**Las tres opciones, con lo que cuesta cada una:**
+
+| Opción | Dónde vive el crédito | A favor | En contra |
+| --- | --- | --- | --- |
+| **A · Tabla propia en `verticales_sorsabsa`** (esquema `convertidor`) | Base que el producto ya usa para identidad | Control total del consumo; no toca a nadie más | Convertidor estrena base de datos: RLS, migraciones y un esquema más que mantener |
+| **B · Saldo prepago, como agente24siete** | El producto lleva el saldo y `pagos-sorsabsa` solo avisa | Patrón que ya existe y funciona en el ecosistema; sirve si mañana hay más cosas que cobrar por unidad | Es el mismo trabajo que A más la idea de "saldo"; sobra si solo va a haber un tipo de compra |
+| **C · Sin crédito: se paga y se convierte en el acto** | En ningún lado — el pago devuelve a una pantalla que ya trae el archivo | Nada que guardar, nada que descontar, nada que reconciliar | Si el pago se aprueba y la conversión falla, no hay a qué volver: la persona pagó y perdió el archivo |
+
+**Recomendación: A**, y no C. C parece la más barata hasta el primer fallo de
+conversión después de un cobro aprobado — ahí no hay crédito al que volver y la
+reclamación se atiende a mano. B es A con una capa de más que hoy no se usa.
+
+**Lo que hace falta hacer una vez decidido** (esto ya está averiguado, no hay
+que volver a investigarlo):
+
+1. `CALLBACKS_POR_PRODUCTO.convertidor` en `pagos-sorsabsa/api/confirmar.js` —
+   hoy solo están `agente24siete` y `condomanager-recaudacion`.
+2. Un webhook en Convertidor que reciba ese aviso y acredite.
+3. El lugar donde se guarda, según la opción elegida.
+4. En `/api/convert`, consumir el crédito **después** de que la conversión
+   salga bien, no antes.
+
+**Lo que NO hay que hacer**, por si esto se retoma en otra sesión: resolverlo
+con un parámetro en la URL de vuelta del pago (`?pagado=true`) o cualquier cosa
+que venga del navegador. Es exactamente el `isPro = forceOcr` que este producto
+ya tuvo — el cliente diciendo cuánto pagó.
+
+### 7 · Código a eliminar — ✅ hecho
 
 El comentario *"herramienta INTERNA … no hay nada que cobrar"* de `apps.ts`
 (dejó de ser cierto) y el `monto: plan_id === "convertidor-pro" ? 9 : 0` de
-`iniciar/route.ts`, que codifica el precio en la ruta en vez de tomarlo del
-catálogo de planes.
+`iniciar/route.ts`, que codificaba el precio en la ruta en vez de tomarlo del
+catálogo de planes. También el `isPro` escrito a mano en la pantalla, que era
+donde vivía el bug de origen: ahora hay una sola definición en
+`useEntitlements`, y exige un plan pagado explícito.
 
 ### 8 · Riesgo de regresión
 
 **Alto si se toca en el orden equivocado**, y ahí está el valor de este
-análisis: cambiar solo `apps.ts` deja a todos afuera del login. El orden
-seguro es `PoliticaDeCobro` primero (con `/auth/complete` ya enseñado a no
-bloquear en freemium), después `iniciar`, después `convert`.
+análisis: cambiar solo `apps.ts` deja a todos afuera del login. Se hizo en el
+orden seguro — `PoliticaDeCobro` primero, con `/auth/complete` intacto porque
+freemium responde `active: true`, después `iniciar`, después `convert`.
+
+**Y el mismo cuidado vale para el DESPLIEGUE, que es lo que queda:** los dos
+commits suben juntos y en ese orden, portero primero. Desplegar solo
+Convertidor deja el plan Pro inalcanzable — el portero todavía respondería sin
+campo `plan` y `esPro` sería falso para todos, incluso para quien pague.
+
+Un test cazó el cambio al hacerlo (`entity-resolver.test.ts` tenía a
+`convertidor` en la lista de `sin_cobro`) y se actualizó con el caso nuevo.
+Eso es la red que hay: 21 tests en el portero.
 
 ### 9 · Validación
 
