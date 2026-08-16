@@ -19,6 +19,13 @@ describe('urlDeSalida', () => {
     expect(urlDeSalida('agente24siete')).not.toContain('next');
   });
 
+  it('solo lleva next cuando el producto es multi-tenant y pasa un destino', () => {
+    expect(urlDeSalida('domuscrm', 'https://ecoinmobiliaria.domuscrm.app/')).toBe(
+      'https://auth.sorsabsa.com/auth/logout?app=domuscrm' +
+        '&next=https%3A%2F%2Fecoinmobiliaria.domuscrm.app%2F',
+    );
+  });
+
   it('escapa el nombre de la app', () => {
     expect(urlDeSalida('a b')).toBe('https://auth.sorsabsa.com/auth/logout?app=a%20b');
   });

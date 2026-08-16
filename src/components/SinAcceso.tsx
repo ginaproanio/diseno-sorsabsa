@@ -56,12 +56,23 @@ export interface SinAccesoProps {
   /** Limpieza local del producto antes de salir (localStorage, cookies
    *  propias). Los que usan el SDK de Supabase no necesitan nada. */
   alSalir?: () => void | Promise<void>;
-  /** Segundo destino REAL, solo si existe: "Volver a mi inventario" cuando la
-   *  persona sí tiene lugar en otra parte del producto. No poner acá enlaces
-   *  a la web ni a "crear cuenta": salir ya lleva a la web, que es donde eso
-   *  vive. */
-  secundaria?: { texto: string; href: string };
+  /** Segunda acción REAL, solo si existe. Dos formas legítimas:
+   *
+   *  - `href`: otro lugar del producto donde la persona SÍ tiene lugar
+   *    ("Volver a mi inventario", DomusCRM con rol insuficiente).
+   *  - `alHacerClic`: reintentar la consulta que falló. CondoManager marca
+   *    "sin perfil" también cuando la consulta a `perfiles` da error de red,
+   *    así que su "Reintentar" es la salida de un fallo técnico, no del
+   *    rechazo — sin eso, una desconexión momentánea deja a un residente real
+   *    mirando "tu cuenta no pertenece a ningún condominio".
+   *
+   *  Lo que NO va acá: enlaces a la web o a "crear cuenta" (salir ya lleva a
+   *  la web, que es donde eso vive) ni "volver a intentar el LOGIN" — la
+   *  cuenta sigue sin lugar después de reautenticar y eso es el bucle. */
+  secundaria?: { texto: string; href: string } | { texto: string; alHacerClic: () => void };
   textoSalir?: string;
+  /** Solo productos multi-tenant — ver `urlDeSalida` en lib/portero.ts. */
+  destino?: string;
   className?: string;
 }
 
@@ -73,6 +84,7 @@ export function SinAcceso({
   alSalir,
   secundaria,
   textoSalir = 'Salir',
+  destino,
   className,
 }: SinAccesoProps) {
   return (
@@ -88,14 +100,19 @@ export function SinAcceso({
           <h1 className="mt-3 text-lg font-bold text-brand-text">{titulo}</h1>
           <div className="mt-2 text-sm text-brand-muted">{mensaje}</div>
           <div className="mt-6 flex flex-col gap-2">
-            <Button className="w-full" onClick={() => salirDelEcosistema(app, alSalir)}>
+            <Button className="w-full" onClick={() => salirDelEcosistema(app, alSalir, destino)}>
               {textoSalir}
             </Button>
-            {secundaria && (
-              <Button variant="ghost" size="sm" className="w-full" href={secundaria.href}>
-                {secundaria.texto}
-              </Button>
-            )}
+            {secundaria &&
+              ('href' in secundaria ? (
+                <Button variant="ghost" size="sm" className="w-full" href={secundaria.href}>
+                  {secundaria.texto}
+                </Button>
+              ) : (
+                <Button variant="ghost" size="sm" className="w-full" onClick={secundaria.alHacerClic}>
+                  {secundaria.texto}
+                </Button>
+              ))}
           </div>
         </CardContent>
       </Card>

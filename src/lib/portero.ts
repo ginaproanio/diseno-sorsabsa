@@ -24,11 +24,29 @@
  */
 const PORTERO = 'https://auth.sorsabsa.com/auth';
 
-/** URL del cierre de sesión universal para un producto. Sin `next` a
- *  propósito: el destino lo decide el portero con el `redirectUrl` de la app.
- *  Útil para un `href`; para un `onClick` usar `salirDelEcosistema`. */
-export function urlDeSalida(app: string): string {
-  return `${PORTERO}/logout?app=${encodeURIComponent(app)}`;
+/**
+ * URL del cierre de sesión universal para un producto. Útil para un `href`;
+ * para un `onClick` usar `salirDelEcosistema`.
+ *
+ * **Sin `destino`, no lleva `next`** — el portero resuelve a dónde salir con
+ * el `redirectUrl` de la app, que es lo que hace que la regla valga para
+ * todos sin programarla en cada uno. Ese es el caso normal.
+ *
+ * `destino` existe SOLO para productos multi-tenant, donde "la web" no es una
+ * del PRODUCTO sino una del CLIENTE: DomusCRM le da a cada inmobiliaria su
+ * propio subdominio (`ecoinmobiliaria.domuscrm.app`) o su dominio propio, y
+ * sacar a esa persona a `domuscrm.app` —la portada del SaaS que le vende a su
+ * agencia— sería sacarla del sitio equivocado. Ahí `redirectUrl` no puede
+ * saber la respuesta y el producto sí. Fuera de ese caso, mandar `destino` es
+ * volver a decidir por producto lo que este archivo existe para unificar.
+ *
+ * El destino se valida igual contra el allowlist del portero
+ * (`resolveSafeRedirect` + dominios de tenant verificados): si no pasa, cae
+ * al `redirectUrl` de todos modos.
+ */
+export function urlDeSalida(app: string, destino?: string): string {
+  const base = `${PORTERO}/logout?app=${encodeURIComponent(app)}`;
+  return destino ? `${base}&next=${encodeURIComponent(destino)}` : base;
 }
 
 /**
@@ -41,13 +59,17 @@ export function urlDeSalida(app: string): string {
  * tocar el almacenamiento de otro dominio. Lo que se limpia es asunto del
  * producto; que después se pase por el logout central, no.
  */
-export function salirDelEcosistema(app: string, limpiar?: () => void | Promise<void>): void {
+export function salirDelEcosistema(
+  app: string,
+  limpiar?: () => void | Promise<void>,
+  destino?: string,
+): void {
   void (async () => {
     try {
       await limpiar?.();
     } catch {
       /* que una limpieza local fallida no impida cerrar la sesión real */
     }
-    window.location.href = urlDeSalida(app);
+    window.location.href = urlDeSalida(app, destino);
   })();
 }
