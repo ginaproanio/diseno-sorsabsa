@@ -1048,7 +1048,49 @@ real de que cerró también la sesión de identity.
 - ✅ **IOT** — `iot@4400bee`. No puede consumir el componente (Flask/Jinja,
   otro stack): se comparte la regla y el contrato de salida, no el código.
   Detalle en 🟠-8.
-- ⬜ **CondoManager, DomusCRM, Convertidor** — sin tocar.
+- ✅ **CondoManager** — `condomanager@0b7d91c`. `tsc` y `next build` limpios.
+- ✅ **DomusCRM** — `domuscrm@449e7c3`. Su `AccesoDenegado` era la MEJOR de
+  las seis pantallas (fue la referencia para armar la compartida), y aun así
+  se reemplazó: el estándar solo existe si nadie conserva la suya.
+- ⬜ **Convertidor** — ver 🟠-9.
+
+**Dos correcciones al diseño de v0.1.49, encontradas al adoptar — o sea
+leyendo los productos, no imaginándolos (v0.1.50, `diseno-sorsabsa@644a14c`):**
+
+1. **`destino` opcional.** Dije que aceptar un destino rompía el estándar.
+   Es cierto para los productos de una sola web, y falso para DomusCRM: es
+   multi-tenant, y "la web" de un agente es la de SU inmobiliaria (subdominio
+   o dominio propio), no `domuscrm.app`, que es la portada del SaaS que le
+   vende a su agencia. Ahí `redirectUrl` no puede saber la respuesta y el
+   producto sí. Queda admitido y documentado como exclusivo de ese caso.
+2. **Acción secundaria por clic.** CondoManager pone `sinPerfil = true`
+   también cuando la consulta a `perfiles` FALLA
+   (`DashboardShell.tsx`, los dos `setSinPerfil`), así que su botón
+   "Reintentar" no es decorativo: sin él, una desconexión momentánea deja a
+   un residente real mirando "tu cuenta no pertenece a ningún condominio".
+   Ver 🟠-10: que un fallo técnico se presente como un rechazo de negocio es
+   un defecto propio, y ese botón lo tapa en vez de resolverlo.
+
+### 🟠-10 — ⬜ CondoManager muestra un rechazo de negocio cuando lo que falló es la red — encontrado 16-ago-2026
+
+- **Archivo:** `condomanager/app/(dashboard)/components/DashboardShell.tsx`
+  — `setSinPerfil(true)` se ejecuta en tres situaciones que no son la misma:
+  la consulta devolvió cero perfiles (rechazo real), la consulta devolvió
+  `error`, y el `catch` de una excepción.
+- **Consecuencia:** un residente con perfil válido, ante una desconexión
+  momentánea, ve *"Tu cuenta no pertenece a ningún condominio"* — una
+  afirmación falsa sobre su cuenta, no un error técnico. El botón
+  "Reintentar" existe para eso, o sea el síntoma está mitigado y la causa no.
+- **Es el mismo patrón que esta auditoría persigue en todos lados:** tratar
+  un fallo técnico como un estado del negocio (y al revés). agente24siete
+  resuelve el caso simétrico de la forma correcta: si `whoami` no responde
+  por red, **deja pasar** — no castiga a nadie por una desconexión.
+- **Fix propuesto, sin implementar:** separar los tres casos. Cero perfiles →
+  `SinAcceso` (lo de hoy). Error/excepción → una pantalla distinta ("no
+  pudimos verificar tu cuenta") con Reintentar, sin afirmar nada sobre a qué
+  condominio pertenece. Una vez separados, `SinAcceso` en CondoManager ya no
+  necesita acción secundaria.
+- **Riesgo:** bajo. **Pendiente de decidir con Gina.**
 
 ### 🟠-8 — ✅ CORREGIDO 16-ago-2026, commit `iot@4400bee` — IOT trataba "esta cuenta no opera IOT" como "no hay sesión"
 
