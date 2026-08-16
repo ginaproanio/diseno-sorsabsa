@@ -424,7 +424,7 @@ diciendo "pendiente de verificar" hasta el 16-ago-2026 aunque la sección
 de cierre de este mismo documento ya daba la respuesta — corregido acá
 para que las dos partes digan lo mismo.
 
-### 🟠-4 — ⬜ "Salir" borra el `localStorage` pero deja viva la cookie de sesión — el gate del SERVIDOR sigue viendo sesión válida hasta 60 minutos después de cerrarla. Encontrado 16-ago-2026
+### 🟠-4 — 🔧 CORREGIDO 16-ago-2026, commit `agente24siete@61760c5`, falta la prueba en vivo de Gina — "Salir" borra el `localStorage` pero deja viva la cookie de sesión — el gate del SERVIDOR sigue viendo sesión válida hasta 60 minutos después de cerrarla. Encontrado 16-ago-2026
 
 **1. Síntoma:** después del clic en "Salir", volver a `/portal` (o
 `/admin`) hace que `middleware.ts` —el gate del servidor, la pieza que
@@ -478,6 +478,21 @@ a nadie adentro, y el camino de login no se toca.
 Application → Cookies confirmar que `a24_cliente_token` ya no existe (hoy
 sigue ahí). Después volver a `agente24siete.app/portal`: debe redirigir
 al portero sin que el servidor llegue a servir la página.
+
+**Construido, commit `agente24siete@61760c5` — Gina: "adelante":**
+
+- `lib/sesion.ts` nuevo: `limpiarSesionLocal(tokenKey)`, definición única.
+- `app/portal/LoginGate.tsx` y `app/admin/LoginGate.tsx`: borraron su copia
+  local y usan la compartida — de tres copias de la regla a una.
+- `components/SignOutButton.tsx`: usa la compartida, y el comentario que
+  afirmaba que la sesión no vive en cookies quedó corregido con la fecha en
+  que dejó de ser cierto.
+- Verificado con `tsc --noEmit` limpio y `next build` COMPLETO (no solo
+  typecheck): rutas listadas en la salida real y bundle de Middleware
+  (34.4 kB) generado.
+
+⬜ **Falta el punto 9, lo hace Gina** — la comprobación que cierra esto no
+es que compile: es ver la cookie desaparecer del navegador al salir.
 
 ### 🟠-5 — ⬜ El `next` de agente24siete no apunta a su propio `/auth/callback`: el login solo termina por una cadena de fallbacks, con una vuelta entera de más por el portero. Encontrado 16-ago-2026
 
@@ -643,6 +658,9 @@ observado, solo deducido del código.
   bajo, y es una sesión que sigue viva después de "Salir"), 🟠-5 después
   (más grande y con una trampa explícita anotada), y 🟡-1 al final porque su
   costo depende de cómo quede 🟠-5.
+  - **🟠-4 construido el mismo día** (`agente24siete@61760c5`, Gina:
+    "adelante") — falta solo su punto 9 en vivo.
+  - **🟠-5 y 🟡-1 siguen sin tocarse**, esperando decisión.
 - **10-ago-2026:** 🟠-1 (Salir), 🟠-2 (chequeo de vigencia), 🔴-1
   (`middleware.ts` + cookie + `whoami` para el tercer caso), el fix del
   bucle de "cuenta sin cliente", y la causa real del bucle que persistía
