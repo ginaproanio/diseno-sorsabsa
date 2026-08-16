@@ -1582,3 +1582,48 @@ de OCR, no el **cómputo** — un PDF escaneado que entre por el plan gratis igu
 hace correr Tesseract en Railway. Reduce el gasto abierto, no lo cierra. Si el
 OCR se va a cobrar de verdad, la decisión de aplicarlo tiene que llegar al motor
 como un parámetro que el servidor controla, no como una heurística del motor.
+
+---
+
+## 22. ⬜ SorsabsaForensic y el Convertidor: ¿se están duplicando? — pregunta abierta, 16-ago-2026
+
+**Pregunta de Gina, sin analizar todavía** (*"anota nada más esto, luego
+analizamos"*): *"me hablas de él en JustiRed, en Convertidor, ¿y qué pasa con
+SorsabsaForensic? ¿No lo está duplicando? Debería también consumirlo dependiendo
+de las pericias en las que sea convocado, pero será convocado cuando se lo
+requiera. Hoy ¿algún procesador lo llama? ¿De qué forma interviene si acaso se
+lo llama?"*
+
+**Esto es la anotación, no la respuesta.** Lo único que se comprobó es el hecho
+de partida, para que el análisis no arranque de una suposición:
+
+- **Hoy NINGÚN procesador de SorsabsaForensic llama al Convertidor.** `grep` en
+  `c:/sorsabsa/SorsabsaForensic/**/*.py` por `convertidor`, `tesseract`,
+  `easyocr`, `pytesseract` y `ocr`: **cero coincidencias**. Ni lo consume ni
+  tiene OCR propio.
+- Tiene **16 procesadores** (`core/processors/`): audio, correo, **documento**,
+  facebook, georeferencia, gsheets, imagen_forense, infografía,
+  materialización_video, red_x, tiktok, video, web_social, whatsapp, youtube.
+- El candidato natural es **`documento`**, y ahí está el matiz que hace la
+  pregunta buena: `documento/processor.py` **usa PyMuPDF (`fitz`) para
+  RENDERIZAR páginas a imagen** (`get_pixmap`, DPI configurable), no para
+  extraer texto. O sea, hasta donde se ve, **no duplica al Convertidor: hace
+  otra cosa** — materializa la evidencia como imagen, que es lo que pide una
+  pericia. Pero comparte la misma librería, y de ahí a "esto ya lo hace el
+  otro" hay un paso corto que conviene no dar sin mirar.
+
+**Lo que queda por analizar, y es lo que Gina preguntó:**
+
+1. ¿Renderizar a imagen y extraer texto son de verdad dos cosas, o el
+   Convertidor debería devolver ambas y Forensic dejar de abrir el PDF?
+2. Si una pericia necesita el TEXTO de un PDF (un contrato, un oficio), ¿hoy
+   qué hace Forensic? ¿No lo extrae, o lo extrae en otro procesador?
+3. ¿Cómo se invoca "cuando se lo requiera"? Forensic es por caso, no continuo:
+   habría que ver si el orquestador puede llamar al Convertidor por HTTP como
+   hace el scraper de JustiRed, y con qué credencial (el motor exige
+   `Authorization: Bearer` desde el 16-ago-2026, y la regla del ecosistema es
+   **un token por producto**, así que sería el suyo, no el de JustiRed).
+4. Si pasa a consumirlo, el Convertidor deja de tener dos consumidores y pasa a
+   tener tres — y eso toca la decisión de capacidad/cobro: los transversales no
+   se cobran entre sí, pero sí consumen cómputo de Railway que ahora **es el
+   producto** (`ALMACENAMIENTO-COSTOS.md` §8.3).
