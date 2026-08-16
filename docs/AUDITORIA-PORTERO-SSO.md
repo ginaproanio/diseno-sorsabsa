@@ -988,7 +988,7 @@ producto" terminaba distinto en cada uno. Relevado leyendo los seis repos:
 | CondoManager | dentro de `DashboardShell.tsx`, muestra el email | "Cerrar sesión" (sin `next`) + "Reintentar" |
 | agente24siete | propia, en cada `LoginGate` | **ninguna** — encerraba a la persona |
 | IOT | ninguna: `requires_sso_auth` mandaba al login igual que si no hubiera sesión | ninguna; y el rechazo del callback ofrecía "Volver a intentar" → login |
-| Convertidor | no filtra por cuenta | su `signOut()` es **local**, no pasa por el logout central |
+| Convertidor | no filtra por cuenta | su `signOut()` era **local**, no pasaba por el logout central — y en la portada no había ni entrar ni salir |
 | auth-sorsabsa | `payment_blocked` en `/auth/complete` | "Ir a pagos" + volver al login (con la sesión de identity ya cerrada) |
 
 **2. Causa inmediata:** cada producto escribió su propia pantalla, su propio
@@ -1052,7 +1052,14 @@ real de que cerró también la sesión de identity.
 - ✅ **DomusCRM** — `domuscrm@449e7c3`. Su `AccesoDenegado` era la MEJOR de
   las seis pantallas (fue la referencia para armar la compartida), y aun así
   se reemplazó: el estándar solo existe si nadie conserva la suya.
-- ⬜ **Convertidor** — ver 🟠-9.
+- ✅ **Convertidor** — `convertidor@616abcb`. `tsc` y `next build` limpios.
+  Adopta el **contrato de salida**, no la pantalla: no rechaza a nadie por
+  cuenta, así que no tiene el caso terminal que `SinAcceso` cubre. Detalle y
+  lo que se decidió NO hacer, en 🟠-9.
+
+**Los seis productos adoptados.** El estándar del portero del lado del
+consumidor queda cerrado; lo que sigue abierto son hallazgos de cada producto
+(🟠-8 IOT, 🟠-10 CondoManager), no el estándar.
 
 **Dos correcciones al diseño de v0.1.49, encontradas al adoptar — o sea
 leyendo los productos, no imaginándolos (v0.1.50, `diseno-sorsabsa@644a14c`):**
@@ -1132,18 +1139,50 @@ menor: el ciclo a un clic.
    Railway — ojo con el antecedente de que su auto-deploy no se disparó solo
    (ver #14 de `PENDIENTES-ECOSISTEMA.md`).
 
-### 🟠-9 — ⬜ El "salir" de Convertidor no pasa por el logout central — encontrado 16-ago-2026
+### 🟠-9 — ✅ El "salir" de Convertidor no pasaba por el logout central — CORREGIDO 16-ago-2026
 
-- **Archivo:** `convertidor/frontend/src/hooks/useAuth.ts` — `signOut()` hace
+**Con esto, los seis productos usan el mismo contrato de salida.** Era el
+último.
+
+- **Archivo:** `convertidor/frontend/src/hooks/useAuth.ts` — `signOut()` hacía
   solo `supabase.auth.signOut()`.
 - **Es el mismo bug ya corregido tres veces** (CondoManager 🟠-5, JustiRed
   🔴-11, agente24siete 🟠-1): cierra la sesión del producto y deja viva la de
   identity, que auto-aprueba el siguiente login sin pedir credenciales — o
   sea "cerrar sesión" no permite entrar con otra cuenta.
-- **Fix:** `salirDelEcosistema('convertidor', …)` de `@sorsabsa/ui` v0.1.49,
-  igual que el resto. Su `signIn()` en cambio ya está bien (manda `next` a su
-  propio `/auth/callback`, el patrón correcto).
-- **Riesgo:** bajo. **Sin implementar todavía.**
+- **Corregido:** `salirDelEcosistema('convertidor', …)` de `@sorsabsa/ui`,
+  **sin `destino`** — Convertidor no es multi-tenant, así que el destino lo
+  resuelve el portero con el `redirectUrl` de `apps.ts`. Commit
+  `convertidor@616abcb`. Su `signIn()` ya estaba bien (manda `next` a su
+  propio `/auth/callback`, el patrón correcto) y no se tocó.
+- **Lo que NO se hizo, a propósito: no se le agregó pantalla `SinAcceso`.**
+  Convertidor no rechaza a nadie por cuenta —cualquiera con sesión convierte,
+  el plan solo cambia límites—, así que una pantalla de rechazo que nunca se
+  muestra sería inventar un caso de negocio para poder decir que "adoptó el
+  estándar completo". El estándar aquí es la salida, y era lo que faltaba.
+
+- **Hallazgo aparte, del mismo commit — por qué el arreglo del pie de página
+  no se veía:** `app/page.tsx` (la portada) se copiaba a mano su propia barra
+  y su propio pie en vez de usar `Navbar` y `Footer`, que ya existían. Por eso
+  el pie del ecosistema que se corrigió esa misma mañana (`convertidor@73f6312`)
+  llegó a `Footer.tsx` y la portada seguía mostrando el viejo, y por eso la
+  portada era **la única pantalla del sitio sin sesión visible: ni entrar ni
+  salir** — o sea el portero no existía justo en la página donde aterriza
+  cualquiera. Encontrado descargando `convertidor.sorsabsa.com` y comparando
+  el HTML servido contra el repo, no leyendo el código. Es la duplicación que
+  persigue `ESTANDAR-DESARROLLO.md`: el arreglo llega a una copia y la otra
+  sigue rota.
+
+- **Queda abierto (no es de este hallazgo, pero toca el mismo archivo):**
+  `useEntitlements` devuelve `{active:false, reason:'error'}` cuando la
+  consulta falla, así que una desconexión momentánea le muestra los límites
+  del plan gratis a alguien que paga Pro. Mismo patrón que 🟠-10 en
+  CondoManager —confundir fallo técnico con estado del negocio— aunque acá
+  degrada en vez de conceder, que es el lado seguro. Y el gate de tamaño es
+  del lado del cliente: `/api/convert` acepta 50 MB sin verificar plan, así
+  que el límite de 5 MB del plan gratis se salta llamando a la ruta directo.
+  Eso es lo que bloquea el cobro y está anotado en `PENDIENTES-ECOSISTEMA.md`
+  #21.
 
 ### 🟠-3 — ✅ Autorización duplicada en dos archivos de IOT — CORREGIDO 09-ago-2026
 

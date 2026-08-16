@@ -16,10 +16,17 @@ const SIZE: Record<string, string> = {
 
 function getInitials(name?: string, fallback?: string): string {
   if (fallback) return fallback;
-  if (!name) return '?';
-  const parts = name.trim().split(/\s+/);
-  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-  return name.slice(0, 2).toUpperCase();
+  const limpio = name?.trim();
+  if (!limpio) return '?';
+  // `filter(Boolean)` y no `split` a secas: un nombre de solo espacios
+  // devolvía [''] y terminaba en `'  '.toUpperCase()` — dos espacios dentro
+  // del círculo en vez del '?'. Y con noUncheckedIndexedAccess, `parts[0][0]`
+  // no compilaba: era el mismo hueco visto por el compilador.
+  const partes = limpio.split(/\s+/).filter(Boolean);
+  const [primera, segunda] = partes;
+  if (!primera) return '?';
+  if (segunda) return (primera[0]! + segunda[0]!).toUpperCase();
+  return primera.slice(0, 2).toUpperCase();
 }
 
 export function Avatar({ initials, name, size = 'md', className = '', ...rest }: AvatarProps) {

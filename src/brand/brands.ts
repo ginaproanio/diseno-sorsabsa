@@ -283,6 +283,16 @@ export const BRANDS: Record<string, BrandConfig> = {
   // planos que se lee de un vistazo, y una marca que herede de otra obliga a
   // saltar para saber de qué color es. Queda anotado acá, que es donde va a
   // mirar quien la toque.
+  //
+  // TRAMPA DE ESTA PALETA, aprendida el mismo día: declararla bien no alcanza.
+  // Gina volvió con *"sigue en escala de grises"* con estos valores YA
+  // aplicados y verificados en el HTML servido. El motivo es que `primary`
+  // (#423F44) ES un gris: si un producto lo usa para todo —titulares, íconos,
+  // botones, pastillas— y deja el verde en fondos al 10%, la pantalla se ve
+  // gris aunque los tokens estén perfectos. Quien adopte esta paleta tiene que
+  // repartir: `variant="accent"` en la acción principal y
+  // `text-brand-accent-text` para el verde como texto (el crudo no pasa AA).
+  // Ver la cabecera de `convertidor/frontend/src/app/page.tsx`.
   convertidor: {
     name: 'convertidor',
     displayName: 'SORSABSA Convertidor',
