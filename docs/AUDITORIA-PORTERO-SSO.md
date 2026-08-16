@@ -644,7 +644,24 @@ llegar a la causa real:
   no directo a su propio dominio — para no repetir este mismo problema en
   dos pasos.
 
-### 🔴-11 — 🔧 DomusCRM corregido 10-ago-2026, agente24siete y JustiRed pendientes — El portero está mal implementado en los 4 productos web, y de tres maneras distintas
+### 🔴-11 — 🔧 DomusCRM y agente24siete corregidos 10-ago-2026; JustiRed corregido en código 15-ago-2026, pendiente de deploy — El portero está mal implementado en los 4 productos web, y de tres maneras distintas
+
+> **15-ago-2026 — JustiRed (falla nº 3 de las tres):** corregido en
+> `legaltech/src/hooks/useAuth.ts`, pendiente de deploy. **No es una copia del
+> fix de CondoManager:** ahí el `signOut()` local se *reemplazó* por el logout
+> central; en JustiRed hacen falta **los dos, en orden**. Es una SPA y su sesión
+> vive en el `localStorage` de `www.justired.com`, que `auth.sorsabsa.com` no
+> puede tocar — sin el `signOut()` local, el `access_token` ya emitido sigue ahí
+> y `getSession()` lo da por bueno hasta que expire, o sea la app se ve logueada
+> después de "salir". Primero se limpia lo local, después el logout central
+> cierra identity (que es lo que impide el auto-reingreso silencioso).
+>
+> **Y al corregirlo apareció la causa de por qué el login de JustiRed no podía
+> funcionar:** `apps.ts` la tenía registrada en `justired.app`, un dominio
+> **NXDOMAIN** (el real es `www.justired.com`). Análisis completo de 9 puntos en
+> [AUDITORIA-JUSTIRED.md](./AUDITORIA-JUSTIRED.md) 🔴-2 — el fix vive en este
+> repo (`auth-sorsabsa/src/lib/apps.ts`) y **el logout de JustiRed no se puede
+> validar hasta que ese deploy ocurra**: su `next` no pasa la allowlist.
 
 **Origen:** Gina, tras el bug de agente24siete (🔴 en `AUDITORIA-AGENTE24SIETE.md`):
 *"por lo visto el portero esta mal implementado en todos los productos, cuando
@@ -665,7 +682,7 @@ botón de salir, y a dónde apunta?
 | **CondoManager** | ✅ existe | Sesión real (`getUser()` contra Supabase — vigencia, no solo presencia) | Redirige antes de servir HTML — nunca se ve el panel | ✅ `SignOutButton.tsx` → `auth.sorsabsa.com/auth/logout` |
 | **DomusCRM** | ✅ existe (`webs/src/middleware.ts`) | ✅ **10-ago-2026:** ahora valida en vivo contra Supabase (`sesionVigente()`), no solo presencia — commit `domuscrm@13d9176` | ⚠️ el caso común (sesión vencida) ya no llega a esta pantalla, gracias al fix de arriba. Queda un caso residual sin tocar: `AdminLayout` sigue dibujando `<aside>` sin condición, así que si `LoginGate` dispara por otra razón (401 de la API por otro motivo) todavía se ve dentro del chasis | ✅ **10-ago-2026:** `SignOutButton.tsx` agregado al sidebar y al menú móvil, mismo commit |
 | **agente24siete** | ✅ **10-ago-2026:** `middleware.ts` nuevo, valida vigencia real | ✅ vigencia (middleware) + asociación a cliente/usuario (`whoami`, el caso que middleware no puede cubrir desde Edge) — commits `agente24siete@89429ff`/`63251761`/`87c5216`, causa de fondo cerrada en 🔴-12 | ✅ validado en vivo: cuenta sin cliente → una sola pantalla centrada, sin sidebar, sin bucle | ✅ `SignOutButton.tsx` → `auth.sorsabsa.com/auth/logout`, commit `agente24siete@c6f2578` |
-| **JustiRed** | N/A — SPA pura (Vite, sin servidor propio que intercepte antes del HTML) | `supabase.auth.getSession()`/`setSession()` del SDK oficial — vigencia real, correcto para su arquitectura | N/A — no tiene panel privado gateado, solo personaliza el navbar si hay sesión | ⚠️ el botón existe (`Navbar.tsx`, "Cerrar Sesión") pero `useAuth.ts::signOut()` llama solo `supabase.auth.signOut()` — nunca pasa por `auth.sorsabsa.com/auth/logout` |
+| **JustiRed** | N/A — SPA pura (Vite, sin servidor propio que intercepte antes del HTML) | `supabase.auth.getSession()`/`setSession()` del SDK oficial — vigencia real, correcto para su arquitectura | N/A — no tiene panel privado gateado, solo personaliza el navbar si hay sesión | ✅ **15-ago-2026:** `useAuth.ts::signOut()` limpia el `localStorage` de la SPA y **después** redirige a `auth.sorsabsa.com/auth/logout?app=justired&next=<origin>`. Antes llamaba solo a `supabase.auth.signOut()`. Pendiente de deploy, y bloqueado por 🔴-2 de `AUDITORIA-JUSTIRED.md` (la allowlist apunta a un dominio inexistente) |
 
 **No es un bug copiado 4 veces — son tres fallas distintas, y confirma la
 sospecha de Gina sin ser una sola causa:**

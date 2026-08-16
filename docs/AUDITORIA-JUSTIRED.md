@@ -30,7 +30,42 @@ para esta arquitectura, ya confirmado en `AUDITORIA-PORTERO-SSO.md`
 
 ## 🔴 CRÍTICO
 
-### 🔴-1 — ⬜ El panel de Control de Calidad no hace nada: RLS bloquea la tabla para cualquier usuario, la UI lo esconde con un "éxito" falso
+### 🔴-1 — ✅ RESUELTO 15-ago-2026 — El panel de Control de Calidad no hace nada: RLS bloquea la tabla para cualquier usuario, la UI lo esconde con un "éxito" falso
+
+> **Cerrado el 15-ago-2026.** Construido lo que pedía el punto 6, con la
+> decisión de negocio ya tomada por Gina (quién modera: `justired.staff`).
+> Qué existe ahora:
+>
+> - **`justired.staff`** (`email` · `nombre` · `rol` · `activo`) — fuente única
+>   de autorización, mismo patrón que `usuarios` de agente24siete
+>   (`lib/adminAuth.js`): se resuelve por el email del token del SSO central.
+>   RLS activado y cero políticas, esta vez **a propósito y documentado**: la
+>   tabla que decide quién modera no puede ser legible por el navegador.
+>   Sembrada con `gina.proanio76@gmail.com` (rol `admin`). **Ningún email
+>   hardcodeado en código.**
+> - **Edge Function `justired-calidad`** (desplegada, `version 1`, ACTIVE,
+>   `verify_jwt: true`) — identidad por token, autorización contra `staff`, y
+>   recién entonces toca la tabla con `service_role`. Una sola función con
+>   `accion: listar | resolver` en vez de una por acción: la regla "quién puede
+>   moderar" vive en un solo despliegue, no duplicada en dos.
+> - **El "éxito" falso está muerto**: el UPDATE lleva `.eq('estado','pendiente')
+>   .select(...)` y devuelve las filas que **realmente** cambió. Cero filas →
+>   `409` con mensaje, no un `ok`. La fila no se saca de la pantalla si la base
+>   no cambió.
+> - **`Calidad.tsx`** ya no llama a `supabase.from(...)`; el gate dejó de ser
+>   `if (!user)`. Una cuenta logueada sin autorización ve "Acceso restringido"
+>   —una pantalla explícita— en vez de una lista vacía que miente.
+> - **Trazabilidad**: `revisado_por` + `revisado_at` en
+>   `documentos_pendientes_revision`, y `check (estado in ('pendiente',
+>   'aprobado','rechazado'))` — antes era texto libre y cualquier typo era un
+>   estado válido.
+>
+> Migraciones versionadas en `legaltech/supabase/migrations/`
+> (`20260815000000_justired_staff_y_trazabilidad_revision.sql`).
+> **Falta solo la validación en vivo** (ver el cierre de este documento).
+>
+> Al construirlo aparecieron **dos hallazgos nuevos**, 🔴-2 y 🔴-3 — uno de
+> ellos explica por qué el login de JustiRed no podía funcionar.
 
 **1. Síntoma:** `/calidad` (`pages/Calidad.tsx`) es un panel real —
 aprobar/rechazar documentos legales antes de publicarlos en la biblioteca
@@ -84,8 +119,8 @@ cerradas por diseño.
 **5. Código afectado:** `src/pages/Calidad.tsx` completo (lectura y las
 dos escrituras).
 
-**6. Fix propuesto (NO ejecutado, requiere decisión de Gina — no es solo
-"agregar una política"):**
+**6. Fix propuesto — ✅ ejecutado 15-ago-2026 tal cual está escrito acá
+(la decisión del punto 6.1 la tomó Gina: `justired.staff`):**
 
 1. **Decisión de negocio primero:** ¿quién debe poder aprobar/rechazar
    documentos? Hoy el único gate es "cualquier cuenta logueada" — ni
@@ -121,17 +156,180 @@ autorización no puede hacerlo aunque esté logueada.
 
 ---
 
+### 🔴-2 — 🔧 El portero central tiene a JustiRed registrada en un dominio que NO EXISTE: todo login termina en `justired.app` (NXDOMAIN)
+
+**Encontrado el 15-ago-2026**, al ir a corregir el logout de 🟠-1: había que
+decidir a dónde vuelve el usuario tras salir, y la allowlist no coincidía con
+el dominio real del sitio. **Esto responde el pendiente nº 1 de la sesión
+anterior** ("verificar si un abogado puede loguearse hoy") sin necesidad de
+probarlo en vivo: no puede, y la causa no es el gate de suscripción.
+
+**1. Síntoma:** cualquier login por `auth.sorsabsa.com/auth/login?app=justired`
+termina redirigiendo a `https://justired.app` — un dominio que no resuelve. El
+navegador muestra un error de DNS, no una pantalla de JustiRed.
+
+**2. Causa inmediata:** `auth-sorsabsa/src/lib/apps.ts`, entrada `justired`:
+`redirectUrl: 'https://justired.app'`, `callbackUrl:
+'https://justired.app/auth/callback'`, `allowedHosts: ['justired.app',
+'www.justired.app', 'localhost']`.
+
+**3. Causa raíz, verificada con DNS y HTTP el 15-ago-2026, no supuesta:**
+
+| Dominio | Resultado real |
+| --- | --- |
+| `justired.app` | **NXDOMAIN** — *"Non-existent domain"* |
+| `www.justired.app` | no resuelve |
+| `justired.com` | `308` → `https://www.justired.com/` |
+| `www.justired.com` | **`200`**, `<title>JustiRed - Conectamos tus necesidades legales…</title>`, detrás de Cloudflare |
+
+El dominio real del producto es `justired.com`, y el propio SPA lo sabe: sus
+canónicos (`Index.tsx`, `Privacidad.tsx`, `LeyDetail.tsx`) y sus correos
+(`contactenos@justired.com`) apuntan ahí. El registro del portero nunca se
+actualizó. El mecanismo de redirección es correcto y falla-cerrado como debe:
+
+- `useAuth.signIn()` manda `next=https://www.justired.com/auth/callback`.
+- `resolveSafeRedirect` (`lib/safe-redirect.ts:30`) exige que el host esté
+  **exactamente** en `allowedHosts`. `www.justired.com` no está → devuelve
+  `config.redirectUrl`, o sea el dominio muerto.
+- La allowlist dinámica no salva el caso: `esDominioDeTenant`
+  (`lib/dynamic-hosts.ts:25`) hace `if (app !== 'domuscrm') return false`.
+- Y el forzado de `callbackUrl` de `/auth/complete` (que actúa justo cuando
+  `resolveSafeRedirect` cayó al default) manda a
+  `https://justired.app/auth/callback`: el mismo dominio muerto.
+
+**Es el mismo error que ya se corrigió para agente24siete en este archivo** —el
+comentario de `apps.ts:77-80` explica que apuntaba a `www.agente24siete.app`
+siendo el origen real `agente24siete.app`— pero peor: ahí el host existía y
+solo no compartía `localStorage`; acá no existe ningún host.
+
+**4. Componente responsable:** el portero central (`auth-sorsabsa`), no
+JustiRed. `ESTANDAR-DESARROLLO.md`: *"Problema de autenticación central →
+corregir el portero, no cada producto."*
+
+**5. Código afectado:** `auth-sorsabsa/src/lib/apps.ts`, entrada `justired`.
+
+**6. Fix aplicado (código, 15-ago-2026):** `redirectUrl` y `callbackUrl` a
+`https://www.justired.com`, `allowedHosts: ['justired.com',
+'www.justired.com', 'localhost']`. Es corregir un dato mal registrado, no
+agregar una excepción: ni un `if (app === 'justired')` ni un bypass.
+
+**7. Código a eliminar:** nada. Es sustitución de un valor equivocado.
+
+**8. Riesgo de regresión:** bajo en su efecto, **alto en su alcance de
+despliegue**: `apps.ts` lo comparten todos los productos, así que el deploy de
+`auth-sorsabsa` toca el login de todo el ecosistema. Por eso **el código está
+cambiado pero NO desplegado** — el deploy lo decide Gina. Lo que sí es seguro
+afirmar: peor que redirigir a un dominio inexistente no se puede quedar.
+
+**9. Validación:** con `auth-sorsabsa` desplegado, entrar por
+`auth.sorsabsa.com/auth/login?app=justired` y confirmar que aterriza en
+`www.justired.com/auth/callback` con sesión, no en un error de DNS. Recién ahí
+se puede saber si el gate de suscripción de `/auth/complete` bloquea o no a un
+abogado — hoy esa pregunta ni siquiera se alcanza a responder.
+
+---
+
+### 🔴-3 — ✅ RESUELTO 15-ago-2026 — La cola de revisión no gateaba nada: toda ley capturada era pública desde el primer segundo, aprobada o no
+
+**Encontrado el 15-ago-2026** al construir el fix de 🔴-1: se verificó qué pasa
+**después** de aprobar, y la respuesta fue "nada".
+
+**1. Síntoma:** `scraper/README.md` documentaba *"Aprobado → visible en la
+biblioteca. Rechazado → no se publica"*. Falso: las 80 leyes estaban visibles
+en la biblioteca pública estando las 80 en `pendiente`. Rechazar un documento
+no lo quitaba de la vista de nadie.
+
+**2. Causa inmediata:** `justired.leyes` **no tiene ninguna columna de estado**
+(verificado en `information_schema.columns`: 20 columnas, ninguna de revisión),
+y su política de lectura era `leyes lectura publica … using (true)` para `anon`
+y `authenticated`. Ninguna consulta del frontend (`LegalLibrary.tsx`,
+`LeyDetail.tsx`) filtra por estado, porque no hay por dónde.
+
+**3. Causa raíz:** el orden del pipeline. El flujo documentado en
+`docs/biblioteca-legal.md` §4 es explícito: *"6. Guardar leyes · articulos …
+8. Revisar documentos_pendientes_revision → panel /calidad"*. **La publicación
+ocurre en el paso 6 y la revisión en el 8** — la cola nunca fue un gate previo,
+es una lista posterior. Se construyó la cola y la pantalla, pero nunca el
+mecanismo que hiciera valer su resultado. Combinado con 🔴-1, el panel era
+doblemente inerte: ni escribía en la base, ni habría cambiado nada si lo
+hubiera hecho.
+
+**4. Componente responsable:** las políticas de lectura de
+`justired.leyes`/`articulos` — no el scraper (archiva bien) ni el panel.
+
+**5. Código afectado:** políticas `leyes lectura publica` y `articulos lectura
+publica`; `scraper/README.md` §"Flujo de calidad" (documentaba algo inexistente).
+
+**6. Fix aplicado, con la decisión de Gina (15-ago-2026): lo rechazado
+desaparece de la biblioteca, lo pendiente sigue visible.** Se descartó
+"solo lo aprobado es público" porque vaciaba la biblioteca de 80 leyes a 0
+hasta revisarlas una por una.
+
+- El estado sigue viviendo en **un solo lugar**
+  (`documentos_pendientes_revision.estado`). **No se agregó una columna espejo
+  en `leyes`**: dos columnas con el mismo dato es la duplicación que el
+  estándar pide evitar.
+- **Trampa evitada, y vale escribirla:** una política sobre `leyes` que
+  consultara `documentos_pendientes_revision` con un subselect directo se
+  evalúa con los permisos de quien consulta, y `anon` no tiene acceso a esa
+  tabla — habría fallado, o peor, devuelto cero filas haciendo que `not exists`
+  diera siempre `true`: **una política que existe y no filtra nada.** Sería el
+  mismo defecto que originó esta auditoría. Por eso la lectura del estado pasa
+  por `justired.ley_rechazada(uuid)`, `SECURITY DEFINER` con `search_path`
+  fijado, que devuelve solo un booleano.
+- Se aplicó también a `articulos`: sin eso, una ley "desaparecida" seguía
+  legible artículo por artículo por `ley_id`.
+
+**7. Código a eliminar:** las dos políticas `using (true)` (reemplazadas) y la
+frase falsa del README (corregida, con la nota de por qué era falsa).
+
+**8. Riesgo de regresión:** medido, no estimado. Prueba ejecutada dentro de una
+transacción **revertida** (verificado después: 80 en `pendiente`, 0 con
+revisor — no quedó rastro):
+
+| Momento | Leyes visibles para `anon` | Artículos visibles |
+| --- | --- | --- |
+| Antes (nada rechazado) | **80** | **4433** |
+| Rechazando 1 ley | **79** | **4423** |
+
+O sea: la biblioteca no pierde nada hoy, y una ley rechazada se va con sus 10
+artículos.
+
+**9. Validación:** rechazar un documento real desde `/calidad` y ver que esa ley
+desaparece de la biblioteca pública; aprobar otro y ver que sigue visible.
+Queda para la validación en vivo.
+
+---
+
 ## 🟠 IMPORTANTE
 
-### 🟠-1 — Ver `AUDITORIA-PORTERO-SSO.md` 🔴-11 (no duplicado acá)
+### 🟠-1 — ✅ Corregido en código 15-ago-2026 (ver `AUDITORIA-PORTERO-SSO.md` 🔴-11)
 
-El logout de JustiRed (`hooks/useAuth.ts::signOut()`) llama solo
-`supabase.auth.signOut()` — nunca pasa por
+El logout de JustiRed (`hooks/useAuth.ts::signOut()`) llamaba solo
+`supabase.auth.signOut()` — nunca pasaba por
 `https://auth.sorsabsa.com/auth/logout`, repitiendo el mismo bug que ya
 se corrigió dos veces en el ecosistema (CondoManager, y la cadena de 7
-parches que originó `AUDITORIA-PORTERO-SSO.md`). Ya documentado y con fix
-propuesto ahí — pendiente de confirmación de Gina, mismo estado que
-antes de esta auditoría.
+parches que originó `AUDITORIA-PORTERO-SSO.md`). JustiRed nunca tuvo su
+propio "Fix 7".
+
+**Corregido — y con una diferencia respecto de CondoManager que importa.**
+CondoManager (`SignOutButton.tsx`) **reemplazó** el `signOut()` local por el
+logout central. En JustiRed hacen falta **los dos, en este orden**, y no es
+redundancia:
+
+1. `supabase.auth.signOut()` local — JustiRed es una SPA y su sesión vive en el
+   `localStorage` de `www.justired.com`. El logout central corre en
+   `auth.sorsabsa.com` y **no puede tocar ese almacenamiento**: sin este paso,
+   el `access_token` ya emitido sigue ahí y `getSession()` lo da por bueno
+   hasta que expire — la app se vería logueada después de "salir".
+2. Redirección a `/auth/logout?app=justired&next=<origin>` — cierra la sesión
+   de **identity**, que es lo único que impide el auto-reingreso silencioso.
+   Esa autoridad no se reimplementa en el producto.
+
+`next` usa `window.location.origin` (no una constante) para que funcione igual
+en producción y en local. **Depende de 🔴-2:** hasta que `apps.ts` no esté
+desplegado con los dominios correctos, ese `next` no pasa la allowlist y el
+usuario sale hacia el dominio muerto.
 
 ---
 
@@ -257,3 +455,64 @@ propósito.
    funcional (🔴-1), una vez decidido el punto 6.1 original (quién es
    curador).
 4. Resolver 🟠-1 (logout central), chico y seguro, puede ir en paralelo.
+
+---
+
+## 15-ago-2026 — Qué se ejecutó, qué falta
+
+**Punto 3 ✅ construido y desplegado** (🔴-1) · **punto 4 ✅ corregido en
+código** (🟠-1) · **punto 1 respondido sin necesidad de probarlo en vivo**: no
+era el gate de suscripción, es que el portero manda a JustiRed a un dominio
+inexistente (🔴-2) — y por el camino apareció 🔴-3, que el punto 3 no cubría.
+**Punto 2 (`lawyer_subscriptions` vs `pagos-sorsabsa`) sigue intacto**: no se
+tocó, sigue necesitando su propio análisis de 9 puntos.
+
+### Ya está andando en producción (base de datos)
+
+Aplicado sobre `verticales_sorsabsa` (`twkuidnjwhopbjnrhnxp`), schema
+`justired`, y versionado en `legaltech/supabase/migrations/`:
+
+| Cambio | Estado |
+| --- | --- |
+| `justired.staff` + RLS sin políticas (deliberado) + `check (email = lower(email))` | ✅ creada, sembrada con 1 fila |
+| `documentos_pendientes_revision`: `revisado_por`, `revisado_at`, `check` de estado, 2 índices | ✅ aplicado |
+| Edge Function `justired-calidad` (`verify_jwt: true`) | ✅ desplegada, ACTIVE |
+| Políticas de `leyes`/`articulos` + `justired.ley_rechazada()` | ✅ aplicadas y medidas (80→79 al rechazar una) |
+
+**Por qué `check (email = lower(email))`:** el email es la llave de
+autorización. Guardado con mayúsculas, la comparación exacta falla y la
+tentación es resolverlo con `ILIKE` — que trata `_` y `%` como comodines y
+**podría hacer coincidir un email con otro**. Se normaliza en el
+almacenamiento para poder comparar con `.eq` y nada más.
+
+**Comprobado, no supuesto:** la función responde `401` sin token y `401`
+`{"error":"token inválido"}` con la llave anon — falla cerrado. El SPA compila
+y `tsc --noEmit` pasa limpio.
+
+### Cambiado en código, SIN desplegar — lo decide Gina
+
+| Repo | Archivo | Qué |
+| --- | --- | --- |
+| `legaltech` | `src/pages/Calidad.tsx` | reescrito contra la Edge Function |
+| `legaltech` | `src/hooks/useAuth.ts` | logout central (🟠-1) |
+| `legaltech` | `scraper/README.md` | corregida la promesa falsa del flujo de calidad |
+| `auth-sorsabsa` | `src/lib/apps.ts` | dominios reales de JustiRed (🔴-2) |
+
+⚠️ **`auth-sorsabsa` toca el login de TODO el ecosistema.** Es un cambio de un
+dato mal registrado, no de lógica, pero el deploy es decisión de Gina.
+
+### Validación en vivo pendiente (en este orden, porque se encadenan)
+
+1. **Desplegar `auth-sorsabsa`** y entrar a JustiRed por SSO: debe aterrizar en
+   `www.justired.com`, no en un error de DNS. Sin esto, nada de lo demás se
+   puede probar desde una sesión real.
+2. **Desplegar `legaltech`** y abrir `/calidad` con la cuenta de Gina: debe
+   listar **80 documentos** (hoy la pantalla dice "No hay documentos
+   pendientes" con 80 esperando).
+3. **Aprobar uno** → debe seguir en la biblioteca, y `revisado_por` /
+   `revisado_at` quedan grabados en la base.
+4. **Rechazar uno** → debe desaparecer de la biblioteca pública (80 → 79).
+5. **Con una cuenta cualquiera sin fila en `staff`** → "Acceso restringido",
+   no una lista vacía.
+6. **Cerrar sesión** y volver a entrar: debe **pedir credenciales de nuevo**.
+   Si entra solo, el logout central no cerró la sesión de identity.
