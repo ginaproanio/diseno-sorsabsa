@@ -1279,18 +1279,144 @@ las dos mitades se despliegan, versionan y cobran distinto.
 
 Pendiente, en orden de lo que bloquea a lo que se ve:
 
-1. **Verificación del plan del lado del SERVIDOR.** Hoy no existe: el
-   servidor hacía `const isPro = forceOcr` —el plan salía de una casilla que
-   manda el navegador— y eso se eliminó sin reemplazarlo, porque fingir la
-   verificación es peor. **Bloquea todo el cobro**, incluido el pago único
-   por archivo grande que pidió Gina: hay que consultar `/api/entitlements`
-   desde la ruta, no desde el cliente.
+1. **El cobro no existe todavía — análisis completo abajo (21-bis).** Es lo
+   que bloquea todo lo demás, incluido el pago único por archivo grande que
+   pidió Gina.
 2. **Catálogo de herramientas** (lo que Gina describe como *"algo como
    ilovepdf.com"*): hoy la web expone UNA sola conversión (PDF → Markdown)
    aunque el motor entrega `txt`/`md`/`csv`. No hay dónde elegir qué hacer.
-3. **Portero**: su `signOut()` es local, no pasa por el logout central —
-   `AUDITORIA-PORTERO-SSO.md` 🟠-9. Es el único de los seis productos que
-   todavía no adoptó el estándar.
+3. ✅ **Portero** — cerrado 16-ago-2026, `convertidor@616abcb`.
+   `AUDITORIA-PORTERO-SSO.md` 🟠-9. Con esto los seis productos usan el mismo
+   contrato de salida.
 4. **Notificaciones**: no consume `notificaciones-sorsabsa`.
-5. **Pagos**: suscripción o pago único por conversión de archivos sobre
-   5 MB — depende del punto 1.
+
+---
+
+## 21-bis. 🔴 Lo que bloquea el cobro del Convertidor — analizado 16-ago-2026
+
+Análisis pedido por Gina (*"analiza lo que bloquea el cobro"*), siguiendo
+`ESTANDAR-DESARROLLO.md`. **Sin implementar: acá está el diagnóstico y la
+decisión que falta, no el fix.**
+
+### 1 · Síntoma
+
+**Hoy cualquier persona que inicia sesión es Pro, sin pagar.** No es una
+hipótesis: `useEntitlements` calcula
+`isPro = entitlements?.active === true && entitlements?.plan !== "free"`, y
+para Convertidor el portero responde `{ active: true, motivo: 'sin_cobro' }`
+— sin campo `plan`. `undefined !== "free"` es verdadero, así que **`isPro`
+sale `true` para todo el mundo**: OCR, 50 MB, HTML y JSON, gratis. Los dos
+servicios validan contra el mismo proyecto de Supabase
+(`twkuidnjwhopbjnrhnxp`), así que el token verifica y la respuesta llega.
+
+Y del otro lado: **si alguien igual paga los $9, no pasa nada.** El pago se
+cobra y no acredita ningún plan.
+
+### 2 · Causa inmediata — cuatro cortes independientes en la misma cadena
+
+| # | Dónde | Qué está roto |
+| --- | --- | --- |
+| 1 | `auth-sorsabsa/src/lib/apps.ts` | `convertidor` declara `cobro: { modo: 'sin_cobro' }` — *"herramienta INTERNA … no hay nada que cobrar"*. El portero nunca le pregunta a pagos-sorsabsa y contesta `active: true` siempre. |
+| 2 | `convertidor/…/api/pagos/iniciar/route.ts` | Manda `correo: ""` y **ningún** bloque `suscripcion`. En `pagos-sorsabsa/api/confirmar.js`, `extenderSuscripcion` corta en seco si falta `suscripcion.dias` o `suscripcion.sujeto`: el pago aprobado **nunca escribe fila en `suscripciones`**. |
+| 3 | `convertidor/…/api/convert/route.ts` | No lee sesión ni plan: `MAX_SIZE = 50 MB` para cualquiera. El límite de 5 MB y el candado del OCR viven **solo en el navegador**, así que se saltan llamando la ruta directo. |
+| 4 | — | El **pago único** por archivo grande que pidió Gina no existe en ninguna parte: solo hay `convertidor-pro` a $9/mes. |
+
+Aparte, `/precios` promete *"Hasta 10MB por archivo"* en el plan Gratis y la
+app aplica 5 MB. La página de precios ofrece el doble de lo que entrega.
+
+### 3 · Causa raíz
+
+**El producto cambió de categoría y la línea que decide si hay algo que
+cobrar se quedó en la anterior.** Convertidor pasó de herramienta interna a
+producto con página de precios, planes y ruta de pago — todo eso se escribió—
+pero `cobro: { modo: 'sin_cobro' }` sigue diciendo que no se le cobra a nadie.
+Es el mismo patrón que apareció hoy con el pie de página: el cambio llega a
+una copia y no a la otra.
+
+**Y debajo hay algo más de fondo, que es lo que hay que decidir:** el gate del
+portero es binario. `/auth/complete:84` hace `if (!entitlement.active)` →
+cierra la sesión y muestra `payment_blocked`. Sirve para CondoManager o
+DomusCRM, donde sin suscripción no hay producto. **Convertidor es freemium:
+todos entran, solo algunas funciones se pagan.** El portero hoy no sabe
+expresar eso — confunde *"¿puede entrar?"* con *"¿qué plan tiene?"*.
+
+**Por eso NO se puede simplemente cambiar `sin_cobro` por `persona`:** eso
+dejaría a `active: false` a todo el mundo (nadie tiene fila en
+`suscripciones`) y el portero **bloquearía el login de Convertidor para
+todos**, Gina incluida, también para el plan gratis. Mismo tipo de trampa de
+orden que `AUDITORIA-DOMUSCRM.md` 🔴-1 fix #2 etapa 2.
+
+### 4 · Componente responsable
+
+El portero (`apps.ts` + `/api/entitlements` + `/auth/complete`), no el
+Convertidor. El producto no puede arreglar esto solo sin volver a decidir por
+su cuenta lo que el portero existe para unificar.
+
+### 5 · Código afectado
+
+`auth-sorsabsa`: `src/lib/apps.ts`, `src/lib/entity-resolver.ts`,
+`src/app/api/entitlements/route.ts`, `src/app/auth/complete/page.tsx`.
+`convertidor`: `api/pagos/iniciar`, `api/convert`, `hooks/useEntitlements.ts`,
+`app/precios`. `pagos-sorsabsa`: `CALLBACKS_POR_PRODUCTO` en `api/confirmar.js`.
+
+### 6 · Solución de raíz (no parche)
+
+**Decisión pendiente de Gina — dos formas, se recomienda la B:**
+
+- **A · Convertidor pregunta por su cuenta.** Sigue `sin_cobro` en el login y
+  el producto consulta el plan aparte. Rápido, pero deja a un producto
+  resolviendo por su cuenta una pregunta del portero: la segunda vez que otro
+  producto sea freemium, se copia. Es la forma que crea la próxima excepción.
+- **B · El portero aprende a decir "freemium".** Un tercer `modo` en
+  `PoliticaDeCobro` donde `/api/entitlements` **sí** consulta a
+  pagos-sorsabsa, devuelve `{ active: true, plan: 'free' | 'pro' }` y
+  `/auth/complete` **no** bloquea. Es un hecho del producto declarado en el
+  archivo donde ya vive lo que cada producto ES, sin un solo `if (app === …)`
+  — igual que la etapa 1 del fix #2 de DomusCRM, que sacó cuatro nombres de
+  producto de `entity-resolver.ts`.
+
+  **Señal de que B es lo que siempre se quiso:** el cliente ya compara
+  `plan !== "free"`. Quien lo escribió esperaba un campo `plan` que el backend
+  nunca produjo.
+
+Con B resuelto, lo demás es mecánico y tiene referencia buena en el repo:
+
+- **`/api/pagos/iniciar`** debe exigir la sesión, sacar el usuario del token
+  (nunca del body) y mandar `correo: user.email` y
+  `suscripcion: { plan: 'pro', dias: 30, sujeto: user.id }`. El `sujeto` tiene
+  que ser **el mismo id** que `/api/entitlements` va a buscar después.
+  `condomanager/app/api/admin/suscripcion/route.ts:129-139` lo hace bien y su
+  comentario nombra el bug exacto a evitar: JustiRed mandaba un sujeto nuevo
+  en cada pago, así que ningún login futuro lo encontraba (punto #16).
+- **`/api/convert`** debe leer la sesión y consultar el plan del lado del
+  servidor. El chequeo del cliente se queda para la experiencia, pero deja de
+  ser la autoridad.
+- **Pago único** — es otra figura, no una suscripción: no extiende un período,
+  autoriza UNA conversión. Necesita `CALLBACKS_POR_PRODUCTO.convertidor` en
+  `pagos-sorsabsa/api/confirmar.js` (hoy solo están agente24siete y
+  condomanager-recaudación), un webhook en Convertidor y **un lugar donde
+  guardar el crédito**. Convertidor no tiene base propia: usa Supabase solo
+  para identidad. Dónde vive ese crédito es la segunda decisión que falta.
+
+### 7 · Código a eliminar
+
+El comentario *"herramienta INTERNA … no hay nada que cobrar"* de `apps.ts`
+(dejó de ser cierto) y el `monto: plan_id === "convertidor-pro" ? 9 : 0` de
+`iniciar/route.ts`, que codifica el precio en la ruta en vez de tomarlo del
+catálogo de planes.
+
+### 8 · Riesgo de regresión
+
+**Alto si se toca en el orden equivocado**, y ahí está el valor de este
+análisis: cambiar solo `apps.ts` deja a todos afuera del login. El orden
+seguro es `PoliticaDeCobro` primero (con `/auth/complete` ya enseñado a no
+bloquear en freemium), después `iniciar`, después `convert`.
+
+### 9 · Validación
+
+Con una cuenta sin pagar: entra, ve "Plan Gratis", el OCR aparece bloqueado y
+un POST directo a `/api/convert` con 20 MB **es rechazado por el servidor**.
+Después de pagar: `suscripciones` tiene fila con `sujeto` = su userId, y ese
+mismo userId es el que consulta el siguiente login. Y la prueba que hoy
+fallaría: **cerrar sesión, volver a entrar y seguir siendo Pro** — o sea que
+el pago sobrevive a la sesión.
