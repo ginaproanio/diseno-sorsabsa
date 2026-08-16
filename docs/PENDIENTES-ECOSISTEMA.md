@@ -1306,12 +1306,12 @@ Análisis pedido por Gina (*"analiza lo que bloquea el cobro"*), siguiendo
 > - ⬜ **Decisión 2 sin tomar:** dónde vive el crédito del **pago único** por
 >   archivo grande (corte 4). Es lo que Gina dejó apuntado por no alcanzar en
 >   esta etapa.
-> - ⚠️ **SIN DESPLEGAR al momento de escribir esto.** Los dos commits van
->   juntos y en ese orden: primero el portero, después Convertidor. Desplegar
->   solo Convertidor deja el plan Pro inalcanzable (el portero todavía
->   respondería sin campo `plan`). No se subió en el momento porque Gina
->   estaba verificando los logins de todos los productos y `auth-sorsabsa`
->   despliega solo en cada push.
+> - ✅ **DESPLEGADO** el 16-ago-2026, portero primero y Convertidor después.
+>   Verificado contra producción, no contra el código: un anónimo que pide OCR
+>   recibe `402`, y una conversión normal sigue funcionando.
+> - 🔴 **DOS BLOQUEOS NUEVOS, encontrados al probar lo desplegado** — ver
+>   "Lo que apareció al probarlo" al final. Uno de ellos hace que el plan Pro
+>   **no se pueda entregar** aunque el cobro funcione.
 >
 > El diagnóstico se conserva entero abajo, no se reescribe: es lo que explica
 > por qué la solución tiene la forma que tiene.
@@ -1485,9 +1485,74 @@ Eso es la red que hay: 21 tests en el portero.
 
 ### 9 · Validación
 
-Con una cuenta sin pagar: entra, ve "Plan Gratis", el OCR aparece bloqueado y
-un POST directo a `/api/convert` con 20 MB **es rechazado por el servidor**.
-Después de pagar: `suscripciones` tiene fila con `sujeto` = su userId, y ese
-mismo userId es el que consulta el siguiente login. Y la prueba que hoy
-fallaría: **cerrar sesión, volver a entrar y seguir siendo Pro** — o sea que
-el pago sobrevive a la sesión.
+**Hecho contra producción el 16-ago-2026, sin credenciales** (los tres casos
+se prueban como visitante anónimo, que es el peor escenario):
+
+| Prueba | Antes | Ahora |
+| --- | --- | --- |
+| Anónimo pide `force_ocr=true` | se lo daba | `402` — "El OCR está disponible en el plan Pro" |
+| Anónimo sube un PDF chico | funcionaba | sigue funcionando, devuelve el markdown |
+| Anónimo inicia un pago | lo iniciaba sin dueño | `500` "Pagos no configurado" — ver bloqueo B abajo |
+
+**Falta probar con cuenta** (necesita sesión real): entrar y ver "Plan Gratis";
+después de pagar, que `suscripciones` tenga fila con `sujeto` = su userId; y la
+prueba que de verdad importa — **cerrar sesión, volver a entrar y seguir siendo
+Pro**, o sea que el pago sobreviva a la sesión, que es lo que JustiRed no
+lograba.
+
+---
+
+### Lo que apareció al probarlo — 16-ago-2026
+
+Ninguno de los dos salió de leer código: salieron de llamar a la API desplegada.
+
+#### 🔴 A · Vercel corta el archivo en ~4,5 MB, así que el plan Pro no se puede entregar
+
+Medido contra `convertidor.sorsabsa.com/api/convert`:
+
+| Tamaño | Respuesta |
+| --- | --- |
+| 3 MB | llega al motor |
+| 4 MB | llega al motor |
+| 5 MB | **`413 FUNCTION_PAYLOAD_TOO_LARGE`** — Vercel lo rechaza ANTES de ejecutar nuestro código |
+
+Es el límite de cuerpo de petición de las funciones de Vercel, no una regla
+nuestra. Consecuencias, en orden de gravedad:
+
+1. **El plan Pro promete 50 MB por archivo y por esta ruta no entran ni 5.** Se
+   puede cobrar y no se puede entregar. Esto ya no es un problema de cobro: es
+   el producto pagado que no existe.
+2. **El plan Gratis anuncia 5 MB y el techo real es ~4,5.** El número que se
+   anuncia no se cumple, justo en el borde.
+3. **El "pago único por archivo más grande de 5 MB" que pidió Gina está
+   bloqueado por la plataforma, no por la facturación.** Aunque el crédito de
+   la Decisión 2 estuviera hecho, el archivo no llega.
+
+**Esto cambia la Decisión 2:** antes de decidir dónde vive el crédito hay que
+decidir **por dónde sube el archivo grande**. El motor en Railway es un
+contenedor y no tiene ese límite; las dos salidas conocidas son subir directo
+al motor (`api.convertidor.sorsabsa.com`, que hoy además **no pide
+credencial** — habría que ponerle una) o subir a R2 y pasarle la URL al motor.
+No se elige acá: es decisión de arquitectura y cuesta plata de tráfico.
+
+**No se bajó el número anunciado a 4 MB** a propósito: 5 MB es la cifra que
+Gina fijó, y ajustar el anuncio para que coincida con la limitación sería
+esconder el defecto en vez de resolverlo.
+
+#### 🟠 B · `PAGOS_API_URL` y `PAGOS_API_KEY` no están configuradas en Convertidor
+
+`vercel env ls production` en el proyecto `convertidor` devuelve solo
+`CONVERTIDOR_API_URL`, `NEXT_PUBLIC_SUPABASE_URL` y
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`. Por eso `/api/pagos/iniciar` responde `500`
+"Pagos no configurado" antes de llegar a comprobar la sesión: **nadie puede
+suscribirse todavía**, y no por el código. Las tiene que cargar Gina en Vercel
+(son secretos; el valor está en el proyecto `pagos-sorsabsa`).
+
+#### 🟡 C · El motor aplica OCR por su cuenta cuando la página trae poco texto
+
+En la prueba del camino feliz, un PDF con una línea de texto volvió como
+`## Página 1 (OCR-Tesseract)`. O sea: el candado nuevo bloquea el **interruptor**
+de OCR, no el **cómputo** — un PDF escaneado que entre por el plan gratis igual
+hace correr Tesseract en Railway. Reduce el gasto abierto, no lo cierra. Si el
+OCR se va a cobrar de verdad, la decisión de aplicarlo tiene que llegar al motor
+como un parámetro que el servidor controla, no como una heurística del motor.
