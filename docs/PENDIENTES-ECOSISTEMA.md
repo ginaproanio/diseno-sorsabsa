@@ -5,7 +5,7 @@ aparece. Fuente de arquitectura: `ARQUITECTURA-ECOSISTEMA.md`. El plan paso a
 paso del desoldado vive en [`PLAN-DESOLDADO.md`](PLAN-DESOLDADO.md) — este doc
 es la lista de trabajo suelto, no el plan en sí.
 
-Última actualización: 2026-08-15.
+Última actualización: 2026-08-16.
 
 ## Principio que gobierna (regla dura)
 
@@ -252,6 +252,17 @@ lista" en "producto que funciona para un cliente". **Bloqueante para el Paso 3
 de `PLAN-DESOLDADO.md`** (Gina decidió no separar proyectos hasta probar
 esto — separar cuesta $20/mes reales y no hay apuro).
 
+⚠️ **Restricción de orden, agregada 16-ago-2026 — leer antes del paso 2.**
+Probar el flujo con **un** condominio es seguro y es lo que este punto pide.
+Lo que NO se puede hacer todavía es subir el censo real de Punta Blanca: son
+5 condominios y ~120 personas con propiedades en más de uno, o sea el primer
+caso real de una persona con dos filas en `perfiles`. Medido en el código el
+15-ago-2026, hay **60 `.single()` sobre `perfiles`** en CondoManager —
+`.single()` no devuelve la primera fila, **falla** con más de una, así que
+esos 60 lugares empiezan a dar error el día que exista el primer perfil
+doble. Las Fases 4 y 5 de [`PLAN-MULTI-CONDOMINIO.md`](PLAN-MULTI-CONDOMINIO.md)
+son las que los migran; hasta entonces, censo completo no.
+
 **Flujo mapeado 08-ago-2026** (grafo de graphify + código, no probado en vivo
 todavía):
 
@@ -386,14 +397,23 @@ lo cual es falso y quedó anotado para no repetirlo.
     sesiones.
   - `condomanager` commit `b84f771` — el botón de la pantalla "sin perfil"
     pasa por ese logout compartido en vez de su atajo local.
-  - ⏳ **Queda un gap menor, no urgente:** `condomanager/app/components/SignOutButton.tsx`
-    (el "Salir del sistema" del sidebar normal, con la regla de salir a la
-    web propia de cada condominio/asociación) sigue sin pasar por el
-    logout compartido — a propósito, no se tocó: ese redirect a un dominio
-    arbitrario (`puntablancaecuador.com`, etc.) no está en el allowlist del
-    logout compartido y hubiera roto esa regla de negocio sin más trabajo.
-    Mismo gap probablemente presente en el resto de productos (nadie más
-    fue auditado todavía) — pendiente de un barrido aparte si hace falta.
+  - ✅/⚠️ **Actualizado 16-ago-2026 — este bullet estaba vencido y su
+    advertencia se cumplió.** Decía que `condomanager/app/components/SignOutButton.tsx`
+    "sigue sin pasar por el logout compartido, a propósito, no se tocó",
+    porque el redirect a un dominio arbitrario (`puntablancaecuador.com`)
+    no está en el allowlist y rompería la regla de "salir a la web propia".
+    **Sí se tocó** después (`condomanager@c9a2359`): hoy pasa por el logout
+    compartido — correcto, sin eso la sesión de identity quedaba viva — pero
+    la otra mitad no se resolvió, y es exactamente lo que este bullet había
+    predicho: el `next=` a la web de la asociación no pasa el allowlist y el
+    portero lo descarta en silencio, así que se sale a `condomanager.vip`.
+    Verificado leyendo los tres archivos (`apps.ts`, `auth/logout/page.tsx`,
+    `dynamic-hosts.ts` — este último arranca con `if (app !== 'domuscrm')
+    return false`). **Anotado como hallazgo con su análisis en
+    `AUDITORIA-PORTERO-SSO.md` 🟠-6**, incluida la razón por la que el fix
+    NO es agregar el dominio a mano: CondoManager todavía no tiene
+    verificación de propiedad de dominio, que es lo que hace segura la
+    allowlist dinámica de DomusCRM.
 - ✅ **Facebook — HECHO y probado en vivo, 08-ago-2026.** App nueva y
   separada en Meta for Developers, **"Sorsabsa Identity"** (App ID
   `1851084815870458`, aislada del portafolio de WhatsApp de agente24siete

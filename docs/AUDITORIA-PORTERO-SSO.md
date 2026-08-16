@@ -680,7 +680,7 @@ botón de salir, y a dónde apunta?
 | Producto | `middleware.ts` | Qué valida | "No autorizado" se ve | Logout |
 | --- | --- | --- | --- | --- |
 | **CondoManager** | ✅ existe | Sesión real (`getUser()` contra Supabase — vigencia, no solo presencia) | Redirige antes de servir HTML — nunca se ve el panel | ✅ `SignOutButton.tsx` → `auth.sorsabsa.com/auth/logout` |
-| **DomusCRM** | ✅ existe (`webs/src/middleware.ts`) | ✅ **10-ago-2026:** ahora valida en vivo contra Supabase (`sesionVigente()`), no solo presencia — commit `domuscrm@13d9176` | ⚠️ el caso común (sesión vencida) ya no llega a esta pantalla, gracias al fix de arriba. Queda un caso residual sin tocar: `AdminLayout` sigue dibujando `<aside>` sin condición, así que si `LoginGate` dispara por otra razón (401 de la API por otro motivo) todavía se ve dentro del chasis | ✅ **10-ago-2026:** `SignOutButton.tsx` agregado al sidebar y al menú móvil, mismo commit |
+| **DomusCRM** | ✅ existe (`webs/src/middleware.ts`) | ✅ **10-ago-2026:** ahora valida en vivo contra Supabase (`sesionVigente()`), no solo presencia — commit `domuscrm@13d9176` | ✅ **15-ago-2026:** el "caso residual" tenía nombre y no era el `<aside>` — era un 401 que mentía. `authorizePanel` devolvía `null` tanto para "no hay sesión" como para "sesión válida sin membresía en este tenant", y todo el panel lo leía como lo primero. Corregido en `domuscrm@479ea1b` (401 vs 403, pantalla `AccesoDenegado`); detalle en `AUDITORIA-DOMUSCRM.md` 🟠-4. El `<aside>` sin condicionar sigue igual, pero ya no es el camino por el que se llegaba ahí | ✅ **10-ago-2026:** `SignOutButton.tsx` agregado al sidebar y al menú móvil, mismo commit |
 | **agente24siete** | ✅ **10-ago-2026:** `middleware.ts` nuevo, valida vigencia real | ✅ vigencia (middleware) + asociación a cliente/usuario (`whoami`, el caso que middleware no puede cubrir desde Edge) — commits `agente24siete@89429ff`/`63251761`/`87c5216`, causa de fondo cerrada en 🔴-12 | ✅ validado en vivo: cuenta sin cliente → una sola pantalla centrada, sin sidebar, sin bucle | ✅ `SignOutButton.tsx` → `auth.sorsabsa.com/auth/logout`, commit `agente24siete@c6f2578` |
 | **JustiRed** | N/A — SPA pura (Vite, sin servidor propio que intercepte antes del HTML) | `supabase.auth.getSession()`/`setSession()` del SDK oficial — vigencia real, correcto para su arquitectura | N/A — no tiene panel privado gateado, solo personaliza el navbar si hay sesión | ✅ **15-ago-2026:** `useAuth.ts::signOut()` limpia el `localStorage` de la SPA y **después** redirige a `auth.sorsabsa.com/auth/logout?app=justired&next=<origin>`. Antes llamaba solo a `supabase.auth.signOut()`. Pendiente de deploy, y bloqueado por 🔴-2 de `AUDITORIA-JUSTIRED.md` (la allowlist apunta a un dominio inexistente) |
 
@@ -888,7 +888,7 @@ era (b), un problema de configuración, no vencimiento natural.
   (ver detalle en 🔴-4, mismo fix). Ya no hay ningún nombre de producto
   hardcodeado en esta condición.
 
-### 🟠-2 — ⬜ Bypass de entitlements hardcodeado por nombre de producto
+### 🟠-2 — ✅ RESUELTO 15-ago-2026, commit `auth-sorsabsa@bc38ca1` — Bypass de entitlements hardcodeado por nombre de producto
 
 - **Archivo:** `auth-sorsabsa/src/lib/entity-resolver.ts:51`
 - **Código:** `if (app === 'iot' || app === 'convertidor') { return { subject: null, bypass: true }; }`
@@ -906,6 +906,68 @@ era (b), un problema de configuración, no vencimiento natural.
   nombres hardcodeados ahora, no dos. El fix declarativo (`billable:
   boolean` en `AppConfig`) sigue siendo el correcto, y ahora limpia tres
   casos en vez de dos.
+- ⚠️ **Cuarto nombre, 15-ago-2026:** `sorsabsaforensic` entró a la misma
+  lista al sumarse al portero. Cuatro. La lista crecía una vez por producto
+  nuevo, que es la definición de un antipatrón que se paga en cuotas.
+- ✅ **RESUELTO 15-ago-2026** (llegó por otra puerta: la etapa 1 del fix #2
+  de `AUDITORIA-DOMUSCRM.md` 🔴-1, que necesitaba lo mismo). El fix es el
+  que este hallazgo prescribía, con un matiz que apareció al hacerlo: no
+  alcanza un `billable: boolean`, porque los productos no se parten en dos
+  grupos sino en **tres** — paga una ENTIDAD (domuscrm, condomanager), paga
+  la PERSONA (justired, y el default histórico), o no se cobra en el login
+  (iot, convertidor, agente24siete, sorsabsaforensic). Un booleano habría
+  fusionado los dos primeros y perdido justamente la distinción que el
+  resolver necesita. Quedó `cobro: {modo: 'entidad' | 'persona' |
+  'sin_cobro'}` en `lib/apps.ts`, obligatorio: un producto nuevo no compila
+  sin declarar cómo se le cobra. `entity-resolver.ts` ya no menciona ninguna
+  app, y los motivos de cada producto se movieron como comentario al lado
+  de su declaración — no se perdieron. Los cubren 5 tests nuevos en
+  `src/lib/entity-resolver.test.ts`.
+
+### 🟠-6 — ⬜ El logout de CondoManager calcula el destino correcto y el portero lo descarta en silencio — encontrado 16-ago-2026
+
+- **Archivos:** `condomanager/app/components/SignOutButton.tsx` +
+  `auth-sorsabsa/src/lib/apps.ts` (allowlist) +
+  `auth-sorsabsa/src/lib/dynamic-hosts.ts`.
+- **Síntoma esperable:** un residente de Punta Blanca cierra sesión y, en vez
+  de aterrizar en `puntablancaecuador.com` (la regla de negocio escrita en el
+  propio componente: "SIEMPRE se sale a la web, nunca al login"), termina en
+  `condomanager.vip`. Sin ningún error: la redirección ocurre, solo que a
+  otro lado.
+- **Causa, verificada leyendo los tres archivos:** `SignOutButton` calcula
+  bien el destino (asociación → condominio → portada) y lo manda como
+  `next=` al logout central. `auth/logout/page.tsx` valida ese `next` con
+  `/api/redirect-allowed`, o sea el mismo allowlist del login. El de
+  `condomanager` es `['condomanager.vip', 'www.condomanager.vip',
+  'condomanager-roan.vercel.app']` — la web de una asociación no está ahí. Y
+  la allowlist dinámica no lo salva: `esDominioDeTenant()` arranca con
+  `if (app !== 'domuscrm') return false` — hoy solo DomusCRM tiene dominios
+  por cliente. Resultado: el destino cae al `redirectUrl` del producto.
+- **Cómo llegó a estar así — no fue un descuido, fue una predicción que se
+  cumplió.** `PENDIENTES-ECOSISTEMA.md` #10 anotó este riesgo textualmente
+  ("ese redirect a un dominio arbitrario no está en el allowlist del logout
+  compartido y hubiera roto esa regla de negocio") y por eso dejó
+  `SignOutButton` sin tocar a propósito. Después se tocó igual
+  (`condomanager@c9a2359`, "SignOutButton pasa por el logout compartido") —
+  necesario, porque el logout local no cerraba la sesión de identity (🔴 #2
+  de ese mismo punto) — pero sin resolver la mitad que el pendiente ya había
+  advertido. El pendiente quedó marcado como "no se tocó" y nadie volvió.
+- **Fix propuesto, sin implementar (necesita su análisis de 9 puntos):** lo
+  correcto no es agregar `puntablancaecuador.com` a mano a la allowlist
+  estática —sería el hardcode por cliente que `ESTANDAR-DESARROLLO.md`
+  prohíbe— sino extender la allowlist DINÁMICA a CondoManager, con el mismo
+  criterio que ya usa DomusCRM: aceptar el dominio solo si sale de la base y
+  el producto lo tiene verificado. Hoy `asociaciones.sitio_web` /
+  `condominios.sitio_web` se llenan a mano en un formulario, sin ninguna
+  verificación de propiedad — o sea, la fuente existe pero **no cumple todavía
+  la condición de seguridad** que hace segura la versión de DomusCRM
+  (`agent_sites.domain_verified`). Ese es el trabajo real: verificación de
+  dominio para CondoManager, no una excepción en el allowlist.
+- **Riesgo mientras tanto:** bajo y cosmético (se sale a la portada del
+  producto en vez de a la web del cliente), sin exposición de seguridad — el
+  allowlist está haciendo exactamente lo que debe. Se documenta para que la
+  regla de negocio escrita en el componente no siga afirmando algo que el
+  sistema no cumple.
 
 ### 🟠-3 — ✅ Autorización duplicada en dos archivos de IOT — CORREGIDO 09-ago-2026
 
