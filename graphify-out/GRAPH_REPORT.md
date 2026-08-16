@@ -1,26 +1,26 @@
 # Graph Report - diseno-sorsabsa  (2026-08-16)
 
 ## Corpus Check
-- 83 files · ~90,007 words
+- 86 files · ~93,244 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 707 nodes · 954 edges · 43 communities (40 shown, 3 thin omitted)
+- 718 nodes · 988 edges · 43 communities (40 shown, 3 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `004ed49a`
+- Built from commit: `ab0fa9c7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - App.tsx
+- DomusLanding.tsx
 - Arquitectura del ecosistema SORSABSA
 - BrandProvider.tsx
-- Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)
 - Estándar de desarrollo — no parchear la arquitectura
-- IconName
+- Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)
 - devDependencies
 - Plan — una persona en más de un condominio (CondoManager)
 - 🔴 CRÍTICO
@@ -57,25 +57,25 @@
 1. `Pendientes del ecosistema SORSABSA` - 23 edges
 2. `Plan — una persona en más de un condominio (CondoManager)` - 16 edges
 3. `Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)` - 16 edges
-4. `compilerOptions` - 13 edges
-5. `IconName` - 13 edges
+4. `IconName` - 15 edges
+5. `compilerOptions` - 13 edges
 6. `compilerOptions` - 13 edges
 7. `Arquitectura del ecosistema SORSABSA` - 12 edges
 8. `🔴 CRÍTICO` - 12 edges
 9. `BrandConfig` - 11 edges
-10. `@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA` - 11 edges
+10. `Icon` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `resolveEffectiveColors()` --calls--> `brandToCssVars()`  [EXTRACTED]
   showcase/src/resolveColors.ts → src/brand/BrandProvider.tsx
 - `TokenAudit()` --calls--> `useBrand()`  [EXTRACTED]
   showcase/src/components/TokenAudit.tsx → src/brand/BrandProvider.tsx
+- `SinAccesoProps` --references--> `IconName`  [EXTRACTED]
+  src/components/SinAcceso.tsx → src/icons/icon-paths.ts
 - `App()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
   showcase/src/App.tsx → showcase/src/resolveColors.ts
 - `ColorPalette()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
   showcase/src/components/ColorPalette.tsx → showcase/src/resolveColors.ts
-- `ContrastReport()` --calls--> `contrastRatio()`  [EXTRACTED]
-  showcase/src/components/ContrastReport.tsx → showcase/src/contrast.ts
 
 ## Import Cycles
 - None detected.
@@ -84,27 +84,27 @@
 
 ### Community 0 - "App.tsx"
 Cohesion: 0.07
-Nodes (32): App(), BRAND_KEYS, AtomShowcase(), ButtonMatrix(), SHADOW, VARIANTS, ColorPalette(), TOKEN_ORDER (+24 more)
+Nodes (31): App(), BRAND_KEYS, AtomShowcase(), ButtonMatrix(), SHADOW, VARIANTS, ColorPalette(), TOKEN_ORDER (+23 more)
 
-### Community 1 - "Arquitectura del ecosistema SORSABSA"
+### Community 1 - "DomusLanding.tsx"
+Cohesion: 0.06
+Nodes (32): CardStatusDemo(), SHADOW, TONES, DomusLanding(), FEATURES, SOCIAL, IconCatalog(), NAMES (+24 more)
+
+### Community 2 - "Arquitectura del ecosistema SORSABSA"
 Cohesion: 0.04
 Nodes (48): 1. Inventario, 2. Los dos planos, 3-bis. NO HAY DATOS DE CLIENTES. Punto., 3. Mapa de bases de datos — LA TRAMPA, 4. Almacenamiento, 4-bis. Georreferenciación y R2 — estado real (verificado 2026-08-08), 5. Roturas verificadas el 2026-07-26, 6-bis. Plano de DNS y correo ✅ verificado 2026-07-26 (+40 more)
 
-### Community 2 - "BrandProvider.tsx"
-Cohesion: 0.07
-Nodes (32): DomusLanding(), FEATURES, SOCIAL, TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandContext (+24 more)
-
-### Community 3 - "Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)"
-Cohesion: 0.05
-Nodes (42): 10. Plazo real y calendario, 11. Dominio, 12. Decisiones pendientes, 1. Los dos perfiles y el modelo de negocio, 2. Lo que se reusa del ecosistema (regla dura del tracker), 3.a Navegación: gestión ≠ ejecución (pedido de Gina, 15-ago-2026), 3. Acceso al contenido de las plataformas — lo único que cambia en `core/`, 3.b Editor de texto enriquecido — requisito, no mejora futura (+34 more)
+### Community 3 - "BrandProvider.tsx"
+Cohesion: 0.08
+Nodes (34): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandConfig, BrandContext, BrandProvider(), brandToCssVars() (+26 more)
 
 ### Community 4 - "Estándar de desarrollo — no parchear la arquitectura"
 Cohesion: 0.05
-Nodes (34): 🟠-1 — ✅ CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` — No existe botón de cerrar sesión en ningún panel — y la versión ingenua repetiría un bug ya corregido en CondoManager e identity, 🔴-1 — ✅ RESUELTO Y VALIDADO EN VIVO 10-ago-2026 — El portero de agente24siete es 100% client-side — sin `middleware.ts`, a diferencia del patrón ya estabilizado en CondoManager, 🟠-2 — ✅ CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` — `LoginGate` valida presencia de token, nunca vigencia — deja pasar sesiones vencidas al shell completo, 🟠-3 — Pendiente de verificar en vivo, no descartado: ¿el mensaje de Gina fue realmente por vencimiento, o hay un problema de configuración?, Auditoría — agente24siete, el portero (sesión/autenticación), 🔴 CRÍTICO, 🟠 IMPORTANTE, Pendiente de decidir con Gina antes de ejecutar (+26 more)
+Nodes (38): 🟠-1 — ✅ CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` — No existe botón de cerrar sesión en ningún panel — y la versión ingenua repetiría un bug ya corregido en CondoManager e identity, 🟡-1 — ⬜ El `refresh_token` se descarta: la sesión dura 60 minutos y se "renueva" con una vuelta completa por el portero. Encontrado 16-ago-2026, 🔴-1 — ✅ RESUELTO Y VALIDADO EN VIVO 10-ago-2026 — El portero de agente24siete es 100% client-side — sin `middleware.ts`, a diferencia del patrón ya estabilizado en CondoManager, 🟠-2 — ✅ CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` — `LoginGate` valida presencia de token, nunca vigencia — deja pasar sesiones vencidas al shell completo, 🟠-3 — ✅ RESUELTO 10-ago-2026 (era la hipótesis (b): configuración) — ¿el mensaje de Gina fue realmente por vencimiento, o hay un problema de configuración?, 🟠-4 — 🔧 CORREGIDO 16-ago-2026, commit `agente24siete@61760c5`, falta la prueba en vivo de Gina — "Salir" borra el `localStorage` pero deja viva la cookie de sesión — el gate del SERVIDOR sigue viendo sesión válida hasta 60 minutos después de cerrarla. Encontrado 16-ago-2026, 🟠-5 — ⬜ El `next` de agente24siete no apunta a su propio `/auth/callback`: el login solo termina por una cadena de fallbacks, con una vuelta entera de más por el portero. Encontrado 16-ago-2026, Auditoría — agente24siete, el portero (sesión/autenticación) (+30 more)
 
-### Community 5 - "IconName"
-Cohesion: 0.08
-Nodes (29): CardStatusDemo(), SHADOW, TONES, IconCatalog(), NAMES, SHADOW, Card(), CardContent() (+21 more)
+### Community 5 - "Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)"
+Cohesion: 0.05
+Nodes (42): 10. Plazo real y calendario, 11. Dominio, 12. Decisiones pendientes, 1. Los dos perfiles y el modelo de negocio, 2. Lo que se reusa del ecosistema (regla dura del tracker), 3.a Navegación: gestión ≠ ejecución (pedido de Gina, 15-ago-2026), 3. Acceso al contenido de las plataformas — lo único que cambia en `core/`, 3.b Editor de texto enriquecido — requisito, no mejora futura (+34 more)
 
 ### Community 6 - "devDependencies"
 Cohesion: 0.05
@@ -219,7 +219,7 @@ Cohesion: 0.67
 Nodes (3): scripts, test, typecheck
 
 ## Knowledge Gaps
-- **370 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+365 more)
+- **373 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+368 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -227,16 +227,16 @@ Nodes (3): scripts, test, typecheck
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Arquitectura del ecosistema SORSABSA` connect `Arquitectura del ecosistema SORSABSA` to `Plan — una persona en más de un condominio (CondoManager)`?**
-  _High betweenness centrality (0.051) - this node is a cross-community bridge._
+  _High betweenness centrality (0.050) - this node is a cross-community bridge._
 - **Why does `Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)` connect `Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)` to `Plan — una persona en más de un condominio (CondoManager)`?**
-  _High betweenness centrality (0.045) - this node is a cross-community bridge._
+  _High betweenness centrality (0.044) - this node is a cross-community bridge._
 - **Why does `Auditoría — portero SSO del ecosistema SORSABSA` connect `🔴 CRÍTICO` to `Estándar de desarrollo — no parchear la arquitectura`?**
   _High betweenness centrality (0.035) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _370 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _373 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.07315233785822021 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07137254901960784 - nodes in this community are weakly interconnected._
+- **Should `DomusLanding.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.062040816326530614 - nodes in this community are weakly interconnected._
 - **Should `Arquitectura del ecosistema SORSABSA` be split into smaller, more focused modules?**
   _Cohesion score 0.041666666666666664 - nodes in this community are weakly interconnected._
-- **Should `BrandProvider.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.0726950354609929 - nodes in this community are weakly interconnected._
