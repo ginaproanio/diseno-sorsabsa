@@ -1627,3 +1627,86 @@ de partida, para que el análisis no arranque de una suposición:
    tener tres — y eso toca la decisión de capacidad/cobro: los transversales no
    se cobran entre sí, pero sí consumen cómputo de Railway que ahora **es el
    producto** (`ALMACENAMIENTO-COSTOS.md` §8.3).
+
+---
+
+## 23. ⬜ Consola del negocio y CRM de ventas de SORSABSA — anotado 16-ago-2026, aplazado a propósito
+
+**Va en `sorsabsa.com`.** Decisión de Gina el mismo día en que apareció el tema.
+
+**Cómo apareció:** hablando de costos por producto, Gina lo reformuló hacia lo
+que de verdad le falta: *"hoy no hay algo desde donde yo diga administro desde
+aquí mi negocio, veo cuántos clientes, ingresos, gastos, etc… ahora tendría que
+monitorear las bases de datos a mano, no sé quién ingresa y si alguien
+ingresa"*.
+
+Y después lo encuadró bien, que es lo que cambia el alcance: *"es parte de un
+CRM que eso sí necesito, el CRM para que pueda contratar vendedores y ellos
+puedan gestionar, promocionar y vender los productos del ecosistema"*.
+
+### ⚠️ Este CRM NO es DomusCRM — no confundirlos nunca
+
+| | **DomusCRM** (`crm_inmobiliario`) | **Este** |
+|---|---|---|
+| Qué es | Producto que SE VENDE | Herramienta INTERNA de SORSABSA |
+| Quién lo usa | Inmobiliarias clientes y sus agentes | Gina y los vendedores que contrate |
+| Qué gestiona | Inmuebles y sus compradores | **Los seis productos del ecosistema y quién los compra** |
+| Dominio | `domuscrm.app` (multi-tenant) | `sorsabsa.com` |
+
+Los dos son "un CRM" y ahí termina el parecido. Quien retome esto: leer esta
+tabla antes de proponer "reusar DomusCRM", que es la conclusión fácil y
+equivocada — DomusCRM vende metros cuadrados, este vende suscripciones a
+software.
+
+### Estado real, relevado el 16-ago-2026 (no supuesto)
+
+Lo que **ya existe** y sería su materia prima:
+
+- **Ingresos y suscriptores por producto:** `pagos-sorsabsa` tiene `pagos` y
+  `suscripciones`, las dos con columna `producto` **e indexadas por ella**.
+  Está construido, solo que nadie lo mira. Es la mitad que suele costar.
+- **Quién entra:** consultado en vivo contra `verticales_sorsabsa`
+  (`/auth/v1/admin/users`): **11 usuarios, los 11 han iniciado sesión alguna
+  vez, ninguno registrado sin entrar nunca**, último ingreso ese mismo día a
+  las 14:42, actividad concentrada entre el 8 y el 15 de agosto. La mayoría
+  entra por `custom:sorsabsa-identity`, o sea federada por el portero, que es
+  como debe ser.
+
+Lo que **no existe**:
+
+- **Gastos por producto.** Cloudflare, Railway, Vercel, Supabase y Hostinger
+  van cada uno por su lado y ninguno sabe qué producto es cuál. Necesita el
+  inventario de recursos por producto — ver `ALMACENAMIENTO-COSTOS.md`.
+- **Historial de ingresos.** `last_sign_in_at` guarda **un solo sello y pisa el
+  anterior**: dice cuándo entró por última vez cada persona, y nada más. No
+  dice a qué producto entró, ni cuántas veces, ni si entró y rebotó contra una
+  pantalla de "sin acceso".
+- **Cualquier noción de vendedor, cartera, comisión o embudo**, que es lo que
+  el CRM necesita y hoy no tiene dónde apoyarse.
+
+### Lo que se pierde mientras tanto — dicho y aplazado a conciencia
+
+**El portero es el único punto por donde pasan todos los ingresos de todos los
+productos**, y hoy no registra ninguno. Cada login que ocurre sin registrarse
+es histórico que **no se puede reconstruir después**: es lo único de esta lista
+que no se puede armar más adelante con datos ya guardados.
+
+Se le planteó a Gina que empezar por ahí costaba poco (una tabla y una
+escritura desde `/auth/complete`) y **decidió aplazarlo igual**, con su razón:
+*"no es algo en lo que ahora me quiera desgastar porque realmente nos falta
+mucho para llegar a tener clientes"*. Con cero clientes, el histórico que se
+pierde es de sus propias pruebas. Queda anotado que fue una decisión tomada
+sabiendo el costo, no un olvido.
+
+### Orden sugerido cuando se retome
+
+1. **Registro de ingresos en el portero** — lo único urgente por lo de arriba.
+2. **Inventario de recursos por producto** — destraba el cuadrante de gastos.
+3. **Consola** — dónde se mira todo junto; hasta que existan 1 y 2 no tendría
+   qué mostrar.
+4. **CRM de ventas** encima de eso: vendedores, cartera, comisiones.
+
+**No es un producto más del ecosistema**: es la herramienta desde la que se
+administran los otros seis. Vive en `sorsabsa.com`, usa el portero como todos,
+y lee de `pagos-sorsabsa` con su propia clave (regla de una clave por producto,
+`pagos-sorsabsa/lib/auth.js`).
