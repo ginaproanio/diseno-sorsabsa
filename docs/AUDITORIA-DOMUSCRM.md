@@ -27,7 +27,7 @@ repite, solo se referencia.
 
 ## 🔴 CRÍTICO
 
-### 🔴-1 — 🔧 Fix #1 CORREGIDO 10-ago-2026 (fix #2 sigue pendiente) — Dos gates independientes para "¿esta cuenta tiene acceso?" dan respuestas distintas para el mismo hecho, según el historial del navegador
+### 🔴-1 — 🔧 Fix #1 CORREGIDO 10-ago-2026 · fix #2 etapa 1 CORREGIDA 15-ago-2026 (etapas 2-3 pendientes) — Dos gates independientes para "¿esta cuenta tiene acceso?" dan respuestas distintas para el mismo hecho, según el historial del navegador
 
 **Síntoma, textual (Gina):** entra a la landing, presiona "Ingresar" → Google
 → inicia sesión con una cuenta real sin ninguna agencia asociada → llega a
@@ -66,17 +66,33 @@ segunda vez. La página no es segura contra un replay por navegación — algo
 que un botón de "atrás" hace constantemente y sin que el usuario sepa que
 está repitiendo una operación.
 
-**Lo que todavía no está confirmado con datos (no adivinar):** por qué el
-resultado del segundo chequeo (`sin_suscripcion`, entidad SÍ resuelta) fue
-distinto al primero (que dejó pasar hacia DomusCRM, consistente con
-`bypass: true`, entidad NO resuelta). Candidatos, sin descartar ninguno
-todavía: (a) rotación de refresh token de Supabase entre el primer y
-segundo `setSession()` con el mismo token ya usado, cambiando qué ve
-`getUser()` la segunda vez; (b) alguna condición de carrera en
-`resolve_company_for_user()`. **Pendiente de Gina:** repetir el flujo con
-las herramientas de desarrollador abiertas (pestaña Network) y capturar el
-cuerpo de las dos respuestas de `/api/entitlements` — sin eso, cualquier
-causa que se escriba acá sería una suposición, no un hecho verificado.
+**Por qué el segundo chequeo dio distinto que el primero — 15-ago-2026,
+dos candidatos MECÁNICOS que reemplazan a los de antes.** Los originales
+("rotación de refresh token", "alguna condición de carrera") eran
+descripciones vagas. Leyendo el código de punta a punta aparecieron dos
+explicaciones concretas, cada una verificable:
+
+- **(A) El estado cambió entre las dos corridas, y lo cambió DomusCRM.**
+  El `/auth/callback` del producto llama a `/api/auth/reconciliar-perfil`,
+  que hace el `INSERT` en `domus.company_users` a partir de
+  `domus.registros_pendientes`. Secuencia: 1ª pasada del portero → todavía
+  no hay fila → `resolve_company_for_user` devuelve NULL → bypass → entra;
+  DomusCRM reconcilia y CREA la fila; "atrás" → 2ª pasada → ahora SÍ hay
+  entidad → pagos-sorsabsa no tiene suscripción para esa empresa →
+  `sin_suscripcion`. No hace falta ningún token rotado: la base cambió en
+  el medio. Requiere que existiera un `registros_pendientes` para ese email.
+- **(B) La resolución falló en la segunda corrida.** Ver 🟠-3: cualquier
+  excepción en la consulta producía el sujeto inventado
+  `__resolucion_fallida__<userId>`, y pagos-sorsabsa responde
+  `sin_suscripcion` para todo sujeto que no tenga fila
+  (`api/entitlements.js:32`). O sea: una falla de base de datos se veía
+  EXACTAMENTE como el mensaje que reportó Gina.
+
+Se distinguen con dos consultas:
+`SELECT * FROM domus.registros_pendientes WHERE email = '<el suyo>'` y
+`SELECT status FROM domus.company_users WHERE user_id = '<el suyo>'`. Si hay
+o hubo fila, es (A). (B) quedó corregido igual, porque es un defecto
+independiente de si ocurrió ese día.
 
 **Componente responsable:** `auth-sorsabsa/src/app/auth/complete/page.tsx`
 (no limpia el fragment) es la causa inmediata; el diseño de dos gates
@@ -91,23 +107,66 @@ reutilizables en la URL. typecheck limpio, jest 15/15 (de paso, corregido
 un valor de color de marca desactualizado en `login.test.tsx`, sin
 relación con este fix, encontrado al correr la suite).
 
-**Fix #2 — ⬜ sigue pendiente:** evaluar si el chequeo de "sin_suscripcion"
-(`auth/complete`) y el de "sin_empresa" (DomusCRM) deberían fusionarse en
-un solo gate, o al menos compartir un mismo vocabulario de error — hoy son
-dos preguntas que en la práctica significan lo mismo para DomusCRM ("¿esta
-cuenta tiene acceso real?") pero con dos textos y dos productos distintos
-respondiendo. Requiere decisión de arquitectura, no es un fix chico — no
-se toca sin su propio análisis.
+**Fix #2 — la causa de fondo, con su análisis (15-ago-2026).** No son dos
+gates: son **tres consultas a la misma tabla** `domus.company_users`, con
+tres predicados distintos, en dos repos y dos esquemas.
 
-**Código a eliminar:** ninguno — el fix #1 fue aditivo.
+| # | Dónde | Predicado | Si no encuentra |
+| --- | --- | --- | --- |
+| 1 | `public.resolve_company_for_user` (condomanager/supabase/migrations, l.195) — lo usa el portero | `WHERE user_id = $1 LIMIT 1` — **sin filtro de status** | NULL → bypass → **deja entrar** |
+| 2 | `domus.company_lookup_for_user` (crm_inmobiliario/supabase/migrations, l.63) — lo usa `/api/my-company` | `status='active'` **+ JOIN `agent_sites` `is_active`** | 0 filas → `sin_empresa` → **bloquea** |
+| 3 | `authorizePanel` (webs/src/lib/auth-guard.ts) — lo usa cada API del panel | `status='active'`, acotado a ESE tenant | null → **401** → `LoginGate` |
 
-**Riesgo de regresión:** bajo, confirmado — una línea, mismo patrón ya
-probado en el propio repo, typecheck y tests limpios.
+Se contradicen en estados reales: sin ninguna fila, (1) deja entrar y (2)
+bloquea; con membresía activa pero `agent_sites` inactivo, (1) cobra y (2)
+dice "sin inmobiliaria". La causa raíz es que el portero convierte "no
+encontré entidad" en "no hay nada que cobrar → pasa" — el *fallback
+peligroso* que `ESTANDAR-DESARROLLO.md` prohíbe textualmente ("si no existe
+autorización → permitir"). No puede distinguir *superadmin sin entidad* de
+*persona sin ninguna membresía*: son la misma fila ausente.
 
-**Validación:** repetir el flujo completo (login → error → atrás) y
-confirmar que la segunda vez ya no re-ejecuta el chequeo — debería quedar
-en una pantalla neutra o volver a `/auth/login`, no repetir la verificación
-con tokens viejos.
+**La restricción que impide el fix obvio (verificada, y es la razón de que
+esto se haga por etapas):** si el portero bloqueara con entidad NULL, **toda
+agencia recién registrada quedaría afuera para siempre**. Su fila en
+`domus.company_users` la crea el propio producto DESPUÉS del portero
+(`/auth/callback` → `/api/auth/reconciliar-perfil`, desde
+`registros_pendientes`). Bloquear antes = nunca llegan a la página que las
+da de alta. Por eso el bypass "funciona" hoy.
+
+**Etapa 1 — ✅ CORREGIDA 15-ago-2026, commit `auth-sorsabsa@bc38ca1`:**
+
+- El modelo de cobro se declara en `auth-sorsabsa/src/lib/apps.ts` (`cobro:
+  {modo:'entidad'|'persona'|'sin_cobro'}`), no en el resolver. Se eliminaron
+  las **cuatro excepciones por nombre de producto** (`if (app === 'iot')`,
+  `'convertidor'`, `'agente24siete'`, `'sorsabsaforensic'`) que vivían en
+  `entity-resolver.ts` — exactamente la señal de alarma "no crear una
+  excepción para el producto que expuso el bug". El resolver quedó genérico:
+  no menciona ninguna app. Los motivos reales de cada producto se movieron
+  como comentarios al lado de su declaración, no se perdieron.
+- `bypass: true` (un solo estado para dos hechos distintos) se partió en
+  `sin_cobro` y `sin_entidad`. **`sin_entidad` sigue dejando pasar** — eso
+  es la etapa 2 — pero ahora tiene nombre propio, viaja en el cuerpo de
+  `/api/entitlements` (visible en la pestaña Network) y su `return` está
+  marcado en el código con la restricción de arriba.
+- 🟠-3 corregido (abajo).
+
+**Etapa 2 — ⬜ pendiente, es la decisión de fondo:** que `sin_entidad`
+bloquee con el MISMO texto que ya usa DomusCRM. Exige primero resolver el
+orden: la reconciliación de identidad tiene que ocurrir antes del gate, o
+`registros_pendientes` tiene que ser visible para él.
+
+**Etapa 3 — ⬜ pendiente:** una sola función de membresía, un solo
+predicado, consumida por las tres. Elimina `public.resolve_company_for_user`
+— que vive en el esquema de CondoManager leyendo tablas de DomusCRM, y que
+`crm_inmobiliario/supabase/roles.sql:15` ya declara temporal.
+
+**Código eliminado en la etapa 1:** las cuatro ramas por producto del
+resolver y la rama `__resolucion_fallida__`. **Riesgo:** bajo y verificado —
+nadie que entra hoy deja de entrar; lo único que cambia para un usuario es
+que una falla nuestra ya no se le presenta como falta de pago.
+**Validación:** typecheck limpio, jest 20/20 en auth-sorsabsa (5 tests
+nuevos en `src/lib/entity-resolver.test.ts`, uno por cada estado de la tabla
+de arriba, incluido "la consulta falla → no se inventa un sujeto").
 
 ---
 
@@ -145,14 +204,82 @@ como parte del consolidado de los 4 productos. Estado tras esta sesión:
   API responde 401 más tarde.
 - ✅ Botón de "Salir" agregado al sidebar y al menú móvil (mismo commit),
   con el contrato central de logout — hasta hoy no existía ninguno.
-- ⬜ `AdminLayout` sigue dibujando el `<aside>` sin condición — quedó sin
-  tocar a propósito: con el middleware ya validando en vivo, el caso común
-  que disparaba `LoginGate` (sesión vencida) ya no llega a esta pantalla.
-  El caso residual (la API devuelve 401 por otra razón, con el middleware
-  ya conforme) sigue mostrando `LoginGate` dentro del chasis — más raro
-  ahora, pero no imposible. No se resolvió porque cambiar cómo
-  `AdminLayout` decide qué dibujar es un cambio de forma, no solo de
-  seguridad, y no estaba en el lote de fixes chicos y seguros de hoy.
+- ✅ 15-ago-2026 · **El "caso residual" tenía nombre y no era el `<aside>`:
+  era 🟠-4** (abajo). Lo que hacía aparecer `LoginGate` con el middleware ya
+  conforme era el 401 que la API devolvía para "sesión válida sin membresía"
+  — un 403 disfrazado. Corregido eso, ese camino ahora muestra
+  `AccesoDenegado`, que dice la verdad y ofrece una salida real.
+- ⬜ `AdminLayout` sigue dibujando el `<aside>` sin condición. Queda sin
+  tocar: cambiar cómo decide qué dibujar es un cambio de forma, y el estado
+  de sesión hoy lo decide cada página por su cuenta (`needsLogin` en cuatro
+  lugares) — eso sí es duplicación real, pero se resuelve subiendo el estado
+  al layout, no parcheando el `<aside>`.
+
+### 🟠-3 — ✅ CORREGIDO 15-ago-2026, commit `auth-sorsabsa@bc38ca1` — Una falla de nuestra base de datos se le reportaba al usuario como "no pagaste"
+
+- **Archivo:** `auth-sorsabsa/src/lib/entity-resolver.ts` (rama `catch`).
+- **Qué hacía:** ante cualquier excepción al resolver la entidad, devolvía
+  el sujeto **inventado** `__resolucion_fallida__<userId>` y se lo mandaba
+  igual a pagos-sorsabsa. Pagos responde `sin_suscripcion` para todo sujeto
+  sin fila (`pagos-sorsabsa/api/entitlements.js:32`), así que la persona
+  leía *"Tu cuenta existe, pero no tiene una suscripción de tu producto.
+  Contáctanos para activarla"* — con `esNuestro: false`, o sea, se le
+  cobraba la culpa de una consulta nuestra que falló.
+- **Lo llamativo:** el vocabulario correcto ya existía. `blocked-message.ts`
+  documenta `verificacion_no_disponible` en un comentario (l.25) y lo
+  traduce a *"No pudimos verificar tu cuenta… no es necesariamente un tema
+  de pago"*. **Nadie lo emitía nunca** — el motivo estaba escrito pero no
+  conectado.
+- **Fix:** el resolver devuelve `{subject: null, motivo:
+  'verificacion_no_disponible'}` y `/api/entitlements` lo traduce a 503 con
+  ese `reason`. Falla-cerrado se mantiene: no se autoriza el acceso.
+- **Por qué importa más de lo que parece:** este es el candidato (B) del
+  🔴-1. Una falla transitoria de base producía EXACTAMENTE el mensaje que
+  reportó Gina.
+- **Riesgo:** bajo, confirmado — typecheck limpio, 5 tests nuevos, uno de
+  ellos afirma que ningún resultado del resolver puede volver a contener un
+  sujeto fabricado.
+
+### 🟠-4 — ✅ CORREGIDO 15-ago-2026, commit `domuscrm@479ea1b` — El panel le decía "Iniciar sesión" a alguien que ya tenía la sesión iniciada
+
+- **Archivos:** `crm_inmobiliario/webs/src/lib/auth-guard.ts` + los ~15
+  llamadores del panel.
+- **Qué pasaba:** `authorizePanel` devolvía `null` tanto para "no hay token"
+  como para "el token es válido pero esta cuenta no tiene membresía activa
+  en ESTE tenant", y todos los llamadores mapeaban ese `null` a **401**. El
+  front lee 401 como "no hay sesión" y muestra `LoginGate` — cuya única
+  acción es rehacer el SSO completo para volver al mismo 401. Un callejón
+  sin salida con un cartel que miente.
+- **Lo llamativo, otra vez:** el propio docstring de `auth-guard.ts`
+  afirmaba *"un usuario de otra inmobiliaria recibe 403 aunque su sesión sea
+  válida"*. Ese 403 **no existía en ninguna parte del código**. La
+  documentación describía el comportamiento correcto; la implementación
+  nunca lo tuvo.
+- **Alcance real, más ancho de lo que parecía:** el mismo 401 cubría también
+  "sos de esta agencia pero no sos owner/admin" en equipo e invitaciones —
+  o sea, a un agente normal que abría *Equipo* se le ofrecía iniciar sesión.
+  Y el 403 ya era el patrón del repo para ese caso (`api/profile`,
+  `api/properties/[id]`): la inconsistencia estaba dentro del mismo producto.
+- **Fix:** `authorizePanel` → `autorizarPanel`, que devuelve una unión
+  discriminada (`{ok:true, auth}` | `{ok:false, motivo:'sin_sesion' |
+  'sin_membresia'}`). El **cambio de nombre es deliberado**: un `if (!auth)`
+  que sobreviviera contra un objeto siempre truthy dejaría pasar a cualquiera
+  sin que el compilador dijera nada; al cambiar el nombre, el llamador que no
+  se migró no compila. Las respuestas HTTP quedaron en un solo lugar
+  (`respuestaNegada` / `respuestaSinPermiso`), en vez del mismo
+  `NextResponse.json({error:'UNAUTHORIZED'},{status:401})` copiado en cada
+  archivo. En el front, un 403 ahora renderiza `AccesoDenegado`
+  (`components/AccesoDenegado.tsx`), con las dos salidas que sí sirven:
+  cambiar de cuenta (Salir) o volver a donde la persona sí tiene permiso.
+- **De paso:** `api/invitations` autorizaba DOS VECES la misma petición
+  (`guard()` y después otra llamada cruda, solo para leer el email de quien
+  invita) — dos validaciones de token y dos consultas de membresía por
+  invitación. Ahora autoriza una sola vez.
+- **Riesgo:** medio por superficie (15 archivos), bajo por naturaleza: el
+  cambio es de forma de retorno, no de regla. Ninguna condición de
+  autorización se relajó — un acceso que antes se negaba se sigue negando,
+  con otro código. typecheck limpio, jest 18/18 con 6 tests nuevos que fijan
+  el contrato (`src/lib/__tests__/auth-guard.test.tsx`).
 
 ---
 
@@ -200,6 +327,45 @@ como parte del consolidado de los 4 productos. Estado tras esta sesión:
   tarjetas de propiedad sigue intacto porque usa `.ei-grid`, nunca `.grid`.
 
 ---
+
+## Estado 15-ago-2026
+
+Sesión de "avancemos con lo pendiente". Se corrigió la **etapa 1 del fix #2**
+(🔴-1) y **🟠-4**, y aparecieron dos hallazgos nuevos al verificar el código,
+🟠-3 y 🟠-4, ninguno de los dos reportado por síntoma — salieron de leer el
+camino completo.
+
+Hilo que une todo lo de hoy: **el sistema tenía escrito el comportamiento
+correcto y no lo ejecutaba.** `verificacion_no_disponible` estaba nombrado en
+un comentario y nadie lo emitía; el 403 para "otra inmobiliaria" estaba en un
+docstring y no existía en el código. No fue diseño ausente, fue diseño
+desconectado.
+
+**Pendiente real:** etapas 2 y 3 del fix #2 — que `sin_entidad` bloquee, y una
+sola fuente de membresía para las tres consultas. Ambas necesitan resolver
+antes el orden de la reconciliación de identidad, que está documentado arriba.
+
+**Commits:** `auth-sorsabsa@bc38ca1`, `domuscrm@479ea1b`, desplegados. Se
+pushea ANTES de la validación en vivo a propósito: no hay ningún tenant real
+todavía (EcoInmobiliaria es un nombre de ejemplo en tests y en el `?ctx=` del
+login, no una agencia creada), así que no hay a quién romperle nada, y las
+pruebas de abajo se hacen sobre el sitio desplegado.
+
+**Validación automatizada de hoy:** auth-sorsabsa typecheck limpio, jest
+20/20 (5 nuevos), `next build` OK. DomusCRM typecheck limpio, jest 18/18
+(6 nuevos), `next build` OK.
+
+**Falta la validación en vivo (Gina):**
+
+1. Entrar a DomusCRM con una cuenta sin agencia: debe seguir viendo "Sin
+   inmobiliaria asociada", igual que antes — nadie que entraba deja de entrar.
+2. Con sesión válida, abrir el subdominio de OTRA inmobiliaria: antes salía
+   "Ingresa a tu panel" (mentira); ahora debe salir "Tu cuenta no tiene acceso
+   a esta inmobiliaria" con el botón de Salir.
+3. Con una cuenta de rol `agent`, abrir *Equipo*: mismo cambio, con "Volver a
+   mi inventario".
+4. En la pestaña Network de `/api/entitlements`, el cuerpo ahora trae `motivo`
+   — es lo que faltaba capturar para cerrar del todo el 🔴-1.
 
 ## Estado 10-ago-2026
 
