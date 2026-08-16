@@ -1,7 +1,7 @@
 # Graph Report - diseno-sorsabsa  (2026-08-16)
 
 ## Corpus Check
-- 83 files · ~88,350 words
+- 83 files · ~89,138 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `817dee56`
+- Built from commit: `32170542`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -122,7 +122,7 @@ Nodes (26): DATA, SectionHeader(), SectionHeaderProps, ALIGN, HIDE_CLASSES, hide
 
 ### Community 9 - "Plan — Identificación de unidades configurable por condominio"
 Cohesion: 0.08
-Nodes (23): Alcance real, verificado leyendo cada archivo (no asumido), Causa raíz, Fase 1 — ✅ RESUELTO 09-ago-2026 (`condomanager@5267329`), Fase 2 — ✅ RESUELTO 09-ago-2026 (`condomanager@e9dcf0f`), Fase 3 — ✅ RESUELTO 09-ago-2026 (`condomanager@2d9c0a9`) — Reagrupar el sidebar, Fase 4 — Verificación y cierre, Fases, Orden recomendado (+15 more)
+Nodes (23): Alcance real, verificado leyendo cada archivo (no asumido), Causa raíz, Decidido y ejecutado (ya no está pendiente), Fase 1 — ✅ RESUELTO 09-ago-2026 (`condomanager@5267329`), Fase 2 — ✅ RESUELTO 09-ago-2026 (`condomanager@e9dcf0f`), Fase 3 — ✅ RESUELTO 09-ago-2026 (`condomanager@2d9c0a9`) — Reagrupar el sidebar, Fase 4 — Verificación y cierre — 🔧 casi cerrada (15-ago-2026), Fases (+15 more)
 
 ### Community 10 - "compilerOptions"
 Cohesion: 0.09
