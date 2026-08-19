@@ -1,14 +1,36 @@
 # Modelo de trabajo de JustiRed
 
-**Qué es este documento.** El modelo con el que trabajan las bibliotecas
-legales serias —Lexis, vLex, Westlaw, el BOE, el estándar ELI— y, al lado de
-cada pieza, **dónde está JustiRed de verdad**: si lo hacemos, si no lo hacemos,
-si lo hacemos mal, o si lo hacemos mejor.
+**Qué es este documento y para qué sirve.** Es el **manual de dirección del
+proyecto**: describe cómo se toma el dato, cómo se digitaliza, cómo se convierte
+y cómo se trabaja, de manera que alguien que no escribió el código pueda juzgar
+si el procedimiento es defendible.
 
-Está pensado como manual, así que la regla es una sola: **cada afirmación sobre
-JustiRed va con su evidencia y su fecha.** Lo que no está medido se dice que no
-está medido. Un manual que describe lo que uno quisiera tener no sirve para
-trabajar.
+Tiene dos capas superpuestas, y esa es su utilidad:
+
+1. **El modelo del sector** — cómo resuelven este problema las bibliotecas
+   legales establecidas (Lexis, vLex, Westlaw, el BOE, el estándar ELI). Es el
+   marco de referencia.
+2. **Dónde está JustiRed de verdad**, pieza por pieza: si lo hacemos, si no lo
+   hacemos, si lo hacemos mal, o si lo hacemos mejor.
+
+**La regla del documento es una sola: cada afirmación sobre JustiRed va con su
+evidencia y su fecha.** Lo que no está medido se dice que no está medido, y lo
+que está mal se dice que está mal — incluidos los defectos introducidos por
+quien escribe. Un manual que describe lo que uno quisiera tener no sirve ni para
+dirigir el trabajo ni para sostenerlo ante nadie.
+
+**Por dónde entrar, según qué se busque:**
+
+| Si busca… | Vaya a |
+|---|---|
+| El marco conceptual y la unidad de análisis | §1 y §2 |
+| **El procedimiento: cómo se obtiene, se digitaliza y se convierte el dato** | **§5-bis** |
+| Qué se conserva y qué se pierde en la conversión | §5-bis D |
+| Reproducibilidad y auditabilidad | §5-bis E |
+| Consideraciones legales y éticas | §5-bis F |
+| El estado real del sistema, con cifras | «Resumen en una pantalla», abajo |
+| Qué falta y en qué orden | §9 |
+| **Qué se tira, y cuándo** | **§9-bis** |
 
 Última verificación contra la base de producción: **19-ago-2026.**
 
@@ -33,7 +55,7 @@ trabajar.
 | Artículo | ⚠️ | 4.565 filas, pero cuelgan de la gaceta y están mal cortadas |
 | Inventariar | ✅ | 26 años, 0 huecos de numeración |
 | Adquirir | ✅ | Separado de procesar desde el 17-ago |
-| Extraer | ⚠️ | Convierte bien; **tira el texto y hay que reconvertir** |
+| Extraer | ✅ | Convierte y **guarda el texto** (19-ago). Falta llenarlo hacia atrás: 5.906 sin markdown |
 | Estructurar | ⚠️ | Corta artículos, no actos. Y los corta mal |
 | Enriquecer | ⚠️ | Clasifica la gaceta, que es justo lo que el modelo prohíbe |
 | Validar | ✅ | Mide forma del texto y estado del sistema |
@@ -45,7 +67,7 @@ trabajar.
 
 ## 1. Las unidades de trabajo
 
-```
+```text
 Fuente
   └── Publicación / Contenedor (Gaceta, Registro Oficial, Boletín)
         └── Acto / Norma individual          ← unidad canónica
@@ -297,7 +319,7 @@ una alarma que se ignora.
 
 ## 5. El proceso completo
 
-```
+```text
 1. INVENTARIAR   Recorrer cada fuente y registrar qué publicaciones existen,
                  sin descargar todavía.
 
@@ -339,20 +361,28 @@ Resultado: 26 años de originales archivados en una corrida de 4 h 33 min
 (5.892 objetos, 20,8 GB), sin generar de paso miles de documentos mal
 segmentados. Hoy: **5.822 esperando proceso**, a propósito.
 
-#### 3. Extraer — ⚠️ convierte bien y tira el texto
+#### 3. Extraer — ✅ desde el 19-ago-2026
 El Convertidor 1.3.0 (Railway) decide solo si hace falta OCR midiendo la
 proporción de caracteres ilegibles. Funciona: los 6 documentos que estaban
-ilegibles pasaron a **0,00%** al reprocesarlos.
+ilegibles pasaron a **0,00%** al reprocesarlos. El detalle del procedimiento y
+de la calibración está en §5-bis C.
 
-> ❌ **Pero el texto extraído no se guarda en ningún lado.** No hay columna de
-> markdown en `leyes`. Solo sobrevive el resultado ya segmentado. El modelo dice
-> «el texto queda inmutable» y nosotros lo descartamos.
->
-> Consecuencia práctica, encontrada el 19-ago al escribir `medir_actos.py`: para
-> medir el corte por acto hay que **bajar el original de R2 y reconvertirlo**,
-> porque el segmentador actual tira todo lo anterior al primer «ARTÍCULO» —la
-> portada, el sumario, y el encabezado y los considerandos del primer acto—.
-> Cada experimento sobre el texto cuesta una reconversión completa.
+**Hasta esa fecha el texto se usaba y se tiraba.** No había dónde guardarlo, así
+que solo sobrevivía el resultado ya segmentado — y el modelo del sector dice, con
+razón, que «el texto queda inmutable».
+
+Lo encontró un trabajo concreto: para medir el corte por acto había que **bajar
+el original de R2 y reconvertirlo**, porque el segmentador viejo descarta todo lo
+anterior al primer «ARTÍCULO» —la portada, el sumario, y el encabezado y los
+considerandos del primer acto—. Cada experimento sobre el texto costaba una
+reconversión completa: ~13 s por documento, **~21 h el archivo entero**.
+
+Ahora el markdown se archiva en `texto/AAAA/NOMBRE.md` junto a la versión del
+motor que lo produjo, y hay un modo (`extraer`) que ejecuta esta etapa **sola**,
+sin estructurar ni publicar.
+
+> ⚠️ **Falta llenarlo hacia atrás.** Los 5.906 originales ya archivados todavía
+> no tienen su texto guardado. `justired.pendiente_de_extraer` los cuenta.
 
 #### 4. Estructurar — ⚠️ mitad hecha, mitad mal
 - **a) Cortar en actos: ❌.** El módulo existe y está probado; no está conectado.
@@ -434,6 +464,222 @@ Pero hay que decirlo con todas las letras: **hoy publicar es un efecto
 secundario del procesamiento, exactamente lo que el modelo dice que no debe
 ser.** Cerrar la compuerta solo es viable cuando exista un flujo de curación que
 no deje la biblioteca vacía; es decir, después del acto.
+
+---
+
+## 5-bis. El procedimiento técnico, paso a paso
+
+Esta sección responde a la pregunta que hace un director de tesis: **de dónde
+sale el dato, cómo se toma, en qué se convierte, qué se conserva y qué se
+pierde.** Cada decisión va con el criterio que la justifica y con la medición
+que la respalda, porque un procedimiento que no se puede auditar tampoco se
+puede defender.
+
+### El recorrido, con sus artefactos
+
+```text
+FUENTE (registroficial.gob.ec)
+   │  listado navegable por año y mes; cada ficha declara
+   │  número, fecha, páginas y URL del PDF
+   ▼
+[1] INVENTARIAR ─────────► justired.inventario     (una fila por documento que EXISTE)
+   │                        no descarga nada
+   ▼
+[2] ADQUIRIR ────────────► R2: registros-oficiales/2026/RO_No_340.pdf
+   │                        + SHA-256          ORIGINAL INMUTABLE, nunca se borra
+   ▼
+[3] EXTRAER ─────────────► R2: texto/2026/RO_No_340.md
+   │  api.convertidor.sorsabsa.com               TEXTO, derivado y recalculable
+   ▼
+[4..8] ESTRUCTURAR, ENRIQUECER, VALIDAR, CURAR, PUBLICAR
+       trabajan SOLO sobre el markdown. El PDF no se vuelve a abrir.
+```
+
+Las tres primeras etapas se ejecutan **por separado**, cada una con su propia
+entrada en el flujo de trabajo automatizado. No es una comodidad: adquirir
+depende de un tercero que puede caerse o reorganizar su archivo, y procesar es
+barato y repetible sobre un original que ya está en casa. Atarlas obligaría a
+hacer las dos o ninguna.
+
+### A. Delimitación del corpus — etapa 1
+
+**Universo.** El Registro Oficial del Ecuador publica un archivo navegable por
+año y mes. Cada ficha del listado declara, **sin descargar el PDF**, el número
+de edición, la fecha, el total de páginas y la URL del documento.
+
+**Procedimiento.** Se recorre el árbol y se registra una fila por documento que
+existe. Recorrer 26 años cuesta minutos; descargarlos cuesta horas. Esa asimetría
+es la que permite **dimensionar el corpus antes de constituirlo**.
+
+**Estado actual (19-ago-2026):** 5.906 documentos inventariados, 26 años,
+**0 huecos** en la numeración.
+
+**Por qué importa metodológicamente.** Sin una lista de lo que existe, «no hay
+nada nuevo» y «no estoy mirando donde debería» son indistinguibles. En este
+proyecto lo fueron durante seis semanas: faltaban las ediciones Nº 277 y
+Nº 316–328 y nada lo señalaba. La completitud del corpus **se comprueba, no se
+supone**.
+
+**Rastreo responsable.** El recorrido respeta `robots.txt` —comprobado en cada
+petición, no de palabra—, aplica un tope de tasa con pausas irregulares
+(*jitter*) para no imponer carga a la fuente, y guarda su progreso para poder
+reanudar. `registroficial.gob.ec/robots.txt` permite todo salvo `/wp-admin/`.
+
+### B. Adquisición y garantía de autenticidad — etapa 2
+
+Se descarga el PDF, se calcula su **SHA-256** y se archiva en almacenamiento de
+objetos (Cloudflare R2) bajo una ruta estable: `registros-oficiales/AAAA/RO_No_XXX.pdf`.
+
+Tres propiedades, y las tres son metodológicas antes que técnicas:
+
+1. **El original nunca se borra ni se modifica.** Es la prueba de autenticidad y
+   la fuente de la verdad de todo lo demás.
+2. **La huella permite identificar el documento por su contenido**, no por su
+   URL — que es lo que detecta que dos direcciones distintas sirven el mismo
+   archivo.
+3. **Tener el original se verifica con fecha.** «Archivado» era una afirmación
+   sin fecha —cierta el día que se subió, y nadie volvía a mirar— y así se
+   perdieron 17 originales durante 17 días sin que nada lo notara. Hoy se
+   comprueba antes de cada escaneo y la pérdida vuelve a ser cola de trabajo.
+
+**Estado actual:** 5.902 originales archivados (20,8 GB), verificados.
+
+### C. Extracción de texto — etapa 3
+
+**Un solo servicio, y no es código de este proyecto.** La conversión la hace el
+**Convertidor** (`api.convertidor.sorsabsa.com`), un servicio propio del
+ecosistema desplegado en Railway, que es el mismo motor que usa la aplicación
+web `convertidor.sorsabsa.com`. El scraper **no tiene una sola línea de análisis
+de PDF**: se lo pide por HTTP. No hay dos implementaciones que puedan divergir.
+
+**Todo documento pasa por el mismo camino**, tenga o no capa de texto. No existe
+una vía alterna: el Convertidor recibe el PDF y decide **internamente** qué hacer.
+
+**La decisión, en tres pasos:**
+
+1. Abre el PDF y extrae la capa de texto que el archivo ya trae (PyMuPDF,
+   `get_text("text")`), página por página.
+2. **Evalúa si esa capa es confiable.** Tres motivos la descartan:
+
+| Motivo | Criterio | Qué significa |
+|---|---|---|
+| `poco_texto` | menos de 100 caracteres | el PDF es una imagen escaneada |
+| `texto_ilegible` | **> 0,5%** de caracteres en `U+0100–U+024F` | el PDF trae capa de texto y está rota |
+| `forzado` | lo pidió una persona | un revisor vio algo que la medición no ve |
+
+**Y el tercer paso:** si hay motivo, **descarta lo extraído** y relee el
+documento entero por imagen con OCR (Tesseract). Si aun así el resultado tiene
+menos de 50 caracteres, responde con error en vez de entregar un texto de
+disculpa que el consumidor guardaría como si fuera el documento.
+
+**Calibración del umbral — esto es lo que lo hace defendible.** No es una
+intuición: se midió sobre 78 documentos reales.
+
+| | |
+|---|---|
+| Documentos sanos | 0,0% – 0,1% de caracteres en ese rango |
+| Documentos con la capa rota | 1,7% o más |
+| Zona gris | **ninguna** — por eso el umbral puede ir en el medio |
+| Afectados en el corpus | 6 de 78 |
+
+**El fenómeno.** Ocurre cuando la fuente tipográfica viene incrustada sin su
+tabla `ToUnicode`: el extractor emite los códigos internos de la fuente en vez
+de las letras.
+
+```text
+ƌƵŝĚĂĐŽŶůĂƉĂƌƚŝĐŝƉĂĐŝſŶĚĞƚŽĚĂƐ      ← lo que devolvía
+...truida con la participación de todas     ← lo que dice el papel
+```
+
+No es OCR fallando —eso da palabras borrosas, no una sustitución sistemática— y
+no hay tabla de conversión posible, porque cada PDF trae su propia codificación
+arbitraria. La única salida es releer por imagen. El rango elegido **excluye
+deliberadamente** las tildes del español (`U+00C0–U+00FF`) y la tipografía
+habitual de un PDF (comillas `U+2018/2019`, rayas `U+2013/2014`, puntos
+suspensivos `U+2026`), para que un documento correcto en español nunca dispare
+la regla.
+
+**Resultado comprobado sobre los 6 documentos reales:** forzando OCR, el texto
+ilegible pasó a **0,00%** en los seis, sin perder contenido, y con **más
+artículos detectados en todos (hasta +83%)** — porque el texto roto también
+escondía las marcas «Artículo N» de cualquier segmentador.
+
+**La salida es siempre la misma.** Con OCR o sin OCR, el Convertidor devuelve
+markdown con un encabezado por página. Cuando pasó por OCR el encabezado lo dice
+—`## Página 12 (OCR-Tesseract)` en vez de `# Página 12`—, así que el propio
+texto declara cómo se obtuvo. **Ninguna etapa posterior sabe ni necesita saber
+cuál de los dos caminos se usó.**
+
+**Desde el 19-ago-2026 ese texto se conserva** en `texto/AAAA/NOMBRE.md`, junto
+con la versión del motor que lo produjo. Antes se usaba y se descartaba, y cada
+experimento sobre el texto obligaba a reconvertir: ~13 s por documento, ~21 h
+para el archivo completo.
+
+### D. Qué conserva y qué pierde la conversión
+
+Declararlo es parte del método: **lo que el texto no trae no se puede analizar,
+y hay que decirlo antes de que alguien lo eche de menos.**
+
+**Se conserva:**
+
+| | |
+|---|---|
+| El contenido literal | íntegro, en orden de lectura |
+| La división en páginas | `# Página N`, que permite ubicar cada acto en su página impresa |
+| Los encabezados y pies corridos | la fecha y el número de edición de cada página |
+| La procedencia | si hubo OCR y por qué motivo |
+
+**Se pierde:**
+
+| | Consecuencia |
+|---|---|
+| Justificación y alineación | el texto sale sin justificar y sin centrar. Es la razón de que un documento se vea como una tira larga en la pantalla: **no es un defecto de la biblioteca, es lo que la conversión devuelve** |
+| Columnas | el texto se aplana a una sola columna en orden de lectura |
+| Negritas, cursivas, tamaños | no sobreviven a `get_text("text")` |
+| Tablas | se aplanan a líneas de texto; **no se extraen como estructura** |
+| Imágenes, sellos, firmas gráficas | no se conservan en el texto |
+
+**Dónde queda lo perdido.** En el PDF original, que sigue íntegro en R2 y es la
+versión fidedigna. La biblioteca puede —y debe— ofrecerlo junto al texto: **el
+texto sirve para buscar, citar y analizar; el PDF, para acreditar.** Es el mismo
+reparto que hacen los repositorios legales serios.
+
+> ⚠️ **Anomalía detectada al escribir esto (19-ago-2026):** la columna
+> `justired.leyes.tablas` **no contiene tablas**. Guarda una copia truncada de
+> los primeros 50 artículos (500 caracteres cada uno), es decir un duplicado
+> parcial de `justired.articulos` con un nombre que engaña. No se usa para nada
+> y hay que retirarla en la migración al acto.
+
+### E. Reproducibilidad
+
+Es la propiedad que sostiene todo lo demás, y conviene enunciarla como tal:
+
+> **Original inmutable + versión del motor + código versionado = cualquier
+> derivado se puede volver a calcular.**
+
+En concreto: el texto, la segmentación, la clasificación por materia y el resumen
+se han recalculado varias veces —tres en un solo día— **sin volver a pedirle
+nada a la fuente**. Esto tiene dos consecuencias metodológicas:
+
+1. **Un error en una etapa derivada no destruye datos.** Se corrige la regla y
+   se recalcula. Lo único irrecuperable sería perder el original, y por eso es
+   lo único que se protege con verificación fechada.
+2. **Los resultados son auditables.** Cualquiera con el original y la versión
+   del motor obtiene el mismo texto, porque la conversión es determinista.
+
+Guardar la **versión del motor** junto al texto es lo que permite saber qué hay
+que reconvertir cuando el motor mejora: sin ese dato, «tengo el texto» no dice
+si está al día.
+
+### F. Consideraciones legales y éticas
+
+| | |
+|---|---|
+| Naturaleza del material | documentos oficiales de publicación obligatoria, de dominio público |
+| Datos personales | los que el propio Registro Oficial publica; no se agregan ni se cruzan con otras fuentes |
+| Carga sobre la fuente | tope de tasa, pausas irregulares y `robots.txt` respetado en cada petición |
+| Almacenamiento | cubo público para documentos oficiales; los materiales sensibles de otros productos del ecosistema viven en un cubo distinto y privado |
+| Integridad | el original se conserva sin modificar, con su huella criptográfica |
 
 ---
 
@@ -546,6 +792,40 @@ que falten funciones de búsqueda: falta el objeto sobre el que buscar.**
 
 ---
 
+## 9-bis. Deuda a retirar
+
+Migrar al acto **no es rehacer el sistema**: de seis bloques, cuatro no se
+tocan, uno crece y uno se rehace. Pero lo que se reemplaza hay que borrarlo, y
+esta lista existe porque si no se escribe, no se borra nunca.
+
+`ESTANDAR-DESARROLLO.md` pregunta, antes de cada cambio: *«¿qué código existente
+debería ELIMINARSE como consecuencia de esta solución?»*. **Esta sección es
+donde vive esa respuesta para JustiRed.** Contestarla en una conversación no
+sirve: la conversación se termina y el código se queda.
+
+> **Nada de esto está borrado todavía, y es deliberado.** El segmentador viejo
+> es lo único que produce el corpus actual de 82 documentos, que es el corpus de
+> prueba. Retirarlo antes de que exista la tabla `actos` dejaría el sistema sin
+> nada que mirar. El orden es: construir el reemplazo → medirlo → migrar →
+> borrar.
+
+| Qué se retira | Por qué | Se borra cuando |
+|---|---|---|
+| `scraper.py: _segmentar_articulos()` y `_RE_ARTICULO` | Lo reemplaza `scraper/actos.py`. Corta artículos de una gaceta que contiene 5 normas distintas, y por eso el `Nº 340` tiene `ARTÍCULO 6` dos veces | exista la tabla `actos` y la migración esté hecha |
+| `scraper/test_segmentacion.py` | Prueba el segmentador que se va. Su reemplazo es `test_actos.py` | con lo anterior, **en el mismo commit** |
+| `justired.leyes.tablas` (jsonb) | **No contiene tablas.** Guarda una copia truncada de los primeros 50 artículos (500 caracteres cada uno): un duplicado parcial de `justired.articulos` con un nombre que engaña. No lo consume nadie | con la migración al acto |
+| `justired.leyes.ente_emisor` y `.categoria` | 2 valores distintos en 82 documentos: es la FUENTE, no el ente que emitió nada. El dato útil —58 entes distintos— pertenece al acto | exista `actos.ente` |
+| Renombrar `justired.leyes` → `gacetas` | La tabla no contiene leyes: contiene gacetas. El nombre es de cuando el modelo era otro y hoy engaña a quien lee el esquema | con la migración |
+| `leyes.materia` / `.materias[]` a nivel de gaceta | Se mueven al acto. 1,30 materias forzadas sobre 5 normas independientes | exista `actos.materias` |
+
+**Lo que NO se retira, y conviene decirlo para que nadie lo toque:** el
+inventario, la adquisición y el archivo en R2, el Convertidor y su decisión de
+OCR, el parser del sumario, el panel de calidad con sus motivos y su
+procedencia, el catálogo de fuentes y el tablero de estado. Todo eso es
+independiente del nivel al que se corte y sigue igual después de la migración.
+
+---
+
 ## 10. Reglas de trabajo que salieron de los defectos
 
 No son teoría: cada una nació de algo que se rompió y costó tiempo.
@@ -586,7 +866,7 @@ No son teoría: cada una nació de algo que se rompió y costó tiempo.
 | Qué | Dónde |
 |---|---|
 | Infraestructura, despliegues, herramientas de sesión | `diseno-sorsabsa/docs/ARQUITECTURA-ECOSISTEMA.md` |
-| Regla de desarrollo: auditar si la solución es un parche | `diseno-sorsabsa/docs/ESTANDAR-DESARROLLO.md` |
+| Regla de desarrollo: no parchear (parte I) y lo que existe sin ejecutarse (parte II) | `diseno-sorsabsa/docs/ESTANDAR-DESARROLLO.md` |
 | Etapas de la ingesta | `legaltech/docs/arquitectura-ingesta.md` |
 | Biblioteca legal y sus fallos históricos | `legaltech/docs/biblioteca-legal.md` |
 | Cortador por acto | `legaltech/scraper/actos.py` · `test_actos.py` |
