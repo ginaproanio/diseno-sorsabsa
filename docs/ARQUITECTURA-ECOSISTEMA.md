@@ -716,6 +716,44 @@ CLI, fuera de git). Este documento registra que existe y su alcance, no el
 secreto. Al expirar (07-sep-2026) hay que pedirle uno nuevo a Gina si
 todavía hace falta consultar Actions desde una sesión.
 
+### Herramientas de una sesión: qué se puede ejecutar y por dónde — verificado 19-ago-2026
+
+Gina, 19-ago-2026: *"cuando me dijiste, encontré por dónde ejecutar los SQL; por
+favor especifícalo en arquitectura, ahí deberían estar todas las herramientas que
+usamos y cuándo las usamos"*.
+
+Escrito porque **se perdió tiempo por no saberlo**: durante semanas ella pegó a
+mano cada migración en el editor SQL de Supabase, con el ida y vuelta que eso
+implica, mientras la sesión sí podía aplicarlas. Nadie estaba equivocado; nadie
+lo había comprobado.
+
+| Herramienta | Para qué | ¿La sesión puede? | Cómo |
+|---|---|---|---|
+| **MCP de Supabase** | Consultar y **aplicar SQL/DDL** en el proyecto central | ✅ Sí | `execute_sql` (consultas y DDL) · `apply_migration` (DDL con registro de versión) · `list_tables`, `list_migrations`, `get_advisors` |
+| **CLI de Supabase** (`supabase`) | Desplegar Edge Functions | ✅ Sí | `supabase functions deploy <nombre> --project-ref <ref>` — **no** typechequea: pasar `deno check` antes |
+| **`gh` CLI** | Leer corridas de CI | ✅ Solo lectura | `gh run list`, `gh run view --log` |
+| **`gh` CLI** | **Disparar** un workflow | ❌ **No** | 403. El token es *Actions: Read-only* (arriba). Lo lanza Gina: Actions → workflow → *Run workflow* |
+| **`wrangler`** | Cloudflare R2 | ✅ Sí, ya autenticado | Ver §4, "Cómo conectarse a Cloudflare/R2" |
+| **`railway`** | Contenedores y binarios | ✅ Sí | Ver §2, plano de proceso |
+| **Correr scripts del repo** (scraper, reparaciones) | Procesar, reparar, medir | ❌ **No en local** | Gina entrega la máquina: **todo va a la nube**. Un script que hay que correr necesita su modo en un workflow, o no existe |
+
+**Dos reglas que nacen de defectos reales:**
+
+1. **Un script sin modo en un workflow es un script que nadie puede ejecutar.**
+   `reparar_inventario.py` vivió dos días en el repo sin que ningún modo lo
+   llamara —y encima roto—, igual que `Inventario.marcar_adquirido()`, que
+   existió meses sin que nadie la invocara. Si se escribe una reparación, se
+   escribe su modo en el mismo commit.
+2. **Aplicar DDL desde la sesión no exime de dejar el archivo de migración.**
+   El SQL se guarda siempre en `supabase/migrations/` con su fecha y su porqué;
+   aplicarlo es un paso aparte. La base ejecuta, el repo explica.
+
+**Desfase conocido:** el historial de migraciones de Supabase
+(`list_migrations`) se detiene el 16-ago-2026, porque desde entonces todo se
+aplicó a mano por el editor SQL. Los archivos del repo son la verdad; ese
+historial no. **No correr `supabase db push`** contra el proyecto sin resolver
+antes ese desfase: intentaría reaplicar migraciones ya aplicadas.
+
 ---
 
 ## 5. Roturas verificadas el 2026-07-26
