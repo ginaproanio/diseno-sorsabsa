@@ -17,7 +17,17 @@ existía. Ninguno de los siete parches era la causa. Este documento existe
 para que la próxima vez, la primera reacción sea encontrar la causa, no
 tapar el síntoma.
 
+**Ampliado el 19-ago-2026** con la parte II. Todo lo de la parte I siguió
+siendo correcto —varios arreglos de esa semana fueron aplicaciones directas
+de sus reglas— pero apareció una **familia de fallos distinta** que no
+cubría. La parte I previene *escribir código malo*; la parte II previene
+*código bueno que nadie ejecuta* y *mediciones que engañan con
+naturalidad*. Los dos producen fallos silenciosos, que es lo que este
+documento persigue, pero entran por puertas distintas.
+
 ---
+
+## PARTE I — No parchear la arquitectura
 
 ## Principio fundamental
 
@@ -47,6 +57,14 @@ los contratos entre componentes y las responsabilidades establecidas.
 14. ¿Este cambio puede producir una regresión arquitectónica?
 15. ¿Qué código existente debería ELIMINARSE como consecuencia de esta solución?
 
+Y desde el 19-ago-2026, tres más — ver la parte II:
+
+16. ¿**Quién ejecuta** esto, y cuándo? Si la respuesta es "alguien, alguna
+    vez", no está resuelto.
+17. ¿Qué prueba **fallaría** si el defecto volviera mañana?
+18. Si esto se apoya en una medición: ¿de dónde sale el **denominador**, y
+    está completo?
+
 Si cualquiera revela un problema: **no implementar el fix todavía.**
 Auditar la arquitectura primero.
 
@@ -68,6 +86,16 @@ Auditar la arquitectura primero.
   identificador". Un sistema debe distinguir "no configurado" de
   "configurado y válido" — nunca convertir lo primero en lo segundo para
   evitar que falle visiblemente.
+- **Y su espejo — fallar cerrado DE MÁS** (19-ago-2026): **fallar cerrado se
+  aplica a la ACCIÓN que depende de la pieza rota, no a la pantalla que la
+  contiene.** Caso real: faltaba aplicar el catálogo de motivos de rechazo y
+  la función respondía 500 antes de cualquier acción, así que el panel de
+  calidad entero apareció en cero —ni un documento a la vista, un cartel
+  rojo— cuando solo *rechazar* necesitaba ese catálogo; *listar*, *corregir*
+  y *aprobar* no lo usaban para nada. Un sistema que se apaga entero por una
+  pieza que casi ninguna acción usa no es prudente, es frágil. La pregunta a
+  hacerse: *¿qué operaciones dependen REALMENTE de lo que falta?* Las demás
+  siguen, con un aviso visible de lo que no está disponible.
 - **Duplicación:** la misma regla en dos archivos, o en producto A y
   producto B. No copiar la corrección a los dos lugares — encontrar la
   fuente única de verdad y que ambos la usen.
@@ -135,3 +163,121 @@ Ante la duda entre un parche pequeño y detenerse a revisar la
 arquitectura: **detenerse.** Es preferible reportar "encontré una
 inconsistencia arquitectónica, antes de tocar código necesito corregir la
 fuente de verdad" que introducir otro workaround.
+
+---
+
+## PARTE II — Lo que existe y no funciona
+
+**Vigente desde:** 19-ago-2026.
+
+**Por qué existe.** La parte I nació de siete parches sobre el mismo bug en
+24 horas: el problema era *código mal escrito*. Entre el 15 y el 19 de
+agosto de 2026, trabajando la ingesta legal de JustiRed, apareció una
+familia distinta y peor de encontrar. Ningún componente estaba mal
+escrito. Estaban **bien escritos y sin ejecutar**, o **midiendo mal**.
+
+Los cuatro casos que originaron esta parte:
+
+| Qué pasó | Cuánto duró sin que nadie lo notara |
+|---|---|
+| `Inventario.marcar_adquirido()` existía desde que nació el módulo y **nadie la llamaba**. El inventario informaba "152 pendientes" incluyendo 78 documentos ya descargados, convertidos y publicados | meses |
+| `reparar_inventario.py` estaba en el repo y **ningún modo del flujo de trabajo lo invocaba** — y además su comprobación final estaba rota | 2 días |
+| ESLint tenía configurada la regla de hooks de React, con el mensaje exacto del defecto, y **CI nunca la corría**. `tsc` y el build pasaron en verde con la pantalla en blanco | hasta que la usuaria apretó un documento |
+| `test_r2.py` **pasaba en verde mientras 17 originales se perdían**, porque la prueba estaba escrita desde el código y afirmaba justo lo que el código hacía mal | 17 días |
+
+Ninguno de estos habría sido detenido por la parte I. No hay hardcode, no
+hay bypass, no hay duplicación, no hay fallback peligroso. Hay cosas que
+**parecen funcionar y no hacen nada**.
+
+## Regla 1 — Código que no se puede ejecutar no existe
+
+Todo componente que RESUELVE algo —un script de reparación, un método, un
+modo de mantenimiento— debe llegar con su **disparador declarado en el
+mismo commit**: una entrada en el flujo de trabajo, una llamada desde
+donde corresponde, o un cron. No en el siguiente commit, no "cuando haga
+falta".
+
+- Si al terminar no se puede responder **"lo ejecuta X, cuando Y"**, el
+  trabajo no está hecho.
+- Un método nuevo en una clase que nadie invoca es lo mismo que un archivo
+  vacío, con el agravante de que parece resuelto.
+- **Buscar quién lo llama antes de darlo por hecho.** Un `grep` del nombre
+  habría ahorrado los meses de `marcar_adquirido()`.
+
+## Regla 2 — Una comprobación desconectada es una comprobación que no existe
+
+Toda herramienta de verificación configurada tiene que estar **conectada a
+algo que la ejecute**, y ese algo tiene que correr sin que nadie se
+acuerde.
+
+- Una regla de linter que CI no corre no protege nada.
+- Dos comprobaciones distintas no se sustituyen: el compilador de tipos no
+  ve un hook mal colocado y el linter no ve un tipo mal. Las dos pasaron en
+  verde con la pantalla vacía.
+- Ante un defecto que llegó a producción, la pregunta no es solo *"¿qué
+  comprobación falta?"* sino **"¿había una comprobación que existía y no se
+  ejecutaba?"**. Es lo más común.
+
+## Regla 3 — Una prueba que pasa no es una prueba que sirve
+
+- **La mitad de las pruebas de una regla deben ser NEGATIVAS**: comprobar
+  que lo que no debe pasar, no pasa. Un clasificador se prueba sobre todo
+  con vocabulario que **no** debe clasificar nada; un cortador de texto,
+  con citas que **no** deben abrir un corte.
+- **No escribir la prueba desde el código que prueba.** `test_r2.py`
+  afirmaba `if devuelta != key: FALLA`, que era exactamente lo que el
+  código hacía mal: comprobaba que el componente hiciera lo que hacía, no
+  lo que debía hacer. Escribir la prueba desde el REQUISITO —"el original
+  tiene que estar en el almacén, no solo la clave anotada"— la habría hecho
+  fallar el primer día.
+- **Probar contra datos REALES.** Una suite entera pasaba en verde con
+  oraciones inventadas mientras 29 de 81 documentos quedaban sin clasificar
+  en producción. Los fixtures se capturan de la fuente, con fecha.
+
+## Regla 4 — Medir mal es peor que no medir
+
+Una medición equivocada **no falla**: entrega una conclusión con toda
+naturalidad, y esa conclusión dirige el trabajo.
+
+- **Antes de concluir, mirar el denominador.** ¿De dónde sale, y está
+  completo? Caso real: una medición comparó 450 elementos hallados contra
+  377 "declarados" e informó 175 falsos positivos. Los 175 eran correctos;
+  el denominador estaba truncado por un defecto en otro componente. Sin
+  comprobar el denominador, la conclusión habría sido "arreglar" algo que
+  funcionaba bien.
+- **Un resultado inesperado se investiga antes de aceptarlo**, sobre todo
+  cuando confirma lo que uno temía.
+- **Correr la medición dos veces** antes de darla por buena. Es lo que
+  reveló una falsa alarma que se disparaba en cada corrida.
+- **Una alerta que siempre suena no es una alerta**, y una que nunca puede
+  sonar tampoco. Toda excepción escrita para un caso legítimo hay que
+  probarla contra un caso ilegítimo: una excepción para "esta fuente no se
+  inventaría" se tragó una fuente mal escrita durante 19 días.
+
+## Regla 5 — Lo que se declara no se deduce
+
+Cuando una regla del negocio se puede escribir en una tabla, **escribirla**,
+aunque parezca deducible de los datos. Deducirla parece más robusto —no hay
+lista que mantener— y es lo contrario: un error de tipeo se disfraza de
+caso nuevo y la deducción lo bendice.
+
+Es la misma exigencia de *fuente única de verdad* de la parte I, aplicada
+antes de que exista el problema: si dos componentes tienen que saber lo
+mismo, eso es una tabla, no una constante ni una inferencia.
+
+## Regla 6 — La deuda que se retira se escribe
+
+La pregunta 15 —*"¿qué código debería eliminarse?"*— necesita **un lugar
+donde vivir**. Una respuesta dada en una conversación no sobrevive a la
+conversación, y el código que iba a retirarse se queda para siempre.
+
+Cada proyecto mantiene una lista visible de **deuda a retirar**: qué,
+por qué, y con qué hito se borra. En JustiRed vive en
+`diseno-sorsabsa/docs/modelo_justired.md`.
+
+## Criterio de aceptación de la parte II
+
+Una solución está terminada solo si además: **se puede ejecutar + hay algo
+que la ejecuta + existe una prueba que fallaría si el defecto volviera + si
+se apoya en una medición, el denominador está comprobado + lo que reemplaza
+quedó anotado para retirarse.**
