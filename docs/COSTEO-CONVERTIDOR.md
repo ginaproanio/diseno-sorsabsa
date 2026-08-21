@@ -72,6 +72,45 @@ dos columnas del Registro Oficial a un orden de lectura correcto. La métrica
 compara contra un texto lineal, así que castiga precisamente lo que puede ser
 mejor salida. No usar esa columna sola para descartar Opus.
 
+## 3-bis · Lo que la prueba sintética NO mostraba
+
+Gina, al aprobar el cambio: *"haz con haiku, pero aspiro que no baje la
+calidad"*. Dos páginas sintéticas son poca base para eso, así que se repitió
+sobre **fotos reales sin procesar** (`copias expediente`, 6 de 51 hojas), con
+los dos modelos y el mismo perfil. Ahí apareció el matiz:
+
+| Tipo de hoja | Coincidencia Opus/Haiku |
+|---|---|
+| Texto mecanografiado (5 hojas) | 83% – 92% — empate práctico |
+| **Lámina fotográfica (1 hoja)** | **12,9% — no es empate** |
+
+Esa hoja son cinco fotografías del sitio del hecho, con foliación manuscrita y
+sello. Lo que leyó cada uno:
+
+| | Opus 5 | Haiku 4.5 |
+|---|---|---|
+| Placa del vehículo | `PYA-082` | no la vio |
+| Foliación manuscrita | `CUARENTA Y OCHO`, `ciento dieciseis` | `-2 Jo 4 2` |
+| Sello | `ARCHIVO GENERAL DE LA DIRECCIÓN PROVINCIAL DE PICHINCHA` | "texto ilegible" |
+| Las 5 fotografías | descritas una por una | secciones vacías |
+
+**Se buscó un disparador barato para escalar solo esas hojas** —comparar lo que
+devuelve el modelo contra lo que ya sacó Tesseract— **y no sirve**: en esa misma
+hoja Tesseract sacó 136 caracteres, menos que Haiku, así que no se activaría.
+Probado antes de descartarlo.
+
+### La decisión: el modelo depende del perfil
+
+No hay truco técnico; hay dos economías distintas.
+
+| Perfil | Modelo | Por qué |
+|---|---|---|
+| `conversion` | `claude-haiku-4-5` | Es el producto de $9/mes. Su material típico es texto mecanografiado, donde los modelos empatan. 51 hojas: **$0,31** en vez de $3,42. |
+| `pericial` | `claude-opus-5` | No se vende a $9. Una placa o una foliación manuscrita puede ser materia de prueba, y perderla no se arregla con un reintento. |
+
+`VISION_MODEL` sigue existiendo y pisa a los dos, para forzar uno sin tocar
+código.
+
 ## 4 · Lo que NO cuesta
 
 Conviene tenerlo presente antes de sobredimensionar el problema: **la ruta de
