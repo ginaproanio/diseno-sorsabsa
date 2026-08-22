@@ -932,6 +932,83 @@ esta tarde, y por qué?".
 
 ---
 
+### 🟠-8 — ✅ CORREGIDO 22-ago-2026, commit `agente24siete@6b9a69a` — El producto tiene DOS poblaciones y la web UNA sola puerta: la administradora entra por la de clientes, es rechazada con razón, y sale a un callejón cerrado en círculo
+
+**1. Síntoma.** Gina, tres veces seguidas en la misma noche: *"INTENTO entrar
+por google y me dice Cuenta sin cliente asociado — Entraste como
+gina.proanio76@gmail.com"*. La pantalla era **correcta** en todo: la cuenta es
+la suya, y efectivamente no está en `clientes`. Y aun así la dejaba afuera.
+
+**2. Causa inmediata.** El único "Ingresar" de la web (`app/page.tsx`) apunta
+a `/portal`, fijo. Al panel solo se llega escribiendo `/admin` a mano: **no
+está enlazado desde ninguna parte del producto** (relevado hoy: cero
+enlaces a `/admin` fuera del propio panel).
+
+**3. Causa raíz.** agente24siete tiene **dos poblaciones distintas** —
+`usuarios` (quien administra) y `clientes` (quien contrata) — y una sola
+entrada, escrita cuando "quien entra" significaba una sola cosa. No es un
+fallo del gate: el gate hace exactamente lo que debe. Falta una puerta.
+
+Y el círculo se cierra por el propio contrato de salida: "Salir" lleva al
+`redirectUrl` de `apps.ts` —la landing— cuya única puerta es otra vez
+`/portal`. Cada intento honesto de volver a entrar termina en la misma
+pantalla. **Un rechazo correcto, repetido en bucle, es indistinguible de un
+producto roto**, que es la misma familia de 🟠-7.
+
+**4. Componente responsable.** La entrada del producto. Dos candidatos reales:
+la landing (que podría ofrecer las dos puertas) o `/portal` (que puede
+enrutar a quien no es cliente). Se eligió `/portal`: mantiene **una sola
+puerta pública** —no hay que decidir si un enlace de administración va en una
+página de marketing— y pone la decisión donde ya está la información.
+
+**5. Código afectado:** `app/portal/LoginGate.tsx`. Nada más.
+
+**6. Fix aplicado.** Cuando el portal rechaza a alguien por no ser cliente,
+consulta `/api/admin/whoami` **antes** de mostrar la pantalla terminal. No
+decide nada por su cuenta: le pregunta a la autoridad que ya existe
+(`usuarios`, vía el mismo endpoint que usa el panel). Sirve el token del
+portal porque `autenticarAdmin` resuelve por el claim `email` del JWT, no por
+de qué llave de `localStorage` salió. Si la respuesta es 200, la pantalla
+ofrece *"Ir al panel de administración"* y el texto deja de aconsejarle que
+pida el alta como cliente.
+
+Las tres preguntas de alarma del estándar, respondidas:
+
+- **¿Es una excepción?** No. No hay ningún `if email === …` ni `if app === …`:
+  la condición es "esta identidad está en `usuarios`", que es un dato, no una
+  constante.
+- **¿Es un bypass?** No. El panel sigue decidiendo su propio acceso y el viaje
+  a `/admin` pasa por `middleware.ts` y por el portero como cualquier otro. No
+  se copia ningún token de una llave a la otra — eso sí habría sido un bypass.
+- **¿Duplica lógica?** No. `SinAcceso.secundaria` está documentado
+  literalmente para esto: *"otro lugar del producto donde la persona SÍ tiene
+  lugar"*. Era la pieza correcta, escrita y sin usar — el mismo patrón que
+  🟠-7, donde `mensaje` ya aceptaba nodos "para poder resaltar el email".
+
+**Fallback, explícito:** si `/api/admin/whoami` no se puede consultar (red
+caída), **no se ofrece nada**. Nunca se insinúa un permiso que no se pudo
+comprobar — la dirección prohibida por *fallback peligroso*.
+
+**7. Código que debe eliminarse:** ninguno.
+
+**8. Riesgo de regresión:** bajo. Solo agrega un botón a una rama que ya era
+terminal. El camino de un cliente real no se toca: llega a `sin_cliente` solo
+quien ya fue rechazado.
+
+**9. Validación:** ⬜ la hace Gina — entrar por "Ingresar" de la landing con
+su cuenta y confirmar que la pantalla ahora ofrece el panel. ❌ Sin prueba
+automática (pregunta 17).
+
+**Lo que este hallazgo NO resuelve, dicho como tal.** La puerta pública sigue
+siendo una sola y sigue llamándose "Ingresar" hacia `/portal`. Quien
+administra pasa por un rechazo antes de llegar a donde va — mejor que un
+callejón, peor que una puerta. Si algún día hay más de una persona
+administrando, **la decisión de fondo es de Gina**: o la landing ofrece las
+dos puertas, o `/portal` deja de ser la entrada y pasa a serlo una ruta que
+enrute por quién sos. No se eligió por ella.
+
+---
+
 ---
 
 ## 🟡 MEDIO
@@ -1113,6 +1190,10 @@ en el lugar equivocado.
     🟡-2 se veía como una expulsión. **Un portero que rechaza bien por el
     motivo equivocado es indistinguible de uno que funciona** — hasta que
     alguien lo usa de verdad.
+  - **🟠-8 se sumó más tarde esa misma noche** (`6b9a69a`), y es el que mejor
+    resume el día: la pantalla que 🟠-7 había arreglado funcionaba
+    perfectamente y **seguía dejando a Gina afuera**, porque el defecto no
+    estaba en lo que decía sino en que al producto le faltaba una puerta.
   - **Deuda a retirar** (parte II, regla 6): el argumento `tokenKey` de
     `limpiarSesionLocal`, hoy ignorado a propósito, en la firma y en sus tres
     call sites. Se borra al tocar cualquiera de esos archivos por otro motivo.
