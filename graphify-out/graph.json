@@ -1293,7 +1293,7 @@
       "file_type": "code",
       "norm_label": "notificationbell()",
       "source_file": "src/components/NotificationBell.tsx",
-      "source_location": "L57"
+      "source_location": "L59"
     },
     {
       "id": "src_hooks_useonclickoutside_useonclickoutside",
@@ -5895,7 +5895,7 @@
       "file_type": "code",
       "norm_label": "type_color",
       "source_file": "src/components/NotificationBell.tsx",
-      "source_location": "L32"
+      "source_location": "L34"
     },
     {
       "id": "src_components_notificationbell_type_icon",
@@ -5906,7 +5906,7 @@
       "file_type": "code",
       "norm_label": "type_icon",
       "source_file": "src/components/NotificationBell.tsx",
-      "source_location": "L25"
+      "source_location": "L27"
     },
     {
       "id": "src_hooks_useonclickoutside",
@@ -10714,7 +10714,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/NotificationBell.tsx",
-      "source_location": "L68",
+      "source_location": "L71",
       "weight": 1.0
     },
     {
@@ -22263,7 +22263,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/NotificationBell.tsx",
-      "source_location": "L25",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -22274,7 +22274,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/NotificationBell.tsx",
-      "source_location": "L32",
+      "source_location": "L34",
       "weight": 1.0
     },
     {
@@ -22285,7 +22285,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/NotificationBell.tsx",
-      "source_location": "L57",
+      "source_location": "L59",
       "weight": 1.0
     },
     {
@@ -23411,5 +23411,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "fba3842a6b9dcb5ef9f20779e5b6b2183b3c6156"
+  "built_at_commit": "7b66ff6e92f355d62f1133767f78fa59629fc5dc"
 }
