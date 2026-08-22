@@ -2017,7 +2017,7 @@ pregunta de arriba.
 | **CondoManager** | ✅ onboarding propio | ✅ Capa 1 | ⚠️ **Capa 2 imposible**: `pagos.comercios` vacía, ningún condominio puede cobrar alícuotas |
 | **JustiRed** | ✅ | ✅ Capa 1 | ⚠️ el `sujeto` de su suscripción no es estable: cada renovación crea fila nueva en vez de extender |
 | **DomusCRM** | ✅ onboarding propio | ❌ **no existe página de pago** | — |
-| **agente24siete** | ❌ **imposible si ya tiene cuenta en el ecosistema** (409) | — | ❌ **no hay canal**: WhatsApp baneado por Meta, Twilio sin número |
+| **agente24siete** | ⚠️ sí, pero **solo el admin da de alta** — ya no rechaza a quien tiene cuenta en el ecosistema, y desde el 22-ago hay pantalla para hacerlo | — | ❌ **no hay canal**: WhatsApp baneado por Meta, Twilio sin número |
 | **Forensic** | — | ❌ **cobro sin implementar** (Fase 5) | — |
 
 **Traducido a negocio: de seis productos, hoy solo UNO puede venderse y
@@ -2030,12 +2030,12 @@ entregarse de punta a punta.** Y hasta esta mañana, ninguno.
    entidad. Es el producto más cerca de vender y lo detiene un dato ausente.
 2. **DomusCRM · sin ruta de pago.** No es configuración: la pantalla y el
    endpoint no están escritos.
-3. **agente24siete · dos bloqueos encadenados.** (a) El alta rechaza a quien ya
-   tiene identidad en el ecosistema —`acceso-cliente.js` aborta si
-   `createUser` de identity dice "ya existe"— así que un admin de CondoManager
-   que además contrate esto **no puede darse de alta nunca**. (b) Aunque se
-   diera de alta, no hay canal que entregar. Decisión de Gina del 22-ago: no se
-   gasta en números (ver §24.10-bis).
+3. **agente24siete · queda un bloqueo, de los dos que había.** (a) ~~El alta
+   rechaza a quien ya tiene identidad en el ecosistema~~ — **cerrado el
+   22-ago-2026**, ver §27: `acceso-cliente.js` ahora asegura la identidad en
+   vez de crearla, y existe la pantalla que faltaba para dar de alta.
+   (b) **Sigue abierto:** aunque se dé de alta, no hay canal que entregar.
+   Decisión de Gina del 22-ago: no se gasta en números (ver §24.10-bis).
 4. **JustiRed · sujeto inestable.** Cobra, pero la suscripción no se acumula.
 5. **Forensic · cobro sin escribir.**
 
@@ -2052,3 +2052,81 @@ pasa no es una prueba que sirve"*—. Esta sección es su forma concreta:
 datos reales, hasta que reciba lo que compró.** Ninguna otra comprobación
 sustituye eso.
 
+---
+
+## 27. ✅ agente24siete ya se puede dar de alta — y el agujero que apareció al hacerlo (22-ago-2026)
+
+### El hueco: código escrito que nadie ejecutaba
+
+`/api/admin/clientes` y `/api/admin/acceso-cliente` existían, funcionaban y
+estaban probados contra la base. **Ninguna pantalla los llamaba.** Dar de alta
+un cliente exigía escribir SQL a mano — es decir, en la práctica el producto
+no se le podía vender a nadie, aunque cada pieza por separado estuviera bien.
+
+Es el caso literal de `ESTANDAR-DESARROLLO.md` Parte II regla 1 (*código que
+nadie ejecuta*), y la razón por la que §26 se pregunta por el camino del
+usuario y no por el estado del código: acá el código estaba **completo**.
+
+### Lo hecho ✅ — `app/admin/clientes`
+
+- **Alta** con los datos que exige el SRI para facturar (razón social, RUC,
+  dirección) y contacto, en formulario **en la misma página**. Sin modales
+  (`ESTANDAR-UI.md` §1).
+- **Lista** con los tres estados reales de acceso —con acceso · invitado que
+  todavía no entró · sin acceso—, cuántos negocios cuelgan del cliente, y su
+  suscripción.
+- **Dar acceso** expandido bajo la fila, también en línea.
+- El menú del panel se unificó en `AdminNav.tsx` (una sola lista para
+  escritorio y móvil) — donde apareció que **`/admin/negocios` existía sin
+  estar enlazada en ningún lado**: solo se llegaba escribiendo la URL.
+- Se retiraron los tres `prompt()` de `/admin/contactos`, que violaban
+  `ESTANDAR-UI.md` §1 desde antes de que la regla se escribiera.
+
+### Lo que la pantalla dice y el sistema antes se callaba
+
+Tres cosas que ocurrían en silencio y ahora se ven:
+
+1. **La contraseña que el admin escribe puede no aplicarse.** Si la persona ya
+   tiene cuenta en el ecosistema —el caso normal en cuanto hay dos productos,
+   porque identity es una sola— entra con la suya. El endpoint ya devolvía
+   `identidadYaExistia`; nadie lo mostraba. Sin ese aviso el admin le dicta al
+   cliente una clave que no funciona.
+2. **El período de prueba puede no crearse.** El trial vive en pagos-sorsabsa y
+   su fallo no aborta el alta (a propósito). El resultado se descartaba: un
+   cliente sin trial se veía idéntico a uno con trial, y se enteraba el usuario
+   final cuando el bot dejaba de contestarle.
+3. **"No tiene suscripción" y "no pude preguntar" son cosas distintas.**
+   `consultarSuscripcionCliente` las separa. Colapsarlas haría que un corte de
+   pagos-sorsabsa se lea como *"todos tus clientes están vencidos"*; colapsarlas
+   al revés sería el fallback peligroso que `ESTANDAR-DESARROLLO.md` prohíbe.
+
+### 🔴 Y el agujero que apareció al leer los endpoints
+
+Los **11** endpoints de `pages/api/admin/` llamaban a `autenticarAdmin` **sin
+`await`**. Como es `async`, devolvía una Promesa —siempre truthy— así que el
+`if (!usuario) return` **nunca se cumplía** y el cuerpo del handler se
+ejecutaba con la sesión ya rechazada: `crearCliente` insertaba,
+`crearTrialCliente` disparaba y `acceso-cliente` llegaba a `createUser` **en el
+Supabase de identidad compartido de todo el ecosistema**.
+
+Análisis completo, tabla de carreras y verificación en producción:
+`AUDITORIA-AGENTE24SIETE.md` 🔴-2. Corregido en `agente24siete@16ef1db`.
+
+**Lo importante de este hallazgo no es el bug, es cómo se veía:** las
+respuestas eran 401 y 403 correctos. Desde afuera el panel parecía
+autenticado. No lo encontró ninguna auditoría de seguridad ni ningún check —
+apareció al ir a construir la pantalla que faltaba.
+
+### Lo que queda 🟡
+
+- **No hay comprobación automática que impida que el `await` se vuelva a
+  perder.** El contrato quedó escrito en el docblock de `lib/adminAuth.js`,
+  y eso es todo lo que lo sostiene. `pages/api/**` es `.js` sin tipos;
+  lo que sí lo marcaría es la regla `@typescript-eslint/no-floating-promises`.
+  **No está puesta. Anotado, no resuelto.**
+- **El alta sigue siendo solo del admin.** No hay autoservicio, y es
+  deliberado — ver §24.10-bis.
+- **Y el bloqueo que manda: no hay canal.** Un cliente dado de alta, con
+  acceso y con suscripción, todavía no recibe lo que compró: WhatsApp está
+  baneado por Meta y Twilio no tiene número. La pantalla saca a agente24siete
+  del "no se puede ni empezar", no del "no se puede entregar".

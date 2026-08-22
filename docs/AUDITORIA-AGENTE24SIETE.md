@@ -294,6 +294,107 @@ seguir parcheando síntomas:
 
 ---
 
+### 🔴-2 — ✅ CORREGIDO 22-ago-2026, commit `agente24siete@16ef1db` — Los 11 endpoints de `pages/api/admin/` llamaban a `autenticarAdmin` sin `await`: el `if (!usuario) return` nunca se cumplía y el cuerpo del handler se ejecutaba con la sesión rechazada
+
+**1. Síntoma:** ninguno visible. Nadie reportó nada — las respuestas seguían
+siendo 401 y 403 correctos, así que desde afuera el panel parecía autenticado.
+Se encontró leyendo los endpoints para construir la pantalla `/admin/clientes`,
+no por una falla observada. Esto es parte del hallazgo: **un agujero de
+autenticación que devuelve el código de estado correcto no se manifiesta.**
+
+**2. Causa inmediata:** el patrón repetido en cabecera de cada handler:
+
+```js
+const usuario = autenticarAdmin(req, res);   // sin await
+if (!usuario) return;
+```
+
+`autenticarAdmin` es `async`. Una función `async` devuelve **siempre** una
+Promesa, y una Promesa es **siempre** truthy — incluso la que va a resolver a
+`null`. Así que `if (!usuario)` nunca es verdadero y **el `return` nunca se
+ejecuta**. El handler sigue de largo hacia su lógica de negocio mientras la
+comprobación de sesión corre en paralelo, sin nadie esperándola.
+
+Comprobado con una reproducción del patrón exacto (no deducido):
+
+```
+>> el cuerpo del handler SE EJECUTÓ pese al 401
+RESPUESTA AL CLIENTE: 401 No autorizado
+(descartado 200)
+```
+
+**3. Causa raíz:** `autenticarAdmin` cambió a `async` en la Fase 3, cuando el
+panel dejó de firmar su propio JWT y pasó a verificar el token del portero
+contra el JWKS (`await jwtVerify`) más un `SELECT` sobre `usuarios`. Los call
+sites venían de la versión síncrona anterior y **no se actualizaron**. Nada lo
+detectó: no hay TypeScript en `pages/api/**` (son `.js`), y ninguna prueba
+ejercita un endpoint admin con sesión inválida. El equivalente del portal
+—`autenticarCliente`, mismo cambio, mismo día— sí quedó con `await` en sus 12
+call sites; el admin quedó atrás y nadie volvió a mirar.
+
+**4. Componente responsable:** los call sites, no `autenticarAdmin`. La función
+hace lo correcto; el contrato "hay que esperarla" no estaba escrito en ningún
+lado y se perdió en la migración.
+
+**5. Código afectado:** los 11 endpoints de `pages/api/admin/` —
+`acceso-cliente`, `clientes`, `conocimiento`, `contactos`, `conversaciones`,
+`estadisticas`, `leads`, `negocios`, `pagos`, `pipelines`, `usuarios`. El único
+correcto era `whoami.js`, escrito después, ya con `await`.
+
+**6. Impacto real — dos cosas distintas, y la segunda es la grave:**
+
+*(a) Los efectos secundarios corrían igual.* Independientemente de quién ganara
+la carrera por la respuesta, el cuerpo del handler se ejecutaba: `crearCliente`
+insertaba en la base, `crearTrialCliente` llamaba a pagos-sorsabsa, y
+`acceso-cliente` llegaba hasta `createUser` **en el Supabase de identidad
+compartido de todo el ecosistema**. Un POST con un token cualquiera creaba
+identidades aunque el emisor recibiera 401.
+
+*(b) La lectura podía filtrarse.* Quién responde primero es una carrera:
+
+| caso | camino de la comprobación | camino del handler | quién gana |
+|---|---|---|---|
+| sin header `Authorization` | responde 401 **antes del primer `await`**, o sea síncrono | ni arranca | la comprobación, siempre |
+| `Bearer` con basura | `jwtVerify` falla rápido (ni parsea) | consulta a Postgres | la comprobación, por poco |
+| **token válido de alguien que NO es admin** | `jwtVerify` **+ `SELECT` sobre `usuarios`** | **un solo `SELECT`** | **puede ganar el handler** |
+
+El tercer caso es el que importa: identity es **una sola** para todo SORSABSA,
+así que cualquier persona con cuenta en cualquier producto —un cliente de
+CondoManager, por ejemplo— tiene un token que `jwtVerify` acepta. A partir de
+ahí la comprobación necesita una consulta más que el handler, y la lista
+completa de clientes de agente24siete podía salir antes que el 403.
+
+Verificado en producción para los dos primeros casos (`curl` sin header y con
+`Bearer no-soy-un-token` contra `www.agente24siete.app/api/admin/clientes`):
+401 en ambos. El tercero no se probó en vivo — habría exigido crear una
+identidad real en el proyecto compartido — y no hacía falta: el fix es
+correcto gane quien gane la carrera, y (a) ocurre en los tres casos.
+
+**7. Fix aplicado:** `await` en los 11 call sites. Nada más — no hay cambio de
+diseño, la comprobación siempre estuvo bien escrita.
+
+**8. Lo que impide que vuelva:** el contrato quedó escrito en el docblock de
+`lib/adminAuth.js`, con el porqué y con la fecha. Es lo único que hoy lo
+sostiene: **no hay comprobación automática que lo detecte**, y no la habrá
+mientras `pages/api/**` sea `.js` sin tipos (con TypeScript, `if (!promesa)`
+sobre un `Promise<T | null>` no da error tampoco — habría que mirar
+`@typescript-eslint/no-floating-promises`, que sí lo marca). Anotado como
+pendiente, no resuelto.
+
+**9. Riesgo de regresión:** ninguno. Agregar `await` solo hace que el `return`
+funcione como siempre se pretendió. `npx tsc --noEmit` y `npm run build`
+limpios; los 11 endpoints siguen compilando y respondiendo igual ante sesión
+válida.
+
+**Nota de método.** Esto no lo encontró ninguna auditoría de seguridad ni
+ningún check: apareció al ir a construir la pantalla que faltaba. Es el mismo
+patrón que 🔴-5 de `AUDITORIA-PORTERO-SSO.md` y que el `pipefail` del check de
+conformidad — **lo que no se ejecuta de verdad no se sabe si funciona**, y una
+comprobación de seguridad que devuelve el código correcto por accidente es
+indistinguible de una que funciona.
+
+---
+
 ## 🟠 IMPORTANTE
 
 ### 🟠-1 — ✅ CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578` — No existe botón de cerrar sesión en ningún panel — y la versión ingenua repetiría un bug ya corregido en CondoManager e identity
