@@ -1988,3 +1988,67 @@ Los cinco productos quedaron en `@sorsabsa/ui` **v0.1.55**.
 **Falta configurar, y sin esto la campana sale vacía** (lo dice por consola, no
 falla en silencio): `NOTIFICACIONES_API_URL` y `NOTIFICACIONES_API_KEY` en los
 proyectos Vercel de **Convertidor** y **agente24siete**.
+
+---
+
+## 26. 🔴 ¿Puede un usuario comprar y recibir lo que compró? (22-ago-2026)
+
+**Por qué esta sección se escribe así.** Gina, al cerrar el día:
+
+> *"si no sirve para que compren, el esfuerzo de 6 meses no sirve para nada.
+> Un usuario: vale o no vale. Tú puedes decir que el código es maravilloso,
+> pero si para el usuario tiene un error, el sistema no vale."*
+
+Tiene razón, y las listas anteriores de este documento están escritas al
+revés: agrupadas por defecto técnico, no por lo que le pasa a la persona que
+intenta pagar. Esta es la única tabla que decide si hay negocio.
+
+El ejemplo que lo prueba, encontrado hoy: en el Convertidor el código estaba
+bien, la pantalla decía **"¡Pago confirmado!"**, y el cliente **no recibía
+nada** — porque nadie llamaba a `Confirm` y PayPhone reversaba el cobro a los
+5 minutos. Ningún test lo habría visto; ninguna métrica lo mostraba. Solo la
+pregunta de arriba.
+
+### El estado real, producto por producto
+
+| Producto | ¿Se puede registrar? | ¿Puede pagar? | ¿Recibe lo que compró? |
+|---|---|---|---|
+| **Convertidor** | ✅ desde hoy | ✅ verificado con pago real | ✅ desde hoy — **antes no** |
+| **CondoManager** | ✅ onboarding propio | ✅ Capa 1 | ⚠️ **Capa 2 imposible**: `pagos.comercios` vacía, ningún condominio puede cobrar alícuotas |
+| **JustiRed** | ✅ | ✅ Capa 1 | ⚠️ el `sujeto` de su suscripción no es estable: cada renovación crea fila nueva en vez de extender |
+| **DomusCRM** | ✅ onboarding propio | ❌ **no existe página de pago** | — |
+| **agente24siete** | ❌ **imposible si ya tiene cuenta en el ecosistema** (409) | — | ❌ **no hay canal**: WhatsApp baneado por Meta, Twilio sin número |
+| **Forensic** | — | ❌ **cobro sin implementar** (Fase 5) | — |
+
+**Traducido a negocio: de seis productos, hoy solo UNO puede venderse y
+entregarse de punta a punta.** Y hasta esta mañana, ninguno.
+
+### Lo que bloquea cada uno, en orden de cercanía a una venta
+
+1. **CondoManager · Capa 2 sin comercios.** El código está y es fail-closed, así
+   que hoy falla para todo condominio. Falta dar de alta credenciales por
+   entidad. Es el producto más cerca de vender y lo detiene un dato ausente.
+2. **DomusCRM · sin ruta de pago.** No es configuración: la pantalla y el
+   endpoint no están escritos.
+3. **agente24siete · dos bloqueos encadenados.** (a) El alta rechaza a quien ya
+   tiene identidad en el ecosistema —`acceso-cliente.js` aborta si
+   `createUser` de identity dice "ya existe"— así que un admin de CondoManager
+   que además contrate esto **no puede darse de alta nunca**. (b) Aunque se
+   diera de alta, no hay canal que entregar. Decisión de Gina del 22-ago: no se
+   gasta en números (ver §24.10-bis).
+4. **JustiRed · sujeto inestable.** Cobra, pero la suscripción no se acumula.
+5. **Forensic · cobro sin escribir.**
+
+### La lección de método, que es la que se repitió todo el día
+
+Cada defecto de esta lista **existía desde hacía semanas o meses** y ninguno
+apareció por leer código: aparecieron al **intentar usar el producto**. El
+cobro muerto salió al mirar los logs; el "¡Pago confirmado!" que mentía, al
+mirar la base después de un pago real; el 409 del alta, al intentar entrar.
+
+`ESTANDAR-DESARROLLO.md` parte II ya lo dice en abstracto —*"una prueba que
+pasa no es una prueba que sirve"*—. Esta sección es su forma concreta:
+**antes de dar algo por hecho, recorrer el camino del usuario completo, con
+datos reales, hasta que reciba lo que compró.** Ninguna otra comprobación
+sustituye eso.
+
