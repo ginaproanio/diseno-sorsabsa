@@ -1,0 +1,106 @@
+name: conformidad del ecosistema
+
+# Comprueba que ningún producto reimplemente lo que los sistemas compartidos ya
+# dan. Nació el 22-ago-2026 después de encontrar A MANO, leyendo, que la campana
+# estaba en @sorsabsa/ui y tres productos la habían reimplementado. Arreglar
+# instancias a mano no impide la siguiente; esto es lo que la nota.
+#
+# **Avisa por CORREO, no solo poniéndose en rojo.** Un rojo que nadie mira es lo
+# mismo que no tener comprobación, y ya hay precedente en el ecosistema de
+# comprobaciones que llevaban semanas en verde sin poder detectar nada.
+#
+# Si falta el canal de aviso, el propio job lo grita en vez de seguir en
+# silencio: una alerta que no puede sonar tampoco es una alerta.
+
+on:
+  schedule:
+    - cron: '0 12 * * 1'   # lunes 07:00 en Ecuador — semanal, no diario: esto
+                           # cambia con los commits, no con las horas.
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/index.ts'                 # cambió lo que el design system ofrece
+      - 'src/scripts/conformidad.mjs'
+      - '.github/workflows/conformidad.yml'
+
+permissions:
+  contents: read
+  issues: write     # para dejar el hallazgo donde no se pierda
+
+jobs:
+  comprobar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Comprobar conformidad
+        id: check
+        continue-on-error: true
+        env:
+          GH_ECOSISTEMA_TOKEN: ${{ secrets.GH_ECOSISTEMA_TOKEN }}
+        run: |
+          if [ -z "${GH_ECOSISTEMA_TOKEN:-}" ]; then
+            echo "::error::Falta el secret GH_ECOSISTEMA_TOKEN (PAT con lectura de los repos del ecosistema)."
+            echo "Sin él este check NO puede leer los grafos y no comprueba nada."
+            exit 1
+          fi
+          node src/scripts/conformidad.mjs | tee informe.txt
+
+      - name: Dejarlo en el resumen del job
+        if: always()
+        run: |
+          {
+            echo '## Conformidad del ecosistema'
+            echo '```'
+            cat informe.txt 2>/dev/null || echo '(el check no llegó a producir informe)'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Avisar por correo
+        if: steps.check.outcome == 'failure'
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          EMAIL_AVISOS_INTERNOS: ${{ secrets.EMAIL_AVISOS_INTERNOS }}
+        run: |
+          if [ -z "${RESEND_API_KEY:-}" ] || [ -z "${EMAIL_AVISOS_INTERNOS:-}" ]; then
+            echo "::error::Hay desvíos de conformidad y NO se pudo avisar por correo:"
+            echo "::error::faltan los secrets RESEND_API_KEY y/o EMAIL_AVISOS_INTERNOS."
+            echo "Un hallazgo que no llega a nadie es un hallazgo perdido."
+            exit 0
+          fi
+          cuerpo=$(cat informe.txt 2>/dev/null || echo "sin informe")
+          node -e '
+            const cuerpo = process.argv[1];
+            const html = "<p>El check de conformidad del ecosistema encontró desvíos:</p><pre>"
+              + cuerpo.replace(/[<>&]/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]))
+              + "</pre><p>Cada desvío es código que se mantiene dos veces y se arregla una.</p>";
+            fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: {
+                Authorization: "Bearer " + process.env.RESEND_API_KEY,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                // auth.sorsabsa.com es el único dominio verificado en Resend
+                // para todo el ecosistema (ver condomanager/lib/email/service.ts).
+                from: "SORSABSA <no-reply@auth.sorsabsa.com>",
+                to: process.env.EMAIL_AVISOS_INTERNOS,
+                subject: "[Conformidad] Hay productos que reimplementan lo compartido",
+                html,
+              }),
+            })
+              .then(r => r.json())
+              .then(d => { console.log("Resend:", JSON.stringify(d)); })
+              .catch(e => { console.log("::error::No se pudo enviar el correo: " + e.message); });
+          ' "$cuerpo"
+
+      - name: Ponerse en rojo si hay desvíos
+        if: steps.check.outcome == 'failure'
+        run: |
+          echo "::error::Hay desvíos de conformidad — ver el resumen del job."
+          exit 1

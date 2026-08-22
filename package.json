@@ -19,7 +19,9 @@
   ],
   "scripts": {
     "test": "jest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "conformidad": "node src/scripts/conformidad.mjs",
+    "conformidad:local": "node src/scripts/conformidad.mjs --local C:/condomanager C:/crm_inmobiliario C:/legaltech C:/agente24siete C:/auth-sorsabsa C:/convertidor C:/pagos-sorsabsa"
   },
   "peerDependencies": {
     "framer-motion": ">=11",
