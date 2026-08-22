@@ -1878,7 +1878,7 @@ de arriba.
 
 ---
 
-## 25. 🟡 La campana tiene que ser LA MISMA en todos los productos (22-ago-2026)
+## 25. ✅ La campana es LA MISMA en todos los productos (cerrado 22-ago-2026)
 
 **Requisito de Gina, repetido varias veces y nunca cumplido del todo:** la
 campana de notificaciones va **siempre en la esquina superior derecha, antes
@@ -1954,3 +1954,37 @@ están en él.
 "lo reimplementó suelto dentro de un archivo" — que es exactamente lo de
 CondoManager. La regla que faltaría: marcar la importación directa de iconos de
 `lucide-react` que el design system ya envuelve.
+
+### ✅ Cerrado el 22-ago-2026 — los cinco productos
+
+| Producto | Cómo quedó |
+|---|---|
+| CondoManager | Adaptador `CampanaNotificaciones` + se retiró su campana suelta, su contador y la prop `notifCount` |
+| DomusCRM | Adaptador sobre el componente compartido |
+| JustiRed | Adaptador (se borraron ~100 líneas de implementación propia) |
+| Convertidor | Integración completa nueva: puente, 3 rutas, hook y campana |
+| agente24siete | Integración completa nueva **+ barra superior**, que no existía |
+
+**Dos cosas hubo que arreglar en el propio componente compartido**, y las dos
+se descubrieron al ir a migrar CondoManager — o sea, leyendo lo que cada
+producto renderiza, no antes:
+
+1. **Estaba pintado a mano en gris oscuro** (`bg-zinc-900`, `border-zinc-700`,
+   `text-emerald-400`, `font-mono`): el componente del design system ignoraba
+   los tokens del design system. Puesto en CondoManager (verde y oro) o
+   DomusCRM (azul) se veía como un panel ajeno pegado encima — y las
+   implementaciones locales que reemplaza **sí** usaban los tokens, así que
+   unificar tal cual habría sido un retroceso visual en tres productos a la
+   vez. Corregido en **v0.1.54**: ahora hereda del `BrandProvider` de cada
+   producto. Misma campana, la marca de quien la muestra.
+2. **No tenía enlace a la bandeja completa**, y CondoManager sí la tiene, con
+   destino según rol. Migrar sin eso le habría quitado el acceso a esa
+   pantalla. `verTodasHref` se añadió en **v0.1.55**: un componente compartido
+   tiene que cubrir lo que cubrían las implementaciones que reemplaza; si no,
+   "unificar" es degradar.
+
+Los cinco productos quedaron en `@sorsabsa/ui` **v0.1.55**.
+
+**Falta configurar, y sin esto la campana sale vacía** (lo dice por consola, no
+falla en silencio): `NOTIFICACIONES_API_URL` y `NOTIFICACIONES_API_KEY` en los
+proyectos Vercel de **Convertidor** y **agente24siete**.
