@@ -1741,22 +1741,34 @@ también el §21-bis de este documento.
 | Confirmación del Convertidor | Ruta `/api/pagos/confirmar` — antes la pantalla de éxito **mentía** |
 | Puerta de "Crear cuenta" | En `/oauth/consent`, la única pantalla de acceso que el usuario ve |
 
-### 🔴 Lo único que bloquea que un aviso llegue a una persona
+### ✅ El aviso de vencimiento ya llega — en CondoManager (22-ago-2026)
 
-**Ningún producto sabe recibir el aviso de vencimiento.**
-`callback_vencimiento_url` está en NULL en los seis. El cron corre, detecta y
-reporta `sin_receptor`, pero nadie recibe nada.
+`pagos-sorsabsa` **no puede** mandar el aviso y no debe: guarda `sujeto` como
+id opaco, sin nombres ni correos, a propósito. Solo el producto sabe
+traducirlo. Por eso avisa al PRODUCTO, y el producto decide a quién.
 
-`pagos-sorsabsa` **no puede** mandarlo: guarda `sujeto` como id opaco, sin
-nombres ni correos, a propósito. Solo el producto sabe traducirlo. Falta, en
-CondoManager primero: un endpoint que tome `{sujeto, diasRestantes}`, lo
-resuelva a condominio + administrador y mande el correo por
-`notificaciones-sorsabsa`; después un `UPDATE pagos.productos SET
-callback_vencimiento_url=…`.
+`condomanager/app/api/webhooks/vencimiento` resuelve el `sujeto` a condominio y
+manda **dos correos**: al cliente para que renueve, y uno interno a SORSABSA
+con nombre, correo, teléfono y ciudad — porque el objetivo declarado era poder
+**llamar** antes del corte, no solo enterarse. El interno sale incluso si el
+cliente no tiene correo registrado, que es justo el caso en que hay que llamar.
 
-**Por qué importa:** una suscripción que vence en silencio es una venta
-perdida sin que nadie se entere. El administrador debería poder llamar al
-cliente antes del corte.
+Va por **correo** (Resend, el canal propio que CondoManager ya tenía) y **no**
+por la campana de `notificaciones-sorsabsa`: la campana solo la ve quien entra,
+y quien está por vencer es justamente quien dejó de entrar.
+
+Verificado de punta a punta el 22-ago-2026 con una corrida real, y la segunda
+corrida devolvió `ya_avisadas: 6` — no reenvía.
+
+> **Falta el mismo receptor en los demás productos.** `callback_vencimiento_url`
+> sigue en NULL para `domuscrm`, `justired`, `convertidor` y `agente24siete`:
+> el cron los detecta y los reporta en `sin_receptor`, visible en la salida y
+> como `::warning::` de GitHub. Cada uno necesita su propio endpoint, porque
+> cada uno traduce su `sujeto` a otra cosa.
+>
+> **Falta configurar `EMAIL_AVISOS_INTERNOS`** en el proyecto Vercel de
+> CondoManager. Sin esa variable el correo al cliente sale igual, pero el aviso
+> interno no — y avisa por consola en vez de fallar en silencio.
 
 ### 🟠 Cobro incompleto
 
@@ -1862,4 +1874,63 @@ de arriba.
 | # | Qué | Detalle |
 |---|---|---|
 | 24.15 | **JustiRed en rojo, desde antes de esta sesión** | *"Biblioteca Legal: ID inexistente devuelve 404, no revienta el servidor"* está devolviendo **200**: un ID que no existe responde como si existiera. Sin diagnosticar |
+
+
+---
+
+## 25. 🟡 La campana tiene que ser LA MISMA en todos los productos (22-ago-2026)
+
+**Requisito de Gina, repetido varias veces y nunca cumplido del todo:** la
+campana de notificaciones va **siempre en la esquina superior derecha, antes
+del perfil del usuario, en todos los productos del ecosistema**, con el mismo
+diseño. No es una preferencia estética: es el canal por el que se avisa de una
+**urgencia o un problema del ecosistema**, y un canal que no está en todos los
+productos no sirve para eso.
+
+### Lo que había — auditado el 22-ago-2026
+
+| Producto | Campana | Qué usaba |
+|---|---|---|
+| CondoManager | ✅ | `NotificationBell` de `@sorsabsa/ui` (170 líneas), en `DashboardShell` |
+| DomusCRM | ⚠️ | **Propia** (71 líneas): botón `rounded-full` con `p-2`, `Icon` del design system |
+| JustiRed | ⚠️ | **Propia** (102 líneas): `rounded-xl h-10 w-10`, icono `Bell` de **lucide-react** |
+| agente24siete | ❌ | **Ninguna** |
+| Convertidor | ❌ | **Ninguna** |
+
+Cuatro respuestas distintas al mismo elemento. Ni el mismo componente ni el
+mismo diseño — hasta los hooks diferían en los nombres (`noLeidas`/`marcarLeida`
+frente a `unreadCount`/`markRead`). Es la duplicación que persigue
+`ESTANDAR-DESARROLLO.md`: *"la misma regla en producto A y producto B — encontrar
+la fuente única de verdad y que ambos la usen"*.
+
+### Lo hecho ✅
+
+`@sorsabsa/ui` ya exportaba `NotificationBell`, y es **puramente
+presentacional**: recibe `notificaciones`, `unreadCount`, `onMarkRead` y
+`onMarkAllRead` por props. Los datos —de dónde salen y cómo se marcan leídas—
+son de cada producto y se quedan en su hook. Por eso la migración fue mecánica:
+los dos hooks ya devolvían exactamente la forma que el componente espera
+(`id`, `tipo`, `mensaje`, `leida`, `created_at`).
+
+**DomusCRM y JustiRed** pasaron a ser adaptadores de ~30 líneas sobre el
+componente compartido. Sus puntos de uso (layout y Navbar) no cambiaron.
+Verificado con `tsc --noEmit` y el build de cada uno.
+
+### Lo que falta 🟡
+
+**agente24siete y el Convertidor siguen sin campana**, y ahí **no basta un
+adaptador**: ninguno de los dos está integrado con `notificaciones-sorsabsa`.
+Cada uno necesita, en este orden:
+
+1. Las rutas de API que hablen con el servicio compartido (`/api/crear`,
+   `/api/listar`, `/api/marcar-leida`, `/api/marcar-todas-leidas`) con su
+   propia `NOTIFICACIONES_API_KEY`.
+2. Un `useNotifications` que devuelva la forma estándar.
+3. El `NotificationBell` de `@sorsabsa/ui` en su cabecera, antes del perfil.
+
+**Por qué importa más de lo que parece:** mientras esos dos no la tengan, un
+aviso de urgencia del ecosistema **no llega a sus usuarios**, que es el caso de
+uso que motivó el requisito. Y el Convertidor es hoy el único producto con un
+cobro verificado funcionando, o sea el único con clientes que pagan a los que
+haya que avisarles de algo.
 
