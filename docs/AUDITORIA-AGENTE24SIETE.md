@@ -870,6 +870,27 @@ observado, solo deducido del código.
   navegación real seguía en `agente24siete.app`"): si alguna vez el apex
   pasa a servirse directo, sin la redirección, los dos orígenes se separan
   de nuevo y ese bug renace.
+- **22-ago-2026 — esa fragilidad ahora sostiene una cosa más que cuando se
+  escribió la nota de arriba.** Desde que existe `middleware.ts`, el gate de
+  página no lee `localStorage`: lee la **cookie** `a24_admin_token` /
+  `a24_cliente_token` que escribe `app/auth/callback`. Y esa cookie se pone con
+  `document.cookie` sin atributo `domain`, o sea **host-only**: vale para el
+  host exacto donde corrió la página, no para sus hermanos. Hoy funciona
+  porque `https://agente24siete.app/auth/callback` responde **308 → www**
+  *antes* de que la página se ejecute (verificado hoy con `curl`: apex 308 a
+  www en `/`, `/auth/callback` y `/admin/*`; www responde 200), así que el
+  callback corre ya en www y la cookie nace en www — el mismo host donde el
+  middleware la va a buscar.
+
+  Si el apex alguna vez se sirve directo, el callback correrá en el apex, la
+  cookie será del apex, `window.location.replace(next)` mandará al apex, y el
+  308 llevará a www **con una cookie que www no recibe**: el middleware no ve
+  sesión, rebota al portero, identity auto-aprueba porque ya hay sesión,
+  vuelve al callback… **bucle infinito de login**, no un simple "aterricé en
+  la página equivocada". Es el mismo patrón que ya costó 34 vueltas en los
+  logs de SorsabsaForensic. Se anota acá porque el arreglo, si llega ese día,
+  no es tocar el callback: es que `callbackUrl` en `auth-sorsabsa/src/lib/
+  apps.ts` apunte al host canónico real.
 - **Corrección sobre el plan original — `LoginGate.tsx` NO se borra.** El
   punto 7 de este hallazgo decía eliminarlo "una vez que el middleware
   cubra su función" — eso era cierto para el chequeo de vigencia (🟠-2),
