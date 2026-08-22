@@ -1786,8 +1786,68 @@ cliente antes del corte.
 
 | # | Qué | Detalle |
 |---|---|---|
-| 24.10 | **"Crear cuenta" se muestra para TODAS las apps** | Debería ser declarado, no supuesto: un campo de autoservicio en `auth-sorsabsa/src/lib/apps.ts`, al lado de `registerUrl` que ya funciona así. **agente24siete da de alta a sus clientes por administrador**, así que ahí esa puerta invita a fabricar identidades huérfanas — y la persona lo descubre *después* de registrarse |
+| 24.10 | **"Crear cuenta" se muestra para TODAS las apps** | Debería ser declarado, no supuesto: un campo en `auth-sorsabsa/src/lib/apps.ts`, al lado de `registerUrl` que ya funciona así. En agente24siete esa puerta invita a fabricar identidades huérfanas, y la persona lo descubre *después* de registrarse. **El campo NO debe ser un `autoservicio: sí/no`** — ver 24.10-bis: lo que decide no es una política sino qué exige el alta, y eso cambia con el tiempo |
 | 24.11 | **Diseño: una puerta, no dos** | Recomendación, no defecto. El patrón actual en autoservicio (Slack, Notion, Linear, Vercel) es **email primero**: se escribe el correo y el sistema decide si es acceso o alta. `/oauth/consent` ya pide correo y contraseña en la misma pantalla, así que encaja — y elimina la pregunta en vez de responderla con un enlace |
+
+### 24.10-bis · Por qué agente24siete no puede tener autoservicio, y qué haría falta
+
+Primero se anotó que "sus clientes los da de alta un administrador". Es cierto
+y es la **consecuencia**, no la causa. La causa es que **cada alta consume un
+recurso escaso y pagado**, y eso cambia el embudo entero.
+
+**Lo que hace distinto a este producto:**
+
+1. **Un cliente sin número no tiene producto.** `negocios.numero_whatsapp_id`
+   es `UNIQUE NOT NULL`: un negocio no existe sin canal. El Convertidor entrega
+   valor con cero aprovisionamiento —se sube un PDF y ya—; agente24siete no
+   hace nada hasta que un número apunta a él.
+2. **Ese número cuesta desde el minuto uno, y no lo paga el cliente.** Un alta
+   gratuita es un número comprado más minutos de Deepgram, ElevenLabs y Claude
+   en cada llamada. El freemium del Convertidor es barato (CPU); el de
+   agente24siete es un **pasivo recurrente por cada registro**.
+3. **El alta es manual de verdad, no por política.** `agente24siete/docs/twilio.md`
+   pasos 3 y 4: comprar el número con capacidad *Voice*, configurar su webhook
+   en la consola de Twilio y después un `UPDATE negocios SET
+   twilio_phone_number=…, canal_toggle=…` a mano. Más el `prompt_sistema`, que
+   hoy lo escribe alguien que entendió el negocio del cliente.
+
+**Nada de eso es imposible — está sin construir.** Twilio tiene API para
+comprar el número y fijar su `VoiceUrl` programáticamente, lo que convierte los
+pasos 3 y 4 en código; el `prompt_sistema` sale de un formulario de onboarding;
+y el saldo prepago ya existe (`movimientos_saldo` con su ledger, `planes.markup_uso`
+a 1.5).
+
+**Pero el embudo se invierte respecto al Convertidor:** allí se prueba y luego
+se paga; aquí hay que **cobrar antes de aprovisionar**. "Crear cuenta gratis"
+en agente24siete no es una puerta, es una factura. La versión compatible con
+autoservicio sería un **número demo compartido** con tope duro: el prospecto
+llama, comprueba que funciona, y solo al pagar se le compra el suyo.
+
+**Falta separar dos consumos distintos (planteado por Gina, 22-ago-2026).** Lo
+que gasta el CLIENTE y lo que gasta SORSABSA no son lo mismo, y hoy solo está
+modelado el primero: `movimientos_saldo` está keyed por `cliente_id`, así que
+el consumo propio de SORSABSA no tiene dónde vivir. Cualquier uso interno del
+canal —ver el párrafo siguiente— necesita esa separación antes de existir, o se
+mezcla con la facturación de los clientes.
+
+**Idea aplazada a futuro:** un robot que llame para vender y evitar pagar
+vendedores. Es consumo de SORSABSA, no de un cliente — depende de la separación
+de arriba.
+
+> ### ⛔ Decisión de Gina, 22-ago-2026: por ahora NO se gasta en números
+>
+> Twilio queda en pausa. No se compran números ni se aprovisiona nada por
+> cliente. **Consecuencia, escrita sin adornos: agente24siete no se puede
+> vender hoy** — WhatsApp baneado por Meta ("hoy en standby", su README) y la
+> voz con el código completo pero sin cuenta ni número. La pregunta del
+> registro y el autoservicio es *posterior* a tener un canal vivo: no hay
+> producto que entregar aunque alguien se registre y pague.
+>
+> Por eso el campo de `apps.ts` (24.10) **no debe ser un booleano**: un
+> `autoservicio: false` congelaría como "nunca" algo que es una pausa. Debe
+> describir **qué exige el alta** de ese producto, para que el día que el
+> número se compre solo y se cobre por adelantado, el cambio sea un dato y no
+> una revisión del portero.
 
 ### 🟡 Convertidor
 
