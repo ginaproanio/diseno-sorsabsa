@@ -756,6 +756,138 @@ antes ese desfase: intentaría reaplicar migraciones ya aplicadas.
 
 ---
 
+## 4-ter. El cobro y el portero — ✅ verificado en vivo 22-ago-2026
+
+Esta sección existe porque **nada de lo de abajo estaba escrito**, y averiguarlo
+costó dos días de sesión. Cada punto se derivó contra el sistema real; ninguno
+es deducible leyendo el código.
+
+### PayPhone: los cuatro hechos que cuestan un día si no están escritos
+
+1. **El `storeId` NO es el "Identificador" de la aplicación.** La consola de
+   PayPhone muestra *Identificador*, *Id Cliente*, *Clave secreta*,
+   *Contraseña de codificación* y *Token para \<RUC\>*. Ninguno de esos es el
+   `storeId`: es un GUID aparte, el de la **tienda**. El de SORSABSA es
+   `d6856129-d615-4a9c-9ec6-7a9ab7ae05ad`. Con el Identificador (que además es
+   un GUID de .NET en base64, y decodificarlo tienta) PayPhone responde
+   `404 "The associate store does not exist"`. **CondoManager tiene el suyo**
+   — Capa 2, tabla `comercios`.
+2. **PayPhone valida la credencial ANTES que el cuerpo.** Un token inválido da
+   401 con cuerpo vacío, con cuerpo bien formado y sin cabecera `Authorization`.
+   Sobre eso está construido `/api/salud-pasarela`: manda `{}` y mira si la
+   respuesta es 401 — comprueba la credencial **sin crear ningún cobro**.
+3. **El enlace de pago exige `Referer`.** Pegar el `payUrl` en la barra del
+   navegador da *"No autorizado — intenta la compra de nuevo desde la página de
+   origen"*. Con cualquier `Referer` carga bien. **No se restringe a la lista
+   de "Dominios autorizados"**: se probó con `condomanager.vip` y
+   `justired.com`, que no están en ella, y la página carga. Corolario: no se
+   puede probar un cobro pegando el enlace — hay que entrar desde el producto.
+4. **De los dos ambientes de PayPhone, el código solo habla con producción.**
+   `PAYPHONE_API_BASE` (nuevo, 21-ago-2026) permite apuntar a otro; sin la
+   variable, produce el mismo comportamiento de siempre. Un token de una app en
+   **Prueba** contra producción da 401 — fue la causa raíz del cobro caído.
+
+### Railway: las variables selladas no se leen, ni desde la sesión
+
+`PAYPHONE_TOKEN`, `PAYPHONE_STORE_ID`, `COMERCIOS_MASTER_KEY` y
+`PAGOS_API_KEY_DOMUSCRM` están **selladas**. `railway variables` devuelve el
+literal `[SENSITIVE]` (11 caracteres, idéntico en las cuatro — parece un
+placeholder y no lo es), y **`railway run` tampoco las inyecta**: un script
+local recibe la máscara, no el valor. Solo el contenedor desplegado las ve. Se
+pueden **escribir** (`railway variables --set`), no leer.
+
+`DATABASE_URL` y `PAGOS_API_KEY` **no** están selladas y sí llegan a
+`railway run` — por eso los diagnósticos contra la base funcionan así.
+
+> Nota de shell: `railway run bash -c 'psql "$DATABASE_URL" -f archivo.sql'`
+> falla en Git Bash — psql ignora el `-f` al cruzar el puente MSYS. Con
+> redirección (`< archivo.sql`) funciona.
+
+### Un cobro fallido ya deja rastro — antes se evaporaba
+
+Hasta el 21-ago-2026, `api/iniciar.js` llamaba a PayPhone **antes** de insertar
+la fila: si la pasarela fallaba, el intento no existía en ninguna parte salvo
+los logs del contenedor. `pagos.pagos` informaba **0 filas** mientras el
+ecosistema entero llevaba semanas sin poder cobrar. Hoy el intento se registra
+primero y, si la pasarela lo rechaza, queda **`FALLIDO`** con el motivo textual
+— estado nuevo, distinto de `RECHAZADO` (que significa "PayPhone evaluó el pago
+y lo declinó"; mezclarlos haría que la tasa de rechazo culpara a las tarjetas
+de los clientes de un error de configuración propio).
+
+Y el monitor que faltaba: los dos únicos checks de `qa_sorsabsa` que tocaban
+pagos comprobaban que la puerta **rechazara** sin clave — y siguieron en verde
+todas esas semanas, porque no hay cobro que se pueda intentar sin credencial.
+Su mitad positiva ya existe: *"Pagos · la caja PUEDE cobrar"*.
+
+### Quién cobra a quién — modelo fijado por Gina, 22-ago-2026
+
+| Producto | Capa 1 (SORSABSA cobra) | Capa 2 (la entidad cobra a SUS clientes) |
+|---|---|---|
+| CondoManager | por condominio | condominio → residente (alícuotas) |
+| DomusCRM | por inmobiliaria | inmobiliaria → sus clientes (publicaciones) |
+| Convertidor | sí | — |
+| JustiRed | sí | — |
+| Forensic | sí | — |
+
+**Estado real:** Capa 1 verificada viva el 22-ago-2026 (credencial, `storeId` y
+creación del botón). **Capa 2 no existe todavía en datos**: `pagos.comercios`
+está vacía, así que ningún condominio ni inmobiliaria puede cobrar aún.
+**DomusCRM y Forensic no tienen código de cobro** — no es un problema de
+credenciales.
+
+### El portero: `/auth/login` es un pasillo, no una pantalla
+
+**Esto costó una ronda entera de trabajo en el lugar equivocado.**
+
+`auth-sorsabsa/src/app/auth/login/page.tsx` **se redirige sola al cargar**
+(`void handleContinue()` en su `useEffect`): solo inicia la federación OIDC
+contra identity. El usuario no la ve el tiempo suficiente para pulsar nada —
+cualquier enlace o botón que se le añada parpadea y desaparece.
+
+**La única pantalla de acceso que el usuario ve de verdad es
+`/oauth/consent`**: ahí escribe correo y contraseña. Toda intervención de UI
+sobre el acceso va ahí. Es donde ya vivía "¿Olvidaste tu contraseña?" y donde
+se añadió, el 22-ago-2026, **"Crear cuenta"** — que no existía en **ninguna**
+pantalla del ecosistema pese a que `/auth/register` estaba escrito desde
+siempre. Un visitante sin cuenta llegaba desde cualquier producto, veía un
+formulario de acceso y no tenía salida: podía recuperar una contraseña que
+nunca creó, pero no crear la cuenta. Lo destapó el Convertidor
+("Suscribirse por $9" → login → callejón), pero el hueco era del portero.
+
+Al saltar a identity **solo sobrevive `authorization_id`**; ningún otro
+parámetro cruza. La marca ya viajaba por `sessionStorage`
+(`sorsabsa_pending_app`) y desde el 22-ago-2026 el destino también
+(`sorsabsa_pending_next`), para que quien se registre desde una compra vuelva a
+esa compra y no a la pantalla por defecto del producto.
+
+**Onboarding por producto:** `/auth/register` decide solo — las apps con
+`registerUrl` en `lib/apps.ts` (hoy `domuscrm` y `condomanager`) van a SU
+onboarding; las demás (`convertidor`, `justired`, `agente24siete`) usan el
+formulario genérico del portero. Es dato, no rama de código.
+
+### Lo que sigue pendiente del cobro
+
+- **`Confirm` sin verificar de punta a punta.** Está probado que se crea el
+  botón; falta un pago real que cierre el circuito (aprobado → suscripción
+  extendida → producto notificado). Es donde se decide si un cliente paga y
+  recibe lo que compró.
+- **`pagos-sorsabsa` se personaliza por producto**, contra el criterio del
+  propio ecosistema: `lib/auth.js` lleva una lista de variables de entorno
+  escrita a mano (una por producto) y `api/confirmar.js` un mapa
+  `CALLBACKS_POR_PRODUCTO` con URLs literales — y una de sus claves
+  (`"condomanager-recaudacion"`) tiene que coincidir con una constante que vive
+  en **otro repo**. Dar de alta un producto exige editar el motor financiero y
+  redesplegarlo. **Propuesto, no construido:** una tabla `pagos.productos`
+  (`producto`, `clave`, `callback_url`, credenciales de tienda) — alta = un
+  INSERT. Mismo patrón opaco `producto`/`sujeto` que ya usan Suscripciones y
+  Referidos.
+- **`pagos-sorsabsa` no despliega desde GitHub.** Entre sus variables no hay
+  ninguna `RAILWAY_GIT_*`, que es lo que Railway inyecta cuando el servicio
+  está conectado a un repo: hoy se despliega subiendo la carpeta con
+  `railway up` desde la máquina. Conectarlo al repo es pendiente.
+
+---
+
 ## 5. Roturas verificadas el 2026-07-26
 
 | Dónde | Qué | Estado |
