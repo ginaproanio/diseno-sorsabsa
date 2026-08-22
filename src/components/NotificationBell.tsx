@@ -36,6 +36,24 @@ const TYPE_COLOR: Record<string, string> = {
   APROBACION: 'text-emerald-500',
 };
 
+/**
+ * Campana de notificaciones del ecosistema. Va SIEMPRE arriba a la derecha,
+ * antes del perfil, en todos los productos — ver `docs/ESTANDAR-UI.md` §2.
+ *
+ * **22-ago-2026: pasó a tokens de marca.** Estaba pintada a mano en gris
+ * oscuro (`bg-zinc-900`, `border-zinc-700`, `text-emerald-400`, `font-mono`),
+ * o sea que el componente compartido ignoraba el propio design system: puesto
+ * en CondoManager (verde y oro) o DomusCRM (azul) se veía como un panel ajeno
+ * pegado encima. Las implementaciones locales que reemplaza sí usaban los
+ * tokens, así que "unificar" habría sido un retroceso visual.
+ *
+ * Ahora hereda del `BrandProvider` de cada producto: misma campana, mismo
+ * comportamiento, la marca de quien la muestra. Que es lo que se pedía —
+ * reconocible igual en todos, no idéntica en color.
+ *
+ * Es puramente presentacional: los datos y el marcar-leído los pone cada
+ * producto por props, desde su propio `useNotifications`.
+ */
 export function NotificationBell({
   notificaciones,
   unreadCount = 0,
@@ -68,11 +86,11 @@ export function NotificationBell({
         aria-expanded={isOpen}
         aria-label={`Notificaciones${unreadCount > 0 ? ` (${unreadCount} sin leer)` : ''}`}
         title="Notificaciones"
-        className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-zinc-200 hover:border-zinc-500 hover:text-white transition-colors"
+        className="relative flex h-10 w-10 items-center justify-center rounded-brand border border-brand-border bg-brand-surface text-brand-text hover:border-brand-primary hover:text-brand-primary transition-colors"
       >
         <Bell className="h-5 w-5" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold rounded-full bg-red-500 text-white border-2 border-zinc-900">
+          <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold rounded-full bg-brand-destructive text-white border-2 border-brand-surface">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -85,10 +103,10 @@ export function NotificationBell({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="absolute right-0 top-full mt-3 w-80 sm:w-96 rounded-2xl border border-zinc-700 bg-zinc-900 shadow-2xl shadow-black/60 overflow-hidden z-50"
+            className="absolute right-0 top-full mt-3 w-80 sm:w-96 rounded-brand border border-brand-border bg-brand-surface shadow-brand-lg overflow-hidden z-50"
           >
-            <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
-              <span className="font-mono text-xs font-semibold uppercase tracking-wider text-white">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-brand-border">
+              <span className="font-brand text-xs font-semibold uppercase tracking-wider text-brand-text">
                 Notificaciones
               </span>
               {unreadCount > 0 && onMarkAllRead && (
@@ -98,7 +116,7 @@ export function NotificationBell({
                     e.stopPropagation();
                     onMarkAllRead();
                   }}
-                  className="flex items-center gap-1 font-mono text-[11px] text-emerald-400 hover:underline"
+                  className="flex items-center gap-1 font-brand text-[11px] text-brand-primary hover:underline"
                 >
                   <CheckCheck className="h-3.5 w-3.5" />
                   Marcar todas como leídas
@@ -108,14 +126,14 @@ export function NotificationBell({
 
             <div className="max-h-[320px] overflow-y-auto">
               {notificaciones.length === 0 ? (
-                <div className="px-4 py-8 text-center font-mono text-xs text-zinc-400">
+                <div className="px-4 py-8 text-center font-brand text-xs text-brand-muted">
                   {emptyText}
                 </div>
               ) : (
                 <div className="py-1">
                   {notificaciones.map((notif) => {
                     const IconComponent = TYPE_ICON[notif.tipo] || Bell;
-                    const iconColor = TYPE_COLOR[notif.tipo] || 'text-zinc-400';
+                    const iconColor = TYPE_COLOR[notif.tipo] || 'text-brand-muted';
 
                     return (
                       <button
@@ -124,25 +142,25 @@ export function NotificationBell({
                         onClick={() => handleItemClick(notif)}
                         className={`w-full text-left px-4 py-3 transition-colors ${
                           !notif.leida
-                            ? 'bg-zinc-800/80 hover:bg-zinc-800'
-                            : 'hover:bg-zinc-800/50'
+                            ? 'bg-brand-primary/10 hover:bg-brand-primary/15'
+                            : 'hover:bg-brand-muted/10'
                         }`}
                       >
                         <div className="flex items-start gap-3">
-                          <div className={`p-1.5 rounded-lg bg-zinc-800 ${iconColor}`}>
+                          <div className={`p-1.5 rounded-brand bg-brand-background ${iconColor}`}>
                             <IconComponent className="h-4 w-4" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-mono text-[11px] font-semibold text-zinc-100">
+                              <span className="font-brand text-[11px] font-semibold text-brand-text">
                                 {notif.tipo.replace(/_/g, ' ')}
                               </span>
                               {!notif.leida && (
-                                <span className="font-mono text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-medium">
+                                <span className="font-brand text-[10px] px-1.5 py-0.5 rounded-full bg-brand-accent/15 text-brand-accent-text font-medium">
                                   Nueva
                                 </span>
                               )}
-                              <span className="font-mono text-[10px] text-zinc-500 ml-auto">
+                              <span className="font-brand text-[10px] text-brand-muted ml-auto">
                                 {new Date(notif.created_at).toLocaleDateString('es-ES', {
                                   day: '2-digit',
                                   month: 'short',
@@ -151,7 +169,7 @@ export function NotificationBell({
                                 })}
                               </span>
                             </div>
-                            <p className="mt-1 text-xs leading-relaxed text-zinc-300 line-clamp-2">
+                            <p className="mt-1 text-xs leading-relaxed text-brand-text line-clamp-2">
                               {notif.mensaje}
                             </p>
                           </div>
