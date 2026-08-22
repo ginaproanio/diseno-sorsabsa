@@ -44,6 +44,13 @@ jobs:
         env:
           GH_ECOSISTEMA_TOKEN: ${{ secrets.GH_ECOSISTEMA_TOKEN }}
         run: |
+          # pipefail NO es el comportamiento por defecto de bash, y sin él este
+          # check se volvió inútil el primer día: `node … | tee` devuelve el
+          # código de salida de `tee`, que siempre es 0. La corrida del
+          # 22-ago-2026 informó 13 desvíos y salió VERDE — el paso de ponerse
+          # en rojo nunca corrió y el correo nunca se envió.
+          set -o pipefail
+
           if [ -z "${GH_ECOSISTEMA_TOKEN:-}" ]; then
             echo "::error::Falta el secret GH_ECOSISTEMA_TOKEN (PAT con lectura de los repos del ecosistema)."
             echo "Sin él este check NO puede leer los grafos y no comprueba nada."
