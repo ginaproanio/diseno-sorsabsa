@@ -1293,7 +1293,7 @@
       "file_type": "code",
       "norm_label": "notificationbell()",
       "source_file": "src/components/NotificationBell.tsx",
-      "source_location": "L39"
+      "source_location": "L57"
     },
     {
       "id": "src_hooks_useonclickoutside_useonclickoutside",
@@ -10714,7 +10714,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/NotificationBell.tsx",
-      "source_location": "L50",
+      "source_location": "L68",
       "weight": 1.0
     },
     {
@@ -22285,7 +22285,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/NotificationBell.tsx",
-      "source_location": "L39",
+      "source_location": "L57",
       "weight": 1.0
     },
     {
@@ -23411,5 +23411,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "27dfa51439a9af3c93ae77cd7c009e0460bd9575"
+  "built_at_commit": "fba3842a6b9dcb5ef9f20779e5b6b2183b3c6156"
 }
