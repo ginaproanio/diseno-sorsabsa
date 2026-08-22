@@ -865,22 +865,43 @@ esa compra y no a la pantalla por defecto del producto.
 onboarding; las demás (`convertidor`, `justired`, `agente24siete`) usan el
 formulario genérico del portero. Es dato, no rama de código.
 
-### Lo que sigue pendiente del cobro
+### El circuito completo, cerrado el 22-ago-2026 ✅
 
-- **`Confirm` sin verificar de punta a punta.** Está probado que se crea el
-  botón; falta un pago real que cierre el circuito (aprobado → suscripción
-  extendida → producto notificado). Es donde se decide si un cliente paga y
-  recibe lo que compró.
-- **`pagos-sorsabsa` se personaliza por producto**, contra el criterio del
-  propio ecosistema: `lib/auth.js` lleva una lista de variables de entorno
-  escrita a mano (una por producto) y `api/confirmar.js` un mapa
-  `CALLBACKS_POR_PRODUCTO` con URLs literales — y una de sus claves
-  (`"condomanager-recaudacion"`) tiene que coincidir con una constante que vive
-  en **otro repo**. Dar de alta un producto exige editar el motor financiero y
-  redesplegarlo. **Propuesto, no construido:** una tabla `pagos.productos`
-  (`producto`, `clave`, `callback_url`, credenciales de tienda) — alta = un
-  INSERT. Mismo patrón opaco `producto`/`sujeto` que ya usan Suscripciones y
-  Referidos.
+`Prepare → pago → Confirm → suscripción acreditada`, verificado con un pago
+real de $9 del Convertidor: `APROBADO`, `transaction_id 90384096`, y
+`suscripciones.ultimo_pago_id` apuntando a ese pago. **Es el primer cobro
+confirmado del ecosistema.**
+
+Lo que faltaba no era la pasarela sino el último eslabón del producto:
+`/pagos/callback` del Convertidor leía un solo parámetro —`?status=success`,
+que ponemos NOSOTROS en el `responseUrl`— y anunciaba "¡Pago confirmado!"
+**porque la URL lo decía**. PayPhone devuelve `id` y `clientTransactionId` en
+esa redirección y la página los ignoraba los dos; nada en todo el repo llamaba
+nunca a confirmar. Consecuencia verificada en la base antes de arreglarlo: dos
+pagos de $9 con su botón creado, los dos en `PENDIENTE`, sin acreditar — y
+PayPhone reversa el cobro si no se confirma en ~5 min. **El cliente pagaba,
+veía el mensaje de éxito y se quedaba sin nada: peor que no cobrar.** Al
+integrar un producto nuevo, ese es el paso que hay que comprobar primero.
+
+### El catálogo de productos ✅ y lo que sigue pendiente
+
+`pagos.productos` existe desde el 22-ago-2026 (`producto`, `clave_hash`,
+`callback_url`, `callback_vencimiento_url`, `activo`): **dar de alta un
+producto es un INSERT**, ya no editar el motor financiero. Absorbió el mapa
+`CALLBACKS_POR_PRODUCTO` que estaba escrito a mano en `api/confirmar.js`.
+Junto con él llegaron `avisos_vencimiento`, `/api/avisar-vencimientos` y su
+cron diario en GitHub Actions.
+
+**Las claves NO se migraron y es deliberado:** las "Sensitive" de Vercel y las
+selladas de Railway no se pueden releer (`PAGOS_API_KEY_DOMUSCRM` es una), así
+que moverlas a ciegas cortaría en producción al producto que las usa.
+`lib/auth.js` acepta las dos fuentes; un producto **nuevo** ya no obliga a
+tocar código.
+
+La lista completa de lo que queda —el receptor del aviso de vencimiento, la
+Capa 2 sin comercios, DomusCRM y Forensic sin cobro, las suscripciones
+huérfanas— vive en [`PENDIENTES-ECOSISTEMA.md`](PENDIENTES-ECOSISTEMA.md) §24.
+
 - **`pagos-sorsabsa` no despliega desde GitHub.** Entre sus variables no hay
   ninguna `RAILWAY_GIT_*`, que es lo que Railway inyecta cuando el servicio
   está conectado a un repo: hoy se despliega subiendo la carpeta con

@@ -5,7 +5,7 @@ aparece. Fuente de arquitectura: `ARQUITECTURA-ECOSISTEMA.md`. El plan paso a
 paso del desoldado vive en [`PLAN-DESOLDADO.md`](PLAN-DESOLDADO.md) — este doc
 es la lista de trabajo suelto, no el plan en sí.
 
-Última actualización: 2026-08-16.
+Última actualización: 2026-08-22.
 
 ## Principio que gobierna (regla dura)
 
@@ -1710,3 +1710,96 @@ sabiendo el costo, no un olvido.
 administran los otros seis. Vive en `sorsabsa.com`, usa el portero como todos,
 y lee de `pagos-sorsabsa` con su propia clave (regla de una clave por producto,
 `pagos-sorsabsa/lib/auth.js`).
+
+---
+
+## 24. 🟡 El cobro del ecosistema quedó vivo — lo que falta después (21/22-ago-2026)
+
+**Contexto.** Dos días de sesión arrancando de *"me preocupa que ninguno de los
+productos esté cobrando"*. Resultó cierto: **el cobro llevaba semanas muerto y
+`pagos.pagos` tenía cero filas**. Causa raíz: PayPhone devolvía 401 a cada
+intento (token de una aplicación en **Prueba** contra el endpoint de
+producción), y `api/iniciar.js` llamaba a la pasarela **antes** de insertar la
+fila, así que ningún intento fallido dejaba rastro. Los dos checks de QA que
+tocaban pagos comprobaban que la puerta *rechazara* sin clave — y siguieron en
+verde todo ese tiempo.
+
+Detalle técnico completo (qué es el `storeId`, por qué el enlace de pago exige
+`Referer`, las variables selladas de Railway) en
+[`ARQUITECTURA-ECOSISTEMA.md`](ARQUITECTURA-ECOSISTEMA.md) §4-ter. Cierra
+también el §21-bis de este documento.
+
+### Lo que quedó funcionando ✅
+
+| Qué | Verificado |
+|---|---|
+| Cobro Capa 1 de punta a punta | Pago real de $9: `APROBADO`, `transaction_id 90384096`, suscripción extendida con `ultimo_pago_id` |
+| Intento fallido deja rastro | Estado nuevo `FALLIDO` con el motivo textual de la pasarela |
+| Monitor que lo detecta | `/api/salud-pasarela` + check *"Pagos · la caja PUEDE cobrar"* en qa_sorsabsa |
+| Catálogo de productos | Tabla `pagos.productos`: alta de un producto = un INSERT |
+| Aviso de vencimiento | `/api/avisar-vencimientos` + cron diario en GitHub Actions |
+| Confirmación del Convertidor | Ruta `/api/pagos/confirmar` — antes la pantalla de éxito **mentía** |
+| Puerta de "Crear cuenta" | En `/oauth/consent`, la única pantalla de acceso que el usuario ve |
+
+### 🔴 Lo único que bloquea que un aviso llegue a una persona
+
+**Ningún producto sabe recibir el aviso de vencimiento.**
+`callback_vencimiento_url` está en NULL en los seis. El cron corre, detecta y
+reporta `sin_receptor`, pero nadie recibe nada.
+
+`pagos-sorsabsa` **no puede** mandarlo: guarda `sujeto` como id opaco, sin
+nombres ni correos, a propósito. Solo el producto sabe traducirlo. Falta, en
+CondoManager primero: un endpoint que tome `{sujeto, diasRestantes}`, lo
+resuelva a condominio + administrador y mande el correo por
+`notificaciones-sorsabsa`; después un `UPDATE pagos.productos SET
+callback_vencimiento_url=…`.
+
+**Por qué importa:** una suscripción que vence en silencio es una venta
+perdida sin que nadie se entere. El administrador debería poder llamar al
+cliente antes del corte.
+
+### 🟠 Cobro incompleto
+
+| # | Qué falta | Por qué importa |
+|---|---|---|
+| 24.1 | **`pagos.comercios` está vacía** | La Capa 2 no puede cobrar: ni condominio→residente (alícuotas) ni inmobiliaria→sus clientes. El código existe y es fail-closed, así que hoy falla para toda entidad |
+| 24.2 | **DomusCRM y Forensic sin código de cobro** | No es un problema de credenciales: la ruta de pago no está escrita. DomusCRM no tiene página propia de suscripción |
+| 24.3 | **Referidos: la conversión nunca se construyó** | Los estados llegan hasta `registrado`; acreditar `recompensa_dias` no existe en ningún archivo. Ya estaba anotado y sigue |
+
+### 🟡 Deuda del motor financiero
+
+| # | Qué | Detalle |
+|---|---|---|
+| 24.4 | **`clave_hash` sin usar** | Las claves de los 4 productos actuales siguen en variables de entorno. NO se migraron a propósito: las "Sensitive" de Vercel y las selladas de Railway no se pueden releer (`PAGOS_API_KEY_DOMUSCRM` es una), y rotarlas a ciegas cortaría al producto en producción. Se retiran cuando se pueda regenerar cada una con su producto delante |
+| 24.5 | **La clave SALIENTE de los callbacks sigue siendo la compartida** | `api/confirmar.js` y `api/avisar-vencimientos.js` autentican con `PAGOS_API_KEY` hacia todos. Es el comportamiento que ya había, pero es acoplamiento: depende de 24.4 |
+| 24.6 | **`pagos-sorsabsa` no despliega desde GitHub** | Entre sus variables no hay ninguna `RAILWAY_GIT_*`, que es lo que Railway inyecta cuando el servicio está conectado a un repo. Hoy se sube con `railway up` desde la máquina de Gina — justo lo que ella pidió evitar (*"todo debe correr directamente en nube"*) |
+| 24.7 | **Parche de seguridad de Postgres sin aplicar** | Railway lo programó para la próxima ventana de mantenimiento. Reinicia el Postgres de `pagos` **y** `notificaciones`. Conviene aplicarlo mirando, no dejarlo caer solo |
+
+### 🟡 Datos que mienten
+
+| # | Qué | Por qué importa |
+|---|---|---|
+| 24.8 | **5 de 6 suscripciones de `condomanager` apuntan al vacío** | Sus `sujeto` no son ni condominio, ni perfil, ni usuario — condominios borrados o ids que nunca existieron. Solo `1e0656a0…` (Punta Blanca) es real. **Inflan cualquier métrica de clientes activos**, y de hecho ya causaron una conclusión falsa en esta misma sesión: se repitió durante dos días que "6 condominios pierden acceso el 24" contando filas sin comprobar a qué apuntaban. Es la Regla 4 del estándar |
+| 24.9 | **Filas de prueba en `pagos.pagos`** | Dos `_verificacion` y dos `convertidor` en `PENDIENTE` que no se pueden confirmar hacia atrás (nunca se recibió el `id` de PayPhone, porque la pantalla que lo traía lo ignoraba). Limpiarlas o marcarlas antes de que alguien mida ingresos |
+
+### 🟡 Portero
+
+| # | Qué | Detalle |
+|---|---|---|
+| 24.10 | **"Crear cuenta" se muestra para TODAS las apps** | Debería ser declarado, no supuesto: un campo de autoservicio en `auth-sorsabsa/src/lib/apps.ts`, al lado de `registerUrl` que ya funciona así. **agente24siete da de alta a sus clientes por administrador**, así que ahí esa puerta invita a fabricar identidades huérfanas — y la persona lo descubre *después* de registrarse |
+| 24.11 | **Diseño: una puerta, no dos** | Recomendación, no defecto. El patrón actual en autoservicio (Slack, Notion, Linear, Vercel) es **email primero**: se escribe el correo y el sistema decide si es acceso o alta. `/oauth/consent` ya pide correo y contraseña en la misma pantalla, así que encaja — y elimina la pregunta en vez de responderla con un enlace |
+
+### 🟡 Convertidor
+
+| # | Qué | Detalle |
+|---|---|---|
+| 24.12 | **`npm run lint` no revisa nada** | El script existe pero el proyecto **no tiene configuración de ESLint**: al correrlo, pide crearla desde cero. Es exactamente la Regla 2 de la parte II del estándar — *"una comprobación desconectada es una comprobación que no existe"*. El typecheck sí sirvió: atrapó una regresión real en esta sesión |
+| 24.13 | **`__pycache__/*.pyc` versionados** | Mismo problema que los 154 archivos de `.next` que ya documentó `ARQUITECTURA-ECOSISTEMA.md` |
+| 24.14 | **El requisito de cuenta aparece en el paso del pago** | Hoy: se convierte gratis, se pulsa "Suscribirse" y *ahí* se pide cuenta — el peor momento, porque la persona ya decidió comprar y se le pone un trámite. El momento natural es **cuando choca con el límite** (su archivo pesa 62MB, el tope gratis son 50), con su archivo delante. Hoy el producto pide la cuenta **para cobrar**, no **para servir** |
+
+### 🟡 QA
+
+| # | Qué | Detalle |
+|---|---|---|
+| 24.15 | **JustiRed en rojo, desde antes de esta sesión** | *"Biblioteca Legal: ID inexistente devuelve 404, no revienta el servidor"* está devolviendo **200**: un ID que no existe responde como si existiera. Sin diagnosticar |
+
