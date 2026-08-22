@@ -1891,7 +1891,7 @@ productos no sirve para eso.
 
 | Producto | Campana | Qué usaba |
 |---|---|---|
-| CondoManager | ✅ | `NotificationBell` de `@sorsabsa/ui` (170 líneas), en `DashboardShell` |
+| CondoManager | ⚠️ | **Propia y suelta**: un `<Link>` a una página con un icono `Bell` de lucide-react dentro de su `<header>` (`DashboardShell.tsx` L630). **No usa el componente compartido** |
 | DomusCRM | ⚠️ | **Propia** (71 líneas): botón `rounded-full` con `p-2`, `Icon` del design system |
 | JustiRed | ⚠️ | **Propia** (102 líneas): `rounded-xl h-10 w-10`, icono `Bell` de **lucide-react** |
 | agente24siete | ❌ | **Ninguna** |
@@ -1934,3 +1934,23 @@ uso que motivó el requisito. Y el Convertidor es hoy el único producto con un
 cobro verificado funcionando, o sea el único con clientes que pagan a los que
 haya que avisarles de algo.
 
+
+### Corrección del 22-ago-2026 y decisión de Gina
+
+Lo primero que se reportó aquí —"CondoManager usa la del design system"— **era
+falso**. `NotificationBell` de `@sorsabsa/ui` tenía **cero usos en todo el
+ecosistema**: CondoManager también tenía la suya, suelta dentro de su `<header>`.
+Eran cuatro respuestas distintas y el componente compartido no lo usaba nadie.
+El error vino de dar por buena una coincidencia de `grep` sobre la palabra
+"Bell" sin abrir el archivo.
+
+**Decisión de Gina: el estándar es el componente del design system.** O sea que
+falta **migrar CondoManager**, cuya campana hoy es un enlace a una página y pasa
+a ser el panel desplegable compartido. DomusCRM, JustiRed y el Convertidor ya
+están en él.
+
+**Y una limitación del check de conformidad que este caso destapó:** detecta
+"este repo redefine un símbolo que `@sorsabsa/ui` exporta", pero **no** detecta
+"lo reimplementó suelto dentro de un archivo" — que es exactamente lo de
+CondoManager. La regla que faltaría: marcar la importación directa de iconos de
+`lucide-react` que el design system ya envuelve.

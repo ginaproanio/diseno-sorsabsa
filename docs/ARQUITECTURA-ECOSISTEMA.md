@@ -909,6 +909,104 @@ huérfanas— vive en [`PENDIENTES-ECOSISTEMA.md`](PENDIENTES-ECOSISTEMA.md) §2
 
 ---
 
+## 4-quater. Mapa de repos y el grafo — ✅ levantado 22-ago-2026
+
+Esta sección existe porque **cada sesión volvía a descubrir lo mismo**: que
+DomusCRM vive en una carpeta llamada `crm_inmobiliario`, que el Convertidor
+está en `master` y no en `main`, que el grafo usa `links` y no `edges`. Nada de
+eso estaba escrito, así que cada vez se investigaba de nuevo — con el costo de
+tokens que eso tiene. **Si algo de aquí hay que averiguarlo otra vez, es que
+esta tabla está incompleta: se corrige aquí, no se re-investiga.**
+
+### Producto ↔ carpeta ↔ repo ↔ rama
+
+El nombre de la carpeta local, el del repo en GitHub y el del producto **no
+coinciden** en tres casos. Verificado con `git remote` el 22-ago-2026.
+
+| Producto | Carpeta local | Repo GitHub | Rama |
+|---|---|---|---|
+| CondoManager | `c:\condomanager` | `ginaproanio/condomanager` | `main` |
+| **DomusCRM** | **`c:\crm_inmobiliario`** ⚠️ | `ginaproanio/domuscrm` | `main` |
+| **JustiRed** | **`c:\legaltech`** ⚠️ | `ginaproanio/legaltech` | `main` |
+| Agente24Siete | `c:\agente24siete` | `ginaproanio/agente24siete` | `main` |
+| **Convertidor** | `c:\convertidor` (app en `frontend/`) | `ginaproanio/convertidor` | **`master`** ⚠️ |
+| Portero (SSO) | `c:\auth-sorsabsa` | `ginaproanio/auth-sorsabsa` | `main` |
+| Pagos | `c:\pagos-sorsabsa` | `ginaproanio/pagos-sorsabsa` | `main` |
+| Notificaciones | `c:\notificaciones-sorsabsa` | `ginaproanio/notificaciones-sorsabsa` | `main` |
+| Design system | `c:\diseno-sorsabsa` | `ginaproanio/diseno-sorsabsa` | `main` |
+| QA | `c:\qa_sorsabsa` | `ginaproanio/qa_sorsabsa` | `main` |
+| Geo | `c:\geo-sorsabsa` | `ginaproanio/geo-sorsabsa` | `main` |
+
+> **DomusCRM tiene su app en el subdirectorio `webs/`** — su `package.json`,
+> su grafo y sus builds viven ahí, no en la raíz del repo.
+
+> **`diseno-sorsabsa` tiene un hook de pre-push** que bloquea el push si
+> cambiaste `src/` o `package.json` sin subir la versión: los consumidores lo
+> instalan por tag (`github:ginaproanio/diseno-sorsabsa#v0.1.x`) y sin bump
+> **nunca verían el cambio**. Flujo: `npm version patch` y luego
+> `git push --follow-tags`.
+
+### El grafo de conocimiento — **consúmelo ANTES de investigar**
+
+Cada repo publica `graphify-out/graph.json`, reconstruido por su workflow
+`graphify.yml` en cada push a la rama principal (`pip install graphifyy`,
+`python -m graphify update .`, `PYTHONHASHSEED=0` para que el clustering sea
+determinista) y commiteado de vuelta con `[skip ci]`.
+
+**Regla:** antes de salir a leer archivos o hacer `grep` sobre un repo,
+preguntarle al grafo. Investigar lo que el grafo ya sabe es trabajo pagado dos
+veces.
+
+**Esquema real** (verificado 22-ago-2026 — no es el que uno supondría):
+
+```
+{ directed, multigraph, graph, nodes[], links[], hyperedges[], built_at_commit }
+```
+
+- **`links`, NO `edges`.** Un `g.edges` devuelve `undefined` y parece un grafo
+  vacío.
+- **Nodo:** `id`, `label`, `_callable`, `_callable_class`, `_origin`,
+  `community`, `community_name`, `file_type`, `norm_label`, **`source_file`**,
+  **`source_location`** (ej. `"L135"`).
+- **Arista:** `source`, `target`, **`relation`**, `_origin`, `confidence`,
+  `confidence_score`, `context`, `source_file`, `source_location`, `weight`.
+  El tipo está en `relation`; no hay campo `type`.
+- **Relaciones que existen:** `contains`, `imports`, `imports_from`,
+  `re_exports`, `calls`, `references`, `extends`, `indirect_call`.
+
+**Qué responde bien** (sin leer una línea de código):
+
+- Qué símbolos define un repo y **en qué archivo y línea** — `nodes[].label` +
+  `source_file`. Base del check de conformidad (`src/scripts/conformidad.mjs`).
+- Quién llama a qué **dentro** del repo (`relation: "calls"`).
+- La estructura de imports **internos** (`imports`, `imports_from`).
+
+**Qué NO responde — límite verificado, no supuesto:**
+
+> Para paquetes **externos** el grafo solo registra la dependencia del
+> `package.json`. `@sorsabsa/ui` aparece como un nodo suelto
+> (`package_dependencies_sorsabsa_ui → sorsabsa_ui`, desde `package.json` L17)
+> y **no hay aristas de qué archivo importa qué símbolo de él**. Así que
+> *"¿quién usa el componente compartido?"* **no se puede contestar con el
+> grafo** — eso sí exige leer los imports. Es la razón por la que el check de
+> conformidad detecta "este repo redefine `Button`" pero no detecta "este repo
+> reimplementó la campana suelta dentro de un `<header>`", que fue justamente
+> el caso de CondoManager.
+
+**Consulta mínima:**
+
+```js
+const g = JSON.parse(fs.readFileSync("graphify-out/graph.json", "utf8"));
+g.nodes.filter(n => n.label === "NotificationBell");        // ¿lo define?
+g.links.filter(l => l.relation === "calls" && l.target === id);
+```
+
+**Dos repos están FUERA del grafo** (sin `graphify.yml` y sin `graph.json`):
+**`convertidor`** y **`geo-sorsabsa`**. Sobre ellos ninguna comprobación basada
+en el grafo dice nada — el silencio no es "está limpio".
+
+---
+
 ## 5. Roturas verificadas el 2026-07-26
 
 | Dónde | Qué | Estado |
