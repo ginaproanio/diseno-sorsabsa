@@ -19,6 +19,8 @@ export interface NotificationBellProps {
   onMarkRead?: (id: string) => void;
   onMarkAllRead?: () => void;
   emptyText?: string;
+  /** Enlace a la bandeja completa del producto. Si se omite, no se muestra. */
+  verTodasHref?: string;
   className?: string;
 }
 
@@ -60,6 +62,7 @@ export function NotificationBell({
   onMarkRead,
   onMarkAllRead,
   emptyText = 'No hay notificaciones',
+  verTodasHref,
   className = '',
 }: NotificationBellProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -180,6 +183,21 @@ export function NotificationBell({
                 </div>
               )}
             </div>
+
+            {/* Enlace a la bandeja completa. Opcional porque no todo producto
+                tiene una: CondoManager sí, y su destino además depende del rol
+                (superadmin/admin/residente), así que lo resuelve él y lo pasa
+                por prop. Sin esto, unificar la campana le habría quitado el
+                acceso a esa pantalla — el componente compartido tiene que
+                cubrir lo que cubrían las implementaciones que reemplaza. */}
+            {verTodasHref && (
+              <a
+                href={verTodasHref}
+                className="block border-t border-brand-border px-4 py-3 text-center font-brand text-[11px] font-semibold text-brand-primary hover:underline"
+              >
+                Ver todas
+              </a>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
