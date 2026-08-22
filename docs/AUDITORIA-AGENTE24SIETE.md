@@ -26,7 +26,10 @@ solo "compila y no tira error 500".
 `app/auth/callback/page.tsx`, `app/portal/LoginGate.tsx`,
 `app/admin/LoginGate.tsx`, `app/portal/layout.tsx`,
 `app/admin/layout.tsx`, `pages/api/auth/reconciliar-cliente.js`,
-`lib/supabaseAdminIdentity.js`. Comparado contra el patrón YA probado y
+`lib/supabaseAdminIdentity.js`. **Ampliado el 22-ago-2026** con las piezas que
+los hallazgos de ese día incorporaron y que no existían al abrir: `middleware.ts`,
+`lib/sesion.ts`, `lib/jwt.ts`, `app/admin/AdminNav.tsx` y los 11 endpoints de
+`pages/api/admin/**` (🔴-2). Comparado contra el patrón YA probado y
 estabilizado en CondoManager (`middleware.ts`,
 `app/components/SignOutButton.tsx`) y contra el contrato real de
 `auth-sorsabsa/src/app/auth/logout/page.tsx`, no contra suposiciones.
@@ -525,7 +528,7 @@ diciendo "pendiente de verificar" hasta el 16-ago-2026 aunque la sección
 de cierre de este mismo documento ya daba la respuesta — corregido acá
 para que las dos partes digan lo mismo.
 
-### 🟠-4 — 🔧 CORREGIDO 16-ago-2026, commit `agente24siete@61760c5`, falta la prueba en vivo de Gina — "Salir" borra el `localStorage` pero deja viva la cookie de sesión — el gate del SERVIDOR sigue viendo sesión válida hasta 60 minutos después de cerrarla. Encontrado 16-ago-2026
+### 🟠-4 — ✅ CERRADO 22-ago-2026 en DOS pasos (`agente24siete@61760c5` + `agente24siete@628c84a`) — "Salir" no sacaba. Primero por la cookie; después, descubierto al ejecutar por fin el punto 9, porque borraba UNA de las DOS llaves de sesión. Encontrado 16-ago-2026, cerrado el 22-ago-2026
 
 **1. Síntoma:** después del clic en "Salir", volver a `/portal` (o
 `/admin`) hace que `middleware.ts` —el gate del servidor, la pieza que
@@ -601,6 +604,98 @@ producto, pero ya no la llama un logout escrito acá: la llama
 `salirDelEcosistema` de `@sorsabsa/ui` como su función de limpieza. O sea el
 fix de este hallazgo se conserva entero; lo que cambió es quién arma la URL
 del portero (ver 🟠-6 y `AUDITORIA-PORTERO-SSO.md` 🟠-7).
+
+---
+
+#### 22-ago-2026 — el punto 9 se ejecutó por fin, seis días después, y el fix estaba a la mitad
+
+Arriba quedó escrito: *"⬜ Falta el punto 9, lo hace Gina — la comprobación
+que cierra esto no es que compile: es ver la cookie desaparecer del navegador
+al salir."* Estuvo seis días sin ejecutarse. El día que se ejecutó, no falló
+por la cookie —eso sí estaba bien— sino por algo que el análisis original no
+había mirado. **Regla 2 de la parte II, en su forma más cara: la comprobación
+existía, estaba bien escrita, y no la corría nadie.**
+
+**1. Síntoma.** Gina, probando en vivo: *"ingrese cuando me dijiste y salí,
+volví a ingresar y ya no pude"*, y después, con la observación que resolvió el
+caso: *"parece que tomara el perfil de patricio.marmol@hotmail.com que está
+preescrito y no le importa que yo presione google para ingresar"*.
+
+**2. Causa inmediata.** `limpiarSesionLocal(tokenKey)` recibía UNA llave y
+borraba UNA llave. El panel le pasa `a24_admin_token`; el portal,
+`a24_cliente_token`. Salir de un panel dejaba la sesión del otro viva —en
+`localStorage` **y** en su cookie— hasta 60 minutos.
+
+**3. Causa raíz — y no es "faltó una línea".** El producto modela la sesión
+**por panel**; el portero la modela **por persona**. Son dos componentes
+decidiendo distinto sobre el mismo concepto, que es exactamente lo que la
+sección *Fuente única de verdad* de `ESTANDAR-DESARROLLO.md` marca como
+hallazgo arquitectónico en sí mismo, no como coincidencia.
+
+El fix del 16-ago heredó el parámetro `tokenKey` del código que venía a
+reemplazar sin preguntarse si ese parámetro **debía existir**. La pregunta 15
+—*"¿qué código debería eliminarse?"*— se respondió sobre las dos copias
+duplicadas de la función, y no sobre su firma. Unificar tres copias de una
+regla equivocada da una sola copia equivocada.
+
+**4. Componente responsable:** `lib/sesion.ts` — es quien sabe qué guarda este
+producto y dónde, y por lo tanto quien tiene que saber que son dos cosas.
+
+**5. Código afectado:** `lib/sesion.ts`; y los tres que le pasan `tokenKey`
+(`app/portal/LoginGate.tsx`, `app/admin/LoginGate.tsx`,
+`components/SignOutButton.tsx`).
+
+**6. Impacto real — por qué se veía como "no me deja entrar".** Con el token
+viejo todavía vigente, `middleware.ts` dejaba pasar la petición y `LoginGate`
+daba la sesión por buena, así que **`app/auth/callback` nunca llegaba a
+correr** y el token nuevo nunca se guardaba. De ahí la frase de Gina: el
+producto ya había decidido con la sesión anterior antes de que Google entrara
+en la historia. Y lo que lo convierte en fallo y no en comodidad:
+`salirDelEcosistema` **sí** destruye la sesión en `sorsabsa-identity`
+—verificado contra `auth.sessions`: las sesiones previas desaparecieron y se
+crearon dos nuevas a las 17:51:12 hora Ecuador— así que quedaba un token local
+válido para una identidad que **ya no existía**. El mismo defecto que este
+hallazgo denunciaba el 16-ago, por la otra mitad.
+
+**7. Fix, commit `agente24siete@628c84a`:** `limpiarSesionLocal` borra las DOS
+llaves, `localStorage` y cookie. La lista (`LLAVES_DE_SESION`) vive en el
+módulo que borra, no en el que escribe. El parámetro se conserva y **se ignora
+a propósito**: no hay ningún caso legítimo en el que salir de un panel deba
+dejarte dentro del otro, en el mismo navegador y con la identidad central ya
+cerrada.
+
+**8. Código que debe eliminarse — anotado, NO retirado hoy:** el argumento
+`tokenKey` en los tres call sites y en la firma. Se dejó por compatibilidad
+para que el fix llegara en un commit chico y verificable mientras Gina estaba
+bloqueada. **Queda como deuda a retirar** (parte II, regla 6): se borra cuando
+se toque cualquiera de esos tres archivos por otro motivo. Mientras siga ahí,
+un parámetro ignorado es una invitación a creer que hace algo.
+
+**9. Riesgo de regresión:** bajo — borrar de más al salir no puede dejar a
+nadie adentro. El único efecto observable es que cerrar sesión en un panel
+ahora también cierra el otro, que es lo que se pretende.
+
+**Validación — y acá hay que ser exacto sobre qué se comprobó y qué no:**
+
+- ✅ Verificado en la base de identity que el logout central destruye las
+  sesiones (las de las 17:23/17:31 desaparecieron; aparecieron las de 17:51).
+- ✅ `tsc --noEmit` y `next build` completos, limpios.
+- ⬜ **Falta la prueba en vivo**: salir del panel y confirmar que en
+  DevTools → Application ya no está NI `a24_admin_token` NI
+  `a24_cliente_token`, en cookies y en localStorage. Se anota explícitamente
+  porque es el mismo punto 9 que estuvo seis días sin ejecutarse y cuya
+  ausencia dejó este hallazgo medio abierto sin que nadie lo supiera.
+- ❌ **Ninguna prueba automática fallaría si esto volviera mañana.** Es la
+  respuesta honesta a la pregunta 17 de la parte II. No hay suite de
+  navegador en este repo y no se creó una hoy. Anotado como pendiente real,
+  no como algo cubierto.
+
+**Nota de método, para no repetirla.** El 16-ago este hallazgo se dio por
+"corregido, falta la prueba de Gina" y el encabezado dijo 🔧 durante seis
+días. En ese estado es indistinguible de "cerrado" para quien lo lee rápido —
+y de hecho se le construyó encima. La lección no es "probar más": es que un
+hallazgo cuya validación no se ejecutó **no está corregido**, y su encabezado
+tiene que decirlo con la misma fuerza que lo diría un ⬜.
 
 ### 🟠-5 — ⬜ El `next` de agente24siete no apunta a su propio `/auth/callback`: el login solo termina por una cadena de fallbacks, con una vuelta entera de más por el portero. Encontrado 16-ago-2026
 
@@ -697,6 +792,25 @@ fix, un login que arranca en `/portal` debe pasar UNA sola vez por
 `auth.sorsabsa.com` — hoy pasa dos, visible en la pestaña Network del
 navegador con "Preserve log" activado.
 
+**22-ago-2026 — trazado en vivo, y una hipótesis mía que resultó FALSA.** Al
+construir `/admin/clientes` se vio que `middleware.ts` manda
+`next=%2Fadmin%2Fclientes` (relativo) y se sospechó que el enlace directo a
+una ruta profunda se perdía después del login: `resolveSafeRedirect` no puede
+resolver una ruta relativa y cae a `redirectUrl`. **Es cierto y no importa.**
+Siguiendo el flujo completo en el código, `auth/complete` arma el fragment con
+`…&next=${encodeURIComponent(next)}` usando el `next` ORIGINAL, no el destino
+resuelto — así que la ruta pedida viaja aparte y sobrevive; y
+`app/auth/callback/page.tsx` tiene un `catch` explícito para el `next`
+relativo. El destino profundo llega bien.
+
+Se anota por dos motivos. Uno: **evita que alguien "arregle" esto rompiéndolo**
+— la trampa ya está escrita en el punto 6 de este hallazgo y ahora hay un
+segundo motivo para no tocarlo a la ligera. Dos: es un caso de método. La
+sospecha era razonable, encajaba con el bug real del 10-ago, y era **falsa**;
+lo único que la descartó fue seguir el dato por los cuatro archivos en vez de
+informarla. Este hallazgo sigue ⬜ **abierto**: la vuelta de más por el portero
+existe igual, que es lo que denuncia desde el 16-ago.
+
 ### 🟠-6 — ✅ CORREGIDO Y ESTANDARIZADO 16-ago-2026 — La pantalla terminal encerraba a la persona: sin salir, sin volver a la web, sin poder pedir el alta
 
 **Escrito el 16-ago-2026, tarde:** este hallazgo se corrigió y se commiteó
@@ -756,6 +870,68 @@ asociado", clic en "Salir" → debe llegar a `agente24siete.app`, y un login
 nuevo debe **pedir credenciales** (prueba de que cerró también la sesión de
 identity, no solo la apariencia de haber salido).
 
+### 🟠-7 — ✅ CORREGIDO 22-ago-2026, commit `agente24siete@6684e54` — Las dos pantallas de rechazo nunca dicen CON QUÉ CUENTA te está rechazando, y con una identidad compartida eso vuelve indistinguible "te rechacé" de "estoy roto"
+
+**1. Síntoma.** Gina, entrando a `/admin/clientes`: *"dice: Cuenta no
+habilitada"*. Y al reintentar por otra vía: *"si hago el acceso por google
+dice: Cuenta sin cliente asociado"*. Las dos pantallas correctas, las dos
+inútiles: ninguna dice de quién habla.
+
+**2. Causa inmediata.** Los dos `LoginGate` pasan a `<SinAcceso>` un `mensaje`
+que es una cadena fija. El dato —el `email` del JWT que el propio gate acaba
+de leer del `localStorage`— está en la mano y no se usa.
+
+**3. Causa raíz.** El texto se escribió cuando pensar en "la cuenta" era
+pensar en **una**. Con portero central hay **una sola identidad para todo
+SORSABSA** y la misma persona acumula varias: en `auth.users` de
+`sorsabsa-identity` hay hoy siete, dos de ellas de Gina (una Google, una
+Facebook). En ese mundo "esta cuenta no está habilitada" no identifica nada.
+
+Es el mismo error de fondo que 🔴-2 de `PENDIENTES-ECOSISTEMA.md` §27
+(*"asegurar la identidad, no crearla"*): razonar sobre un producto aislado
+cuando el portero ya es compartido. Y el componente compartido no tenía la
+culpa — `@sorsabsa/ui/SinAcceso` declara su `mensaje` como `ReactNode`
+con este motivo escrito textualmente: *"Acepta nodos para poder resaltar el
+email con el que entró"*. **La pieza estaba preparada; nadie le pasaba el
+dato.**
+
+**4. Componente responsable:** los dos `LoginGate` de agente24siete, que son
+quienes tienen el token.
+
+**5. Código afectado:** `lib/jwt.ts`, `app/portal/LoginGate.tsx`,
+`app/admin/LoginGate.tsx`.
+
+**6. Costo real, medido en esta sesión.** El diagnóstico tomó cerca de media
+hora y **produjo una afirmación equivocada**: sin saber qué cuenta era, se
+dedujo de dos marcas de tiempo separadas por 18 segundos que el rechazo había
+sido para `patricio.marmol@hotmail.com`, y se le dijo a Gina como si fuera un
+hecho. Al mirar `auth.sessions` no había ninguna sesión de esa cuenta que lo
+respaldara. Se corrigió ante Gina en el momento. **La pantalla tenía el dato
+todo el tiempo**; se dedujo lo que se podía haber leído, que es justo lo que
+la regla 5 de la parte II (*lo que se declara no se deduce*) previene.
+
+**7. Fix aplicado:** `emailDelToken()` en `lib/jwt.ts`, hermano de
+`tokenExpirado()` — decodifica el claim sin verificar firma, **para mostrar,
+nunca para autorizar** (eso lo sigue haciendo el servidor contra el JWKS). Los
+dos gates lo pasan dentro del `mensaje`. Si el token no trae `email`, el texto
+cae al genérico anterior: no se inventa un dato ausente.
+
+**8. Código que debe eliminarse:** ninguno.
+
+**9. Riesgo de regresión:** ninguno — es texto. No toca el gate ni decide
+acceso. `tsc` y `next build` limpios.
+
+**Validación:** ⬜ la hace Gina, entrando con una cuenta sin lugar en el
+producto y confirmando que la pantalla nombra esa cuenta. ❌ Ninguna prueba
+automática lo cubre (respuesta honesta a la pregunta 17).
+
+**Pendiente que este hallazgo deja abierto — ver 🟡-3:** el rechazo se ve
+ahora en la pantalla de quien lo sufre, pero **sigue sin quedar registrado en
+ningún lado**. Nadie puede responder después "¿a quién se le negó el acceso
+esta tarde, y por qué?".
+
+---
+
 ---
 
 ## 🟡 MEDIO
@@ -797,6 +973,102 @@ escribir código: 🟠-5 cambia el costo real de (b).
 real y registrar qué pasa exactamente al minuto 60 — hoy no está
 observado, solo deducido del código.
 
+### 🟡-2 — ✅ CORREGIDO 22-ago-2026, commit `agente24siete@d168078` — El portero se reejecutaba en CADA clic del menú, y mientras tanto la pantalla decía "Redirigiendo al acceso…" aunque no fuera a ningún lado
+
+**1. Síntoma.** Gina, recién entrada al panel: *"me cambio entre opciones
+clientes y conversaciones y veo el mensaje redirigiendo"*. En cada cambio de
+sección, una pantalla completa anunciando una expulsión que no ocurría.
+
+**2. Causa inmediata — son dos defectos que se potencian:**
+
+- El menú (`app/admin/AdminNav.tsx`) usaba `<a href>`, o sea **navegación con
+  recarga completa**. Cada clic reejecutaba `middleware.ts`, remontaba
+  `LoginGate` y disparaba otra vez `/api/admin/whoami`.
+- El cartel de espera se mostraba para `estado !== "listo"`, un único cajón que
+  mezclaba *verificando* con *redirigiendo*, y su texto era el del segundo.
+
+**3. Causa raíz.** El `<a href>` es mío, de ese mismo día: `AdminNav.tsx` nació
+al unificar el menú de escritorio y móvil, y copió el marcado del `<aside>` que
+reemplazaba sin notar que en un layout de App Router eso tira abajo el árbol
+entero —`LoginGate` incluido— en cada navegación. El componente compartido
+`MobileNav` sí usa `<a>` a propósito y lo dice; ese razonamiento no vale para
+el `<aside>`, que vive dentro del gate.
+
+El cartel es más viejo y es de la familia del *"¡Pago confirmado!"* del
+Convertidor (`PENDIENTES-ECOSISTEMA.md` §26): **la pantalla afirmando algo
+distinto de lo que está pasando.** No era grave mientras se veía una vez por
+sesión; con la recarga por clic pasó a leerse como *"te estoy echando"*, seis
+veces por minuto.
+
+**4. Componente responsable:** `app/admin/AdminNav.tsx` (la navegación) y los
+dos `LoginGate` (el texto).
+
+**5. Código afectado:** esos tres.
+
+**6. Fix aplicado:** `next/link` en el `<aside>` — navegación del lado del
+cliente, el layout no se remonta, la sesión se comprueba **una vez por carga y
+no una vez por clic**. Los ítems deshabilitados dejaron de ser enlaces: no van
+a ningún lado, y un `<a>` sin destino es otra cosa que la pantalla afirma y no
+cumple. Estado `"redirigiendo"` nuevo, marcado justo antes de cada salto real
+al portero: mientras solo comprueba dice *"Verificando tu acceso…"*.
+
+**7. Código que debe eliminarse:** ninguno.
+
+**8. Riesgo de regresión:** bajo. `next/link` no cambia quién decide el acceso
+—el gate sigue igual— solo con qué frecuencia se le pregunta. Ojo con lo que
+NO cambia: el `matcher` de `middleware.ts` sigue cubriendo `/admin/*`, así que
+una entrada directa por URL o un refresco siguen pasando por el servidor.
+
+**9. Validación:** ⬜ la hace Gina — cambiar de sección y confirmar que no
+aparece ningún cartel. ❌ Sin prueba automática.
+
+### 🟡-3 — ⬜ No existe ningún registro de accesos NI de rechazos: el único rastro es un campo que se pisa. Encontrado 22-ago-2026
+
+**1. Síntoma.** Gina, en medio del problema de acceso: *"¿hay log de
+acceso?"*. La respuesta honesta fue no, y por eso el diagnóstico se hizo por
+deducción — con una conclusión equivocada de por medio (ver 🟠-7 punto 6).
+
+**2. Causa inmediata, relevada hoy contra las bases, no supuesta:**
+
+| fuente | qué guarda | sirve para mirar atrás |
+|---|---|---|
+| `auth.audit_log_entries` (identity) | **0 filas** — Supabase la purga sola | no |
+| `auth.users.last_sign_in_at` | solo el ÚLTIMO ingreso, se pisa en cada login | no |
+| `auth.sessions` | sesiones vivas, con IP y fecha; desaparecen al cerrar sesión | a medias |
+| logs de Vercel | las respuestas HTTP, retención corta | a medias, y no dicen el porqué |
+| agente24siete | **nada** | no |
+
+**3. Causa raíz.** Nunca se decidió que esto hiciera falta. El portero delega
+la identidad en Supabase y se asumió que "Supabase ya lo registra" — hoy se
+comprobó que su tabla de auditoría está vacía. Y del lado del producto, los
+rechazos (`autenticarAdmin` → 403, `autenticarCliente` → 401) se responden y
+se olvidan: no hay `console.error`, no hay tabla, no hay nada. La información
+más valiosa para un portero —**a quién NO dejó pasar y por qué**— es la única
+que no se guarda.
+
+**4. Componente responsable — sin decidir, y es la pregunta que hay que
+responder antes de escribir código:** ¿va en `sorsabsa-identity` (un intento
+de login es del portero, y serviría para los seis productos) o en cada
+producto (los 401/403 los decide el producto, contra SUS tablas
+`usuarios`/`clientes`)? Son eventos distintos y probablemente hagan falta los
+dos. Ponerlo en el producto es más rápido y **repite lo mismo seis veces** —
+justo lo que la sección *Fuente única de verdad* previene.
+
+**5-8.** N/A hasta decidir el punto 4. **Anotado a propósito sin fix
+propuesto:** escribir el código antes de responder quién es el dueño del
+evento es como se llega a seis implementaciones distintas del mismo registro.
+
+**9. Validación, cuando se haga:** reproducir el caso de hoy —entrar con una
+cuenta sin lugar en el producto— y poder responder después, leyendo, *quién*
+fue rechazado, *cuándo*, *en qué producto* y *por qué motivo*, sin deducir
+nada de marcas de tiempo.
+
+**Decisión pendiente de Gina.** Ofrecido en la sesión del 22-ago y **no
+construido**: sin su respuesta al punto 4, cualquier cosa que se escriba nace
+en el lugar equivocado.
+
+---
+
 ---
 
 ## Resuelto con Gina (ya no está pendiente)
@@ -828,6 +1100,27 @@ observado, solo deducido del código.
   - **🟠-4 construido el mismo día** (`agente24siete@61760c5`, Gina:
     "adelante") — falta solo su punto 9 en vivo.
   - **🟠-5 y 🟡-1 siguen sin tocarse**, esperando decisión.
+- **22-ago-2026 — cinco entradas nuevas, cuatro ya corregidas.** Ninguna salió
+  de auditar: salieron de **construir `/admin/clientes` y de que Gina la
+  usara**. 🔴-2 (los 11 endpoints admin sin `await`, commit `16ef1db`), 🟠-4
+  reabierto y cerrado de verdad (`628c84a`), 🟠-7 (las pantallas no decían la
+  cuenta, `6684e54`), 🟡-2 (el menú recargaba entero y el cartel mentía,
+  `d168078`) y 🟡-3 (**no hay registro de rechazos** — ⬜ sin construir, espera
+  que Gina decida de quién es ese evento).
+  - **Lo que las cinco tienen en común, y es el hallazgo de método del día:**
+    ninguna se manifestaba como un error. 🔴-2 devolvía 401 y 403 correctos;
+    🟠-4 se veía como "no me deja entrar"; 🟠-7 se veía como un sistema roto;
+    🟡-2 se veía como una expulsión. **Un portero que rechaza bien por el
+    motivo equivocado es indistinguible de uno que funciona** — hasta que
+    alguien lo usa de verdad.
+  - **Deuda a retirar** (parte II, regla 6): el argumento `tokenKey` de
+    `limpiarSesionLocal`, hoy ignorado a propósito, en la firma y en sus tres
+    call sites. Se borra al tocar cualquiera de esos archivos por otro motivo.
+  - **Lo que NO quedó cubierto, dicho como tal:** ninguno de los cuatro fixes
+    tiene una prueba automática que falle si el defecto vuelve (pregunta 17 de
+    la parte II). Este repo no tiene suite de navegador y no se creó una. Lo
+    único que hoy sostiene 🔴-2 es un docblock; lo único que sostiene 🟠-4 es
+    que la lista de llaves vive en un solo lugar.
 - **10-ago-2026:** 🟠-1 (Salir), 🟠-2 (chequeo de vigencia), 🔴-1
   (`middleware.ts` + cookie + `whoami` para el tercer caso), el fix del
   bucle de "cuenta sin cliente", y la causa real del bucle que persistía
