@@ -1,16 +1,16 @@
 # Graph Report - diseno-sorsabsa  (2026-08-23)
 
 ## Corpus Check
-- 92 files · ~130,195 words
+- 92 files · ~131,203 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 897 nodes · 1170 edges · 59 communities (56 shown, 3 thin omitted)
+- 898 nodes · 1171 edges · 59 communities (56 shown, 3 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `dae86db5`
+- Built from commit: `7fd08f6f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -30,8 +30,8 @@
 - 🟠 IMPORTANTE
 - compilerOptions
 - Estándar de desarrollo — no parchear la arquitectura
-- devDependencies
 - Auditoría — CondoManager como aplicación (más allá del portero)
+- devDependencies
 - Auditoría — JustiRed (legaltech)
 - 21-bis. 🟠 Lo que bloquea el cobro del Convertidor — analizado y resuelto a medias, 16-ago-2026
 - index.ts
@@ -85,12 +85,12 @@
   showcase/src/resolveColors.ts → src/brand/BrandProvider.tsx
 - `TokenAudit()` --calls--> `useBrand()`  [EXTRACTED]
   showcase/src/components/TokenAudit.tsx → src/brand/BrandProvider.tsx
-- `SinAccesoProps` --references--> `IconName`  [EXTRACTED]
-  src/components/SinAcceso.tsx → src/icons/icon-paths.ts
 - `App()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
   showcase/src/App.tsx → showcase/src/resolveColors.ts
 - `ColorPalette()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
   showcase/src/components/ColorPalette.tsx → showcase/src/resolveColors.ts
+- `ContrastReport()` --calls--> `contrastRatio()`  [EXTRACTED]
+  showcase/src/components/ContrastReport.tsx → showcase/src/contrast.ts
 
 ## Import Cycles
 - None detected.
@@ -102,16 +102,16 @@ Cohesion: 0.06
 Nodes (35): CardStatusDemo(), SHADOW, TONES, DomusLanding(), FEATURES, SOCIAL, IconCatalog(), NAMES (+27 more)
 
 ### Community 1 - "App.tsx"
-Cohesion: 0.08
-Nodes (31): App(), BRAND_KEYS, AtomShowcase(), ButtonMatrix(), SHADOW, VARIANTS, ColorPalette(), TOKEN_ORDER (+23 more)
+Cohesion: 0.07
+Nodes (32): App(), BRAND_KEYS, AtomShowcase(), ButtonMatrix(), SHADOW, VARIANTS, ColorPalette(), TOKEN_ORDER (+24 more)
 
 ### Community 2 - "Arquitectura del ecosistema SORSABSA"
 Cohesion: 0.04
 Nodes (47): 1. Inventario, 2. Los dos planos, 3-bis. NO HAY DATOS DE CLIENTES. Punto., 3. Mapa de bases de datos — LA TRAMPA, 4. Almacenamiento, 4-quater. Mapa de repos y el grafo — ✅ levantado 22-ago-2026, 4-ter. El cobro y el portero — ✅ verificado en vivo 22-ago-2026, 5. Roturas verificadas el 2026-07-26 (+39 more)
 
 ### Community 3 - "BrandProvider.tsx"
-Cohesion: 0.08
-Nodes (33): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandContext, BrandProvider(), brandToCssVars(), contrastRatio() (+25 more)
+Cohesion: 0.09
+Nodes (32): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandContext, BrandProvider(), brandToCssVars(), contrastRatio() (+24 more)
 
 ### Community 4 - "Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)"
 Cohesion: 0.05
@@ -157,13 +157,13 @@ Nodes (20): jest, @testing-library/jest-dom, compilerOptions, esModuleInterop, f
 Cohesion: 0.10
 Nodes (20): Antes de cada fix — responder internamente, Criterio de aceptación, Criterio de aceptación de la parte II, Estándar de desarrollo — no parchear la arquitectura, Fuente única de verdad, "Funciona" no es lo mismo que "está bien diseñado", PARTE I — No parchear la arquitectura, PARTE II — Lo que existe y no funciona (+12 more)
 
-### Community 15 - "devDependencies"
+### Community 15 - "Auditoría — CondoManager como aplicación (más allá del portero)"
+Cohesion: 0.11
+Nodes (19): 🔵-1 — ✅ Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo — RESUELTO 09-ago-2026, 🟠-1 — ✅ Chequeo de rol/autorización reimplementado en al menos 13 rutas, sin fuente única — RESUELTO 09-ago-2026, 🟠-2 — ✅ `resolverPostLogin`: un error de consulta se trata igual que "usuario sin perfiles todavía" — RESUELTO 09-ago-2026, 🔵-2 — ✅ Unidad fantasma auto-creada en cada registro de admin — RESUELTO 09-ago-2026, 🔵-3 — ✅ `codigo_predial` sin garantía de unicidad — RESUELTO 09-ago-2026, 🔴-3 — ✅ `registros_pendientes` y `campanas_masivas` sin GRANT ni RLS — service_role no podía usarlas — RESUELTO 09-ago-2026, 🟠-3 — ✅ Ubicación y Contacto escribían las mismas columnas sin saberlo — pérdida de datos real — RESUELTO 09-ago-2026, 🔴-4 — ✅ CORREGIDO 22-ago-2026, commit `condomanager@3127979` — La integración con EcoInmobiliaria estaba construida de los dos lados y **nadie llamaba al emisor**, mientras dos pantallas prometían por escrito que publicaba (+11 more)
+
+### Community 16 - "devDependencies"
 Cohesion: 0.11
 Nodes (19): jest-environment-jsdom, devDependencies, jest, jest-environment-jsdom, @testing-library/jest-dom, @testing-library/react, ts-jest, @types/jest (+11 more)
-
-### Community 16 - "Auditoría — CondoManager como aplicación (más allá del portero)"
-Cohesion: 0.11
-Nodes (18): 🔵-1 — ✅ Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo — RESUELTO 09-ago-2026, 🟠-1 — ✅ Chequeo de rol/autorización reimplementado en al menos 13 rutas, sin fuente única — RESUELTO 09-ago-2026, 🟠-2 — ✅ `resolverPostLogin`: un error de consulta se trata igual que "usuario sin perfiles todavía" — RESUELTO 09-ago-2026, 🔵-2 — ✅ Unidad fantasma auto-creada en cada registro de admin — RESUELTO 09-ago-2026, 🔵-3 — ✅ `codigo_predial` sin garantía de unicidad — RESUELTO 09-ago-2026, 🔴-3 — ✅ `registros_pendientes` y `campanas_masivas` sin GRANT ni RLS — service_role no podía usarlas — RESUELTO 09-ago-2026, 🟠-3 — ✅ Ubicación y Contacto escribían las mismas columnas sin saberlo — pérdida de datos real — RESUELTO 09-ago-2026, 🔵-4 — ✅ `deudas.rubro_id`: UI decía "opcional", la base exigía `NOT NULL`, y un `LEFT JOIN` faltante lo hacía peor — RESUELTO 09-ago-2026 (+10 more)
 
 ### Community 17 - "Auditoría — JustiRed (legaltech)"
 Cohesion: 0.11
@@ -310,8 +310,8 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `name`, `version`, `description` to the rest of the system?**
   _507 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `DomusLanding.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.0573025856044724 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05660377358490566 - nodes in this community are weakly interconnected._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.07529411764705882 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07315233785822021 - nodes in this community are weakly interconnected._
 - **Should `Arquitectura del ecosistema SORSABSA` be split into smaller, more focused modules?**
   _Cohesion score 0.0425531914893617 - nodes in this community are weakly interconnected._

@@ -108,6 +108,19 @@
       "source_location": "L22"
     },
     {
+      "id": "src_components_sinacceso_sinaccesoprops",
+      "label": "SinAccesoProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "DomusLanding.tsx",
+      "file_type": "code",
+      "norm_label": "sinaccesoprops",
+      "source_file": "src/components/SinAcceso.tsx",
+      "source_location": "L43"
+    },
+    {
       "id": "src_components_statusbadge_statusbadgeprops",
       "label": "StatusBadgeProps",
       "_callable": true,
@@ -509,19 +522,6 @@
       "norm_label": "wordmarktone",
       "source_file": "src/brand/BrandProvider.tsx",
       "source_location": "L77"
-    },
-    {
-      "id": "src_components_sinacceso_sinaccesoprops",
-      "label": "SinAccesoProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "BrandProvider.tsx",
-      "file_type": "code",
-      "norm_label": "sinaccesoprops",
-      "source_file": "src/components/SinAcceso.tsx",
-      "source_location": "L43"
     },
     {
       "id": "src_components_button_buttonprops",
@@ -1859,17 +1859,6 @@
       "source_location": "L1"
     },
     {
-      "id": "src_components_input_input",
-      "label": "Input",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "DomusLanding.tsx",
-      "file_type": "code",
-      "norm_label": "input",
-      "source_file": "src/components/Input.tsx",
-      "source_location": "L26"
-    },
-    {
       "id": "src_components_mobilenav",
       "label": "MobileNav.tsx",
       "_origin": "ast",
@@ -2209,6 +2198,17 @@
       "norm_label": "resolvecolors.ts",
       "source_file": "showcase/src/resolveColors.ts",
       "source_location": "L1"
+    },
+    {
+      "id": "src_components_input_input",
+      "label": "Input",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "input",
+      "source_file": "src/components/Input.tsx",
+      "source_location": "L26"
     },
     {
       "id": "showcase_src_components_tabledemo",
@@ -3287,339 +3287,142 @@
       "source_location": "L71"
     },
     {
-      "id": "package_devdependencies",
-      "label": "devDependencies",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "code",
-      "norm_label": "devdependencies",
-      "source_file": "package.json",
-      "source_location": "L32"
-    },
-    {
-      "id": "package_devdependencies_jest",
-      "label": "jest",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "code",
-      "norm_label": "jest",
-      "source_file": "package.json",
-      "source_location": "L39"
-    },
-    {
-      "id": "package_devdependencies_jest_environment_jsdom",
-      "label": "jest-environment-jsdom",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "code",
-      "norm_label": "jest-environment-jsdom",
-      "source_file": "package.json",
-      "source_location": "L40"
-    },
-    {
-      "id": "package_devdependencies_testing_library_jest_dom",
-      "label": "@testing-library/jest-dom",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "code",
-      "norm_label": "@testing-library/jest-dom",
-      "source_file": "package.json",
-      "source_location": "L33"
-    },
-    {
-      "id": "package_devdependencies_testing_library_react",
-      "label": "@testing-library/react",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "code",
-      "norm_label": "@testing-library/react",
-      "source_file": "package.json",
-      "source_location": "L34"
-    },
-    {
-      "id": "package_devdependencies_ts_jest",
-      "label": "ts-jest",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "code",
-      "norm_label": "ts-jest",
-      "source_file": "package.json",
-      "source_location": "L44"
-    },
-    {
-      "id": "package_devdependencies_types_jest",
-      "label": "@types/jest",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "code",
-      "norm_label": "@types/jest",
-      "source_file": "package.json",
-      "source_location": "L35"
-    },
-    {
-      "id": "package_devdependencies_types_react",
-      "label": "@types/react",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "code",
-      "norm_label": "@types/react",
-      "source_file": "package.json",
-      "source_location": "L36"
-    },
-    {
-      "id": "package_devdependencies_types_react_dom",
-      "label": "@types/react-dom",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "code",
-      "norm_label": "@types/react-dom",
-      "source_file": "package.json",
-      "source_location": "L37"
-    },
-    {
-      "id": "package_devdependencies_typescript",
-      "label": "typescript",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "code",
-      "norm_label": "typescript",
-      "source_file": "package.json",
-      "source_location": "L45"
-    },
-    {
-      "id": "jest_environment_jsdom",
-      "label": "jest-environment-jsdom",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "concept",
-      "norm_label": "jest-environment-jsdom",
-      "source_file": "package.json",
-      "source_location": "L40"
-    },
-    {
-      "id": "package_json_jest",
-      "label": "jest",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "concept",
-      "norm_label": "jest",
-      "source_file": "package.json",
-      "source_location": "L39"
-    },
-    {
-      "id": "package_json_types_react",
-      "label": "@types/react",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "concept",
-      "norm_label": "@types/react",
-      "source_file": "package.json",
-      "source_location": "L36"
-    },
-    {
-      "id": "package_json_types_react_dom",
-      "label": "@types/react-dom",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "concept",
-      "norm_label": "@types/react-dom",
-      "source_file": "package.json",
-      "source_location": "L37"
-    },
-    {
-      "id": "package_json_typescript",
-      "label": "typescript",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "concept",
-      "norm_label": "typescript",
-      "source_file": "package.json",
-      "source_location": "L45"
-    },
-    {
-      "id": "testing_library_jest_dom",
-      "label": "@testing-library/jest-dom",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "concept",
-      "norm_label": "@testing-library/jest-dom",
-      "source_file": "package.json",
-      "source_location": "L33"
-    },
-    {
-      "id": "testing_library_react",
-      "label": "@testing-library/react",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "concept",
-      "norm_label": "@testing-library/react",
-      "source_file": "package.json",
-      "source_location": "L34"
-    },
-    {
-      "id": "ts_jest",
-      "label": "ts-jest",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "concept",
-      "norm_label": "ts-jest",
-      "source_file": "package.json",
-      "source_location": "L44"
-    },
-    {
-      "id": "types_jest",
-      "label": "@types/jest",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "devDependencies",
-      "file_type": "concept",
-      "norm_label": "@types/jest",
-      "source_file": "package.json",
-      "source_location": "L35"
-    },
-    {
       "id": "docs_auditoria_condomanager_1_artefactos_compilados_scratch_dist_js_commiteados_al_repo_resuelto_09_ago_2026",
       "label": "\ud83d\udd35-1 \u2014 \u2705 Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo \u2014 RESUELTO 09-ago-2026",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udd35-1 \u2014 \u2705 artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo \u2014 resuelto 09-ago-2026",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L358"
+      "source_location": "L478"
     },
     {
       "id": "docs_auditoria_condomanager_1_chequeo_de_rol_autorizaci\u00f3n_reimplementado_en_al_menos_13_rutas_sin_fuente_\u00fanica_resuelto_09_ago_2026",
       "label": "\ud83d\udfe0-1 \u2014 \u2705 Chequeo de rol/autorizaci\u00f3n reimplementado en al menos 13 rutas, sin fuente \u00fanica \u2014 RESUELTO 09-ago-2026",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-1 \u2014 \u2705 chequeo de rol/autorizacion reimplementado en al menos 13 rutas, sin fuente unica \u2014 resuelto 09-ago-2026",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L203"
+      "source_location": "L323"
     },
     {
       "id": "docs_auditoria_condomanager_2_resolverpostlogin_un_error_de_consulta_se_trata_igual_que_usuario_sin_perfiles_todav\u00eda_resuelto_09_ago_2026",
       "label": "\ud83d\udfe0-2 \u2014 \u2705 `resolverPostLogin`: un error de consulta se trata igual que \"usuario sin perfiles todav\u00eda\" \u2014 RESUELTO 09-ago-2026",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-2 \u2014 \u2705 `resolverpostlogin`: un error de consulta se trata igual que \"usuario sin perfiles todavia\" \u2014 resuelto 09-ago-2026",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L288"
+      "source_location": "L408"
     },
     {
       "id": "docs_auditoria_condomanager_2_unidad_fantasma_auto_creada_en_cada_registro_de_admin_resuelto_09_ago_2026",
       "label": "\ud83d\udd35-2 \u2014 \u2705 Unidad fantasma auto-creada en cada registro de admin \u2014 RESUELTO 09-ago-2026",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udd35-2 \u2014 \u2705 unidad fantasma auto-creada en cada registro de admin \u2014 resuelto 09-ago-2026",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L431"
+      "source_location": "L551"
     },
     {
       "id": "docs_auditoria_condomanager_3_codigo_predial_sin_garant\u00eda_de_unicidad_resuelto_09_ago_2026",
       "label": "\ud83d\udd35-3 \u2014 \u2705 `codigo_predial` sin garant\u00eda de unicidad \u2014 RESUELTO 09-ago-2026",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udd35-3 \u2014 \u2705 `codigo_predial` sin garantia de unicidad \u2014 resuelto 09-ago-2026",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L460"
+      "source_location": "L580"
     },
     {
       "id": "docs_auditoria_condomanager_3_registros_pendientes_y_campanas_masivas_sin_grant_ni_rls_service_role_no_pod\u00eda_usarlas_resuelto_09_ago_2026",
       "label": "\ud83d\udd34-3 \u2014 \u2705 `registros_pendientes` y `campanas_masivas` sin GRANT ni RLS \u2014 service_role no pod\u00eda usarlas \u2014 RESUELTO 09-ago-2026",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udd34-3 \u2014 \u2705 `registros_pendientes` y `campanas_masivas` sin grant ni rls \u2014 service_role no podia usarlas \u2014 resuelto 09-ago-2026",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L60"
+      "source_location": "L77"
     },
     {
       "id": "docs_auditoria_condomanager_3_ubicaci\u00f3n_y_contacto_escrib\u00edan_las_mismas_columnas_sin_saberlo_p\u00e9rdida_de_datos_real_resuelto_09_ago_2026",
       "label": "\ud83d\udfe0-3 \u2014 \u2705 Ubicaci\u00f3n y Contacto escrib\u00edan las mismas columnas sin saberlo \u2014 p\u00e9rdida de datos real \u2014 RESUELTO 09-ago-2026",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-3 \u2014 \u2705 ubicacion y contacto escribian las mismas columnas sin saberlo \u2014 perdida de datos real \u2014 resuelto 09-ago-2026",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L518"
+      "source_location": "L638"
+    },
+    {
+      "id": "docs_auditoria_condomanager_4_corregido_22_ago_2026_commit_condomanager_3127979_la_integraci\u00f3n_con_ecoinmobiliaria_estaba_construida_de_los_dos_lados_y_nadie_llamaba_al_emisor_mientras_dos_pantallas_promet\u00edan_por_escrito_que_publicaba",
+      "label": "\ud83d\udd34-4 \u2014 \u2705 CORREGIDO 22-ago-2026, commit `condomanager@3127979` \u2014 La integraci\u00f3n con EcoInmobiliaria estaba construida de los dos lados y **nadie llamaba al emisor**, mientras dos pantallas promet\u00edan por escrito que publicaba",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "\ud83d\udd34-4 \u2014 \u2705 corregido 22-ago-2026, commit `condomanager@3127979` \u2014 la integracion con ecoinmobiliaria estaba construida de los dos lados y **nadie llamaba al emisor**, mientras dos pantallas prometian por escrito que publicaba",
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L218"
     },
     {
       "id": "docs_auditoria_condomanager_4_deudas_rubro_id_ui_dec\u00eda_opcional_la_base_exig\u00eda_not_null_y_un_left_join_faltante_lo_hac\u00eda_peor_resuelto_09_ago_2026",
       "label": "\ud83d\udd35-4 \u2014 \u2705 `deudas.rubro_id`: UI dec\u00eda \"opcional\", la base exig\u00eda `NOT NULL`, y un `LEFT JOIN` faltante lo hac\u00eda peor \u2014 RESUELTO 09-ago-2026",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udd35-4 \u2014 \u2705 `deudas.rubro_id`: ui decia \"opcional\", la base exigia `not null`, y un `left join` faltante lo hacia peor \u2014 resuelto 09-ago-2026",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L583"
+      "source_location": "L703"
     },
     {
       "id": "docs_auditoria_condomanager_4_los_m\u00f3dulos_saas_por_condominio_se_activan_sin_ning\u00fan_cobro_real_no_resuelto_elevado_a_la_auditor\u00eda_09_ago_2026",
       "label": "\ud83d\udfe0-4 \u2014 Los m\u00f3dulos SaaS por-condominio se activan sin ning\u00fan cobro real \u2014 NO RESUELTO, elevado a la auditor\u00eda 09-ago-2026",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-4 \u2014 los modulos saas por-condominio se activan sin ningun cobro real \u2014 no resuelto, elevado a la auditoria 09-ago-2026",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L642"
+      "source_location": "L762"
     },
     {
       "id": "docs_auditoria_condomanager_5_resuelto_10_ago_2026_extracci\u00f3n_de_mensaje_de_error_de_fetch_duplicada_en_31_archivos",
       "label": "\ud83d\udd35-5 \u2014 \u2705 RESUELTO 10-ago-2026 \u2014 extracci\u00f3n de mensaje de error de fetch duplicada en ~31 archivos",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udd35-5 \u2014 \u2705 resuelto 10-ago-2026 \u2014 extraccion de mensaje de error de fetch duplicada en ~31 archivos",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L749"
+      "source_location": "L869"
     },
     {
       "id": "docs_auditoria_condomanager_auditor\u00eda_condomanager_como_aplicaci\u00f3n_m\u00e1s_all\u00e1_del_portero",
       "label": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
@@ -3631,85 +3434,294 @@
       "id": "docs_auditoria_condomanager_cr\u00edtico",
       "label": "\ud83d\udd34 CR\u00cdTICO",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udd34 critico",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L58"
+      "source_location": "L75"
     },
     {
       "id": "docs_auditoria_condomanager_hallazgos_ya_cubiertos_en_auditoria_portero_sso_md_no_repetidos_ac\u00e1",
       "label": "Hallazgos ya cubiertos en AUDITORIA-PORTERO-SSO.md (no repetidos ac\u00e1)",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "hallazgos ya cubiertos en auditoria-portero-sso.md (no repetidos aca)",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L384"
+      "source_location": "L504"
     },
     {
       "id": "docs_auditoria_condomanager_importante",
       "label": "\ud83d\udfe0 IMPORTANTE",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0 importante",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L201"
+      "source_location": "L321"
     },
     {
       "id": "docs_auditoria_condomanager_menor",
       "label": "\ud83d\udd35 MENOR",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "\ud83d\udd35 menor",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L356"
+      "source_location": "L476"
     },
     {
       "id": "docs_auditoria_condomanager_pr\u00f3ximo_paso",
       "label": "Pr\u00f3ximo paso",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "proximo paso",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L391"
+      "source_location": "L511"
     },
     {
       "id": "docs_auditoria_condomanager_pr\u00f3ximo_paso_actualizado_al_final_del_documento_ver_tambi\u00e9n_la_nota_de_pr\u00f3ximo_paso_m\u00e1s_arriba_en_el_cuerpo_del_documento",
       "label": "Pr\u00f3ximo paso (actualizado, al final del documento \u2014 ver tambi\u00e9n la nota de Pr\u00f3ximo paso m\u00e1s arriba, en el cuerpo del documento)",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "proximo paso (actualizado, al final del documento \u2014 ver tambien la nota de proximo paso mas arriba, en el cuerpo del documento)",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L715"
+      "source_location": "L835"
     },
     {
       "id": "docs_auditoria_condomanager_resto_de_la_pasada_portero_pagos_facturaci\u00f3n_rls_crons",
       "label": "Resto de la pasada \"portero \u00d7 pagos/facturaci\u00f3n/RLS/crons\"",
       "_origin": "ast",
-      "community": 16,
+      "community": 15,
       "community_name": "Auditor\u00eda \u2014 CondoManager como aplicaci\u00f3n (m\u00e1s all\u00e1 del portero)",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "resto de la pasada \"portero \u00d7 pagos/facturacion/rls/crons\"",
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L145"
+      "source_location": "L162"
+    },
+    {
+      "id": "package_devdependencies",
+      "label": "devDependencies",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "devdependencies",
+      "source_file": "package.json",
+      "source_location": "L32"
+    },
+    {
+      "id": "package_devdependencies_jest",
+      "label": "jest",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "jest",
+      "source_file": "package.json",
+      "source_location": "L39"
+    },
+    {
+      "id": "package_devdependencies_jest_environment_jsdom",
+      "label": "jest-environment-jsdom",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "jest-environment-jsdom",
+      "source_file": "package.json",
+      "source_location": "L40"
+    },
+    {
+      "id": "package_devdependencies_testing_library_jest_dom",
+      "label": "@testing-library/jest-dom",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "@testing-library/jest-dom",
+      "source_file": "package.json",
+      "source_location": "L33"
+    },
+    {
+      "id": "package_devdependencies_testing_library_react",
+      "label": "@testing-library/react",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "@testing-library/react",
+      "source_file": "package.json",
+      "source_location": "L34"
+    },
+    {
+      "id": "package_devdependencies_ts_jest",
+      "label": "ts-jest",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "ts-jest",
+      "source_file": "package.json",
+      "source_location": "L44"
+    },
+    {
+      "id": "package_devdependencies_types_jest",
+      "label": "@types/jest",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "@types/jest",
+      "source_file": "package.json",
+      "source_location": "L35"
+    },
+    {
+      "id": "package_devdependencies_types_react",
+      "label": "@types/react",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "@types/react",
+      "source_file": "package.json",
+      "source_location": "L36"
+    },
+    {
+      "id": "package_devdependencies_types_react_dom",
+      "label": "@types/react-dom",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "@types/react-dom",
+      "source_file": "package.json",
+      "source_location": "L37"
+    },
+    {
+      "id": "package_devdependencies_typescript",
+      "label": "typescript",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "typescript",
+      "source_file": "package.json",
+      "source_location": "L45"
+    },
+    {
+      "id": "jest_environment_jsdom",
+      "label": "jest-environment-jsdom",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "concept",
+      "norm_label": "jest-environment-jsdom",
+      "source_file": "package.json",
+      "source_location": "L40"
+    },
+    {
+      "id": "package_json_jest",
+      "label": "jest",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "concept",
+      "norm_label": "jest",
+      "source_file": "package.json",
+      "source_location": "L39"
+    },
+    {
+      "id": "package_json_types_react",
+      "label": "@types/react",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "concept",
+      "norm_label": "@types/react",
+      "source_file": "package.json",
+      "source_location": "L36"
+    },
+    {
+      "id": "package_json_types_react_dom",
+      "label": "@types/react-dom",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "concept",
+      "norm_label": "@types/react-dom",
+      "source_file": "package.json",
+      "source_location": "L37"
+    },
+    {
+      "id": "package_json_typescript",
+      "label": "typescript",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "concept",
+      "norm_label": "typescript",
+      "source_file": "package.json",
+      "source_location": "L45"
+    },
+    {
+      "id": "testing_library_jest_dom",
+      "label": "@testing-library/jest-dom",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "concept",
+      "norm_label": "@testing-library/jest-dom",
+      "source_file": "package.json",
+      "source_location": "L33"
+    },
+    {
+      "id": "testing_library_react",
+      "label": "@testing-library/react",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "concept",
+      "norm_label": "@testing-library/react",
+      "source_file": "package.json",
+      "source_location": "L34"
+    },
+    {
+      "id": "ts_jest",
+      "label": "ts-jest",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "concept",
+      "norm_label": "ts-jest",
+      "source_file": "package.json",
+      "source_location": "L44"
+    },
+    {
+      "id": "types_jest",
+      "label": "@types/jest",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "devDependencies",
+      "file_type": "concept",
+      "norm_label": "@types/jest",
+      "source_file": "package.json",
+      "source_location": "L35"
     },
     {
       "id": "docs_auditoria_justired_10_ago_2026_estado_real_ad\u00f3nde_debe_llegar_y_los_transversales_que_esta_auditor\u00eda_todav\u00eda_no_cubri\u00f3",
@@ -16418,7 +16430,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L145",
+      "source_location": "L162",
       "weight": 1.0
     },
     {
@@ -16429,7 +16441,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L201",
+      "source_location": "L321",
       "weight": 1.0
     },
     {
@@ -16440,7 +16452,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L356",
+      "source_location": "L476",
       "weight": 1.0
     },
     {
@@ -16451,7 +16463,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L384",
+      "source_location": "L504",
       "weight": 1.0
     },
     {
@@ -16462,7 +16474,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L391",
+      "source_location": "L511",
       "weight": 1.0
     },
     {
@@ -16473,7 +16485,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L58",
+      "source_location": "L75",
       "weight": 1.0
     },
     {
@@ -16484,7 +16496,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L715",
+      "source_location": "L835",
       "weight": 1.0
     },
     {
@@ -16495,7 +16507,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L60",
+      "source_location": "L77",
       "weight": 1.0
     },
     {
@@ -16506,7 +16518,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L203",
+      "source_location": "L323",
       "weight": 1.0
     },
     {
@@ -16517,7 +16529,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L288",
+      "source_location": "L408",
       "weight": 1.0
     },
     {
@@ -16528,7 +16540,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L358",
+      "source_location": "L478",
       "weight": 1.0
     },
     {
@@ -16539,7 +16551,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L431",
+      "source_location": "L551",
       "weight": 1.0
     },
     {
@@ -16550,7 +16562,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L460",
+      "source_location": "L580",
       "weight": 1.0
     },
     {
@@ -16561,7 +16573,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L518",
+      "source_location": "L638",
       "weight": 1.0
     },
     {
@@ -16572,7 +16584,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L583",
+      "source_location": "L703",
       "weight": 1.0
     },
     {
@@ -16583,7 +16595,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L642",
+      "source_location": "L762",
       "weight": 1.0
     },
     {
@@ -16594,7 +16606,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L749",
+      "source_location": "L869",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auditoria_condomanager_resto_de_la_pasada_portero_pagos_facturaci\u00f3n_rls_crons",
+      "target": "docs_auditoria_condomanager_4_corregido_22_ago_2026_commit_condomanager_3127979_la_integraci\u00f3n_con_ecoinmobiliaria_estaba_construida_de_los_dos_lados_y_nadie_llamaba_al_emisor_mientras_dos_pantallas_promet\u00edan_por_escrito_que_publicaba",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
+      "source_location": "L218",
       "weight": 1.0
     },
     {
@@ -23676,7 +23699,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L427",
+      "source_location": "L547",
       "weight": 1.0
     },
     {
@@ -23687,7 +23710,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-CONDOMANAGER.md",
-      "source_location": "L525",
+      "source_location": "L645",
       "weight": 1.0
     },
     {
@@ -23825,5 +23848,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "dae86db5d2a3783af76262608b76768d3115ceec"
+  "built_at_commit": "7fd08f6f7e913440f54d04fd628ee88839aea15f"
 }
