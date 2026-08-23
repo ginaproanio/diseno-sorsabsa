@@ -2195,3 +2195,144 @@ Nada que se pueda comprobar leyendo, consultando una base o corriendo un
 build. Todo eso ya se hizo y está en los commits y en las auditorías. Acá solo
 queda **lo que exige a una persona usando el producto**, que es exactamente la
 clase de defecto que todo el 22-ago demostró que ninguna herramienta encuentra.
+
+---
+
+## 29. 🟡 Lo que queda del barrido de UI del 23-ago-2026 — 18 modales, 8 desvíos y un sistema de avisos sin disparador
+
+**Contexto.** El 23-ago se hizo el primer barrido de `ESTANDAR-UI.md` §1 sobre
+todo el ecosistema y la consolidación del design system. Lo hecho está en
+`AUDITORIA-CONDOMANAGER.md` (🟠-5, 🔵-6), `AUDITORIA-JUSTIRED.md` y
+`AUDITORIA-DOMUSCRM.md`. Esta sección es **solo lo que quedó vivo**, con lo que
+hace falta para cerrarlo.
+
+Todo lo de abajo se puede hacer sin Gina. No requiere pruebas en vivo (eso es
+§28).
+
+### 29.1 · 18 modales del navegador
+
+Números verificados corriendo `npm run modales:local`, no estimados.
+
+| producto | vivos | dificultad |
+|---|---|---|
+| CondoManager | 10 | 8 mecánicos · 2 necesitan diseño |
+| DomusCRM | 7 | 5 mecánicos · `prompt()` de GeoLocation necesita un campo |
+| JustiRed | 1 | `alert()` en `Hero.tsx:22` |
+| agente24siete · Convertidor · auth-sorsabsa · pagos-sorsabsa | **0** | — |
+
+**Los mecánicos** son `ConfirmarAccion` de `@sorsabsa/ui` (v0.1.56+) o un aviso
+en la pantalla. La pieza ya existe; no hay nada que diseñar.
+
+**Los dos que NO son mecánicos, y por qué:**
+
+- `condomanager .../recaudacion/admin/administrar/generar` — dice *"Ya existe
+  una deuda para este rubro en este período, ¿continuar?"*. Eso **no es
+  "¿estás seguro?"**: es una advertencia con una decisión real detrás.
+  Convertirlo en un `ConfirmarAccion` genérico perdería la información. Va
+  como aviso en la pantalla, con el detalle de qué deuda ya existe.
+- `condomanager .../crm-vendedores/vendedor/[oportunidadId]` y
+  `domuscrm .../properties/new/components/GeoLocation.tsx` — son `prompt()`,
+  o sea **piden un dato**. Necesitan un campo en el formulario, no un botón de
+  confirmar.
+
+**Al convertir un `confirm()` de borrado hay que conservar la protección.** Es
+el error real de esta tanda: en `571c80b` se quitó el `confirm()` de
+`useAmenidades` y `useMantenimientos` sin poner nada, y borrar una amenidad con
+todas sus reservas quedó a un clic. Lo encontró Gina preguntando, no una
+prueba. Corregido en `ddce3c7`.
+
+### 29.2 · 8 desvíos de conformidad — de los cuales 1 es falso positivo
+
+Corriendo `npm run conformidad:local` el 23-ago, **con los grafos al día**:
+
+- **4 × `Notificacion`** — el mismo tipo declarado de nuevo en CondoManager
+  (2 pantallas), DomusCRM y JustiRed, cuando `@sorsabsa/ui` ya lo exporta.
+  JustiRed y DomusCRM son **idénticos carácter por carácter**: se arregla
+  importando. CondoManager le suma `condominio_id` y `usuario_id`, así que
+  debe **extender** el tipo compartido, no repetirlo.
+- **3 × sistema de toasts de JustiRed** — ver 29.3. Aplazado a propósito.
+- **1 × `Tag` en agente24siete** — ⚠️ **falso positivo, no tocar.**
+  `app/admin/contactos/page.tsx` declara `type Tag = { id, nombre, color }`:
+  es la **etiqueta de un contacto**, un tipo del negocio. El `Tag` de
+  `@sorsabsa/ui` es una píldora de interfaz. Misma palabra, cosas sin relación.
+  El check compara nombres de símbolos y no puede distinguirlas.
+- **Convertidor: SIN GRAFO** — está fuera del grafo de conocimiento, así que
+  no se le puede comprobar nada. Eso no es una duplicación: es un **agujero de
+  cobertura**, y hoy es el único producto sin vigilar.
+
+> **El check da candidatos, no duplicados.** Compara nombres. Dos cosas que se
+> llaman igual pueden hacer cosas distintas (`Tag`), y algo que comparte el 90 %
+> del dibujo puede tener el 10 % que importa (`Button` con `next/link`,
+> `EstadoBadge` con su mapa de estados). **Su lista es el principio de la
+> revisión, no su conclusión** — ver `AUDITORIA-CONDOMANAGER.md` 🔵-6, donde 3
+> de 5 "duplicados" no lo eran.
+
+### 29.3 · El design system tiene `Toast` pero no cómo dispararlo
+
+`@sorsabsa/ui` exporta un componente `Toast`. **No exporta un provider ni un
+`useToast()`**, así que no hay forma de decir "mostrá este aviso" desde una
+pantalla. JustiRed conserva el sistema de shadcn (`toast.tsx`, `use-toast.ts`,
+`toaster.tsx`, `sonner.tsx`) porque retirarlo lo dejaría **sin avisos**.
+
+Es la misma forma exacta del problema que causó el desvío de JustiRed: el
+producto no eligió duplicar, duplicó porque la pieza compartida no alcanzaba.
+Y se repite ahora que ya se conoce el patrón — por eso queda escrito acá en vez
+de resolverse a las apuradas.
+
+**Para cerrarlo:** un `ToastProvider` + `useToast()` en `@sorsabsa/ui`, y
+recién entonces migrar JustiRed. Antes de eso, cualquier retiro es un
+retroceso. Es además la pieza que **más falta para terminar de sacar modales**:
+buena parte de los `alert()` que quedan son avisos, y un aviso quiere un toast,
+no una confirmación.
+
+### 29.4 · La deuda que se retira se escribe (regla 6, parte II)
+
+Cerrado en esta tanda, para no volver a auditarlo:
+
+- **JustiRed: 48 → 7 componentes propios, cero duplicados.** Build de 39 s a
+  10 s.
+- **CondoManager: 9 → 7, cero duplicados.** `Tabla`, `PasswordInput` y la
+  copia local de `ConfirmarAccion` borradas.
+- **46 de 56 modales fuera de CondoManager**, en ocho tandas verificadas.
+- **`@sorsabsa/ui` creció 5 versiones** (0.1.56 → 0.1.60): `Select`,
+  `Checkbox`, `Tabs`, `ConfirmarAccion`, variante `outline`, `asChild`,
+  `CardDescription`.
+- **Los tres checks del ecosistema, corregidos** — ver 29.5.
+
+### 29.5 · Los tres checks afirmaban cosas que no habían mirado (`diseno@68fbdc0`)
+
+Esto salió al ir a escribir los números de las auditorías, y va acá porque es
+la causa directa de que Gina dijera *"he perdido la confianza en la auditoría,
+grep, grafo, GitHub Action"*.
+
+| check | qué pasaba | estado |
+|---|---|---|
+| workflow *sin modales* | **nunca corrió**: clonaba por nombre de CARPETA local y DomusCRM en GitHub es `domuscrm`, no `crm_inmobiliario` | ✅ corregido |
+| *conformidad* | leyó un grafo 69 s más viejo que el código y denunció 5 duplicaciones ya borradas | ✅ guardia de frescura |
+| *modales* | contaba 2 modales en auth-sorsabsa que eran `<script>alert(1)</script>` dentro de una prueba de XSS | ✅ excluye pruebas |
+
+**El del grafo es el grave, y no por las falsas alarmas.** En la dirección
+contraria, entre que alguien introduce una duplicación y graphify publica el
+grafo nuevo, el check decía *"sin desvíos"* mirando un grafo que todavía no la
+contenía: **verde sin haber mirado el código actual**. Ahora compara
+`built_at_commit` contra la cabeza del repo y se niega a opinar si en el medio
+cambió código. Al conectarlo aparecieron **dos grafos atrasados de verdad**
+(agente24siete y pagos-sorsabsa), uno de ellos dando un ✅ que nadie había
+ganado.
+
+**Queda vivo un límite conocido:** el check de modales todavía marcaría un
+`alert(` que aparezca dentro de una cadena en código de producción. Reconocer
+cadenas de JavaScript a fuerza de expresión regular es justamente la cirugía
+por regex que ya salió mal antes, así que se dejó anotado en vez de darlo por
+cubierto.
+
+### 29.6 · Cómo correr estas comprobaciones
+
+```
+npm run modales:local        # los 7 productos, desde disco
+npm run conformidad:local    # duplicación contra el design system
+```
+
+En CI: workflow *sin modales* los lunes 07:00 Ecuador y en cada push que toque
+el script o `ESTANDAR-UI.md`; *conformidad del ecosistema* con su propio
+disparador. Los dos avisan por Resend y se ponen en rojo.

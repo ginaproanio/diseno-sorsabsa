@@ -516,3 +516,77 @@ dato mal registrado, no de lógica, pero el deploy es decisión de Gina.
    no una lista vacía.
 6. **Cerrar sesión** y volver a entrar: debe **pedir credenciales de nuevo**.
    Si entra solo, el logout central no cerró la sesión de identity.
+
+---
+
+## 23-ago-2026 — Por qué JustiRed "iba por otro camino": la respuesta, a la tercera vez que Gina lo preguntó
+
+Gina, textual: *"otra vez ¿por qué JustiRed tira por otro camino? ¿por
+qué no sigue el estándar? ojo, es la tercera vez que lo digo"*.
+
+### La respuesta no era indisciplina del producto
+
+JustiRed necesitaba un **desplegable**. `@sorsabsa/ui` **no tenía
+ninguno**. Así que se instaló shadcn entero: **48 componentes**, de los
+cuales usaba 12 y **7 duplicaban** lo que el design system ya daba
+(button, input, card, avatar, badge, table, toast).
+
+Nadie eligió duplicar. Los duplicados **vinieron de arriba**, al traer la
+librería que sí tenía la pieza que faltaba. CondoManager hizo lo mismo
+por el mismo motivo.
+
+### Por qué tardó tres avisos en verse
+
+El check de conformidad informaba esto como *"JustiRed reimplementa 18
+símbolos"* — o sea, como un desvío del producto. **Mide en una sola
+dirección: sabe decir "este producto duplica", nunca "al design system le
+falta".** Durante semanas el informe apuntó al síntoma y ocultó la causa.
+Hicieron falta tres señalamientos de Gina para que alguien preguntara
+*duplica **para conseguir qué***.
+
+Es exactamente la pregunta 5 de `ESTANDAR-DESARROLLO` leída al revés: no
+*"¿existe ya otro componente que haga esto?"* sino **"¿el componente
+compartido alcanza para lo que este producto necesita?"**. Sin esa
+segunda pregunta, el estándar empuja al producto a elegir entre cumplir y
+funcionar — y siempre gana funcionar.
+
+### Qué se hizo
+
+| paso | commit | resultado |
+|---|---|---|
+| Borrar lo que nadie usaba | `7acf835` | 48 → 11 componentes |
+| Migrar Button, Input, Badge, Select | `a12b9bb` | usa `@sorsabsa/ui` |
+| Retirar el Card propio | `8b39a05` | **48 → 7, cero duplicados** |
+
+Y del lado del design system, la causa raíz: **`Select` existe desde
+v0.1.56**, construido sobre el `<select>` nativo a propósito — trae
+teclado, lectores de pantalla y la rueda de iOS de fábrica, mejor que
+cualquier lista dibujada a mano.
+
+**Efecto medido, no estimado:** el build pasó de **39 s a 10 s**.
+
+### Lo que queda vivo, y por qué
+
+- **El sistema de toasts** (`toast.tsx`, `use-toast.ts`, `toaster.tsx`,
+  `sonner.tsx`). El design system tiene un componente `Toast` pero **no
+  un mecanismo para dispararlo** — no hay provider ni `useToast()`.
+  Retirar el de JustiRed sin tener con qué reemplazarlo dejaría al
+  producto sin avisos. **Aplazado a propósito**, no olvidado: ver
+  `PENDIENTES-ECOSISTEMA.md` §29.
+- **1 modal**: `alert()` en `src/components/Hero.tsx:22`.
+- **`Notificacion`** redefinido en `src/hooks/useNotifications.ts`,
+  idéntico carácter por carácter al que `@sorsabsa/ui` exporta.
+
+### Un modal que se retiró de más — y por qué se anota
+
+`fe43047` sacó un `<Dialog>` de la página de precios. **Estaba bien
+hecho**: era una capa con la marca, no el cuadro gris del navegador.
+Gina lo precisó después: *"lo que odio es el cartel negro oscuro que
+parece de terminal"*. La regla estaba mal escrita —decía "nada de
+modales, ninguno"— y el check la aplicó al pie de la letra.
+`ESTANDAR-UI.md` §1 se corrigió (`18300c8`) para prohibir el diálogo del
+**navegador**, y el check dejó de marcar `<Dialog>`.
+
+Queda escrito porque el modo de fallo es general: **una regla mal escrita
+hace daño más rápido cuando se automatiza**, porque deja de depender de
+que alguien la lea con criterio.

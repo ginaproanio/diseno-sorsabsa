@@ -391,3 +391,50 @@ separado. Commits: `domuscrm@13d9176`, `auth-sorsabsa@a3e9c97`,
 unificar el vocabulario de los dos gates de suscripción/empresa. Sigue
 siendo un cambio de arquitectura, no un fix chico — necesita su propio
 análisis antes de tocarlo, no se mezcla con el resto.
+
+---
+
+## 23-ago-2026 — Medido por primera vez: 7 modales del navegador y un tipo duplicado
+
+DomusCRM entró en el barrido de `ESTANDAR-UI.md` §1 y en el check de
+conformidad del ecosistema. **No se tocó código acá**: se midió, y esto
+es lo que hay.
+
+### 7 modales nativos, ninguno corregido todavía
+
+| archivo | qué |
+|---|---|
+| `webs/src/app/admin/network/page.tsx` | `alert()` ×2 (líneas 123, 225) |
+| `webs/src/app/admin/clients/new/page.tsx` | `alert()` (181) |
+| `webs/src/app/admin/properties/new/components/GeoLocation.tsx` | `prompt()` (111) |
+| `webs/src/app/admin/properties/new/components/PortalPublish.tsx` | `alert()` (60) |
+| `webs/src/app/admin/properties/page.tsx` | `confirm()` (165) |
+| `webs/src/app/admin/team/page.tsx` | `confirm()` (111) |
+
+Los `confirm()` son borrados: al convertirlos hay que **conservar la
+protección**, no solo quitar el cuadro. En CondoManager ese fue el error
+real de esta tanda —dos borrados quedaron sin confirmación alguna— y está
+documentado en `AUDITORIA-CONDOMANAGER.md` 🟠-5. El `prompt()` de
+`GeoLocation` pide un dato: necesita un campo en la pantalla, no un botón.
+
+La pieza para hacerlo ya existe y no hay que escribirla:
+`ConfirmarAccion` en `@sorsabsa/ui` desde v0.1.56.
+
+### `Notificacion` declarado de nuevo
+
+`webs/src/hooks/useNotifications.ts` declara `interface Notificacion` con
+**exactamente los mismos cinco campos** que `@sorsabsa/ui` ya exporta
+(`id`, `tipo`, `mensaje`, `leida`, `created_at`). No es un defecto de
+comportamiento: es la misma forma mantenida en dos lugares, y el día que
+cambie el servicio de notificaciones habrá que acordarse de los dos. Lo
+mismo pasa en JustiRed (idéntico) y en CondoManager (que además le suma
+`condominio_id` y `usuario_id`, o sea que debería **extender**, no
+repetir).
+
+### Lo que sí quedó verificado en verde
+
+Fuera de eso, DomusCRM **no redefine ningún componente** del design
+system: no tiene un sistema en paralelo como los que hubo que retirar en
+JustiRed (48 componentes) y CondoManager (9).
+
+Pendientes con su plan en `PENDIENTES-ECOSISTEMA.md` §29.

@@ -947,3 +947,124 @@ aplicó el mismo criterio. 3 archivos, 6 apariciones
 (solo `console.error`, nunca llega al usuario) tampoco se tocaron, mismo
 criterio de capas que en CondoManager. Bump a `@sorsabsa/ui@0.1.42`.
 Verificado: `tsc --noEmit` limpio.
+
+---
+
+### 🟠-5 — 🔧 56 modales del navegador, nunca contados: 46 fuera, 10 vivos — 23-ago-2026
+
+**Síntoma (1).** Gina, con mayúsculas y por cuarta vez: *"ODIO LOS
+MODALES, NO USAR MODALES DIJE HACE RATO"*. Y antes: *"ESTO ME HACE VER
+QUE HA HABIDO TANTOS MODALES QUE SALEN DE PANTALLA O DE LA INTERFAZ QUE
+LOCURA"*.
+
+**Causa inmediata (2).** `alert()`, `confirm()` y `prompt()` repartidos
+por todo el panel. Al medirlo por primera vez: **56 solo en
+CondoManager**.
+
+**Causa raíz (3).** No es que se hubieran escrito: es que **nadie los
+contó nunca**. `ESTANDAR-UI.md` §1 los prohíbe desde su primera versión,
+y se corregían de a uno, cuando alguien los veía en pantalla. Regla 2 de
+la parte II de `ESTANDAR-DESARROLLO`: *una comprobación desconectada es
+una comprobación que no existe* — no había ninguna que mirara esta regla.
+El check de conformidad vigila duplicación de componentes, no uso de
+modales. **La regla que Gina más veces tuvo que repetir era justamente la
+única sin vigilancia automática.**
+
+**Componente responsable (4).** El design system: la confirmación en
+línea es una pieza compartida, no algo que cada pantalla resuelva.
+
+**¿Existía ya? (5, 6).** CondoManager tenía un `ConfirmarAccion` local.
+Se movió a `@sorsabsa/ui` (`4ddb6e6`) y la copia local se borró — el
+componente sirve a los cinco productos, no a uno.
+
+**Qué se eliminó (15).** 46 modales, en ocho tandas:
+`b149e56` (reservas, 8) · `571c80b` (seis hooks) · `13c6fa3`
+(automatizaciones, 5) · `3d904c2` (siete `alert()`) · `d21eafd` (medios
+de pago) · `e49fa18` (superadmin y firma electrónica) · `ddce3c7` (dos
+borrados sin confirmación — ver abajo) · `b1c8fd7` (residentes, unidades,
+rubros). `tsc --noEmit` y `npm run build` limpios en cada una.
+
+**El error propio, y por qué aparece acá (11, 14).** En `571c80b` se
+quitó el `confirm()` de `useAmenidades` y `useMantenimientos` **sin poner
+nada en su lugar**: borrar una amenidad con todas sus reservas pasó a ser
+un clic sin vuelta atrás. No lo encontró ninguna prueba ni el check —
+lo encontró Gina preguntando *"¿y si esto fue un error? ¿se puede
+deshacer?"*. Corregido en `ddce3c7`. Queda escrito porque es el modo de
+fallo natural de este trabajo: *quitar el modal* y *conservar la
+protección* son dos tareas, y la segunda es invisible si solo se mira la
+pantalla.
+
+**Quién lo ejecuta ahora (16).** `src/scripts/modales.mjs` en
+diseno-sorsabsa, con workflow propio (lunes 07:00 Ecuador y en cada push
+que lo toque), correo por Resend y rojo en CI. `npm run modales:local`
+para correrlo a mano.
+
+**Qué falla si vuelve (17).** El check sale con 1 y el workflow se pone
+en rojo. Comprobadas las cinco salidas ANTES de conectarlo: con modales →
+1 · sin modales → 0 · ruta ilegible → 2 · sin argumentos → 2 · solo
+comentarios → 0.
+
+**Denominador (18).** 56 al empezar; **10 vivos al 23-ago-2026**,
+verificados corriendo el check, no estimados:
+
+| pantalla | qué queda |
+|---|---|
+| `admin/configuracion/suscripcion` | `alert()` ×2 + `confirm()` |
+| `modulos/comunicados/admin/[id]` | `confirm()` + `alert()` |
+| `admin/configuracion/facturacion` | `confirm()` |
+| `admin/directiva` | `confirm()` |
+| `superadmin/configuracion` | `confirm()` |
+| `modulos/recaudacion/.../generar` | `confirm()` |
+| `modulos/crm-vendedores/vendedor/[id]` | `prompt()` |
+
+**No son todos mecánicos.** Dos necesitan diseño, no reemplazo:
+`generar` pregunta *"Ya existe una deuda para este rubro en este período,
+¿continuar?"* — es una advertencia con decisión, no un "¿estás seguro?".
+Y `crm-vendedores` usa `prompt()` para pedir un dato: necesita un campo
+en la pantalla, no un botón de confirmar.
+
+---
+
+### 🔵-6 — ✅ El sistema de componentes en paralelo, retirado — y tres "duplicados" que no lo eran — 23-ago-2026
+
+**Origen.** Gina: *"QUE PARA ESTE MOMENTO PENSÉ QUE YA ESTÁBAMOS EN EL
+DESIGN SYSTEM PARA EVITAR TENER 2 O 3 SISTEMAS EN PARALELO"*.
+
+**Lo que había (6).** 9 componentes propios en `app/components/ui/`,
+varios repitiendo algo que `@sorsabsa/ui` ya daba.
+
+**Resuelto (`b88f1e3`):** de 9 a 7, cero duplicados según el check de
+conformidad. Se borraron `Tabla.tsx`, `PasswordInput.tsx` y la copia
+local de `ConfirmarAccion.tsx`.
+
+**Lo que NO se migró, a propósito — y es el hallazgo real.** De cinco
+candidatos, **tres no eran duplicados**, y solo se veía leyendo el
+código:
+
+- **`Button`** — con `href` renderiza `next/link`. El del design system
+  dibuja un `<a>` común, y en Next.js eso es **recarga completa de la
+  página** en vez de navegación de cliente. Migrar los 68 archivos a
+  ciegas habría dejado 68 sitios navegando peor **sin que se notara
+  mirando la pantalla**. Se resolvió al revés: se agregó `asChild` al
+  design system (v0.1.59) y el `Button` local quedó como cola de
+  integración con el enrutador, que es responsabilidad del producto (4).
+- **`EstadoBadge`** — no dibuja: **traduce estados del negocio a tonos**
+  (`APROBADO` → verde, `MOROSO` → rojo, `EN_VENTA` → azul). Ese mapa es
+  conocimiento del producto; a JustiRed no le importan los estados de un
+  condominio. Migrar habría obligado a escribir el tono en las 17
+  llamadas — un retroceso disfrazado de unificación. Se retiró el
+  **dibujo** (ahora delega en `StatusBadge`) y se conservó el mapa.
+- **`Chip`** — no era duplicado. Se contó mal al medir.
+
+**Consecuencia para el método (14).** El check de conformidad compara
+**nombres de símbolos**. Eso encuentra candidatos, no duplicados: dos
+cosas que se llaman igual pueden hacer cosas distintas, y algo que
+comparte el 90% del dibujo puede tener el 10% que importa. **La lista
+del check es el principio de la revisión, no su conclusión.** Se tocaron
+24 archivos en vez de 114, y el resultado es mejor.
+
+**Lo que el design system tuvo que crecer para permitirlo (5).** Cinco
+versiones, cada una destrabando un caso concreto en vez de forzar al
+producto a conformarse: `Select`, `Checkbox`, `Tabs` y `ConfirmarAccion`
+(v0.1.56), variante `outline` (v0.1.58), `asChild` (v0.1.59) y
+`CardDescription` (v0.1.60).

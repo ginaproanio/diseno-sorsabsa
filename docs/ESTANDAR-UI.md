@@ -57,9 +57,11 @@ sitio donde se resuelve — no que interrumpa para contarlo.
 
 ### Cómo se vigila esta regla (desde el 23-ago-2026)
 
-`src/scripts/modales.mjs` cuenta modales en los cinco productos y corre en
-`.github/workflows/modales.yml`: cada lunes, en cada push que toque el script o
-este documento, y a mano. **Se pone en rojo y manda correo.**
+`src/scripts/modales.mjs` cuenta modales en los **siete** productos
+(CondoManager, DomusCRM, JustiRed, agente24siete, Convertidor, auth-sorsabsa y
+pagos-sorsabsa) y corre en `.github/workflows/modales.yml`: cada lunes, en cada
+push que toque el script o este documento, y a mano. **Se pone en rojo y manda
+correo.**
 
 Hasta esa fecha esta era la **única regla de este documento que ninguna
 comprobación miraba** — el check de conformidad revisa duplicación de
@@ -72,6 +74,13 @@ Las cinco salidas se comprobaron ANTES de conectarlo: con modales → 1 · sin
 modales → 0 · ruta ilegible → **2** · sin argumentos → 2 · solo comentarios → 0.
 Que una ruta ilegible salga con 2 y no con 0 es deliberado: si se renombra un
 repo, el check tiene que gritar, no decir "todo bien" sin haber mirado.
+
+**Y hubo que cobrarse esa promesa (23-ago-2026).** El workflow gritó desde el
+primer día y nadie lo escuchó: clonaba los repos por el nombre de la CARPETA
+local, y DomusCRM en GitHub es `domuscrm`, no `crm_inmobiliario`. **Nunca
+llegó a contar un solo modal.** Lo salva que falló en rojo y no en verde.
+Corregido en `diseno@68fbdc0`, junto con otros dos defectos de la misma
+familia — ver `PENDIENTES-ECOSISTEMA.md` §29.5.
 
 **Lo que NO marca, a propósito:** los *toasts* —avisan sin bloquear ni tapar— y
 los archivos de `components/ui/` que solo definen la primitiva. Lo que viola la
@@ -119,3 +128,50 @@ Ojo con **dónde** se pone: `auth-sorsabsa/auth/login` se redirige sola al
 cargar (es un pasillo, no una pantalla), así que cualquier enlace ahí parpadea y
 desaparece. La única pantalla de acceso que el usuario ve de verdad es
 `/oauth/consent`. Detalle en `ARQUITECTURA-ECOSISTEMA.md` §4-ter.
+
+---
+
+## 5. Si un producto duplica, preguntar qué necesitaba
+
+**Nace de un caso real, señalado tres veces antes de entenderse
+(23-ago-2026).** JustiRed tenía 48 componentes de shadcn, 7 de ellos
+duplicando lo que `@sorsabsa/ui` ya daba. Durante semanas el check de
+conformidad informó eso como *"JustiRed reimplementa 18 símbolos"*, o sea como
+indisciplina del producto.
+
+No lo era. JustiRed necesitaba un **desplegable** y el design system no tenía
+ninguno, así que trajo la librería que sí lo tenía. **Los duplicados vinieron
+de arriba, con el paquete.** CondoManager hizo lo mismo por lo mismo.
+
+**La regla.** Ante un producto que duplica algo compartido, la primera pregunta
+no es *"¿por qué no usó lo compartido?"* sino **"¿qué necesitaba que lo
+compartido no le daba?"**. Casi siempre hay una pieza que falta, y mientras
+falte, el estándar obliga a elegir entre cumplir y funcionar — y siempre gana
+funcionar, con razón.
+
+Es la pregunta 5 de `ESTANDAR-DESARROLLO` leída en la otra dirección: no solo
+*¿existe ya un componente que haga esto?*, también **¿alcanza?**.
+
+**Corolario para las herramientas.** El check de conformidad **mide en una sola
+dirección**: sabe decir "este producto duplica", nunca "al design system le
+falta". Mientras siga así, su informe apunta al síntoma y esconde la causa. Al
+leerlo hay que hacer a mano la pregunta que él no hace.
+
+**Y su lista son candidatos, no duplicados.** Compara nombres de símbolos. Dos
+cosas que se llaman igual pueden no tener relación (`Tag` en agente24siete es
+la etiqueta de un contacto, no una píldora de interfaz), y algo que comparte el
+90 % del dibujo puede tener el 10 % que importa: el `Button` de CondoManager
+renderiza `next/link`, y migrarlo a ciegas habría convertido 68 navegaciones de
+cliente en recargas completas de página **sin que se notara mirando la
+pantalla**. De cinco "duplicados" de CondoManager, **tres no lo eran**.
+
+Cuando la pieza compartida no alcanza, lo correcto es **hacerla crecer**, no
+forzar al producto. En esta tanda el design system creció cinco versiones
+—`Select`, `Checkbox`, `Tabs`, `ConfirmarAccion`, `outline`, `asChild`,
+`CardDescription`— y cada una destrabó un caso concreto.
+
+**Lo que todavía falta, y ya está causando lo mismo:** el design system exporta
+un componente `Toast` pero **no un modo de dispararlo** (no hay provider ni
+`useToast()`). Por eso JustiRed conserva el sistema de toasts de shadcn: sacarlo
+lo dejaría sin avisos. Es el mismo patrón repitiéndose con el patrón ya
+conocido — anotado en `PENDIENTES-ECOSISTEMA.md` §29.3.
