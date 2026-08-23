@@ -27,16 +27,38 @@
  * Se declara acá y se comprueba a mano.
  */
 
-/** @type {{nombre:string, repo:string, dirLocal:string, sub:string}[]} */
+/**
+ * `tipo` separa dos cosas que se comportan al revés en la comprobación de
+ * costura:
+ *
+ *   - **producto**: tiene interfaz propia, así que sus rutas de API deberían
+ *     tener un llamador DENTRO del mismo repo. Una sin llamador es sospechosa.
+ *   - **servicio**: no tiene interfaz. Sus rutas las llaman OTROS repos, así
+ *     que buscarles llamador adentro da 100 % de falsos positivos — medido el
+ *     23-ago-2026: 16 de 16 en pagos-sorsabsa y 5 de 5 en notificaciones.
+ *     A un servicio hay que comprobarlo AL REVÉS: que las rutas que sus
+ *     consumidores invocan existan.
+ *
+ * `env` son los nombres de variable con que los consumidores arman la URL de
+ * ese servicio (`${NOTIF_URL}/api/listar`). Se declara en vez de adivinarse
+ * por nombre: es la única forma de saber a qué servicio apunta una llamada.
+ */
+/** @type {{nombre:string, repo:string, dirLocal:string, sub:string, tipo:"producto"|"servicio", env?:string[]}[]} */
 export const ECOSISTEMA = [
-  { nombre: "condomanager", repo: "condomanager", dirLocal: "condomanager", sub: "" },
-  { nombre: "domuscrm", repo: "domuscrm", dirLocal: "crm_inmobiliario", sub: "webs" },
-  { nombre: "justired", repo: "legaltech", dirLocal: "legaltech", sub: "" },
-  { nombre: "agente24siete", repo: "agente24siete", dirLocal: "agente24siete", sub: "" },
-  { nombre: "auth-sorsabsa", repo: "auth-sorsabsa", dirLocal: "auth-sorsabsa", sub: "" },
-  { nombre: "convertidor", repo: "convertidor", dirLocal: "convertidor", sub: "frontend" },
-  { nombre: "pagos-sorsabsa", repo: "pagos-sorsabsa", dirLocal: "pagos-sorsabsa", sub: "" },
+  { nombre: "condomanager", repo: "condomanager", dirLocal: "condomanager", sub: "", tipo: "producto" },
+  { nombre: "domuscrm", repo: "domuscrm", dirLocal: "crm_inmobiliario", sub: "webs", tipo: "producto" },
+  { nombre: "justired", repo: "legaltech", dirLocal: "legaltech", sub: "", tipo: "producto" },
+  { nombre: "agente24siete", repo: "agente24siete", dirLocal: "agente24siete", sub: "", tipo: "producto" },
+  { nombre: "auth-sorsabsa", repo: "auth-sorsabsa", dirLocal: "auth-sorsabsa", sub: "", tipo: "producto" },
+  { nombre: "convertidor", repo: "convertidor", dirLocal: "convertidor", sub: "frontend", tipo: "producto" },
+  { nombre: "pagos-sorsabsa", repo: "pagos-sorsabsa", dirLocal: "pagos-sorsabsa", sub: "", tipo: "servicio",
+    env: ["PAGOS_URL", "PAGOS_API_URL"] },
+  { nombre: "notificaciones-sorsabsa", repo: "notificaciones-sorsabsa", dirLocal: "notificaciones-sorsabsa", sub: "", tipo: "servicio",
+    env: ["NOTIF_URL", "NOTIFICACIONES_API_URL", "NOTIFICACIONES_URL"] },
 ];
+
+/** Solo los que exponen una API para que otros la consuman. */
+export const SERVICIOS = () => ECOSISTEMA.filter((e) => e.tipo === "servicio");
 
 /** Ruta a la app dentro del repo — la raíz, salvo que la app viva en un sub. */
 const conSub = (base, sub) => (sub ? `${base}/${sub}` : base);

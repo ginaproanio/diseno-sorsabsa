@@ -23,7 +23,9 @@
     "conformidad": "node src/scripts/conformidad.mjs",
     "conformidad:local": "node src/scripts/conformidad.mjs --local",
     "modales": "node src/scripts/modales.mjs",
-    "modales:local": "node src/scripts/modales.mjs --local"
+    "modales:local": "node src/scripts/modales.mjs --local",
+    "costura": "node src/scripts/costura.mjs",
+    "costura:ecosistema": "node src/scripts/costura.mjs --ecosistema"
   },
   "peerDependencies": {
     "framer-motion": ">=11",
