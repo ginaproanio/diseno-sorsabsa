@@ -25,7 +25,9 @@
     "modales": "node src/scripts/modales.mjs",
     "modales:local": "node src/scripts/modales.mjs --local",
     "costura": "node src/scripts/costura.mjs",
-    "costura:ecosistema": "node src/scripts/costura.mjs --ecosistema"
+    "costura:ecosistema": "node src/scripts/costura.mjs --ecosistema",
+    "huerfanos": "node src/scripts/huerfanos.mjs",
+    "huerfanos:local": "node src/scripts/huerfanos.mjs --local"
   },
   "peerDependencies": {
     "framer-motion": ">=11",
