@@ -1,7 +1,7 @@
 # Graph Report - diseno-sorsabsa  (2026-08-23)
 
 ## Corpus Check
-- 97 files · ~135,103 words
+- 97 files · ~135,336 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5f4ba4d5`
+- Built from commit: `18300c8c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -255,7 +255,7 @@ Nodes (7): 🟠-1 — ✅ CORREGIDO 10-ago-2026 — La tabla de README.md no sum
 
 ### Community 37 - "Estándar de UI del ecosistema SORSABSA"
 Cohesion: 0.25
-Nodes (7): 1. Nada de modales. Ninguno., 2. La campana de notificaciones, 3. El requisito de cuenta se pide para servir, no para cobrar, 4. Toda pantalla de acceso ofrece crear cuenta, Cómo se vigila esta regla (desde el 23-ago-2026), Estándar de UI del ecosistema SORSABSA, Qué se hace en su lugar
+Nodes (7): 1. Prohibidos los diálogos del NAVEGADOR, 2. La campana de notificaciones, 3. El requisito de cuenta se pide para servir, no para cobrar, 4. Toda pantalla de acceso ofrece crear cuenta, Cómo se vigila esta regla (desde el 23-ago-2026), Estándar de UI del ecosistema SORSABSA, Qué se hace en su lugar
 
 ### Community 38 - "Color de marca y contraste"
 Cohesion: 0.29

@@ -1766,7 +1766,7 @@
       "file_type": "code",
       "norm_label": "archivos()",
       "source_file": "src/scripts/modales.mjs",
-      "source_location": "L49"
+      "source_location": "L54"
     },
     {
       "id": "src_scripts_modales_esdefiniciondeprimitiva",
@@ -1778,7 +1778,7 @@
       "file_type": "code",
       "norm_label": "esdefiniciondeprimitiva()",
       "source_file": "src/scripts/modales.mjs",
-      "source_location": "L66"
+      "source_location": "L71"
     },
     {
       "id": "src_scripts_modales_sincomentarios",
@@ -7241,14 +7241,14 @@
       "source_location": "L1"
     },
     {
-      "id": "docs_estandar_ui_1_nada_de_modales_ninguno",
-      "label": "1. Nada de modales. Ninguno.",
+      "id": "docs_estandar_ui_1_prohibidos_los_di\u00e1logos_del_navegador",
+      "label": "1. Prohibidos los di\u00e1logos del NAVEGADOR",
       "_origin": "ast",
       "community": 37,
       "community_name": "Est\u00e1ndar de UI del ecosistema SORSABSA",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "1. nada de modales. ninguno.",
+      "norm_label": "1. prohibidos los dialogos del navegador",
       "source_file": "docs/ESTANDAR-UI.md",
       "source_location": "L11"
     },
@@ -7262,7 +7262,7 @@
       "node_kind": "heading",
       "norm_label": "2. la campana de notificaciones",
       "source_file": "docs/ESTANDAR-UI.md",
-      "source_location": "L64"
+      "source_location": "L80"
     },
     {
       "id": "docs_estandar_ui_3_el_requisito_de_cuenta_se_pide_para_servir_no_para_cobrar",
@@ -7274,7 +7274,7 @@
       "node_kind": "heading",
       "norm_label": "3. el requisito de cuenta se pide para servir, no para cobrar",
       "source_file": "docs/ESTANDAR-UI.md",
-      "source_location": "L83"
+      "source_location": "L99"
     },
     {
       "id": "docs_estandar_ui_4_toda_pantalla_de_acceso_ofrece_crear_cuenta",
@@ -7286,7 +7286,7 @@
       "node_kind": "heading",
       "norm_label": "4. toda pantalla de acceso ofrece crear cuenta",
       "source_file": "docs/ESTANDAR-UI.md",
-      "source_location": "L96"
+      "source_location": "L112"
     },
     {
       "id": "docs_estandar_ui_c\u00f3mo_se_vigila_esta_regla_desde_el_23_ago_2026",
@@ -7298,7 +7298,7 @@
       "node_kind": "heading",
       "norm_label": "como se vigila esta regla (desde el 23-ago-2026)",
       "source_file": "docs/ESTANDAR-UI.md",
-      "source_location": "L42"
+      "source_location": "L58"
     },
     {
       "id": "docs_estandar_ui_est\u00e1ndar_de_ui_del_ecosistema_sorsabsa",
@@ -7322,7 +7322,7 @@
       "node_kind": "heading",
       "norm_label": "que se hace en su lugar",
       "source_file": "docs/ESTANDAR-UI.md",
-      "source_location": "L27"
+      "source_location": "L43"
     },
     {
       "id": "docs_color_y_contraste",
@@ -7450,7 +7450,7 @@
       "file_type": "code",
       "norm_label": "raices",
       "source_file": "src/scripts/modales.mjs",
-      "source_location": "L71"
+      "source_location": "L76"
     },
     {
       "id": "docs_modelo_justired",
@@ -18532,30 +18532,30 @@
       "weight": 1.0
     },
     {
-      "source": "docs_estandar_ui_1_nada_de_modales_ninguno",
+      "source": "docs_estandar_ui_1_prohibidos_los_di\u00e1logos_del_navegador",
       "target": "docs_estandar_ui_qu\u00e9_se_hace_en_su_lugar",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/ESTANDAR-UI.md",
-      "source_location": "L27",
+      "source_location": "L43",
       "weight": 1.0
     },
     {
-      "source": "docs_estandar_ui_1_nada_de_modales_ninguno",
+      "source": "docs_estandar_ui_1_prohibidos_los_di\u00e1logos_del_navegador",
       "target": "docs_estandar_ui_c\u00f3mo_se_vigila_esta_regla_desde_el_23_ago_2026",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/ESTANDAR-UI.md",
-      "source_location": "L42",
+      "source_location": "L58",
       "weight": 1.0
     },
     {
       "source": "docs_estandar_ui_est\u00e1ndar_de_ui_del_ecosistema_sorsabsa",
-      "target": "docs_estandar_ui_1_nada_de_modales_ninguno",
+      "target": "docs_estandar_ui_1_prohibidos_los_di\u00e1logos_del_navegador",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18566,13 +18566,24 @@
     },
     {
       "source": "docs_estandar_ui_est\u00e1ndar_de_ui_del_ecosistema_sorsabsa",
+      "target": "docs_estandar_ui_4_toda_pantalla_de_acceso_ofrece_crear_cuenta",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/ESTANDAR-UI.md",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_estandar_ui_est\u00e1ndar_de_ui_del_ecosistema_sorsabsa",
       "target": "docs_estandar_ui_2_la_campana_de_notificaciones",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/ESTANDAR-UI.md",
-      "source_location": "L64",
+      "source_location": "L80",
       "weight": 1.0
     },
     {
@@ -18583,18 +18594,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/ESTANDAR-UI.md",
-      "source_location": "L83",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_estandar_ui_est\u00e1ndar_de_ui_del_ecosistema_sorsabsa",
-      "target": "docs_estandar_ui_4_toda_pantalla_de_acceso_ofrece_crear_cuenta",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/ESTANDAR-UI.md",
-      "source_location": "L96",
+      "source_location": "L99",
       "weight": 1.0
     },
     {
@@ -24237,7 +24237,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/scripts/modales.mjs",
-      "source_location": "L49",
+      "source_location": "L54",
       "weight": 1.0
     },
     {
@@ -24248,7 +24248,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/scripts/modales.mjs",
-      "source_location": "L66",
+      "source_location": "L71",
       "weight": 1.0
     },
     {
@@ -24259,7 +24259,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/scripts/modales.mjs",
-      "source_location": "L71",
+      "source_location": "L76",
       "weight": 1.0
     },
     {
@@ -24637,5 +24637,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "5f4ba4d50e779b9162d83a3e12df349caf435136"
+  "built_at_commit": "18300c8c17427aac9267effc74bca073adb5b7ba"
 }
