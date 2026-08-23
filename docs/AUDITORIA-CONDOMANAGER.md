@@ -215,7 +215,49 @@ funcionando sin cambios.
 
 ---
 
-### 🔴-4 — ✅ CORREGIDO 22-ago-2026, commit `condomanager@3127979` — La integración con EcoInmobiliaria estaba construida de los dos lados y **nadie llamaba al emisor**, mientras dos pantallas prometían por escrito que publicaba
+### 🔴-4 — ❌ HALLAZGO EQUIVOCADO. Retirado el 23-ago-2026 (`condomanager@460a13d`) — la integración NUNCA estuvo muerta: vive en triggers de Postgres. Lo que se encontró era una segunda implementación en desuso
+
+> **Leer esto antes que nada.** El análisis de abajo llegó a una conclusión
+> falsa y produjo código que hubo que retirar. Se conserva entero, sin
+> maquillar, porque el modo de fallo es el hallazgo de verdad.
+>
+> **Lo cierto:** `lib/domuscrm-sync.ts` era código muerto — el grafo lo
+> confirmó con cero llamadores, y la búsqueda de texto también.
+>
+> **Lo falso:** que por eso la integración no funcionara. La publicación la
+> hacen `trg_sync_domuscrm` (sobre `unidades`) y `trg_sync_fotos_domuscrm`
+> (sobre `unidad_fotos`), habilitados, con `pg_net` instalado y la clave en el
+> **vault de Supabase** desde el 9-jul-2026. Nunca había publicado nada por un
+> motivo trivial: la única unidad de la base está en BALDIO y el trigger no
+> dispara.
+>
+> **El daño.** Se construyó un endpoint, un avisador y tres enganches que
+> duplicaban lo que la base ya hacía —y peor que la base, que además desactiva
+> el aviso cuando la unidad sale del mercado—. Y creyendo que el canal no tenía
+> tráfico, se le dijo a Gina que rotar la clave era seguro: **eso sí rompió el
+> mecanismo que funcionaba**, hasta que ella actualizó el vault.
+>
+> **Por qué se escapó, que es lo único que sirve de esto.** Una regla de
+> negocio que vive en la base de datos es **invisible** para todo lo que usamos
+> para entender un repo: el grafo mapea código, `grep` busca en archivos, las
+> auditorías leen fuentes. Ninguna mira triggers. Y no estaba documentada en
+> ningún lado — se verificó buscando en `condomanager/docs` y en
+> `diseno-sorsabsa/docs`. El archivo `supabase/migrations/00000000000000_baseline_schema.sql`
+> sí tenía la función, en el repo, y no se leyó.
+>
+> Ahora está escrito: [`condomanager/docs/INTEGRACION-ECOINMOBILIARIA.md`].
+>
+> **Lo que del fix se quedó, porque era real:** los cinco tipos de unidad
+> nuevos (`lib/tipos-unidad.ts`, 🟠 más abajo) y el mapeo
+> `tipo_unidad_a_domuscrm()` en Postgres — el trigger usaba `ELSE 'commercial'`
+> y habría publicado un departamento como local comercial.
+
+---
+
+<details>
+<summary>Análisis original, equivocado — se conserva como registro</summary>
+
+### 🔴-4 (versión original) — La integración con EcoInmobiliaria estaba construida de los dos lados y nadie llamaba al emisor
 
 **1. Síntoma.** Ninguno visible, y ese es el problema: la interfaz decía que
 funcionaba. La pantalla de importación masiva dice, textual, *"la unidad se
@@ -303,6 +345,8 @@ clave equivocada como sin configurarla de su lado (decisión de seguridad suya,
 correcta, que deja a este lado ciego). Por eso
 `GET /api/unidades/salud-publicacion` responde si está configurado **sin
 revelar la clave** — mismo criterio que `salud-pasarela` de pagos-sorsabsa.
+
+</details>
 
 **Nota de método — cómo apareció, y qué falló al buscarlo.** No lo encontró
 ninguna auditoría: apareció porque Gina no aceptó un "CondoManager está limpio"
