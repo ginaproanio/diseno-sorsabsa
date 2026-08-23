@@ -396,6 +396,110 @@ conformidad — **lo que no se ejecuta de verdad no se sabe si funciona**, y una
 comprobación de seguridad que devuelve el código correcto por accidente es
 indistinguible de una que funciona.
 
+### 🔴-3 — ✅ CORREGIDO 22-ago-2026, commit `agente24siete@bd3a7a6` — El producto nunca preguntaba QUIÉN SOS: decidía "administradora o clienta" mirando la URL pedida, y `usuarios`/`clientes` solo servían para rechazarte después
+
+**1. Síntoma.** Gina, después de chocar tres veces contra la misma pantalla:
+*"si se creó el administrador, ¿nunca validás que es administrador?????? si
+es usuario administrador va al portal, caso contrario es cliente, ¿tiene
+negocio????? por dios despierta al arquitecto o es que yo no entiendo qué
+diablos hizo"*. Tenía razón en las tres preguntas.
+
+**2. Causa inmediata.** Dos líneas gobernaban todo el ruteo del producto:
+
+```js
+app/auth/callback:  const esPortal = pathname.startsWith("/portal")
+middleware.ts:      const esAdmin  = path.startsWith("/admin")
+```
+
+El producto decidía qué eras **según la URL que habías pedido**, y guardaba la
+sesión en una llave u otra según esa adivinanza. Ni el callback ni el
+middleware consultaban jamás `usuarios` ni `clientes`.
+
+**3. Causa raíz — un error de modelo, no un olvido.** Los dos `whoami`
+existían y funcionaban, pero se llamaban **después** del ruteo y solo para
+**rechazar**. Nadie preguntaba antes, porque el producto no tenía el concepto
+de "¿qué lugar tiene esta persona acá?". Tenía el concepto inverso: "esta URL
+pertenece a los admin, aquella a los clientes, y quien llegue se supone que
+corresponde".
+
+De ahí salen, como consecuencias del MISMO error, tres hallazgos que se
+trataron por separado creyéndolos independientes:
+
+| hallazgo | lo que se veía | lo que era |
+|---|---|---|
+| 🟠-4 (2ª mitad) | "Salir" no sacaba | dos llaves de sesión, porque "panel" y "portal" se modelaban como dos sesiones |
+| 🟠-7 | la pantalla no decía la cuenta | nadie había resuelto la identidad, así que no había qué mostrar |
+| 🟠-8 | callejón cerrado en círculo | la puerta pública asume que quien entra es cliente |
+
+**Los tres son el mismo defecto visto por tres ventanas.** 🟠-8 en particular
+se "arregló" horas antes agregando un botón a la pantalla de rechazo: un
+parche sobre el síntoma, y así lo señaló Gina.
+
+**4. Componente responsable.** Faltaba uno: la autoridad que responde qué
+lugar tiene una persona en este producto. No existía.
+
+**5. Código afectado:** `app/auth/callback/page.tsx`, `middleware.ts`,
+`app/portal/LoginGate.tsx`, `app/admin/LoginGate.tsx`, `lib/sesion.ts`, y las
+14 pantallas que leían la llave de sesión a mano.
+
+**6. Fix aplicado.**
+
+- **`pages/api/quien-soy.js`** (nuevo): resuelve contra `usuarios` y
+  `clientes`, informa si el cliente tiene negocios —un cliente sin negocio
+  entra al portal y no ve nada, la tercera pregunta de Gina— y devuelve
+  `destino` **ya calculado**. La regla de ruteo vive en un solo lugar en vez
+  de copiada en cuatro. Reconcilia ANTES de consultar, o un cliente recién
+  dado de alta se vería "sin lugar" justo en su primer login.
+- **Una sola llave de sesión** (`a24_token`). Una persona tiene una identidad
+  y una sesión; "panel" y "portal" son dos permisos sobre la misma.
+- **El callback rutea por identidad** y respeta un enlace directo solo si esa
+  persona tiene lugar ahí.
+- **Los gates dejan de establecer identidad y solo autorizan.** Que cada uno
+  ofrezca el otro lado sale del mecanismo, no de un caso especial.
+
+**7. Código eliminado** (pregunta 15) — no dejado "por las dudas":
+`pages/api/admin/whoami.js`, `pages/api/portal/whoami.js`,
+`pages/api/auth/reconciliar-cliente.js` (su regla vive ahora en
+`lib/clientes.js`, con dos llamadores y una definición), **el parche de 🟠-8**,
+el parámetro `tokenKey` de `limpiarSesionLocal` —la deuda anotada esa misma
+noche, retirada en el mismo commit—, la constante `TOKEN_KEY` repetida en 14
+archivos, y la tarjeta de `/admin` que pedía **pegar el token a mano en un
+`<input>`**, cuyo propio texto decía que el login real "se implementa en la
+Fase 3" (implementada desde el 10-ago), más cinco tarjetas muertas iguales.
+
+**8. Riesgo de regresión — medio, y con una consecuencia visible.** Al cambiar
+la llave, **toda sesión abierta deja de valer y hay que entrar una vez más**;
+las llaves viejas quedan en la lista de BORRADO para que la primera visita
+limpie el navegador. El riesgo es bajo hoy porque `clientes` tiene **cero
+filas** (verificado esta noche contra la base): las evaluaciones de riesgo de
+🔴-1 y 🟠-5 hablan de *"clientes reales (Punta Blanca)"* y **esa premisa ya no
+es cierta** — se corrige acá para que nadie siga calculando con ella.
+
+**9. Validación.** ✅ `tsc --noEmit` y `next build` completos, con
+`/api/quien-soy` registrado y los tres endpoints viejos ausentes del listado
+de rutas. ⬜ **La prueba real la hace Gina**: entrar por `/portal`, por
+`/admin` y por el "Ingresar" de la web, y confirmar que las tres terminan en
+el panel sin pasar por ninguna pantalla de rechazo. ❌ **Sin prueba
+automática** (pregunta 17): este repo no tiene suite de navegador. Lo que
+sostiene el diseño no es un test, es que la pregunta tiene un solo dueño y la
+respuesta un solo formato.
+
+**Deuda anotada (regla 6):** las dos llaves viejas siguen en la lista de
+borrado de `lib/sesion.ts`. Se quitan cuando no quede ninguna viva — duran 60
+minutos.
+
+**Nota de método.** Este hallazgo no lo encontró una auditoría: lo encontró
+Gina gritando que despertáramos al arquitecto, después de que se le ofreciera
+un parche. Los tres hallazgos que resultaron ser síntomas de éste
+—🟠-4, 🟠-7, 🟠-8— se habían analizado con los 9 puntos cada uno, y **ninguno
+de los tres análisis levantó la cabeza para preguntar por qué el producto
+nunca resolvía la identidad**. La señal estaba escrita en
+`ESTANDAR-DESARROLLO.md`: *"Fix sobre fix: al reconocer esta cadena, no
+agregar otro eslabón — retroceder hasta la primera decisión arquitectónica
+incorrecta."* Hubo tres eslabones en un día antes de retroceder.
+
+---
+
 ---
 
 ## 🟠 IMPORTANTE
@@ -870,7 +974,7 @@ asociado", clic en "Salir" → debe llegar a `agente24siete.app`, y un login
 nuevo debe **pedir credenciales** (prueba de que cerró también la sesión de
 identity, no solo la apariencia de haber salido).
 
-### 🟠-7 — ✅ CORREGIDO 22-ago-2026, commit `agente24siete@6684e54` — Las dos pantallas de rechazo nunca dicen CON QUÉ CUENTA te está rechazando, y con una identidad compartida eso vuelve indistinguible "te rechacé" de "estoy roto"
+### 🟠-7 — ✅ CORREGIDO 22-ago-2026 (`6684e54`) · **síntoma de 🔴-3** — Las dos pantallas de rechazo nunca dicen CON QUÉ CUENTA te está rechazando, y con una identidad compartida eso vuelve indistinguible "te rechacé" de "estoy roto"
 
 **1. Síntoma.** Gina, entrando a `/admin/clientes`: *"dice: Cuenta no
 habilitada"*. Y al reintentar por otra vía: *"si hago el acceso por google
@@ -932,7 +1036,7 @@ esta tarde, y por qué?".
 
 ---
 
-### 🟠-8 — ✅ CORREGIDO 22-ago-2026, commit `agente24siete@6b9a69a` — El producto tiene DOS poblaciones y la web UNA sola puerta: la administradora entra por la de clientes, es rechazada con razón, y sale a un callejón cerrado en círculo
+### 🟠-8 — ✅ CORREGIDO 22-ago-2026 (`6b9a69a`, **el fix fue un parche; lo reemplazó 🔴-3 en `bd3a7a6`**) — El producto tiene DOS poblaciones y la web UNA sola puerta: la administradora entra por la de clientes, es rechazada con razón, y sale a un callejón cerrado en círculo
 
 **1. Síntoma.** Gina, tres veces seguidas en la misma noche: *"INTENTO entrar
 por google y me dice Cuenta sin cliente asociado — Entraste como
@@ -1190,6 +1294,14 @@ en el lugar equivocado.
     🟡-2 se veía como una expulsión. **Un portero que rechaza bien por el
     motivo equivocado es indistinguible de uno que funciona** — hasta que
     alguien lo usa de verdad.
+  - **🔴-3 (`bd3a7a6`) es la causa raíz de tres de ellos.** 🟠-4 (2ª mitad),
+    🟠-7 y 🟠-8 resultaron ser el MISMO defecto visto por tres ventanas: el
+    producto nunca resolvía la identidad, decidía "administradora o clienta"
+    por la URL pedida. Los tres se analizaron con sus 9 puntos y ninguno
+    levantó la cabeza para preguntar por qué. El estándar ya lo advierte
+    —*"fix sobre fix: retroceder hasta la primera decisión arquitectónica
+    incorrecta"*— y hubo tres eslabones antes de retroceder. El de 🟠-8 era
+    directamente un parche, y Gina lo cortó: *"despierta al arquitecto"*.
   - **🟠-8 se sumó más tarde esa misma noche** (`6b9a69a`), y es el que mejor
     resume el día: la pantalla que 🟠-7 había arreglado funcionaba
     perfectamente y **seguía dejando a Gina afuera**, porque el defecto no
