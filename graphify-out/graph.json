@@ -508,7 +508,7 @@
       "file_type": "code",
       "norm_label": "buttonprops",
       "source_file": "src/components/Button.tsx",
-      "source_location": "L55"
+      "source_location": "L62"
     },
     {
       "id": "src_components_button_buttonsize",
@@ -534,7 +534,7 @@
       "file_type": "code",
       "norm_label": "commonprops",
       "source_file": "src/components/Button.tsx",
-      "source_location": "L49"
+      "source_location": "L56"
     },
     {
       "id": "src_components_sinacceso_sinaccesoprops",
@@ -4601,7 +4601,7 @@
       "file_type": "code",
       "norm_label": "button",
       "source_file": "src/components/Button.tsx",
-      "source_location": "L61"
+      "source_location": "L68"
     },
     {
       "id": "src_components_button_sizes",
@@ -4612,7 +4612,7 @@
       "file_type": "code",
       "norm_label": "sizes",
       "source_file": "src/components/Button.tsx",
-      "source_location": "L35"
+      "source_location": "L42"
     },
     {
       "id": "src_components_button_test",
@@ -23071,7 +23071,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Button.tsx",
-      "source_location": "L35",
+      "source_location": "L42",
       "weight": 1.0
     },
     {
@@ -23082,7 +23082,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Button.tsx",
-      "source_location": "L49",
+      "source_location": "L56",
       "weight": 1.0
     },
     {
@@ -23093,7 +23093,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Button.tsx",
-      "source_location": "L55",
+      "source_location": "L62",
       "weight": 1.0
     },
     {
@@ -23104,7 +23104,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Button.tsx",
-      "source_location": "L61",
+      "source_location": "L68",
       "weight": 1.0
     },
     {
@@ -24637,5 +24637,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "18300c8c17427aac9267effc74bca073adb5b7ba"
+  "built_at_commit": "6757c1a204f9eefa7e83561e8364c82bb02880b3"
 }
