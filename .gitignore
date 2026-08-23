@@ -18,3 +18,10 @@ graphify-out/*
 .agents/
 .claude/
 skills-lock.json
+
+# Estado local de wrangler (Cloudflare). No es del proyecto.
+.wrangler/
+
+# Artefacto de Windows: un archivo llamado literalmente `nul` que aparece al
+# redirigir a NUL desde un shell POSIX. Rompe `git add -A`, asi que se ignora.
+nul
