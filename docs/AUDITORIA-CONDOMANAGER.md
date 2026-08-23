@@ -12,7 +12,24 @@ ese documento audita la federación de identidad (SSO) entre productos.
 auditar condomanager como tal ya no solo el portero"* — la preocupación es
 deuda acumulada en el producto mismo, no solo en el punto de entrada.
 
-**Estado de esta auditoría:** ABIERTA — primera pasada, no exhaustiva.
+**Estado de esta auditoría:** ABIERTA.
+
+**22-ago-2026 — segunda pasada, sobre la costura interfaz ↔ API.** Se revisaron
+las **nueve** rutas de `app/api/**` que ninguna pantalla llama con un `fetch`,
+una por una y con evidencia, para separar "externa por diseño" de "huérfana":
+
+| ruta | quién la llama | dónde consta |
+|---|---|---|
+| `cron/limpiar-no-confirmados` · `cron/procesar-activaciones-masivas` | Vercel Cron | `vercel.json` |
+| `onboarding/residente-registrado` | el registro de residente | `app/api/registro-residente/route.ts:178` |
+| `pagos/confirmar` | PayPhone | es el `responseUrl` que se le envía |
+| `pagos/consultar/[id]` | consulta de estado | `docs/PAGOS-ARQUITECTURA.md` |
+| `pagos/reversar/[id]` | nadie, **declarado placeholder** | su cabecera y el ROADMAP |
+| `webhooks/pagos-sorsabsa` · `webhooks/vencimiento` | pagos-sorsabsa | tabla `pagos.productos` |
+| `facturacion/[id]/pdf` · `/ver` | la pantalla de comprobantes | `<a href>` + `next.config.ts` |
+
+**Ninguna ruta huérfana.** El único hueco de esta pasada no era una ruta sino
+una función que nadie llamaba: 🔴-4, la publicación en EcoInmobiliaria.
 
 **Alcance cubierto en esta primera pasada:** las 35 rutas de
 `app/api/**/route.ts`, `middleware.ts`, `lib/auth/post-login.ts`,
@@ -195,6 +212,109 @@ qué módulos pagos tiene activo cualquier condominio. `REVOKE EXECUTE ...
 FROM anon` solo no bastó (seguían abiertas vía `PUBLIC`); revocado también
 de `PUBLIC`. Verificado en vivo: `anon` bloqueado, `authenticated` sigue
 funcionando sin cambios.
+
+---
+
+### 🔴-4 — ✅ CORREGIDO 22-ago-2026, commit `condomanager@3127979` — La integración con EcoInmobiliaria estaba construida de los dos lados y **nadie llamaba al emisor**, mientras dos pantallas prometían por escrito que publicaba
+
+**1. Síntoma.** Ninguno visible, y ese es el problema: la interfaz decía que
+funcionaba. La pantalla de importación masiva dice, textual, *"la unidad se
+publica automáticamente en EcoInmobiliaria (DomusCRM)"*, y la de editar unidad
+titula su sección *"Comercialización (sincroniza con EcoInmobiliaria vía
+DomusCRM)"*. Un dueño ponía su casa en venta con su precio y **del otro lado no
+llegaba nada**, sin un error, sin un aviso, sin nada raro en pantalla.
+
+**2. Causa inmediata.** `lib/domuscrm-sync.ts` existe desde hace meses,
+completo y bien escrito —reintentos con backoff exponencial, tenant forzado a
+`ecoinmobiliaria`, idempotencia por `externalId`, timeout, distinción entre 4xx
+y 5xx—. Su punto de entrada, `onPropertyStatusChange()`, **no lo llamaba
+nadie**.
+
+Verificado con dos fuentes independientes, porque una sola no alcanzaba:
+
+- el grafo de conocimiento: `onPropertyStatusChange` con **cero** aristas
+  entrantes, y `syncPropertyToDomusCRM` con una sola, la del propio
+  `onPropertyStatusChange`;
+- búsqueda de texto: esas dos funciones aparecen **únicamente dentro de su
+  propio archivo**.
+
+**3. Causa raíz.** La integración se escribió como una biblioteca —con su
+docblock diciendo *"Uso (tras el UPDATE del estado en la base)"*— y ese "uso"
+nunca se escribió. Es exactamente la regla 1 de la parte II de
+`ESTANDAR-DESARROLLO.md`: *código que no se puede ejecutar no existe*, y su
+corolario, que el disparador tiene que llegar **en el mismo commit**.
+
+Y había una razón técnica que lo volvía menos obvio, no un olvido tonto: las
+**tres** pantallas que cambian el estado de una unidad —la del dueño
+(`panel/residente/mis-unidades`), la del administrador
+(`panel/admin/unidades/[id]/editar`) y la importación masiva— escriben directo
+a Supabase **desde el navegador**. El emisor necesita `DOMUSCRM_WEBHOOK_KEY`,
+un secreto que no puede viajar ahí. O sea que llamar a la función desde donde
+ocurre el cambio era imposible, y hacía falta una pieza que no existía.
+
+**4. Componente responsable.** Faltaba un punto de entrada del lado del
+servidor. No era un `import` olvidado.
+
+**5. Código afectado:** las tres pantallas citadas, más lo nuevo.
+
+**6. Fix aplicado.**
+
+- `app/api/unidades/[id]/sincronizar/route.ts`: recibe **solo el id**. Todo lo
+  demás lo lee del servidor con la sesión de quien llama, así que **RLS es la
+  autorización** — si esa persona no puede leer la unidad, no puede publicarla,
+  y no hay una regla de permisos nueva corriendo en paralelo. Aceptar el precio
+  o el título en el cuerpo habría dejado publicar inmuebles inventados, o al
+  precio que quisiera cualquiera con sesión, en el portal de una empresa
+  aliada.
+- `lib/publicar-unidad.ts`: un solo avisador para las tres pantallas. Si cada
+  una armara su propio `fetch`, la próxima lo olvidaría — que es literalmente
+  cómo esto quedó sin llamar desde el principio.
+- La regla de **cuándo** publicar sigue en `shouldSyncStatus`, una sola
+  definición. Las pantallas solo dicen *"esta unidad cambió"*; el servidor
+  decide.
+- **Sin precio no se publica**, y no se inventa uno por defecto: eso sería
+  convertir "no configurado" en "válido", y un inmueble sin precio en el portal
+  de la aliada es peor que no estar.
+
+**7. Código que debe eliminarse:** ninguno. `domuscrm-sync.ts` estaba bien; lo
+que faltaba era quien lo llamara.
+
+**8. Riesgo de regresión:** bajo. El aviso va **después** del guardado y sin
+bloquearlo: si EcoInmobiliaria o DomusCRM están caídos, la unidad se guarda
+igual y el dueño no se entera de un problema ajeno. `tsc` y `next build`
+limpios.
+
+**9. Validación.**
+
+- ✅ Compila y las rutas nuevas aparecen en el listado del build.
+- ⬜ **Falta configurar las claves, y lo hace Gina** (son secretos):
+  `DOMUSCRM_WEBHOOK_KEY` en CondoManager con el mismo valor que
+  `CONDOMANAGER_WEBHOOK_KEY` en DomusCRM. **Mientras no estén, no se publica
+  nada.**
+- ⬜ La prueba real: poner una unidad EN VENTA con precio y verla aparecer en
+  el inventario de EcoInmobiliaria.
+- ❌ Sin prueba automática (pregunta 17 de la parte II).
+
+**Y una comprobación, porque esto puede volver a morir en silencio.** El emisor
+devuelve sin publicar cuando falta la clave —escribe en el registro del
+servidor y ya—, y para el dueño eso se ve idéntico a que haya salido bien.
+Desde afuera tampoco se puede distinguir: DomusCRM responde 401 tanto con la
+clave equivocada como sin configurarla de su lado (decisión de seguridad suya,
+correcta, que deja a este lado ciego). Por eso
+`GET /api/unidades/salud-publicacion` responde si está configurado **sin
+revelar la clave** — mismo criterio que `salud-pasarela` de pagos-sorsabsa.
+
+**Nota de método — cómo apareció, y qué falló al buscarlo.** No lo encontró
+ninguna auditoría: apareció porque Gina no aceptó un "CondoManager está limpio"
+que yo había afirmado. Ese veredicto era falso y venía de búsquedas ciegas:
+**`rg` no está instalado en la máquina de trabajo**, y con los errores
+redirigidos a `/dev/null`, "comando no encontrado" se veía exactamente igual
+que "no hay coincidencias". Varias conclusiones de esa sesión —incluida
+*"CondoManager no tiene función de publicar propiedades"*, falsa: tiene un
+módulo inmobiliario completo— salieron de ahí. Se rehízo la revisión con
+`grep`/Grep y el grafo, cruzando dos fuentes por hallazgo. Queda escrito
+porque el modo de fallo es traicionero: una herramienta ausente no dice que
+falta, devuelve vacío.
 
 ---
 
