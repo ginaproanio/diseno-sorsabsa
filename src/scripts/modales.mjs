@@ -71,6 +71,28 @@ function archivos(dir, acc = []) {
 const esDefinicionDePrimitiva = (rel) =>
   /(^|[\\/])components[\\/]ui[\\/]/.test(rel);
 
+/**
+ * Una prueba no le muestra un cuadro de diálogo a nadie.
+ *
+ * 23-ago-2026: este check informaba 2 modales en auth-sorsabsa. No existen.
+ * Eran la carga `<script>alert(1)</script>` DENTRO de una cadena, en la prueba
+ * que verifica que el subtítulo del login se sanea contra XSS. O sea que el
+ * check estaba señalando justo a la prueba que hace lo correcto.
+ *
+ * Se excluyen las pruebas enteras en vez de intentar quitar las cadenas del
+ * código: reconocer una cadena de JavaScript a fuerza de expresión regular
+ * —comillas escapadas, plantillas, apóstrofes en texto en español— es
+ * justamente la cirugía por regex que ya salió mal antes. Y el alcance de la
+ * regla es la interfaz que ve un usuario, que es exactamente lo que un archivo
+ * de prueba no es.
+ *
+ * Queda vivo un falso positivo conocido y sin resolver: un `alert(` dentro de
+ * una cadena en código de producción. Anotado a propósito en vez de darlo por
+ * cubierto.
+ */
+const esPrueba = (rel) =>
+  /\.(test|spec)\.[tj]sx?$/.test(rel) || /(^|[\\/])__tests__[\\/]/.test(rel);
+
 let total = 0;
 let inalcanzables = 0;
 const raices = process.argv.slice(2);
@@ -100,7 +122,7 @@ for (const raiz of raices) {
   const hallazgos = [];
   for (const f of archivos(base)) {
     const rel = relative(base, f);
-    if (esDefinicionDePrimitiva(rel)) continue;
+    if (esDefinicionDePrimitiva(rel) || esPrueba(rel)) continue;
     const src = sinComentarios(readFileSync(f, "utf8"));
     for (const { re, tipo, nombre } of PATRONES) {
       re.lastIndex = 0;
@@ -112,7 +134,16 @@ for (const raiz of raices) {
     }
   }
 
-  const nombreRepo = base.split(/[\\/]/).filter(Boolean).pop();
+  // El nombre del producto, no el de su subcarpeta. Con `domuscrm/webs` y
+  // `convertidor/frontend` el informe decía "### webs" y "### frontend", que no
+  // le dicen a nadie de qué producto se habla.
+  const GENERICOS = new Set(["webs", "frontend", "backend", "app", "src", "apps", "packages"]);
+  const partes = base.split(/[\\/]/).filter(Boolean);
+  const ultimo = partes[partes.length - 1];
+  const nombreRepo =
+    GENERICOS.has(ultimo) && partes.length > 1
+      ? `${partes[partes.length - 2]}/${ultimo}`
+      : ultimo;
   console.log(`\n### ${nombreRepo}`);
   if (!hallazgos.length) {
     console.log("   sin modales");

@@ -27,6 +27,7 @@
  * Sale con código 1 si encuentra desvíos, para que CI se ponga en rojo.
  */
 import { readFileSync, existsSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -103,6 +104,77 @@ async function grafoDe(entrada, basesLocales) {
   return JSON.parse(await res.text());
 }
 
+/**
+ * ¿El grafo describe el código de HOY?
+ *
+ * **El agujero que tapa (23-ago-2026).** Este check corrió a las 10:09 y
+ * denunció que JustiRed redefinía `Card`, `CardContent`, `CardDescription`,
+ * `CardHeader` y `CardTitle`. Ese archivo se había borrado la noche anterior.
+ * Lo que pasó es que graphify —que reconstruye el grafo— terminó a las 10:10,
+ * 69 segundos DESPUÉS. El check leyó un grafo del código viejo y afirmó cinco
+ * duplicaciones que ya no existían.
+ *
+ * Cinco falsas alarmas en la herramienta cuyo único trabajo es no dar falsas
+ * alarmas. Y del lado contrario es peor: entre que alguien introduce una
+ * duplicación y graphify la publica, este check dice "sin desvíos" mirando un
+ * grafo que todavía no la contiene. **Sale verde sin haber mirado el código
+ * actual**, que es exactamente lo que la parte II de ESTANDAR-DESARROLLO
+ * prohíbe.
+ *
+ * Cada grafo trae `built_at_commit`. Comparándolo con la cabeza del repo se
+ * sabe si en el medio cambió algo que pueda mover símbolos. Se ignoran
+ * `graphify-out/` (el commit que PUBLICA el grafo es siempre posterior al
+ * commit en que se construyó: contarlo daría "desactualizado" siempre) y los
+ * `.md` (un documento no define símbolos).
+ *
+ * Devuelve null si está al día, o el motivo si no se puede afirmar nada.
+ */
+const CAMBIO_QUE_NO_MUEVE_SIMBOLOS = (f) =>
+  f.startsWith("graphify-out/") || f.includes("/graphify-out/") || f.endsWith(".md");
+
+async function grafoAtrasado(entrada, grafo, basesLocales) {
+  const base = grafo?.built_at_commit;
+  if (!base) return "el grafo no dice en qué commit se construyó";
+
+  let cambiados;
+  if (basesLocales) {
+    const dir = basesLocales.find((b) =>
+      b.toLowerCase().replace(/[\\/]+$/, "").endsWith(entrada.dirLocal.toLowerCase())
+    );
+    if (!dir) return null;
+    try {
+      const salida = execFileSync("git", ["-C", dir, "diff", "--name-only", base, "HEAD"], {
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
+      });
+      cambiados = salida.split("\n").map((x) => x.trim()).filter(Boolean);
+    } catch {
+      // El commit del grafo no está en este clon (shallow, o se reescribió la
+      // historia). No se puede comprobar: decirlo, no suponer que está bien.
+      return `no se pudo comparar contra ${base.slice(0, 7)} en el clon local`;
+    }
+  } else {
+    const token = process.env.GH_ECOSISTEMA_TOKEN || process.env.GITHUB_TOKEN;
+    const url = `https://api.github.com/repos/ginaproanio/${entrada.repo}/compare/${base}...HEAD`;
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/vnd.github+json",
+        "User-Agent": "conformidad-sorsabsa",
+      },
+    });
+    if (!res.ok) return `GitHub respondió ${res.status} al comparar contra ${base.slice(0, 7)}`;
+    const cuerpo = await res.json();
+    cambiados = (cuerpo.files ?? []).map((f) => f.filename);
+  }
+
+  const relevantes = cambiados.filter((f) => !CAMBIO_QUE_NO_MUEVE_SIMBOLOS(f));
+  if (!relevantes.length) return null;
+  const muestra = relevantes.slice(0, 3).join(", ");
+  const resto = relevantes.length > 3 ? ` y ${relevantes.length - 3} más` : "";
+  return `el grafo es de ${base.slice(0, 7)} y desde ahí cambiaron ${relevantes.length} archivo(s): ${muestra}${resto}`;
+}
+
 (async () => {
   const args = process.argv.slice(2);
   const iLocal = args.indexOf("--local");
@@ -133,6 +205,21 @@ async function grafoDe(entrada, basesLocales) {
         detalle: "No publica graphify-out/graph.json: queda fuera de esta comprobación",
       });
       lineas.push(`  🔴 ${entrada.nombre}: SIN GRAFO — fuera del grafo de conocimiento`);
+      continue;
+    }
+
+    // Antes de afirmar NADA sobre este producto: ¿el grafo es del código de hoy?
+    // Un grafo atrasado miente en las dos direcciones — inventa duplicaciones
+    // ya borradas y no ve las recién introducidas.
+    const atraso = await grafoAtrasado(entrada, grafo, basesLocales);
+    if (atraso) {
+      hallazgos.push({
+        producto: entrada.nombre,
+        tipo: "grafo_atrasado",
+        detalle: atraso,
+      });
+      lineas.push(`  ⚠️  ${entrada.nombre}: GRAFO ATRASADO — ${atraso}`);
+      lineas.push(`       No se comprueba: cualquier resultado sobre este producto sería inventado.`);
       continue;
     }
 

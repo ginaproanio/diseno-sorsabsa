@@ -45,7 +45,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_ECOSISTEMA_TOKEN }}
         run: |
           set -euo pipefail
-          for repo in condomanager crm_inmobiliario legaltech agente24siete convertidor; do
+          # OJO con los nombres: la carpeta local NO es el repo. DomusCRM vive en
+          # `c:/crm_inmobiliario` pero en GitHub es `domuscrm`, y JustiRed en
+          # `c:/legaltech`. Este workflow se escribió con los nombres de CARPETA y
+          # por eso falló en todas sus ejecuciones (23-ago-2026): `crm_inmobiliario`
+          # no existe en GitHub. conformidad.mjs ya tenía esa distinción escrita en
+          # su tabla ECOSISTEMA; no se miró al escribir esto.
+          for repo in condomanager domuscrm legaltech agente24siete convertidor auth-sorsabsa pagos-sorsabsa; do
             git clone --depth 1 --quiet \
               "https://x-access-token:${GH_TOKEN}@github.com/ginaproanio/${repo}.git" "$repo" \
               || { echo "::error::No se pudo clonar ${repo} — este check NO puede afirmar nada."; exit 1; }
@@ -59,7 +65,8 @@ jobs:
                             # vuelve decorativo: le pasó al de conformidad, que
                             # informó 13 desvíos en verde.
           node diseno/src/scripts/modales.mjs \
-            condomanager crm_inmobiliario/webs legaltech agente24siete convertidor/frontend \
+            condomanager domuscrm/webs legaltech agente24siete convertidor/frontend \
+            auth-sorsabsa pagos-sorsabsa \
             | tee informe.txt
 
       - name: Dejarlo en el resumen del job
