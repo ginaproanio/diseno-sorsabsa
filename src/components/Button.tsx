@@ -14,7 +14,7 @@
 import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes } from 'react';
 import { Loader2 } from 'lucide-react';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'destructive' | 'ghost' | 'accent';
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'destructive' | 'ghost' | 'accent';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 const VARIANTS: Record<ButtonVariant, string> = {
@@ -25,6 +25,13 @@ const VARIANTS: Record<ButtonVariant, string> = {
   // texto y estas dos variantes lo pintan sobre fondo claro.
   secondary:
     'bg-brand-primary/10 text-brand-primary-text hover:bg-brand-primary/15 border border-brand-border',
+  // 23-ago-2026 — `outline` es borde sin relleno, y NO es lo mismo que
+  // `secondary`, que lleva un tinte del 10%. Se agrega porque JustiRed la
+  // usaba 8 veces con su propio Button y migrarla a `secondary` habría
+  // cambiado el aspecto de ocho botones de su sitio. Es el mismo caso que
+  // `Select`: la pieza faltaba, y por faltar el producto mantenía su versión.
+  outline:
+    'bg-transparent text-brand-text border border-brand-border hover:bg-brand-muted/10',
   accent:
     'bg-brand-accent text-brand-accent-foreground hover:bg-brand-accent/90 shadow-sm hover:shadow-md',
   destructive:
