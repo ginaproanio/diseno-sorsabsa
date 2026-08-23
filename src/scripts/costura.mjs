@@ -45,7 +45,7 @@
  * Salidas:  0 sin desconexiones · 1 con desconexiones · 2 no pudo mirar.
  */
 import { readdirSync, readFileSync, existsSync, statSync } from "node:fs";
-import { join, relative, sep } from "node:path";
+import { join, relative, sep, dirname, resolve } from "node:path";
 
 const IGNORAR = new Set([
   "node_modules", ".next", "dist", "build", "graphify-out", ".git",
@@ -121,27 +121,85 @@ function descubrirRutas(raiz) {
  * y entonces sus cadenas `/api/…` son rutas **del otro servicio**, no de este
  * producto. Sin esta distinción, `lib/notificacionesCliente.js` de agente24siete
  * hacía que `/api/crear` —que vive en notificaciones-sorsabsa— apareciera como
- * "un 404 esperando". La versión original del check no tenía el problema solo
- * porque miraba `app/` y `components/` y nunca `lib/`; al generalizarla,
- * apareció.
+ * "un 404 esperando".
  *
- * Se reconoce por la forma de la URL, no por el nombre del archivo: una
- * plantilla que ARRANCA con una interpolación es una base externa.
+ * **Se pregunta por el NOMBRE del servicio, no por la forma de la plantilla.**
+ * La primera versión saltaba cualquier archivo con `fetch(\`${`, y eso barrió
+ * de más: `app/api/registro-residente/route.ts` de CondoManager llama a su
+ * PROPIA ruta con `fetch(\`${appUrl}/api/onboarding/residente-registrado\`)`,
+ * o sea una URL absoluta hacia sí mismo. Al saltarlo entero, esa ruta aparecía
+ * como "trabajo que el usuario no puede usar" teniendo llamador — un falso
+ * positivo en la comprobación que existe para no darlos.
  */
-const hablaConOtroServicio = (src) => /fetch\(\s*`\$\{/.test(src);
+const hablaConOtroServicio = (src, envServicios) =>
+  envServicios.some((v) => src.includes(v));
 
-/** Toda cadena `"/api/…"` en código que NO sea el archivo de la propia ruta. */
-function descubrirLlamadas(raiz, archivosDeRuta) {
+/**
+ * Igual que arriba, pero mirando también **un nivel de imports**.
+ *
+ * Un puente no nombra la variable: la nombra el cliente que importa.
+ * `pages/api/notificaciones.js` de agente24siete recibe al navegador y
+ * reenvía al servicio llamando a `llamarNotificaciones("/api/listar")`, y
+ * `NOTIFICACIONES_API_URL` vive en `lib/notificacionesCliente.js`. Mirando
+ * solo el archivo, sus rutas parecen locales y salen como "un 404 esperando".
+ *
+ * Un nivel alcanza para los puentes reales del ecosistema y no obliga a
+ * resolver el árbol entero de imports, que sería otra cosa y más frágil.
+ */
+function hablaConServicioViaImport(raiz, archivo, src, envServicios) {
+  if (hablaConOtroServicio(src, envServicios)) return true;
+  const dir = dirname(join(raiz, archivo));
+  // Relativos **y con alias `@/`**: el Convertidor importa su cliente como
+  // `@/lib/notificaciones-servidor`, y mirando solo los relativos sus tres
+  // puentes salían como "un 404 esperando".
+  for (const m of src.matchAll(/from\s*["']([.@][^"']+)["']|require\(\s*["']([.@][^"']+)["']/g)) {
+    const esp = m[1] || m[2];
+    if (!esp) continue;
+    const bases = esp.startsWith("@/")
+      ? [join(raiz, "src", esp.slice(2)), join(raiz, esp.slice(2))]
+      : [resolve(dir, esp)];
+    const cands = bases.flatMap((base) => [
+      base, base + ".ts", base + ".js", base + ".tsx", base + ".jsx",
+      join(base, "index.ts"), join(base, "index.js"),
+    ]);
+    for (const cand of cands) {
+      try {
+        if (statSync(cand).isFile() && hablaConOtroServicio(readFileSync(cand, "utf8"), envServicios)) {
+          return true;
+        }
+      } catch { /* no existe, se prueba el siguiente */ }
+    }
+  }
+  return false;
+}
+
+/**
+ * Toda cadena `"/api/…"` en código, descontando la que un archivo de ruta hace
+ * sobre SÍ MISMO.
+ *
+ * **Una ruta sí puede llamar a otra ruta**, y saltarse los archivos de ruta
+ * enteros —como hacía la primera versión— borra ese caso. Pasó en CondoManager:
+ * `app/api/registro-residente/route.ts` llama a
+ * `/api/onboarding/residente-registrado`, y esta última aparecía como
+ * "trabajo que el usuario no puede usar" teniendo un llamador perfectamente
+ * visible. Lo que hay que descontar es la AUTO-referencia, no el archivo.
+ */
+function descubrirLlamadas(raiz, rutaDeArchivo, envServicios = []) {
   const llamadas = new Map();
   recorrer(raiz, (p, name) => {
     if (!EXT_CODIGO.test(name)) return;
     const rel = aBarras(relative(raiz, p));
-    if (archivosDeRuta.has(rel)) return;      // una ruta no se llama a sí misma
     if (/\.(test|spec)\./.test(name)) return; // una prueba no es la interfaz
     let src;
     try { src = sinComentarios(readFileSync(p, "utf8")); } catch { return; }
-    if (hablaConOtroServicio(src)) return;
-    for (const m of src.matchAll(/["'`](\/api\/[A-Za-z0-9_\-/]+)/g)) {
+    if (hablaConServicioViaImport(raiz, rel, src, envServicios)) return;
+    const propia = rutaDeArchivo.get(rel);    // si este archivo ES una ruta
+    // Comilla **o `}`**: en `fetch(`${appUrl}/api/x`)` la ruta viene después de
+    // cerrar la interpolación, no de una comilla. Exigir comilla dejaba fuera
+    // toda URL absoluta armada con una base — el mismo descuido que ya había
+    // costado un falso positivo en la comprobación entre repos.
+    for (const m of src.matchAll(/(?:["'`]|\})(\/api\/[A-Za-z0-9_\-/]+)/g)) {
+      if (propia && m[1] === propia) continue; // no se llama a sí misma
       // `${id}` y similares cortan la ruta: se guarda el prefijo, y más abajo
       // una llamada cuenta como satisfecha si alguna ruta empieza igual.
       if (!llamadas.has(m[1])) llamadas.set(m[1], new Set());
@@ -258,22 +316,39 @@ if (!esDir(raiz)) {
 }
 
 let externas = {};
+let placeholders = {};
 const cfg = join(raiz, "costura.config.json");
 if (existsSync(cfg)) {
-  try { externas = JSON.parse(readFileSync(cfg, "utf8")).externas ?? {}; }
-  catch (e) {
+  try {
+    const j = JSON.parse(readFileSync(cfg, "utf8"));
+    externas = j.externas ?? {};
+    // `placeholders` es distinto de `externas` a propósito. Una ruta externa la
+    // llama alguien de afuera; un placeholder no lo llama NADIE, y está bien
+    // porque todavía no se construyó. Meterlo en `externas` sería declarar algo
+    // falso para que el check se calle — que es la clase de arreglo que este
+    // ecosistema ya pagó caro. Se lista aparte y el informe lo dice.
+    placeholders = j.placeholders ?? {};
+  } catch (e) {
     console.error(`costura.config.json ilegible: ${e.message}`);
     process.exit(2);
   }
 }
 
 const rutas = descubrirRutas(raiz);
-const archivosDeRuta = new Set(rutas.values());
-const llamadas = descubrirLlamadas(raiz, archivosDeRuta);
+// archivo -> la ruta que ese archivo DEFINE, para descontar auto-referencias.
+const rutaDeArchivo = new Map([...rutas].map(([ruta, arch]) => [arch, ruta]));
+// Los nombres de variable con que se llama a otro servicio salen de la tabla
+// del ecosistema, no de adivinar por la forma de la plantilla.
+const { ECOSISTEMA: TABLA } = await import("./ecosistema.mjs");
+const ENV_SERVICIOS = TABLA.flatMap((e) => e.env ?? []);
+const llamadas = descubrirLlamadas(raiz, rutaDeArchivo, ENV_SERVICIOS);
 
 console.log(`Rutas de API: ${rutas.size} · llamadas desde el código: ${llamadas.size}`);
 if (Object.keys(externas).length) {
   console.log(`Declaradas como externas: ${Object.keys(externas).length}`);
+}
+if (Object.keys(placeholders).length) {
+  console.log(`Declaradas como placeholder (nadie las llama todavía, a propósito): ${Object.keys(placeholders).length}`);
 }
 
 // Cero y cero no es "todo en orden": es que no se miró nada.
@@ -286,7 +361,6 @@ if (rutas.size === 0 && llamadas.size === 0) {
 // positivos —16 de 16 en pagos-sorsabsa, 5 de 5 en notificaciones—: sus
 // llamadores viven en otros repos por definición. A un servicio se lo
 // comprueba al revés, con `--ecosistema`.
-const { ECOSISTEMA: TABLA } = await import("./ecosistema.mjs");
 const normal = (p) => aBarras(p).toLowerCase().replace(/\/+$/, "");
 const entrada = TABLA.find((e) => normal(raiz).endsWith(normal(e.dirLocal + (e.sub ? "/" + e.sub : ""))));
 if (entrada?.tipo === "servicio") {
@@ -304,9 +378,11 @@ const llamada = (r) =>
 const existe = (l) =>
   listaRutas.some((r) => r === l || l.startsWith(r + "/") || r.startsWith(l));
 
-const huerfanas = listaRutas.filter((r) => !llamada(r) && !externas[r]).sort();
+const huerfanas = listaRutas.filter((r) => !llamada(r) && !externas[r] && !placeholders[r]).sort();
 const rotas = [...llamadas.keys()].filter((l) => !existe(l)).sort();
-const externasFaltantes = Object.keys(externas).filter((r) => !rutas.has(r));
+// La lista tambien envejece: si una declarada ya no existe, esta mintiendo.
+const externasFaltantes = [...Object.keys(externas), ...Object.keys(placeholders)]
+  .filter((r) => !rutas.has(r));
 
 const bloque = (titulo, lista, detalle) => {
   if (!lista.length) return;
