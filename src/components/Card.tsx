@@ -60,6 +60,25 @@ export function CardTitle({ className = '', children }: { className?: string; ch
   return <h3 className={`text-sm font-semibold ${className}`}>{children}</h3>;
 }
 
+/**
+ * La línea de apoyo del encabezado: qué es esta tarjeta, en una frase.
+ *
+ * Faltaba, y por faltar JustiRed no podía retirar su Card propio en la página
+ * de precios — usa `CardDescription` para la descripción del plan. Es el mismo
+ * patrón que ya había pasado con `Select` y con la variante `outline`: la
+ * familia estaba incompleta y el producto se quedaba con su versión entera por
+ * una pieza que no estaba.
+ */
+export function CardDescription({
+  className = '',
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) {
+  return <p className={`mt-1 text-sm text-brand-muted ${className}`}>{children}</p>;
+}
+
 export function CardContent({ className = '', ...rest }: HTMLAttributes<HTMLDivElement>) {
   return <div className={`px-6 py-5 ${className}`} {...rest} />;
 }
