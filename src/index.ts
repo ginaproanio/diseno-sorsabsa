@@ -47,6 +47,15 @@ export {
 } from './components/Table';
 export { NotificationBell, type Notificacion, type NotificationBellProps } from './components/NotificationBell';
 export { Tag, type TagProps } from './components/Tag';
+// 23-ago-2026 — las piezas que FALTABAN, y cuya ausencia empujó a JustiRed y a
+// CondoManager a resolverlo por su cuenta. Ver el docblock de Select.tsx: no
+// eligieron duplicar, trajeron una librería entera para conseguir un
+// desplegable y el resto vino de arriba. El check de conformidad informaba eso
+// como indisciplina del producto porque mide en una sola dirección.
+export { Select, type SelectProps } from './components/Select';
+export { Checkbox, type CheckboxProps } from './components/Checkbox';
+export { Tabs, type TabsProps, type Pestana } from './components/Tabs';
+export { ConfirmarAccion, type ConfirmarAccionProps } from './components/ConfirmarAccion';
 export { Avatar, type AvatarProps } from './components/Avatar';
 export { SectionHeader, type SectionHeaderProps } from './components/SectionHeader';
 export { FormSection, type FormSectionProps } from './components/FormSection';
