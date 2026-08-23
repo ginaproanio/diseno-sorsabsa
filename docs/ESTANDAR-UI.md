@@ -8,14 +8,30 @@ se le habla al usuario**.
 
 ---
 
-## 1. Nada de modales. Ninguno.
+## 1. Prohibidos los diálogos del NAVEGADOR
 
-**Regla dura de Gina, 22-ago-2026:** *"odio los modales, eso nunca debes ni
-siquiera considerar en usarlos"*.
+**`alert()`, `confirm()` y `prompt()` están prohibidos. Sin excepción.**
 
-Incluye, y esto es lo más grave, los del navegador: **`alert()`,
-`confirm()` y `prompt()` están prohibidos.** Bloquean el hilo, no se pueden
+**Precisión de Gina, 23-ago-2026**, después de que esta regla se aplicara de
+más: *"lo que odio es el cartel negro oscuro que parece de terminal, esos son
+los que se debían cambiar o sacar"*.
+
+Es el cuadro gris que el navegador dibuja arriba de todo, encabezado con
+`condomanager.vip dice:`, con tipografía del sistema. Parece un mensaje de
+error del computador, no parte del producto. Bloquean el hilo, no se pueden
 diseñar, no se pueden traducir, no se pueden probar y no dicen a dónde ir.
+
+**Lo que NO prohíbe esta regla, y antes decía que sí.** Una capa con la marca
+—un `<Dialog>` diseñado— no es lo mismo que el cartel del sistema. Esta sección
+decía *"nada de modales, ninguno"* y con eso se retiró de JustiRed una ventana
+de suscripción que estaba bien hecha. No estaba prohibida; se retiró por una
+regla mal escrita.
+
+Sigue valiendo el criterio de fondo: **si la información cabe en la página, va
+en la página.** Tapar la pantalla para pedir tres datos, o para avisar de un
+error, casi nunca es lo correcto — y sobre todo no en la pantalla que factura,
+que es el caso que originó todo esto. Pero eso es un juicio de diseño, no una
+prohibición: la prohibición es el diálogo del navegador.
 
 **El caso real que originó la regla.** En el Convertidor, pulsar "Suscribirse"
 sin sesión abría un `alert()` del navegador con el texto de un error 401. La

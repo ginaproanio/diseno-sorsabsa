@@ -43,7 +43,12 @@ const PATRONES = [
   // `alert(` pero no `.alert(` ni `toast.alert(` — el punto delante indica que
   // es el método de otra cosa, no el diálogo del navegador.
   { re: /(^|[^.\w$])(alert|confirm|prompt)\s*\(/g, tipo: "nativo", nombre: (m) => `${m[2]}()` },
-  { re: /<(Dialog|AlertDialog|Modal|Sheet)[\s>]/g, tipo: "componente", nombre: (m) => `<${m[1]}>` },
+  // 23-ago-2026: acá también se marcaba `<Dialog>`, `<AlertDialog>`, `<Modal>`
+  // y `<Sheet>`. Se quitó. La regla es sobre el diálogo del NAVEGADOR —el
+  // cuadro gris con `sitio.com dice:` y tipografía del sistema—, no sobre una
+  // capa con la marca. Precisión de Gina después de que este check hiciera
+  // retirar de JustiRed una ventana de suscripción que estaba bien hecha:
+  // marcarla fue aplicar de más una regla mal escrita.
 ];
 
 function archivos(dir, acc = []) {
