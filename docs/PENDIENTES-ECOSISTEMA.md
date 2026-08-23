@@ -2503,3 +2503,93 @@ cambiado el código, deduje que el Convertidor no tenía grafo de no encontrarlo
 donde yo suponía. Las tres veces **el dato estaba escrito en alguna parte**.
 Es la regla 5 de la parte II —*lo que se declara no se deduce*— aplicada a
 quien usa el estándar, no a quien escribe el código.
+
+---
+
+## 30. 🟡 Las cuatro comprobaciones que sí encuentran cosas — y el grafo, que no (23-ago-2026)
+
+**Gina, al cabo de un día entero corrigiendo el grafo:** *"estoy harta de
+corregir el grafo, no veo que ayude… ¿tú le ves valor?"*. La respuesta honesta
+es **no**, y no es una opinión: está medida abajo.
+
+### 30.1 · Por qué el grafo no se gana el puesto
+
+| lo que encontró defectos reales hoy | cómo |
+|---|---|
+| el bypass de autenticación en 11 endpoints | construir una pantalla |
+| el bucle de login | Gina usando el producto |
+| 11 rutas desconectadas, 8 huecos reales | el check de **costura** — texto plano |
+| 4 archivos de 0 bytes dados por "implementados" | el check de **huérfanos** — 0,26 s |
+| los triggers de EcoInmobiliaria | leer código |
+| 3 "duplicados" que no lo eran | leer código |
+
+Y el grafo, en un solo día: **7 hallazgos falsos** — 5 `Card` fantasma de un
+grafo viejo, el `Tag` de agente24siete, y "Convertidor sin grafo".
+
+El problema no es que esté mal construido: **mide lo que no duele**. Sus
+aristas son imports y contención; los defectos de este ecosistema viven en
+HTTP, en SQL y entre repos, donde tiene **cero aristas** (medición completa en
+`diseno-sorsabsa/docs/graphify-ci.md`).
+
+**Decisión: no se borra, pero se deja de arreglar.** Ya se mantiene solo, 9 de
+10 en verde, y no cuesta tiempo si nadie lo toca. Lo que costaba era tratar su
+salida como hallazgos.
+
+### 30.2 · Con qué se lo reemplaza
+
+Cuatro comprobaciones, todas de texto plano, todas en segundos, todas en
+`@sorsabsa/ui` y corriendo sobre los ocho repos:
+
+| check | pregunta que responde | estado |
+|---|---|---|
+| `npm run modales:local` | ¿queda algún diálogo del navegador? | 18 vivos |
+| `npm run conformidad:local` | ¿se duplica lo que el design system ya da? | 8 desvíos |
+| `npm run costura` | ¿cada ruta de API tiene llamador, y cada llamada una ruta? | ver 30.3 |
+| `npm run costura:ecosistema` | ¿las rutas que un producto le pide a un servicio existen? | 41 llamadas, 0 rotas |
+| `npm run huerfanos:local` | ¿qué archivo no importa nadie? | 4 vivos |
+
+**`costura:ecosistema` es la que atrapa el bug que nadie podía ver:**
+agente24siete llamando a `${NOTIFICACIONES_API_URL}/api/marcar-todas` cuando la
+ruta se llama `marcar-todas-leidas`. No es un import (el grafo no lo ve),
+compila perfecto (`tsc` no lo ve) y vive en dos repos (ninguna comprobación de
+un repo solo lo ve). Probada contra ese bug exacto en un ecosistema de mentira.
+
+### 30.3 · Lo que queda por triar, y NO son defectos todavía
+
+**Rutas sin llamador local**, del barrido de costura:
+
+| producto | rutas | sin llamador |
+|---|---|---|
+| condomanager | 41 | 8 |
+| domuscrm | 30 | 8 |
+| auth-sorsabsa | 3 | 1 |
+| convertidor · agente24siete | 31 | 0 |
+
+De los 8 de CondoManager, **2 son crons declarados en `vercel.json`**
+(verificado) y varios son webhooks. Hay que mirarlos uno por uno y declarar los
+legítimos en el `costura.config.json` de cada producto, como ya se hizo en
+agente24siete. **Presentarlos como huecos sin triar sería repetir el error de
+decir el alcance sin contarlo.**
+
+**Archivos que nadie importa**, del check de huérfanos:
+
+- `condomanager/app/dev-tools/ColorPalette.tsx` — herramienta de desarrollo.
+- `legaltech/src/components/ui/use-toast.ts` (85 bytes) — copia duplicada del
+  de `src/hooks/`. Se borra sin más.
+- `legaltech/src/hooks/use-mobile.tsx` — resto de shadcn.
+- **`agente24siete/lib/vozTwilio.js`** — un cliente de SMS de Twilio, 31
+  líneas, funcional y documentado en `docs/twilio.md`, que **ningún código
+  importa**. No se borró a propósito: agente24siete no tiene canal (WhatsApp
+  baneado, Twilio sin número, §15), así que esto puede ser un camino a medio
+  construir y no basura. **Decisión de Gina:** conectarlo o retirarlo.
+
+### 30.4 · Lo que falta del lado de las herramientas
+
+- **Los checks corren desde diseno-sorsabsa, no desde cada producto.** Un modal
+  agregado a CondoManager un martes no se ve hasta el lunes. Lo correcto es un
+  workflow reutilizable que cada producto invoque en su propio push.
+- **`costura` y `conformidad` no tienen prueba automática.** `huerfanos` sí
+  (5, tres de ellas negativas) y `ecosistema` también. Es lo que queda del
+  hallazgo A-2 de §29.7.
+- **El Convertidor sigue sin `graphify.yml`** — y está en `master`, así que
+  copiar el template no dispararía. Si se acepta 30.1, esto deja de importar.
