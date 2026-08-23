@@ -2554,22 +2554,54 @@ ruta se llama `marcar-todas-leidas`. No es un import (el grafo no lo ve),
 compila perfecto (`tsc` no lo ve) y vive en dos repos (ninguna comprobación de
 un repo solo lo ve). Probada contra ese bug exacto en un ecosistema de mentira.
 
-### 30.3 · Lo que queda por triar, y NO son defectos todavía
+### 30.3 · ✅ Triado — de 17 "rutas sin llamador" quedó UNA, y no era lo que dije
 
-**Rutas sin llamador local**, del barrido de costura:
+**16 de las 17 eran falsos positivos del propio check.** Cuatro defectos míos,
+todos de la misma familia —reconocer una llamada solo en su forma más simple—:
+exigir comilla antes de `/api/` (y perder `` fetch(`${appUrl}/api/x`) ``),
+saltar los archivos de ruta enteros (y perder una ruta que llama a otra ruta),
+tratar cualquier `` fetch(`${ `` como "otro servicio", y seguir solo imports
+relativos (y perder `@/lib/notificaciones-servidor` del Convertidor).
 
-| producto | rutas | sin llamador |
-|---|---|---|
-| condomanager | 41 | 8 |
-| domuscrm | 30 | 8 |
-| auth-sorsabsa | 3 | 1 |
-| convertidor · agente24siete | 31 | 0 |
+Estado tras el arreglo y la declaración de las externas:
 
-De los 8 de CondoManager, **2 son crons declarados en `vercel.json`**
-(verificado) y varios son webhooks. Hay que mirarlos uno por uno y declarar los
-legítimos en el `costura.config.json` de cada producto, como ya se hizo en
-agente24siete. **Presentarlos como huecos sin triar sería repetir el error de
-decir el alcance sin contarlo.**
+| producto | rutas | externas declaradas | sin resolver |
+|---|---|---|---|
+| condomanager | 41 | 5 + 1 placeholder | **1** |
+| domuscrm | 30 | 3 | 0 |
+| auth-sorsabsa | 3 | 1 | 0 |
+| agente24siete | 25 | 3 | 0 |
+| convertidor | 6 | — | 0 |
+
+Cada externa se verificó una por una —quién la llama— y quedó escrita en el
+`costura.config.json` del producto. Y hay una categoría aparte, `placeholders`,
+para lo que **nadie llama todavía a propósito**: meter eso en `externas` sería
+declarar algo falso para que el check se calle.
+
+#### ⚠️ Corrección — lo que dije de `/api/pagos/consultar/[id]` estaba mal
+
+Informé que esa ruta sin llamador significaba que *"nadie puede consultar el
+estado de un pago"*. **Es falso, y lo corrigió Gina:** *"SI HABÍA UNA PANTALLA
+en donde si yo pagaba como residente el administrador del condominio podía ver
+hasta el comprobante con el que pagó"*.
+
+Verificado después: `app/(dashboard)/panel/admin/reportes/historial-pagos/page.tsx`
+lee la tabla `pagos` **directo por Supabase**, hace join con `comprobantes` y
+enlaza a `/api/facturacion/{id}/ver`. La pantalla existe y funciona.
+
+Lo cierto es mucho más chico: **la ruta no tiene llamador porque las pantallas
+van directo a la base.** Salté de "la ruta está muerta" a una afirmación sobre
+el producto que no comprobé — el mismo error que ya había cometido con el
+alcance del check de costura y con el grafo del Convertidor.
+
+**Qué hacer con ella, pendiente de decisión.** Está implementada, tiene control
+de acceso propio (admin o el residente dueño, `getPerfilAutenticado`) y nadie la
+llama. Pertenece a la misma tanda de junio que `factory.ts` y `service.ts` —los
+archivos de 0 bytes que ya se borraron—: una capa de pagos que se diseñó y el
+producto no adoptó, porque las pantallas resolvieron por Supabase. **No se
+borra por cuenta propia**: es código que funciona, con autorización, y borrarlo
+es distinto de borrar un archivo vacío. Queda marcada en rojo por el check a
+propósito, porque declararla la escondería.
 
 **Archivos que nadie importa**, del check de huérfanos:
 
