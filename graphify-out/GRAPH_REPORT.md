@@ -1,20 +1,21 @@
 # Graph Report - diseno-sorsabsa  (2026-08-23)
 
 ## Corpus Check
-- 104 files · ~151,519 words
+- 104 files · ~151,993 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1055 nodes · 1388 edges · 72 communities (65 shown, 7 thin omitted)
+- 1060 nodes · 1393 edges · 69 communities (65 shown, 4 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 5 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `643250b7`
+- Built from commit: `ffd62f43`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
+- DomusLanding.tsx
 - App.tsx
 - BrandProvider.tsx
 - Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)
@@ -22,17 +23,16 @@
 - Estándar de desarrollo — no parchear la arquitectura
 - devDependencies
 - 🔴 CRÍTICO
-- index.ts
 - Plan — una persona en más de un condominio (CondoManager)
 - ecosistema.mjs
-- IconName
 - costura.mjs
+- index.ts
 - Pendientes del ecosistema SORSABSA
 - Plan — Identificación de unidades configurable por condominio
+- Table.tsx
 - Auditoría — JustiRed (legaltech)
 - compilerOptions
 - compilerOptions
-- CardStatusDemo.tsx
 - 🟠 IMPORTANTE
 - Auditoría — CondoManager como aplicación (más allá del portero)
 - Almacenamiento del ecosistema: modelo, costos y cómo lo hacen otros
@@ -47,7 +47,7 @@
 - 4-bis. Georreferenciación y R2 — estado real (verificado 2026-08-08)
 - @sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA
 - AppShell.tsx
-- NotificationBell.tsx
+- Button.tsx
 - Arquitectura del ecosistema SORSABSA
 - scripts
 - 24. 🟡 El cobro del ecosistema quedó vivo — lo que falta después (21/22-ago-2026)
@@ -56,34 +56,31 @@
 - Estándar de UI del ecosistema SORSABSA
 - 4-ter. El cobro y el portero — ✅ verificado en vivo 22-ago-2026
 - 7. Decisión de arquitectura (2026-07-26)
+- NotificationBell.tsx
 - Color de marca y contraste
 - ecosistema.test.ts
 - 3. Mapa de bases de datos — LA TRAMPA
 - 25. ✅ La campana es LA MISMA en todos los productos (cerrado 22-ago-2026)
 - 27. ✅ agente24siete ya se puede dar de alta — y el agujero que apareció al hacerlo (22-ago-2026)
 - 30. 🟡 Las cuatro comprobaciones que sí encuentran cosas — y el grafo, que no (23-ago-2026)
-- Button.tsx
 - 23. ⬜ Consola del negocio y CRM de ventas de SORSABSA — anotado 16-ago-2026, aplazado a propósito
 - 28. ⬜ PENDIENTE DE GINA — las pruebas en vivo que quedaron del 22-ago-2026
+- 31. 🔵 El "quién soy" está escrito dos veces, y las copias ya divergieron — 23-ago-2026
 - vercel.json
 - 2. Los dos planos
 - 4-quater. Mapa de repos y el grafo — ✅ levantado 22-ago-2026
 - 9. Pendientes, en orden
 - 26. 🔴 ¿Puede un usuario comprar y recibir lo que compró? (22-ago-2026)
 - files
-- PropertyCarousel
-- SegmentedControl.tsx
 - 1. Inventario
 - framer-motion
-- Select.tsx
-- apiError.ts
 - huerfanos.test.ts
 - pre-push
 - jest-environment-jsdom
 - vite.config.ts
 
 ## God Nodes (most connected - your core abstractions)
-1. `Pendientes del ecosistema SORSABSA` - 34 edges
+1. `Pendientes del ecosistema SORSABSA` - 35 edges
 2. `Estándar de desarrollo — no parchear la arquitectura` - 20 edges
 3. `IconName` - 17 edges
 4. `Plan — una persona en más de un condominio (CondoManager)` - 16 edges
@@ -99,49 +96,49 @@
   showcase/src/resolveColors.ts → src/brand/BrandProvider.tsx
 - `TokenAudit()` --calls--> `useBrand()`  [EXTRACTED]
   showcase/src/components/TokenAudit.tsx → src/brand/BrandProvider.tsx
-- `StatusBadgeProps` --references--> `IconName`  [EXTRACTED]
-  src/components/StatusBadge.tsx → src/icons/icon-paths.ts
+- `Wordmark()` --calls--> `useBrand()`  [EXTRACTED]
+  src/components/Wordmark.tsx → src/brand/BrandProvider.tsx
+- `SinAccesoProps` --references--> `IconName`  [EXTRACTED]
+  src/components/SinAcceso.tsx → src/icons/icon-paths.ts
 - `App()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
   showcase/src/App.tsx → showcase/src/resolveColors.ts
-- `ColorPalette()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
-  showcase/src/components/ColorPalette.tsx → showcase/src/resolveColors.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (72 total, 7 thin omitted)
+## Communities (69 total, 4 thin omitted)
 
-### Community 0 - "App.tsx"
+### Community 0 - "DomusLanding.tsx"
 Cohesion: 0.06
-Nodes (34): App(), BRAND_KEYS, AtomShowcase(), ButtonMatrix(), SHADOW, VARIANTS, ColorPalette(), TOKEN_ORDER (+26 more)
+Nodes (36): CardStatusDemo(), SHADOW, TONES, DomusLanding(), FEATURES, SOCIAL, IconCatalog(), NAMES (+28 more)
 
-### Community 1 - "BrandProvider.tsx"
+### Community 1 - "App.tsx"
+Cohesion: 0.07
+Nodes (33): App(), BRAND_KEYS, AtomShowcase(), ColorPalette(), TOKEN_ORDER, ContrastReport(), FormDemo(), MOCK (+25 more)
+
+### Community 2 - "BrandProvider.tsx"
 Cohesion: 0.09
-Nodes (33): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandConfig, BrandContext, BrandProvider(), brandToCssVars() (+25 more)
+Nodes (32): BRAND_FONT_IMPORTS, BrandColors, BrandConfig, BrandContext, BrandProvider(), brandToCssVars(), contrastRatio(), darkenToContrast() (+24 more)
 
-### Community 2 - "Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)"
+### Community 3 - "Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)"
 Cohesion: 0.05
 Nodes (42): 10. Plazo real y calendario, 11. Dominio, 12. Decisiones pendientes, 1. Los dos perfiles y el modelo de negocio, 2. Lo que se reusa del ecosistema (regla dura del tracker), 3.a Navegación: gestión ≠ ejecución (pedido de Gina, 15-ago-2026), 3. Acceso al contenido de las plataformas — lo único que cambia en `core/`, 3.b Editor de texto enriquecido — requisito, no mejora futura (+34 more)
 
-### Community 3 - "Modelo de trabajo de JustiRed"
+### Community 4 - "Modelo de trabajo de JustiRed"
 Cohesion: 0.05
 Nodes (40): 10. Reglas de trabajo que salieron de los defectos, 1. Inventariar — ✅, 1. Las unidades de trabajo, 2. Adquirir — ✅ separado el 17-ago-2026, 2. Clasificaciones que importan, 3. Cómo clasifican las empresas del sector, 3. Extraer — ✅ desde el 19-ago-2026, 4. El inventario (+32 more)
 
-### Community 4 - "Estándar de desarrollo — no parchear la arquitectura"
+### Community 5 - "Estándar de desarrollo — no parchear la arquitectura"
 Cohesion: 0.05
 Nodes (34): 🔵-1 — ✅ CORREGIDO 10-ago-2026 — El propio README del servicio decía que nadie lo consumía, dato desactualizado desde el 08-ago, 🔴-1 — 🟡 CORREGIDO EN CÓDIGO 15-ago-2026, FALTA DESPLEGAR — `/resolver` acepta cualquier URL, sin dominio permitido ni autenticación — SSRF real, sin control de abuso, Auditoría — geo-sorsabsa, 🔵 BAJO, 🔴 CRÍTICO, Pendiente de decidir con Gina antes de ejecutar, Resuelto, verificado, no tocar, 🟠-1 — ✅ CORREGIDO 10-ago-2026 — La tabla de README.md no sumaba porque el conteo de DomusCRM estaba mal (+26 more)
 
-### Community 5 - "devDependencies"
+### Community 6 - "devDependencies"
 Cohesion: 0.05
 Nodes (38): autoprefixer, postcss, dependencies, framer-motion, lucide-react, motion, react, react-dom (+30 more)
 
-### Community 6 - "🔴 CRÍTICO"
+### Community 7 - "🔴 CRÍTICO"
 Cohesion: 0.05
 Nodes (37): 🟠-10 — ⬜ CondoManager muestra un rechazo de negocio cuando lo que falló es la red — encontrado 16-ago-2026, 🔴-10 — ✅ Confirmar cuenta daba "No se pudo instalar la sesión" — RESUELTO 09-ago-2026, completa a 🔴-7, 🔴-11 — 🔧 DomusCRM y agente24siete corregidos 10-ago-2026; JustiRed corregido en código 15-ago-2026, pendiente de deploy — El portero está mal implementado en los 4 productos web, y de tres maneras distintas, 🔴-12 — ✅ RESUELTO Y VALIDADO EN VIVO 10-ago-2026 — agente24siete verificaba su sesión contra el proyecto Supabase equivocado — causa real del bucle que 🔴-1/🟠-3 nunca cerraron, 🔴-1 — ✅ Alta de usuarios no gobernada: el pipeline de registro de cada producto no sabe que identity existe — RESUELTO 09-ago-2026, 🟡-1 — ✅ Eliminación manual de cuentas reales vía SQL directo — reconocido, no repetir, 🟠-1 — ✅ Excepción hardcodeada `app === 'iot'` en /auth/complete — RESUELTO 08-ago-2026, 🔵-1 — ⬜ `iot.redirectUrl` es una URL cruda de Railway, no dominio propio (+29 more)
-
-### Community 7 - "index.ts"
-Cohesion: 0.10
-Nodes (30): DATA, Checkbox, CheckboxProps, ConfirmarAccion(), ConfirmarAccionProps, SectionHeader(), SectionHeaderProps, ALIGN (+22 more)
 
 ### Community 8 - "Plan — una persona en más de un condominio (CondoManager)"
 Cohesion: 0.06
@@ -151,13 +148,13 @@ Nodes (29): auth-sorsabsa reapuntado — commit `212f8b9`, 07-ago-2026, ✅ Cerr
 Cohesion: 0.09
 Nodes (20): AQUI, grafoAtrasado(), pedirGitHub(), tokenGitHub(), ultimoCommitDeCodigo(), conSub(), ECOSISTEMA, raicesLocales() (+12 more)
 
-### Community 10 - "IconName"
-Cohesion: 0.13
-Nodes (19): IconCatalog(), NAMES, SHADOW, FooterEcosistema(), FooterEcosistemaProps, FormSection(), FormSectionProps, InputProps (+11 more)
-
-### Community 11 - "costura.mjs"
+### Community 10 - "costura.mjs"
 Cohesion: 0.12
 Nodes (25): aBarras(), cfg, descubrirLlamadas(), descubrirRutas(), entrada, ENV_SERVICIOS, esDir(), existe() (+17 more)
+
+### Community 11 - "index.ts"
+Cohesion: 0.13
+Nodes (16): Checkbox, CheckboxProps, ConfirmarAccion(), ConfirmarAccionProps, PropertyCarousel(), PropertyCarouselProps, SectionHeader(), SectionHeaderProps (+8 more)
 
 ### Community 12 - "Pendientes del ecosistema SORSABSA"
 Cohesion: 0.08
@@ -167,21 +164,21 @@ Nodes (25): 10. ✅ Login social: Google ✅ cerrado — Facebook ✅ funciona, 
 Cohesion: 0.08
 Nodes (23): Alcance real, verificado leyendo cada archivo (no asumido), Causa raíz, Decidido y ejecutado (ya no está pendiente), Fase 1 — ✅ RESUELTO 09-ago-2026 (`condomanager@5267329`), Fase 2 — ✅ RESUELTO 09-ago-2026 (`condomanager@e9dcf0f`), Fase 3 — ✅ RESUELTO 09-ago-2026 (`condomanager@2d9c0a9`) — Reagrupar el sidebar, Fase 4 — Verificación y cierre — 🔧 casi cerrada (15-ago-2026), Fases (+15 more)
 
-### Community 14 - "Auditoría — JustiRed (legaltech)"
+### Community 14 - "Table.tsx"
+Cohesion: 0.11
+Nodes (23): DATA, ALIGN, HIDE_CLASSES, hideClass(), ResponsiveBreakpoint, SIZE_CELL_PADDING, SIZE_HEADER_TEXT, Table() (+15 more)
+
+### Community 15 - "Auditoría — JustiRed (legaltech)"
 Cohesion: 0.08
 Nodes (24): 10-ago-2026 — Estado real, adónde debe llegar, y los transversales que esta auditoría todavía no cubrió, 15-ago-2026 — Qué se ejecutó, qué falta, 🟠-1 — ✅ Corregido en código 15-ago-2026 (ver `AUDITORIA-PORTERO-SSO.md` 🔴-11), 🔴-1 — ✅ RESUELTO 15-ago-2026 — El panel de Control de Calidad no hace nada: RLS bloquea la tabla para cualquier usuario, la UI lo esconde con un "éxito" falso, 23-ago-2026 — Por qué JustiRed "iba por otro camino": la respuesta, a la tercera vez que Gina lo preguntó, 🔴-2 — 🔧 El portero central tiene a JustiRed registrada en un dominio que NO EXISTE: todo login termina en `justired.app` (NXDOMAIN), 🔴-3 — ✅ RESUELTO 15-ago-2026 — La cola de revisión no gateaba nada: toda ley capturada era pública desde el primer segundo, aprobada o no, Auditoría — JustiRed (legaltech) (+16 more)
 
-### Community 15 - "compilerOptions"
+### Community 16 - "compilerOptions"
 Cohesion: 0.09
 Nodes (21): jest, node, @testing-library/jest-dom, compilerOptions, esModuleInterop, forceConsistentCasingInFileNames, jsx, lib (+13 more)
 
-### Community 16 - "compilerOptions"
+### Community 17 - "compilerOptions"
 Cohesion: 0.09
 Nodes (22): ../src/**/*.test.ts, ../src/**/*.test.tsx, vite.config.ts, compilerOptions, esModuleInterop, forceConsistentCasingInFileNames, isolatedModules, jsx (+14 more)
-
-### Community 17 - "CardStatusDemo.tsx"
-Cohesion: 0.11
-Nodes (17): CardStatusDemo(), SHADOW, TONES, Card(), CardContent(), CardDescription(), CardHeader(), CardHeaderProps (+9 more)
 
 ### Community 18 - "🟠 IMPORTANTE"
 Cohesion: 0.09
@@ -239,9 +236,9 @@ Nodes (12): ⚠️ Bumpear la versión en cada cambio real (16 jul 2026, inciden
 Cohesion: 0.19
 Nodes (10): AppShell(), AppShellProps, Avatar(), AvatarProps, getInitials(), SIZE, SIZE, Tag() (+2 more)
 
-### Community 32 - "NotificationBell.tsx"
-Cohesion: 0.21
-Nodes (8): MOCK, NotificationDemo(), Notificacion, NotificationBell(), NotificationBellProps, TYPE_COLOR, TYPE_ICON, useOnClickOutside()
+### Community 32 - "Button.tsx"
+Cohesion: 0.18
+Nodes (10): ButtonMatrix(), SHADOW, VARIANTS, Button, ButtonProps, ButtonSize, ButtonVariant, CommonProps (+2 more)
 
 ### Community 33 - "Arquitectura del ecosistema SORSABSA"
 Cohesion: 0.18
@@ -275,33 +272,33 @@ Nodes (8): 4-ter. El cobro y el portero — ✅ verificado en vivo 22-ago-2026, 
 Cohesion: 0.25
 Nodes (8): 7. Decisión de arquitectura (2026-07-26), Objetivo de capacidad: ~3000 usuarios (no "por el momento"), Orden de migración, por urgencia, Por qué R2 y dos cubos, Railway y no un VPS pelado, Riesgos aceptados, Se elimina, Verificado 2026-07-28: qué base va a Railway y qué se queda en Supabase
 
-### Community 41 - "Color de marca y contraste"
+### Community 41 - "NotificationBell.tsx"
+Cohesion: 0.32
+Nodes (5): NotificationBell(), NotificationBellProps, TYPE_COLOR, TYPE_ICON, useOnClickOutside()
+
+### Community 42 - "Color de marca y contraste"
 Cohesion: 0.29
 Nodes (6): Color de marca y contraste, Componentes que ya lo aplican, Cuál usar, Cómo comprobarlo, La regla, Los cuatro tokens
 
-### Community 42 - "ecosistema.test.ts"
+### Community 43 - "ecosistema.test.ts"
 Cohesion: 0.29
 Nodes (4): DOC, Entrada, RAIZ, ./src/scripts/ecosistema.mjs
 
-### Community 43 - "3. Mapa de bases de datos — LA TRAMPA"
+### Community 44 - "3. Mapa de bases de datos — LA TRAMPA"
 Cohesion: 0.33
 Nodes (6): 3-bis. NO HAY DATOS DE CLIENTES. Punto., 3. Mapa de bases de datos — LA TRAMPA, ⚠️ Acoplamiento que sigue vivo, El límite de 2 proyectos ya no existe — y la separación sigue sin hacerse, Estado ✅ verificado en SQL el 2026-07-30 — nombre y ocupantes actualizados 08-ago-2026, Qué cambió desde el 2026-07-26
 
-### Community 44 - "25. ✅ La campana es LA MISMA en todos los productos (cerrado 22-ago-2026)"
+### Community 45 - "25. ✅ La campana es LA MISMA en todos los productos (cerrado 22-ago-2026)"
 Cohesion: 0.33
 Nodes (6): 25. ✅ La campana es LA MISMA en todos los productos (cerrado 22-ago-2026), ✅ Cerrado el 22-ago-2026 — los cinco productos, Corrección del 22-ago-2026 y decisión de Gina, Lo hecho ✅, Lo que falta 🟡, Lo que había — auditado el 22-ago-2026
 
-### Community 45 - "27. ✅ agente24siete ya se puede dar de alta — y el agujero que apareció al hacerlo (22-ago-2026)"
+### Community 46 - "27. ✅ agente24siete ya se puede dar de alta — y el agujero que apareció al hacerlo (22-ago-2026)"
 Cohesion: 0.33
 Nodes (6): 27. ✅ agente24siete ya se puede dar de alta — y el agujero que apareció al hacerlo (22-ago-2026), El hueco: código escrito que nadie ejecutaba, Lo hecho ✅ — `app/admin/clientes`, Lo que la pantalla dice y el sistema antes se callaba, Lo que queda 🟡, 🔴 Y el agujero que apareció al leer los endpoints
 
-### Community 46 - "30. 🟡 Las cuatro comprobaciones que sí encuentran cosas — y el grafo, que no (23-ago-2026)"
+### Community 47 - "30. 🟡 Las cuatro comprobaciones que sí encuentran cosas — y el grafo, que no (23-ago-2026)"
 Cohesion: 0.33
 Nodes (6): 30.1 · Por qué el grafo no se gana el puesto, 30.2 · Con qué se lo reemplaza, 30.3 · ✅ Triado — de 17 "rutas sin llamador" quedó UNA, y no era lo que dije, 30.4 · Lo que falta del lado de las herramientas, 30. 🟡 Las cuatro comprobaciones que sí encuentran cosas — y el grafo, que no (23-ago-2026), ⚠️ Corrección — lo que dije de `/api/pagos/consultar/[id]` estaba mal
-
-### Community 47 - "Button.tsx"
-Cohesion: 0.33
-Nodes (5): ButtonProps, ButtonSize, CommonProps, SIZES, VARIANTS
 
 ### Community 48 - "23. ⬜ Consola del negocio y CRM de ventas de SORSABSA — anotado 16-ago-2026, aplazado a propósito"
 Cohesion: 0.40
@@ -311,61 +308,61 @@ Nodes (5): 23. ⬜ Consola del negocio y CRM de ventas de SORSABSA — anotado 1
 Cohesion: 0.40
 Nodes (5): 28.1 · CondoManager → EcoInmobiliaria (lo más cerca de valer dinero), 28.2 · agente24siete — el alta que antes no existía, 28.3 · Lo que arrastra de días anteriores, 28. ⬜ PENDIENTE DE GINA — las pruebas en vivo que quedaron del 22-ago-2026, Lo que NO está en esta lista, a propósito
 
-### Community 50 - "vercel.json"
+### Community 50 - "31. 🔵 El "quién soy" está escrito dos veces, y las copias ya divergieron — 23-ago-2026"
+Cohesion: 0.40
+Nodes (5): 31. 🔵 El "quién soy" está escrito dos veces, y las copias ya divergieron — 23-ago-2026, ⚠️ Antes de unificarlo, mirarlo de cerca, Lo que se repite, medido, Qué es compartible y qué NO, Ya divergieron, que es el argumento de peso
+
+### Community 51 - "vercel.json"
 Cohesion: 0.40
 Nodes (4): buildCommand, framework, installCommand, outputDirectory
 
-### Community 51 - "2. Los dos planos"
+### Community 52 - "2. Los dos planos"
 Cohesion: 0.50
 Nodes (4): 2. Los dos planos, Plano de proceso — NO EXISTE ❌, Plano de proceso — YA EXISTE, parcialmente ✅ (corrección 2026-07-30), Plano web — Vercel ✅ correcto
 
-### Community 52 - "4-quater. Mapa de repos y el grafo — ✅ levantado 22-ago-2026"
+### Community 53 - "4-quater. Mapa de repos y el grafo — ✅ levantado 22-ago-2026"
 Cohesion: 0.50
 Nodes (4): 4-quater. Mapa de repos y el grafo — ✅ levantado 22-ago-2026, Dónde vive el grafo de cada repo, y qué lo regenera, El grafo de conocimiento — **consúmelo ANTES de investigar**, Producto ↔ carpeta ↔ repo ↔ rama
 
-### Community 53 - "9. Pendientes, en orden"
+### Community 54 - "9. Pendientes, en orden"
 Cohesion: 0.50
 Nodes (4): 9. Pendientes, en orden, Abiertos, en orden, Cerrados el 2026-07-30, Reglas que ya no dependen de la memoria
 
-### Community 54 - "26. 🔴 ¿Puede un usuario comprar y recibir lo que compró? (22-ago-2026)"
+### Community 55 - "26. 🔴 ¿Puede un usuario comprar y recibir lo que compró? (22-ago-2026)"
 Cohesion: 0.50
 Nodes (4): 26. 🔴 ¿Puede un usuario comprar y recibir lo que compró? (22-ago-2026), El estado real, producto por producto, La lección de método, que es la que se repitió todo el día, Lo que bloquea cada uno, en orden de cercanía a una venta
 
-### Community 55 - "files"
+### Community 56 - "files"
 Cohesion: 0.50
 Nodes (4): files, src, README.md, tailwind-preset.cjs
 
-### Community 57 - "SegmentedControl.tsx"
-Cohesion: 0.50
-Nodes (3): SegmentedControl(), SegmentedControlProps, SegmentedOption
-
-### Community 58 - "1. Inventario"
+### Community 57 - "1. Inventario"
 Cohesion: 0.67
 Nodes (3): 1. Inventario, Transversales (no se venden solos — cruzan todos los verticales), Verticales (lo que un cliente compra)
 
-### Community 59 - "framer-motion"
+### Community 58 - "framer-motion"
 Cohesion: 0.67
 Nodes (3): framer-motion, framer-motion, framer-motion
 
 ## Knowledge Gaps
-- **585 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+580 more)
+- **589 isolated node(s):** `name`, `version`, `description`, `license`, `private` (+584 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Pendientes del ecosistema SORSABSA` connect `Pendientes del ecosistema SORSABSA` to `24. 🟡 El cobro del ecosistema quedó vivo — lo que falta después (21/22-ago-2026)`, `Plan — una persona en más de un condominio (CondoManager)`, `25. ✅ La campana es LA MISMA en todos los productos (cerrado 22-ago-2026)`, `27. ✅ agente24siete ya se puede dar de alta — y el agujero que apareció al hacerlo (22-ago-2026)`, `30. 🟡 Las cuatro comprobaciones que sí encuentran cosas — y el grafo, que no (23-ago-2026)`, `23. ⬜ Consola del negocio y CRM de ventas de SORSABSA — anotado 16-ago-2026, aplazado a propósito`, `28. ⬜ PENDIENTE DE GINA — las pruebas en vivo que quedaron del 22-ago-2026`, `26. 🔴 ¿Puede un usuario comprar y recibir lo que compró? (22-ago-2026)`, `29.7 · Autoauditoría de esta tanda contra `ESTANDAR-DESARROLLO.md``, `21-bis. 🟠 Lo que bloquea el cobro del Convertidor — analizado y resuelto a medias, 16-ago-2026`?**
-  _High betweenness centrality (0.062) - this node is a cross-community bridge._
+- **Why does `Pendientes del ecosistema SORSABSA` connect `Pendientes del ecosistema SORSABSA` to `24. 🟡 El cobro del ecosistema quedó vivo — lo que falta después (21/22-ago-2026)`, `Plan — una persona en más de un condominio (CondoManager)`, `25. ✅ La campana es LA MISMA en todos los productos (cerrado 22-ago-2026)`, `27. ✅ agente24siete ya se puede dar de alta — y el agujero que apareció al hacerlo (22-ago-2026)`, `30. 🟡 Las cuatro comprobaciones que sí encuentran cosas — y el grafo, que no (23-ago-2026)`, `23. ⬜ Consola del negocio y CRM de ventas de SORSABSA — anotado 16-ago-2026, aplazado a propósito`, `28. ⬜ PENDIENTE DE GINA — las pruebas en vivo que quedaron del 22-ago-2026`, `31. 🔵 El "quién soy" está escrito dos veces, y las copias ya divergieron — 23-ago-2026`, `26. 🔴 ¿Puede un usuario comprar y recibir lo que compró? (22-ago-2026)`, `29.7 · Autoauditoría de esta tanda contra `ESTANDAR-DESARROLLO.md``, `21-bis. 🟠 Lo que bloquea el cobro del Convertidor — analizado y resuelto a medias, 16-ago-2026`?**
+  _High betweenness centrality (0.064) - this node is a cross-community bridge._
 - **Why does `Arquitectura del ecosistema SORSABSA` connect `Arquitectura del ecosistema SORSABSA` to `4-ter. El cobro y el portero — ✅ verificado en vivo 22-ago-2026`, `Plan — una persona en más de un condominio (CondoManager)`, `7. Decisión de arquitectura (2026-07-26)`, `3. Mapa de bases de datos — LA TRAMPA`, `2. Los dos planos`, `4-quater. Mapa de repos y el grafo — ✅ levantado 22-ago-2026`, `9. Pendientes, en orden`, `1. Inventario`, `4-bis. Georreferenciación y R2 — estado real (verificado 2026-08-08)`?**
   _High betweenness centrality (0.051) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _585 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _589 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `DomusLanding.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.05656565656565657 - nodes in this community are weakly interconnected._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.05819209039548023 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06778476589797344 - nodes in this community are weakly interconnected._
 - **Should `BrandProvider.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.08599033816425121 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08585858585858586 - nodes in this community are weakly interconnected._
 - **Should `Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)` be split into smaller, more focused modules?**
   _Cohesion score 0.047619047619047616 - nodes in this community are weakly interconnected._
-- **Should `Modelo de trabajo de JustiRed` be split into smaller, more focused modules?**
-  _Cohesion score 0.04878048780487805 - nodes in this community are weakly interconnected._
