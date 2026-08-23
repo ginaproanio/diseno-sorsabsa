@@ -79,8 +79,8 @@ repo, el check tiene que gritar, no decir "todo bien" sin haber mirado.
 primer día y nadie lo escuchó: clonaba los repos por el nombre de la CARPETA
 local, y DomusCRM en GitHub es `domuscrm`, no `crm_inmobiliario`. **Nunca
 llegó a contar un solo modal.** Lo salva que falló en rojo y no en verde.
-Corregido en `diseno@68fbdc0`, junto con otros dos defectos de la misma
-familia — ver `PENDIENTES-ECOSISTEMA.md` §29.5.
+Corregido el 23-ago-2026, junto con otros dos defectos de la misma familia —
+ver `PENDIENTES-ECOSISTEMA.md` §29.5.
 
 **Lo que NO marca, a propósito:** los *toasts* —avisan sin bloquear ni tapar— y
 los archivos de `components/ui/` que solo definen la primitiva. Lo que viola la

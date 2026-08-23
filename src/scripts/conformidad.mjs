@@ -110,69 +110,137 @@ async function grafoDe(entrada, basesLocales) {
  * **El agujero que tapa (23-ago-2026).** Este check corrió a las 10:09 y
  * denunció que JustiRed redefinía `Card`, `CardContent`, `CardDescription`,
  * `CardHeader` y `CardTitle`. Ese archivo se había borrado la noche anterior.
- * Lo que pasó es que graphify —que reconstruye el grafo— terminó a las 10:10,
- * 69 segundos DESPUÉS. El check leyó un grafo del código viejo y afirmó cinco
- * duplicaciones que ya no existían.
+ * graphify —que reconstruye el grafo— terminó a las 10:10, 69 segundos DESPUÉS.
+ * El check leyó un grafo del código viejo y afirmó cinco duplicaciones que ya
+ * no existían.
  *
  * Cinco falsas alarmas en la herramienta cuyo único trabajo es no dar falsas
  * alarmas. Y del lado contrario es peor: entre que alguien introduce una
  * duplicación y graphify la publica, este check dice "sin desvíos" mirando un
  * grafo que todavía no la contiene. **Sale verde sin haber mirado el código
- * actual**, que es exactamente lo que la parte II de ESTANDAR-DESARROLLO
- * prohíbe.
+ * actual.**
  *
- * Cada grafo trae `built_at_commit`. Comparándolo con la cabeza del repo se
- * sabe si en el medio cambió algo que pueda mover símbolos. Se ignoran
- * `graphify-out/` (el commit que PUBLICA el grafo es siempre posterior al
- * commit en que se construyó: contarlo daría "desactualizado" siempre) y los
- * `.md` (un documento no define símbolos).
+ * **Cómo se pregunta, y el intento que NO sirvió.** La primera versión comparó
+ * `built_at_commit` del grafo contra la cabeza del repo: si en el medio cambió
+ * un archivo de código, grafo atrasado. Está mal, y se vio al conectarlo.
+ * graphify **no commitea nada cuando el grafo le sale igual**, así que
+ * `built_at_commit` se queda atrás en todo arreglo que no mueva símbolos —una
+ * cadena, un comentario, el cuerpo de una función— que son la mayoría. Marcó
+ * agente24siete y pagos-sorsabsa como atrasados teniendo los dos el grafo al
+ * día. Un guardia que grita en cada arreglo de bug se termina ignorando, que
+ * es la misma muerte que la de no existir.
  *
- * Devuelve null si está al día, o el motivo si no se puede afirmar nada.
+ * La pregunta correcta no es *"¿cambió el código desde que se construyó el
+ * grafo?"* sino **"¿graphify ya corrió sobre este código?"**. Si corrió y no
+ * cambió nada, el grafo ES el de hoy. Se responde con el estado del workflow
+ * en la cabeza del repo, que es el hecho, no una inferencia sobre él.
+ *
+ * Devuelve null si el grafo sirve, o el motivo si no se puede afirmar nada.
  */
-const CAMBIO_QUE_NO_MUEVE_SIMBOLOS = (f) =>
-  f.startsWith("graphify-out/") || f.includes("/graphify-out/") || f.endsWith(".md");
+/** El token: de CI por variable, o del `gh` ya autenticado al correr a mano.
+ *  Sin esto, `conformidad:local` no podría preguntarle nada a GitHub y la
+ *  guardia de frescura quedaría apagada justo en el modo que más se usa. */
+let tokenCache;
+function tokenGitHub() {
+  if (tokenCache !== undefined) return tokenCache;
+  tokenCache = process.env.GH_ECOSISTEMA_TOKEN || process.env.GITHUB_TOKEN || null;
+  if (!tokenCache) {
+    try {
+      tokenCache = execFileSync("gh", ["auth", "token"], {
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "ignore"],
+      }).trim() || null;
+    } catch {
+      tokenCache = null;
+    }
+  }
+  return tokenCache;
+}
 
-async function grafoAtrasado(entrada, grafo, basesLocales) {
-  const base = grafo?.built_at_commit;
-  if (!base) return "el grafo no dice en qué commit se construyó";
+async function pedirGitHub(ruta) {
+  const token = tokenGitHub();
+  if (!token) return null;
+  const res = await fetch(`https://api.github.com/${ruta}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+      "User-Agent": "conformidad-sorsabsa",
+    },
+  });
+  if (!res.ok) return null;
+  return res.json();
+}
 
-  let cambiados;
+/**
+ * El commit de CÓDIGO más reciente: el último que no sea de graphify.
+ *
+ * graphify publica el grafo en un commit propio (`chore(graphify): ...`) con
+ * `[skip ci]`, así que **no vuelve a correr sobre su propio commit**. Preguntar
+ * "¿graphify corrió en la cabeza?" da que no en todos los repos cuya cabeza es
+ * justamente ese commit — que son casi todos. El ancla correcta es el último
+ * commit que trajo código.
+ */
+async function ultimoCommitDeCodigo(entrada, basesLocales) {
+  const esDeGraphify = (msg) => /^chore\(graphify\)/.test((msg ?? "").trim());
+
   if (basesLocales) {
     const dir = basesLocales.find((b) =>
       b.toLowerCase().replace(/[\\/]+$/, "").endsWith(entrada.dirLocal.toLowerCase())
     );
     if (!dir) return null;
     try {
-      const salida = execFileSync("git", ["-C", dir, "diff", "--name-only", base, "HEAD"], {
+      const salida = execFileSync("git", ["-C", dir, "log", "-30", "--format=%H%x1f%s"], {
         encoding: "utf8",
         stdio: ["ignore", "pipe", "pipe"],
       });
-      cambiados = salida.split("\n").map((x) => x.trim()).filter(Boolean);
+      for (const linea of salida.split("\n")) {
+        const [sha, msg] = linea.split("\u001f");
+        if (sha && !esDeGraphify(msg)) return sha.trim();
+      }
     } catch {
-      // El commit del grafo no está en este clon (shallow, o se reescribió la
-      // historia). No se puede comprobar: decirlo, no suponer que está bien.
-      return `no se pudo comparar contra ${base.slice(0, 7)} en el clon local`;
+      return null;
     }
-  } else {
-    const token = process.env.GH_ECOSISTEMA_TOKEN || process.env.GITHUB_TOKEN;
-    const url = `https://api.github.com/repos/ginaproanio/${entrada.repo}/compare/${base}...HEAD`;
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github+json",
-        "User-Agent": "conformidad-sorsabsa",
-      },
-    });
-    if (!res.ok) return `GitHub respondió ${res.status} al comparar contra ${base.slice(0, 7)}`;
-    const cuerpo = await res.json();
-    cambiados = (cuerpo.files ?? []).map((f) => f.filename);
+    return null;
   }
 
-  const relevantes = cambiados.filter((f) => !CAMBIO_QUE_NO_MUEVE_SIMBOLOS(f));
-  if (!relevantes.length) return null;
-  const muestra = relevantes.slice(0, 3).join(", ");
-  const resto = relevantes.length > 3 ? ` y ${relevantes.length - 3} más` : "";
-  return `el grafo es de ${base.slice(0, 7)} y desde ahí cambiaron ${relevantes.length} archivo(s): ${muestra}${resto}`;
+  const commits = await pedirGitHub(`repos/ginaproanio/${entrada.repo}/commits?per_page=30`);
+  if (!commits) return null;
+  for (const c of commits) {
+    if (!esDeGraphify(c?.commit?.message)) return c.sha;
+  }
+  return null;
+}
+
+/**
+ * ¿Ya corrió graphify sobre ese código? Es el hecho, no una inferencia sobre él.
+ *
+ * No sirve mirar `built_at_commit` contra la cabeza: graphify **no commitea
+ * nada cuando el grafo le sale igual**, así que ese campo se queda atrás en
+ * todo arreglo que no mueva símbolos —una cadena, un comentario, el cuerpo de
+ * una función— que son la mayoría. La primera versión de esta guardia hacía
+ * eso y marcó como atrasados dos repos que tenían el grafo perfectamente al
+ * día. Un guardia que grita en cada arreglo de bug se termina ignorando, que
+ * es la misma muerte que la de no existir.
+ */
+async function grafoAtrasado(entrada, grafo, basesLocales) {
+  const construido = grafo?.built_at_commit;
+  if (!construido) return "el grafo no dice en qué commit se construyó";
+
+  const ancla = await ultimoCommitDeCodigo(entrada, basesLocales);
+  if (!ancla) return null; // sin forma de saberlo: no se inventa un veredicto
+
+  if (ancla.startsWith(construido) || construido.startsWith(ancla)) return null;
+
+  const runs = await pedirGitHub(
+    `repos/ginaproanio/${entrada.repo}/actions/runs?head_sha=${ancla}&status=success&per_page=20`
+  );
+  if (runs === null) return null; // sin token o API caída: no se afirma nada
+  const corrio = (runs.workflow_runs ?? []).some(
+    (r) => /graphify/i.test(r.name ?? "") || /graphify/i.test(r.path ?? "")
+  );
+  if (corrio) return null;
+
+  return `graphify todavía no corrió sobre ${ancla.slice(0, 7)} (el grafo es de ${construido.slice(0, 7)})`;
 }
 
 (async () => {

@@ -2314,11 +2314,34 @@ grep, grafo, GitHub Action"*.
 **El del grafo es el grave, y no por las falsas alarmas.** En la dirección
 contraria, entre que alguien introduce una duplicación y graphify publica el
 grafo nuevo, el check decía *"sin desvíos"* mirando un grafo que todavía no la
-contenía: **verde sin haber mirado el código actual**. Ahora compara
-`built_at_commit` contra la cabeza del repo y se niega a opinar si en el medio
-cambió código. Al conectarlo aparecieron **dos grafos atrasados de verdad**
-(agente24siete y pagos-sorsabsa), uno de ellos dando un ✅ que nadie había
-ganado.
+contenía: **verde sin haber mirado el código actual**.
+
+Ahora, antes de opinar de un producto, comprueba que **graphify ya haya corrido
+sobre el último commit de código** de ese repo. Si no corrió, no comprueba: lo
+dice y sigue.
+
+**Costó dos intentos equivocados, y los dos valen como aviso:**
+
+1. *Comparar `built_at_commit` contra la cabeza del repo.* Mal: graphify **no
+   commitea nada cuando el grafo le sale igual**, así que ese campo se queda
+   atrás en todo arreglo que no mueva símbolos —una cadena, un comentario, el
+   cuerpo de una función—, que son la mayoría. Marcó como atrasados a
+   agente24siete y pagos-sorsabsa teniendo los dos el grafo al día.
+2. *Preguntar si graphify corrió en la cabeza.* Mal: graphify publica el grafo
+   en un commit propio con `[skip ci]`, o sea que **no corre sobre su propio
+   commit**. Como la cabeza de casi todos los repos ES ese commit, daba
+   "atrasado" en cuatro de siete.
+
+El ancla correcta es **el último commit que no sea de graphify**. Comprobado en
+las dos direcciones: con los siete repos al día → comprueba los siete sin una
+sola falsa alarma; con un commit que graphify no vio → se niega y nombra el
+commit exacto.
+
+> **La lección, que es más general que este check:** las dos versiones
+> equivocadas eran *inferencias sobre el estado* ("si cambió el código, el grafo
+> debe estar viejo"). La que funciona pregunta por **el hecho**: ¿corrió o no
+> corrió? Regla 5 de la parte II de `ESTANDAR-DESARROLLO` —*lo que se declara no
+> se deduce*— aplicada a una herramienta en vez de a un dato.
 
 **Queda vivo un límite conocido:** el check de modales todavía marcaría un
 `alert(` que aparezca dentro de una cadena en código de producción. Reconocer
