@@ -39,6 +39,28 @@ sitio donde se resuelve — no que interrumpa para contarlo.
 
 ---
 
+### Cómo se vigila esta regla (desde el 23-ago-2026)
+
+`src/scripts/modales.mjs` cuenta modales en los cinco productos y corre en
+`.github/workflows/modales.yml`: cada lunes, en cada push que toque el script o
+este documento, y a mano. **Se pone en rojo y manda correo.**
+
+Hasta esa fecha esta era la **única regla de este documento que ninguna
+comprobación miraba** — el check de conformidad revisa duplicación de
+componentes, no uso de modales. Gina tuvo que repetirla cuatro veces
+(Convertidor, agente24siete, y dos por JustiRed) y, al contarlos por primera
+vez, aparecieron **56 solo en CondoManager**. Se corregían los que alguien veía
+en pantalla; nadie los había contado nunca.
+
+Las cinco salidas se comprobaron ANTES de conectarlo: con modales → 1 · sin
+modales → 0 · ruta ilegible → **2** · sin argumentos → 2 · solo comentarios → 0.
+Que una ruta ilegible salga con 2 y no con 0 es deliberado: si se renombra un
+repo, el check tiene que gritar, no decir "todo bien" sin haber mirado.
+
+**Lo que NO marca, a propósito:** los *toasts* —avisan sin bloquear ni tapar— y
+los archivos de `components/ui/` que solo definen la primitiva. Lo que viola la
+regla es usarla, no que el archivo exista.
+
 ## 2. La campana de notificaciones
 
 **Va siempre en la esquina superior derecha, antes del perfil del usuario, en

@@ -1,0 +1,108 @@
+name: sin modales
+
+# Vigila la regla que más veces hubo que repetir (docs/ESTANDAR-UI.md §1) y la
+# ÚNICA del estándar de UI que ninguna comprobación miraba: el check de
+# conformidad revisa duplicación de componentes, no uso de modales.
+#
+# Gina tuvo que decirlo cuatro veces —Convertidor, agente24siete y dos por
+# JustiRed— y al medirlo por primera vez el 23-ago-2026 aparecieron 56 solo en
+# CondoManager. Se corregían los que alguien veía en pantalla; nadie los contó.
+#
+# Se comprobaron las CINCO salidas antes de conectarlo, no después:
+#   con modales -> 1 · sin modales -> 0 · ruta ilegible -> 2 ·
+#   sin argumentos -> 2 · solo comentarios -> 0
+#
+# Que una ruta ilegible salga con 2 y no con 0 es deliberado: si mañana se
+# renombra un repo, este check tiene que GRITAR, no decir "todo bien" sin
+# haber mirado nada.
+
+on:
+  schedule:
+    - cron: '0 12 * * 1'   # lunes 07:00 Ecuador
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/scripts/modales.mjs'
+      - 'docs/ESTANDAR-UI.md'
+      - '.github/workflows/modales.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  comprobar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: diseno }
+
+      # Los productos se clonan porque esto lee CÓDIGO FUENTE, no grafos: un
+      # modal es un `<Dialog>` o un `confirm(` en un archivo, y el grafo no los
+      # ve. Es la misma frontera que dejó pasar la costura interfaz↔API.
+      - name: Traer los productos
+        env:
+          GH_TOKEN: ${{ secrets.GH_ECOSISTEMA_TOKEN }}
+        run: |
+          set -euo pipefail
+          for repo in condomanager crm_inmobiliario legaltech agente24siete convertidor; do
+            git clone --depth 1 --quiet \
+              "https://x-access-token:${GH_TOKEN}@github.com/ginaproanio/${repo}.git" "$repo" \
+              || { echo "::error::No se pudo clonar ${repo} — este check NO puede afirmar nada."; exit 1; }
+          done
+
+      - name: Contar modales
+        id: check
+        continue-on-error: true
+        run: |
+          set -o pipefail   # sin esto `| tee` devuelve 0 SIEMPRE y el check se
+                            # vuelve decorativo: le pasó al de conformidad, que
+                            # informó 13 desvíos en verde.
+          node diseno/src/scripts/modales.mjs \
+            condomanager crm_inmobiliario/webs legaltech agente24siete convertidor/frontend \
+            | tee informe.txt
+
+      - name: Dejarlo en el resumen del job
+        if: always()
+        run: |
+          {
+            echo '## Modales en el ecosistema'
+            echo '```'
+            cat informe.txt 2>/dev/null || echo '(no se produjo informe)'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Avisar por correo
+        if: steps.check.outcome == 'failure'
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          EMAIL_AVISOS_INTERNOS: ${{ secrets.EMAIL_AVISOS_INTERNOS }}
+        run: |
+          if [ -z "${RESEND_API_KEY:-}" ] || [ -z "${EMAIL_AVISOS_INTERNOS:-}" ]; then
+            echo "::error::Hay modales y NO se pudo avisar: faltan RESEND_API_KEY y/o EMAIL_AVISOS_INTERNOS."
+            exit 0
+          fi
+          cuerpo=$(cat informe.txt 2>/dev/null || echo "sin informe")
+          node -e '
+            const cuerpo = process.argv[1];
+            const html = "<p>Hay modales en el ecosistema. ESTANDAR-UI.md §1 los prohíbe:</p><pre>"
+              + cuerpo.replace(/[<>&]/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]))
+              + "</pre>";
+            fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { Authorization: "Bearer " + process.env.RESEND_API_KEY, "Content-Type": "application/json" },
+              body: JSON.stringify({
+                from: "SORSABSA <no-reply@auth.sorsabsa.com>",
+                to: process.env.EMAIL_AVISOS_INTERNOS,
+                subject: "[UI] Hay modales en el ecosistema",
+                html,
+              }),
+            }).then(r => r.json()).then(d => console.log("Resend:", JSON.stringify(d)))
+              .catch(e => console.log("::error::No se pudo enviar el correo: " + e.message));
+          ' "$cuerpo"
+
+      - name: Ponerse en rojo
+        if: steps.check.outcome == 'failure'
+        run: |
+          echo "::error::Hay modales — ver el resumen del job."
+          exit 1
