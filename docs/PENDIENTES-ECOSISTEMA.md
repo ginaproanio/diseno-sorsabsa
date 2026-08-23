@@ -2625,3 +2625,64 @@ propósito, porque declararla la escondería.
   hallazgo A-2 de §29.7.
 - **El Convertidor sigue sin `graphify.yml`** — y está en `master`, así que
   copiar el template no dispararía. Si se acepta 30.1, esto deja de importar.
+
+---
+
+## 31. 🔵 El "quién soy" está escrito dos veces, y las copias ya divergieron — 23-ago-2026
+
+**De dónde sale.** Al construir la membresía de JustiRed, Gina preguntó cómo
+afectaba eso al portero. La respuesta es que **no lo afecta en nada** —cada
+producto pregunta lo suyo contra sus propias tablas, y el portero no conoce
+vocabulario de producto— pero al verificarlo apareció que **la forma de la
+respuesta sí se repite**.
+
+### Lo que se repite, medido
+
+| producto | dónde | líneas | estados |
+|---|---|---|---|
+| agente24siete | `lib/useQuienSoy.ts` | 65 | `consultando · resuelto · sin_sesion · indeterminado` |
+| JustiRed | `src/hooks/useCuenta.ts` | 97 | los mismos cuatro |
+| CondoManager | `lib/auth/post-login.ts` | — | **no aplica**: lo resuelve en el servidor, sin hook |
+
+Son **dos**, no tres. Y comparten dos decisiones de diseño que costaron caro
+aprender:
+
+1. **Cuatro estados, con `indeterminado` distinto de `sin_sesion`.** *"No pude
+   preguntar"* no es *"no sos nadie"*. Colapsarlos hace que un fallo de red
+   mande a registrarse a quien ya tiene cuenta.
+2. **El `destino` lo resuelve el SERVIDOR y llega hecho.** Deducir identidad en
+   el navegador es lo que en agente24siete hizo decidir admin-vs-cliente por el
+   prefijo de la URL, y costó una sesión entera de bucles de login.
+
+### Ya divergieron, que es el argumento de peso
+
+El de JustiRed agrega **`motivo`** al estado `indeterminado`; el de
+agente24siete no lo tiene. O sea que la copia nueva es mejor y la vieja no se
+enteró — **la deriva ya empezó**, con dos copias y un día de diferencia.
+
+### Qué es compartible y qué NO
+
+**Compartible:** la máquina de estados y el contrato de la respuesta. Es
+plomería de interfaz.
+
+**NO compartible, y es lo importante:** las **tablas** y el **vocabulario**.
+JustiRed pregunta por `abogados`/`clientes`/`staff`; agente24siete por
+`usuarios`/`clientes`; CondoManager por `perfiles`. El día que el design system
+—o peor, el portero— conozca los roles de un producto, todos los productos
+empiezan a depender de él para algo que no le corresponde.
+
+### ⚠️ Antes de unificarlo, mirarlo de cerca
+
+Esto es exactamente lo que `ESTANDAR-UI.md` §5 advierte: **el parecido da
+candidatos, no duplicados.** De cinco "duplicados" de CondoManager, tres no lo
+eran —el `Button` con `next/link`, el `EstadoBadge` con su mapa de estados— y
+migrarlos a ciegas habría empeorado el producto sin que se notara en pantalla.
+
+Dos ganchos que se parecen pueden necesitar cosas distintas: JustiRed invoca una
+Edge Function y agente24siete una ruta de API propia. **Leer los dos antes de
+unir**, y si se unen, que sea la máquina de estados con el cargador inyectado —
+no una función que sepa de ambos productos.
+
+**Prioridad baja a propósito:** son 162 líneas entre los dos y hoy funcionan.
+Se anota para que la deriva no siga creciendo en silencio, no porque haya que
+hacerlo ya.
