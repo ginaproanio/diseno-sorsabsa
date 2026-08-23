@@ -30,25 +30,14 @@ import { readFileSync, existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+// La lista de productos vive en UN solo lugar y se comprueba contra la tabla
+// de ARQUITECTURA-ECOSISTEMA.md. Tenerla acá suelta fue lo que hizo que el
+// workflow de modales clonara `crm_inmobiliario` —que no existe en GitHub—
+// y que este mismo check informara "Convertidor sin grafo" mirando la raíz
+// cuando su app (y su grafo) viven en `frontend/`.
+import { ECOSISTEMA, raicesLocales } from "./ecosistema.mjs";
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
-
-/**
- * Repos del ecosistema. `repo` es el nombre en GitHub y `dirLocal` el de la
- * carpeta en disco: no siempre coinciden (DomusCRM vive en `crm_inmobiliario`,
- * JustiRed en `legaltech`), y darlo por supuesto hace que el check informe
- * "sin grafo" sobre un repo que sí lo tiene — o sea, una falsa alarma en la
- * herramienta que existe para no dar falsas alarmas.
- */
-const ECOSISTEMA = [
-  { nombre: "condomanager", repo: "condomanager", dirLocal: "condomanager", sub: "" },
-  { nombre: "domuscrm", repo: "domuscrm", dirLocal: "crm_inmobiliario", sub: "webs" },
-  { nombre: "justired", repo: "legaltech", dirLocal: "legaltech", sub: "" },
-  { nombre: "agente24siete", repo: "agente24siete", dirLocal: "agente24siete", sub: "" },
-  { nombre: "auth-sorsabsa", repo: "auth-sorsabsa", dirLocal: "auth-sorsabsa", sub: "" },
-  { nombre: "convertidor", repo: "convertidor", dirLocal: "convertidor", sub: "" },
-  { nombre: "pagos-sorsabsa", repo: "pagos-sorsabsa", dirLocal: "pagos-sorsabsa", sub: "" },
-];
 
 /** Lo que exporta el design system, leído de su propio índice. */
 function exportadosDelDesignSystem() {
@@ -227,14 +216,24 @@ async function grafoAtrasado(entrada, grafo, basesLocales) {
   if (!construido) return "el grafo no dice en qué commit se construyó";
 
   const ancla = await ultimoCommitDeCodigo(entrada, basesLocales);
-  if (!ancla) return null; // sin forma de saberlo: no se inventa un veredicto
+  // NO se devuelve null acá. null significa "el grafo sirve", y no poder mirar
+  // no es lo mismo que haber mirado. Convertir "no pude comprobar" en "está
+  // bien" es exactamente el fallback prohibido por ESTANDAR-DESARROLLO —"si no
+  // existe configuración, continuar"— y es el defecto que esta misma guardia
+  // vino a tapar. Lo cometí acá al escribirla.
+  if (!ancla) return "no se pudo averiguar cuál es el último commit de código";
 
   if (ancla.startsWith(construido) || construido.startsWith(ancla)) return null;
 
   const runs = await pedirGitHub(
     `repos/ginaproanio/${entrada.repo}/actions/runs?head_sha=${ancla}&status=success&per_page=20`
   );
-  if (runs === null) return null; // sin token o API caída: no se afirma nada
+  // Mismo criterio: sin token o con la API caída no se puede saber si graphify
+  // corrió, y un check que no pudo mirar tiene que ser indistinguible de uno
+  // que encontró algo.
+  if (runs === null) {
+    return `no se pudo consultar si graphify corrió sobre ${ancla.slice(0, 7)} (¿falta GH_ECOSISTEMA_TOKEN?)`;
+  }
   const corrio = (runs.workflow_runs ?? []).some(
     (r) => /graphify/i.test(r.name ?? "") || /graphify/i.test(r.path ?? "")
   );
@@ -246,7 +245,12 @@ async function grafoAtrasado(entrada, grafo, basesLocales) {
 (async () => {
   const args = process.argv.slice(2);
   const iLocal = args.indexOf("--local");
-  const basesLocales = iLocal >= 0 ? args.slice(iLocal + 1) : null;
+  // `--local` a secas usa las raíces de `ecosistema.mjs`. Antes había que
+  // escribir las siete rutas a mano en package.json, y ya discrepaban de las
+  // del otro check.
+  const trasLocal = iLocal >= 0 ? args.slice(iLocal + 1) : null;
+  const basesLocales =
+    trasLocal === null ? null : trasLocal.length ? trasLocal : raicesLocales();
 
   const exportados = exportadosDelDesignSystem();
   const hallazgos = [];

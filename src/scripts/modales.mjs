@@ -29,6 +29,7 @@
  * informando 13 desvíos en verde.
  */
 import { readdirSync, readFileSync, statSync } from "node:fs";
+import { rutasLocales, rutasCI } from "./ecosistema.mjs";
 import { join, relative, sep } from "node:path";
 
 const IGNORAR = new Set(["node_modules", ".next", "dist", "build", "graphify-out", ".git", "coverage"]);
@@ -95,9 +96,16 @@ const esPrueba = (rel) =>
 
 let total = 0;
 let inalcanzables = 0;
-const raices = process.argv.slice(2);
+// `--local` y `--ci` sacan las rutas de `ecosistema.mjs`, que es la única
+// lista de productos. Antes se escribían a mano en el workflow y en
+// package.json, y ya habían empezado a discrepar entre sí.
+const args = process.argv.slice(2);
+const raices =
+  args[0] === "--local" ? rutasLocales(args[1] ?? "C:") :
+  args[0] === "--ci" ? rutasCI() :
+  args;
 if (!raices.length) {
-  console.error("Uso: node src/scripts/modales.mjs <dir> [<dir>...]");
+  console.error("Uso: node src/scripts/modales.mjs --local [raiz] | --ci | <dir> [<dir>...]");
   process.exit(2);
 }
 

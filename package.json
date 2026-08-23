@@ -21,9 +21,9 @@
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "conformidad": "node src/scripts/conformidad.mjs",
-    "conformidad:local": "node src/scripts/conformidad.mjs --local C:/condomanager C:/crm_inmobiliario C:/legaltech C:/agente24siete C:/auth-sorsabsa C:/convertidor C:/pagos-sorsabsa",
+    "conformidad:local": "node src/scripts/conformidad.mjs --local",
     "modales": "node src/scripts/modales.mjs",
-    "modales:local": "node src/scripts/modales.mjs C:/condomanager C:/crm_inmobiliario/webs C:/legaltech C:/agente24siete C:/convertidor/frontend C:/auth-sorsabsa C:/pagos-sorsabsa"
+    "modales:local": "node src/scripts/modales.mjs --local"
   },
   "peerDependencies": {
     "framer-motion": ">=11",
@@ -35,6 +35,7 @@
     "@testing-library/jest-dom": "^6.4.0",
     "@testing-library/react": "^16.0.0",
     "@types/jest": "^29.5.12",
+    "@types/node": "^26.2.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "framer-motion": "^11.11.0",

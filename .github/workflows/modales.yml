@@ -45,13 +45,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_ECOSISTEMA_TOKEN }}
         run: |
           set -euo pipefail
-          # OJO con los nombres: la carpeta local NO es el repo. DomusCRM vive en
-          # `c:/crm_inmobiliario` pero en GitHub es `domuscrm`, y JustiRed en
-          # `c:/legaltech`. Este workflow se escribió con los nombres de CARPETA y
-          # por eso falló en todas sus ejecuciones (23-ago-2026): `crm_inmobiliario`
-          # no existe en GitHub. conformidad.mjs ya tenía esa distinción escrita en
-          # su tabla ECOSISTEMA; no se miró al escribir esto.
-          for repo in condomanager domuscrm legaltech agente24siete convertidor auth-sorsabsa pagos-sorsabsa; do
+          # La lista sale de `ecosistema.mjs`, que es la única que hay y está
+          # comprobada contra la tabla de ARQUITECTURA-ECOSISTEMA.md. Escrita a
+          # mano acá decía `crm_inmobiliario`, que en GitHub no existe: el clone
+          # daba 404 y este check falló en TODAS sus ejecuciones sin contar un
+          # solo modal.
+          for repo in $(node diseno/src/scripts/ecosistema.mjs repos); do
             git clone --depth 1 --quiet \
               "https://x-access-token:${GH_TOKEN}@github.com/ginaproanio/${repo}.git" "$repo" \
               || { echo "::error::No se pudo clonar ${repo} — este check NO puede afirmar nada."; exit 1; }
@@ -64,10 +63,7 @@ jobs:
           set -o pipefail   # sin esto `| tee` devuelve 0 SIEMPRE y el check se
                             # vuelve decorativo: le pasó al de conformidad, que
                             # informó 13 desvíos en verde.
-          node diseno/src/scripts/modales.mjs \
-            condomanager domuscrm/webs legaltech agente24siete convertidor/frontend \
-            auth-sorsabsa pagos-sorsabsa \
-            | tee informe.txt
+          node diseno/src/scripts/modales.mjs --ci | tee informe.txt
 
       - name: Dejarlo en el resumen del job
         if: always()

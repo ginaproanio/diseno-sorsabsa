@@ -2256,9 +2256,21 @@ Corriendo `npm run conformidad:local` el 23-ago, **con los grafos al día**:
   es la **etiqueta de un contacto**, un tipo del negocio. El `Tag` de
   `@sorsabsa/ui` es una píldora de interfaz. Misma palabra, cosas sin relación.
   El check compara nombres de símbolos y no puede distinguirlas.
-- **Convertidor: SIN GRAFO** — está fuera del grafo de conocimiento, así que
-  no se le puede comprobar nada. Eso no es una duplicación: es un **agujero de
-  cobertura**, y hoy es el único producto sin vigilar.
+- ~~**Convertidor: SIN GRAFO**~~ — ❌ **hallazgo mío equivocado, corregido el
+  mismo día.** El Convertidor **sí tiene grafo**: vive en
+  `frontend/graphify-out/graph.json`, porque su app vive en `frontend/`. El
+  check miraba la raíz del repo y concluía que estaba fuera del grafo. Su tabla
+  de productos decía `sub: ""` para el Convertidor, cuando
+  `ARQUITECTURA-ECOSISTEMA.md` ya documentaba *"`c:\convertidor` (app en
+  `frontend/`)"*. **El dato estaba escrito y la herramienta no lo usaba.**
+
+  **Lo que sí es cierto, y es peor:** el Convertidor **no tiene workflow de
+  graphify**. Su grafo existe pero nadie lo reconstruye — la última corrida de
+  Actions en ese repo es del 21-jul-2026. O sea que está en el grafo con el
+  código de julio, lo cual es **peor que no estar**, porque parece cubierto.
+  Ahora la guardia de frescura lo dice en cada corrida en vez de tragárselo.
+  **Para cerrarlo:** copiarle el `graphify.yml` que ya tienen los otros nueve
+  repos.
 
 > **El check da candidatos, no duplicados.** Compara nombres. Dos cosas que se
 > llaman igual pueden hacer cosas distintas (`Tag`), y algo que comparte el 90 %
@@ -2359,3 +2371,135 @@ npm run conformidad:local    # duplicación contra el design system
 En CI: workflow *sin modales* los lunes 07:00 Ecuador y en cada push que toque
 el script o `ESTANDAR-UI.md`; *conformidad del ecosistema* con su propio
 disparador. Los dos avisan por Resend y se ponen en rojo.
+
+---
+
+### 29.7 · Autoauditoría de esta tanda contra `ESTANDAR-DESARROLLO.md`
+
+Gina pidió auditar **lo que hice hoy** con el mismo estándar con el que audito
+el código ajeno. Esto es el resultado. Lo que sigue no son riesgos teóricos:
+cada uno se verificó corriendo algo.
+
+#### 🔴 A-1 — La guardia de frescura fallaba ABIERTA (pregunta 10)
+
+**Síntoma.** Ninguno visible: por eso es grave.
+
+**Causa raíz.** Al escribir la guardia le puse tres `return null` para los
+casos "no pude averiguarlo" (sin token, API caída, repo no encontrado). En esa
+función `null` significa **"el grafo sirve, seguí comprobando"**. O sea que
+sin token el check volvía en silencio a su comportamiento viejo —afirmar sobre
+un grafo sin verificar— **y salía verde**.
+
+Es el *fallback peligroso* textual del estándar: *"si no existe configuración →
+continuar"*. Y lo cometí **dentro del arreglo que existía para tapar ese mismo
+defecto**. Mis propios comentarios decían *"no se inventa un veredicto"*
+mientras el código inventaba uno.
+
+**Corregido hoy.** Ahora esos caminos devuelven el motivo y el producto no se
+comprueba. **Verificado con un token inválido a propósito:** tres productos
+pasan a "no se pudo consultar", el check sale con 1 en vez de 0.
+
+#### 🔴 A-2 — Verifiqué todo a mano (pregunta 17, reglas 1 a 3)
+
+Comprobé las cinco salidas del check de modales, las dos direcciones de la
+guardia y el commit vacío de prueba **escribiendo comandos en una terminal**.
+Nada de eso quedó como prueba automática. La pregunta 17 —*¿qué prueba
+fallaría si el defecto volviera mañana?*— tenía una sola respuesta honesta:
+**ninguna**. Y "yo lo comprobé" es exactamente el *"alguien, alguna vez"* que
+la regla 1 rechaza.
+
+**Cerrado a medias.** Se agregó `src/scripts/ecosistema.test.ts`, que compara
+la lista de productos contra la tabla del documento de arquitectura y **se
+comprobó que puede fallar**: al poner a propósito `repo: "crm_inmobiliario"`
+—el bug real del workflow— dos aserciones se rompen. La suite pasó de 22 a 32
+pruebas.
+
+**Sigue abierto:** las cinco salidas de `modales.mjs` y las tres de la guardia
+de frescura **no tienen prueba automática**. Es la deuda más grande que deja
+esta tanda.
+
+#### 🟠 A-3 — La lista de productos vivía en cinco lugares (pregunta 6)
+
+`ECOSISTEMA` en `conformidad.mjs`, la lista de clonado del workflow, las rutas
+con que ese workflow invoca el script, y los dos `*:local` de `package.json`.
+**Dos ya discrepaban** (`crm_inmobiliario` contra `crm_inmobiliario/webs`).
+
+Y no es teórico: esa duplicación **es** la causa del workflow que nunca corrió.
+
+**Corregido hoy:** `src/scripts/ecosistema.mjs` es la única lista; el workflow
+y los scripts la consultan. De cinco copias quedó una, con una prueba que la
+ata al documento.
+
+#### 🟠 A-4 — El dato estaba en `ARQUITECTURA-ECOSISTEMA.md` y no lo abrí. Dos veces
+
+Es el hallazgo de fondo, y lo señaló Gina, no yo:
+
+1. Escribí el workflow clonando `crm_inmobiliario`. La tabla *"Carpeta local /
+   Repo GitHub"* del documento ya decía `c:\crm_inmobiliario` → `domuscrm`,
+   **con ⚠️ en esa misma fila**.
+2. Concluí *"Convertidor: SIN GRAFO, fuera del grafo de conocimiento"*. El
+   documento ya decía *"`c:\convertidor` (app en `frontend/`)"*, que es
+   exactamente dónde está su grafo.
+
+Las dos veces **redescubrí con `find` y `gh` lo que estaba escrito**, y una de
+las dos terminó como un hallazgo falso en una auditoría. Gina: *"no entiendo
+por qué te pierdes tanto"*.
+
+**Corregido hoy:** el documento ganó la tabla *"Dónde vive el grafo de cada
+repo, y qué lo regenera"* —los diez repos, verificados en disco— y la prueba
+nueva impide que el código se aleje de ella en silencio.
+
+#### 🟠 A-5 — El check de modales vive en el repo equivocado (regla 2)
+
+Se dispara con los push a **diseno-sorsabsa** y los lunes. Un modal agregado a
+CondoManager un martes **no se detecta hasta el lunes siguiente**: hasta 7 días.
+La regla 2 pide que la comprobación esté conectada a algo que la ejecute — lo
+está, pero a algo que no se entera de lo que vigila. **No corregido.** Lo
+correcto es un workflow reutilizable que cada producto invoque en su propio
+push.
+
+#### 🟡 A-6 — Dije "el ecosistema" midiendo 7 de 11 repos (regla 4)
+
+Afirmé *"18 modales en el ecosistema"* sin haber mirado `geo-sorsabsa`,
+`notificaciones-sorsabsa`, `qa_sorsabsa` ni `Siniestros`. **Comprobado
+después:** los tres primeros no tienen pantallas (0 y 1 `.tsx`), cero
+coincidencias. El número aguanta — pero lo verifiqué **después de publicarlo**,
+que es el orden equivocado.
+
+#### 🟡 A-7 — Probé mutando el repo real de Gina (pregunta 11)
+
+Para comprobar que la guardia se dispara creé un commit vacío en
+`c:\agente24siete` y después lo revertí con `reset --hard`. Funcionó y el repo
+quedó limpio (verificado), pero **la prueba de una herramienta no debería
+tocar el repo de un producto**: lo correcto es un repo de mentira armado en
+`/tmp`, como sí se hizo para las salidas del check de modales.
+
+#### 🟡 A-8 — Dependencia nueva sin declarar (pregunta 13)
+
+La guardia usa el CLI `gh` para conseguir un token cuando corre a mano. Es una
+dependencia nueva del script hacia una herramienta externa que nadie declaró.
+Hoy degrada bien (sin `gh` no comprueba y lo dice), pero está sin anotar.
+
+#### Lo que sí cumplió
+
+- **Preguntas 1-3:** los tres defectos se persiguieron hasta la causa raíz, no
+  hasta el síntoma. En la guardia de frescura hicieron falta **dos intentos
+  equivocados** antes de dar con la pregunta correcta, y los dos quedaron
+  escritos en el código y acá.
+- **Pregunta 15:** la tanda anterior retiró 46 modales y 50 componentes
+  duplicados, todos anotados.
+- **Regla 6:** esta sección existe.
+- **Regla 4, en un caso:** al medir por segunda vez apareció que 5 de los 9
+  desvíos eran fantasmas de un grafo viejo. *"Correr la medición dos veces"*
+  evitó publicar cinco hallazgos falsos… y aun así se me escapó el sexto (el
+  del Convertidor), que salió recién al arreglar A-3.
+
+#### La lección, en una línea
+
+**Las tres versiones equivocadas de hoy —el workflow, la guardia v1, la
+guardia v2— tienen la misma forma: deduje en vez de leer.** Deduje el nombre
+del repo del nombre de la carpeta, deduje la frescura del grafo de que hubiera
+cambiado el código, deduje que el Convertidor no tenía grafo de no encontrarlo
+donde yo suponía. Las tres veces **el dato estaba escrito en alguna parte**.
+Es la regla 5 de la parte II —*lo que se declara no se deduce*— aplicada a
+quien usa el estándar, no a quien escribe el código.

@@ -940,6 +940,51 @@ coinciden** en tres casos. Verificado con `git remote` el 22-ago-2026.
 > **DomusCRM tiene su app en el subdirectorio `webs/`** — su `package.json`,
 > su grafo y sus builds viven ahí, no en la raíz del repo.
 
+#### Dónde vive el grafo de cada repo, y qué lo regenera
+
+**Esta tabla existe porque su ausencia costó dos hallazgos falsos el
+23-ago-2026.** El check de conformidad informó *"Convertidor: SIN GRAFO,
+fuera del grafo de conocimiento"* — mentira: el Convertidor tiene grafo, en
+`frontend/`, y el check miraba la raíz. Y el workflow de modales clonó
+`crm_inmobiliario`, que en GitHub no existe. Los dos datos estaban a mano; lo
+que faltaba era que estuvieran **acá**, en un solo sitio, en vez de repetidos
+a mano en cada herramienta.
+
+Verificado en disco el 23-ago-2026, no supuesto:
+
+| Repo | Grafo vigente | ¿Quién lo regenera? |
+|---|---|---|
+| `condomanager` | `graphify-out/graph.json` | `graphify.yml` |
+| `domuscrm` | **`webs/graphify-out/graph.json`** ⚠️ | `graphify.yml` |
+| `legaltech` | `graphify-out/graph.json` | `graphify.yml` |
+| `agente24siete` | `graphify-out/graph.json` | `graphify.yml` |
+| `auth-sorsabsa` | `graphify-out/graph.json` | `graphify.yml` |
+| `convertidor` | **`frontend/graphify-out/graph.json`** ⚠️ | **NINGUNO** 🔴 |
+| `pagos-sorsabsa` | `graphify-out/graph.json` | `graphify.yml` |
+| `notificaciones-sorsabsa` | `graphify-out/graph.json` | `graphify.yml` |
+| `qa_sorsabsa` | `graphify-out/graph.json` | `graphify.yml` |
+| `diseno-sorsabsa` | `graphify-out/graph.json` | `graphify.yml` |
+| `geo-sorsabsa` | **no tiene** | — |
+
+**Los dos únicos casos que hay que recordar** son los marcados: el grafo de
+DomusCRM cuelga de `webs/` y el del Convertidor de `frontend/`, porque ahí
+viven sus apps. Cualquier herramienta que busque `graphify-out/graph.json` en
+la raíz de esos dos **no encuentra nada y concluye que están fuera del grafo**.
+
+🔴 **El Convertidor no tiene workflow de graphify.** Su grafo existe pero
+nadie lo reconstruye: la última corrida de Actions en ese repo es de julio.
+O sea que está en el grafo con el código de julio, que es peor que no estar,
+porque parece cubierto. Pendiente en `PENDIENTES-ECOSISTEMA.md` §29.2.
+
+**`geo-sorsabsa` no tiene grafo** y tampoco lo necesita hoy: es una librería
+de mapas sin pantallas propias (1 solo `.tsx` en todo el repo).
+
+> **Estos datos NO se copian a mano en cada herramienta.** Viven en
+> `diseno-sorsabsa/src/scripts/ecosistema.mjs`, que es la única lista, y una
+> prueba (`ecosistema.test.mjs`) compara esa lista contra la tabla "Carpeta
+> local / Repo GitHub" de arriba y **falla si divergen**. Si se agrega un
+> producto acá y no allá, salta.
+
 > **`diseno-sorsabsa` tiene un hook de pre-push** que bloquea el push si
 > cambiaste `src/` o `package.json` sin subir la versión: los consumidores lo
 > instalan por tag (`github:ginaproanio/diseno-sorsabsa#v0.1.x`) y sin bump
