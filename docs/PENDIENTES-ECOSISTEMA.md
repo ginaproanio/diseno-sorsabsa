@@ -2130,3 +2130,68 @@ apareció al ir a construir la pantalla que faltaba.
   acceso y con suscripción, todavía no recibe lo que compró: WhatsApp está
   baneado por Meta y Twilio no tiene número. La pantalla saca a agente24siete
   del "no se puede ni empezar", no del "no se puede entregar".
+
+---
+
+## 28. ⬜ PENDIENTE DE GINA — las pruebas en vivo que quedaron del 22-ago-2026
+
+**Por qué esta sección existe separada.** Gina agrupa las pruebas en vivo al
+final, no intercaladas, y esa noche cerró cansada: *"qué otra cosa podemos
+avanzar, estoy cansada como para hacer pruebas, pero las cosas que puedan ir de
+tu lado sí podríamos avanzar"*. Todo lo de abajo **necesita a una persona
+usando el producto** — no se puede cerrar desde el código, y por eso queda
+escrito en vez de quedar en la conversación.
+
+Cada punto dice qué hacer, qué tiene que pasar, y qué significa si no pasa.
+
+### 28.1 · CondoManager → EcoInmobiliaria (lo más cerca de valer dinero)
+
+La integración se enganchó el 22-ago (`condomanager@3127979` y siguientes;
+`AUDITORIA-CONDOMANAGER.md` 🔴-4). Estado verificado ese día:
+
+- ✅ Lado DomusCRM: `configurado: true` en
+  `www.domuscrm.app/api/webhooks/condomanager/salud`.
+- ✅ El tenant `ecoinmobiliaria` existe (`domus.site_lookup`).
+- ⬜ **Lado CondoManager: sin verificar.** Necesita sesión.
+
+**La prueba:** entrar a la única unidad que hay (terreno, Mz. 114 Lote 14,
+condominio *Comité Pro Mejoras Sector 46 de Punta Blanca*), ponerla **EN VENTA
+con precio**, subirle una foto, y guardar.
+
+- Si aparece una **advertencia ámbar** en la sección Comercialización → falta
+  `DOMUSCRM_WEBHOOK_KEY` en CondoManager y no se publicó nada.
+- Si no aparece → se envió. Comprobar en `domus.properties` que llegó, con
+  `property_type = 'land'` (no `apartment`) y con sus fotos.
+
+### 28.2 · agente24siete — el alta que antes no existía
+
+Todo lo del 22-ago está desplegado y sin probar por una persona:
+
+| qué probar | qué tiene que pasar |
+|---|---|
+| Entrar por cualquier puerta (`/portal`, `/admin`, "Ingresar" de la web) | aterrizar en el **panel**, sin pantallas de rechazo (🔴-3) |
+| Crear un cliente en `/admin/clientes` | queda creado **con 15 días de prueba**; si no, avisa que pagos no respondió |
+| Darle acceso con un correo **que ya exista** en el ecosistema | aviso ámbar: entra con SU contraseña, la escrita no se aplica |
+| La campana en el panel | arriba a la derecha, antes del perfil |
+| "Salir" y volver a entrar | pide credenciales y **no** reusa la sesión anterior (🟠-4) |
+
+**La primera vez hay que entrar de nuevo:** la llave de sesión cambió a
+`a24_token` (🔴-3), así que toda sesión abierta dejó de valer. Es una sola vez.
+
+### 28.3 · Lo que arrastra de días anteriores
+
+- **El aviso de vencimiento de CondoManager** (§24): confirmar que el correo
+  llegó. Si no llegó, `RESEND_API_KEY` quedó mal puesta.
+- **La campana en convertidor y agente24siete**: que no salga vacía —
+  confirmaría `NOTIFICACIONES_API_URL`/`_KEY` en Vercel.
+- **🟠-4 de `AUDITORIA-AGENTE24SIETE.md`**: en DevTools → Application,
+  confirmar que al salir **no queda ninguna** de las dos llaves de sesión. Ese
+  punto 9 ya estuvo seis días sin ejecutarse y por eso el hallazgo quedó medio
+  abierto sin que nadie lo supiera.
+
+### Lo que NO está en esta lista, a propósito
+
+Nada que se pueda comprobar leyendo, consultando una base o corriendo un
+build. Todo eso ya se hizo y está en los commits y en las auditorías. Acá solo
+queda **lo que exige a una persona usando el producto**, que es exactamente la
+clase de defecto que todo el 22-ago demostró que ninguna herramienta encuentra.
