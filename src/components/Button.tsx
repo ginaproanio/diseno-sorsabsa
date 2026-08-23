@@ -11,7 +11,14 @@
  * cualquier app React; Next lo intercepta igual con prefetch del navegador).
  */
 
-import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes } from 'react';
+import {
+  cloneElement,
+  forwardRef,
+  isValidElement,
+  type AnchorHTMLAttributes,
+  type ButtonHTMLAttributes,
+  type ReactElement,
+} from 'react';
 import { Loader2 } from 'lucide-react';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'destructive' | 'ghost' | 'accent';
@@ -57,6 +64,22 @@ interface CommonProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
+  /**
+   * Renderiza el HIJO con los estilos del botón, en vez de dibujar un `<button>`
+   * o un `<a>` propio. Para cuando el destino lo maneja otro componente: el
+   * `<Link>` de react-router, el de Next, o un `<a>` con atributos propios.
+   *
+   * Existe desde el 23-ago-2026 y es lo que destrabó retirar el Button propio
+   * de JustiRed. Ahí `asChild` envuelve `<Link to=...>` de react-router;
+   * cambiarlo por el `href` de este componente habría producido un `<a>`
+   * común, o sea **recarga completa de la página en vez de navegación del lado
+   * del cliente** — una regresión de verdad, no cosmética. La alternativa era
+   * dejarle su botón propio, que es justo lo que se está eliminando.
+   *
+   * Sin dependencias nuevas: se clona el hijo y se le suma la clase. Si el hijo
+   * ya trae `className`, se conserva y se concatena.
+   */
+  asChild?: boolean;
 }
 
 export type ButtonProps = CommonProps &
@@ -66,7 +89,10 @@ export type ButtonProps = CommonProps &
   );
 
 export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
-  function Button({ variant = 'primary', size = 'md', loading = false, className = '', children, ...rest }, ref) {
+  function Button(
+    { variant = 'primary', size = 'md', loading = false, asChild = false, className = '', children, ...rest },
+    ref,
+  ) {
     const classes = `${BASE} ${VARIANTS[variant]} ${SIZES[size]} ${className}`;
     const content = (
       <>
@@ -74,6 +100,13 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
         {children}
       </>
     );
+
+    if (asChild && isValidElement(children)) {
+      const hijo = children as ReactElement<{ className?: string }>;
+      return cloneElement(hijo, {
+        className: `${classes} ${hijo.props.className ?? ''}`.trim(),
+      });
+    }
 
     if ('href' in rest && rest.href !== undefined) {
       const anchorProps = rest as AnchorHTMLAttributes<HTMLAnchorElement>;
