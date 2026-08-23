@@ -60,6 +60,13 @@ export { Avatar, type AvatarProps } from './components/Avatar';
 export { SectionHeader, type SectionHeaderProps } from './components/SectionHeader';
 export { FormSection, type FormSectionProps } from './components/FormSection';
 export { Toast, type ToastProps } from './components/Toast';
+export {
+  ToastProvider,
+  useToast,
+  type ToastProviderProps,
+  type AvisoNuevo,
+  type PosicionToast,
+} from './components/ToastProvider';
 export { SegmentedControl, type SegmentedControlProps, type SegmentedOption } from './components/SegmentedControl';
 export { AppShell, type AppShellProps } from './components/AppShell';
 export { SinAcceso, type SinAccesoProps } from './components/SinAcceso';

@@ -1,7 +1,5 @@
 'use client';
 
-'use client';
-
 import type { HTMLAttributes, ReactNode } from 'react';
 
 export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
@@ -20,7 +18,7 @@ export function Toast({ tone = 'info', title, className = '', children, ...rest 
   return (
     <div
       role="status"
-      className={`rounded-brand border ${TONE[tone]} ${className}`}
+      className={`rounded-brand border px-4 py-3 shadow-sm ${TONE[tone]} ${className}`}
       {...rest}
     >
       {title && <p className="text-sm font-semibold">{title}</p>}
