@@ -66,7 +66,7 @@
       "file_type": "code",
       "norm_label": "buttonvariant",
       "source_file": "src/components/Button.tsx",
-      "source_location": "L17"
+      "source_location": "L24"
     },
     {
       "id": "src_components_card_cardheaderprops",
@@ -508,7 +508,7 @@
       "file_type": "code",
       "norm_label": "buttonprops",
       "source_file": "src/components/Button.tsx",
-      "source_location": "L62"
+      "source_location": "L85"
     },
     {
       "id": "src_components_button_buttonsize",
@@ -521,7 +521,7 @@
       "file_type": "code",
       "norm_label": "buttonsize",
       "source_file": "src/components/Button.tsx",
-      "source_location": "L18"
+      "source_location": "L25"
     },
     {
       "id": "src_components_button_commonprops",
@@ -534,7 +534,7 @@
       "file_type": "code",
       "norm_label": "commonprops",
       "source_file": "src/components/Button.tsx",
-      "source_location": "L56"
+      "source_location": "L63"
     },
     {
       "id": "src_components_sinacceso_sinaccesoprops",
@@ -4601,7 +4601,7 @@
       "file_type": "code",
       "norm_label": "button",
       "source_file": "src/components/Button.tsx",
-      "source_location": "L68"
+      "source_location": "L91"
     },
     {
       "id": "src_components_button_sizes",
@@ -4612,7 +4612,7 @@
       "file_type": "code",
       "norm_label": "sizes",
       "source_file": "src/components/Button.tsx",
-      "source_location": "L42"
+      "source_location": "L49"
     },
     {
       "id": "src_components_button_test",
@@ -4645,7 +4645,7 @@
       "file_type": "code",
       "norm_label": "variants",
       "source_file": "src/components/Button.tsx",
-      "source_location": "L20"
+      "source_location": "L27"
     },
     {
       "id": "src_components_sinacceso",
@@ -23038,7 +23038,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Button.tsx",
-      "source_location": "L17",
+      "source_location": "L24",
       "weight": 1.0
     },
     {
@@ -23049,7 +23049,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Button.tsx",
-      "source_location": "L18",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
@@ -23060,7 +23060,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Button.tsx",
-      "source_location": "L20",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -23071,7 +23071,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Button.tsx",
-      "source_location": "L42",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
@@ -23082,7 +23082,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Button.tsx",
-      "source_location": "L56",
+      "source_location": "L63",
       "weight": 1.0
     },
     {
@@ -23093,7 +23093,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Button.tsx",
-      "source_location": "L62",
+      "source_location": "L85",
       "weight": 1.0
     },
     {
@@ -23104,7 +23104,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Button.tsx",
-      "source_location": "L68",
+      "source_location": "L91",
       "weight": 1.0
     },
     {
@@ -24637,5 +24637,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6757c1a204f9eefa7e83561e8364c82bb02880b3"
+  "built_at_commit": "215d519f816f74467114d092081cdbfff2550ea8"
 }
