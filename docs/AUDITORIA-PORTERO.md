@@ -211,3 +211,124 @@ No todo está mal, y conviene no romperlo:
   por diseño no paga nunca.
 - **El destino de vuelta se conserva** en toda la cadena, incluido el correo de
   confirmación del registro.
+
+---
+
+## Análisis · Por qué deja pasar sin membresía, y qué cuesta
+
+Gina, 26-ago-2026: *"¿te das cuenta de la basura de información que empiezo a
+recibir? Miles de usuarios ingresan y yo me chanto ese espacio, ¿y regalarle los
+servicios? En el Convertidor estoy de acuerdo con un freemium, pero analiza el
+costo-beneficio."*
+
+### Por qué deja pasar — la causa real, no la excusa
+
+**Un problema de ORDEN, no de criterio.** La membresía se crea **después** de la
+compuerta:
+
+```
+portero comprueba  →  entra al producto  →  el producto le crea la membresía
+       ↑                                              ↓
+       └──────── si acá exigiera membresía, nunca llegaría ahí
+```
+
+En DomusCRM la fila de `company_users` la crea el propio producto en
+`/auth/callback → /api/auth/reconciliar-perfil`, o sea **dos pantallas después**
+del chequeo. Si el portero exigiera membresía, **ninguna agencia recién
+registrada podría entrar a la pantalla que la da de alta.**
+
+Por eso `sin_entidad` devuelve `active: true`. No es que alguien decidiera
+regalar acceso: es que **la compuerta está antes de la puerta que da el
+permiso.**
+
+**El arreglo no es endurecer el portero.** Es que la membresía nazca en el
+registro —no después del primer login— y ahí el portero sí puede exigirla. Es
+justo lo que se acaba de construir en JustiRed: el alta crea la fila **en el
+mismo acto**, sin esperar a un primer ingreso.
+
+### Qué consume realmente alguien sin membresía
+
+Depende del producto, y **la exposición NO está repartida**:
+
+| producto | qué puede consumir sin ser cliente | costo por uso |
+|---|---|---|
+| CondoManager · DomusCRM | nada — `entidad` exige suscripción | — |
+| agente24siete | nada — su gate real es el **saldo** | — |
+| IoT · SorsabsaForensic | nada — interno | — |
+| JustiRed | la biblioteca, **que ya es pública** | ~0 |
+| **Convertidor** | **conversiones reales** | **dinero por página** |
+
+**Toda la exposición está en un solo producto.** Y ahí sí hay que mirar el
+número.
+
+### Convertidor: el costo-beneficio, medido
+
+De `COSTEO-CONVERTIDOR.md`, con tokens reales de la API:
+
+| | Opus 5 | Sonnet 5 | Haiku 4.5 |
+|---|---|---|---|
+| US$/página | 0,0316 | 0,0167 | **0,0046** |
+| Páginas por $9 | 285 | 539 | **1.964** |
+| Léxico | 100,0% | 99,8% | **99,3%** |
+
+**Haiku cuesta 7 veces menos que Opus y pierde 0,7 puntos de lectura.**
+
+#### Lo que protege hoy al plan gratis
+
+Verificado en `frontend/src/app/api/convert/route.ts`:
+
+- ✅ **El OCR es de pago.** `permiteOcr(plan)` bloquea con **402** al gratis, y
+  también bloquea convertir imágenes —*"una imagen se transcribe con OCR"*—.
+  **La ruta cara no está abierta al gratis.**
+- ✅ Tamaño limitado a **5 MB** (Pro: 50 MB).
+
+#### Lo que NO protege
+
+- ❌ **No hay tope de cantidad.** Ni conversiones por mes, ni páginas, ni
+  contador de uso. Verificado: cero menciones de conversiones, mensual o
+  contador en la ruta.
+
+**Conclusión sobre la exposición real:** una cuenta gratis **no puede** disparar
+el gasto de modelo, porque el OCR exige plan. Lo que sí puede hacer es consumir
+**cómputo de Railway sin límite** — conversiones de PDF con capa de texto,
+ilimitadas, gratis. Eso cuesta, pero es **dos órdenes de magnitud menos** que el
+OCR: no es el agujero que parecía.
+
+> **La afirmación "regalás los servicios" es cierta solo a medias, y conviene
+> saber cuál mitad.** El servicio caro —la visión— ya está cerrado. El barato
+> —cómputo— está abierto sin tope.
+
+#### El problema de negocio del Convertidor no es el freemium
+
+Es el modelo por defecto. Con Opus, **un solo expediente consume un tercio de la
+mensualidad**, y dos expedientes hacen que el cliente **cueste más de lo que
+paga**. Eso le pasa al **cliente que SÍ paga**, no al que entra gratis.
+
+**Cambiar el motor a Haiku multiplica el margen por 7** perdiendo 0,7 puntos de
+lectura. Es una variable de entorno.
+
+### La "basura de información"
+
+Hoy: **11 cuentas** en el proyecto compartido, **7** en identity. La
+preocupación es válida a escala, no ahora.
+
+Pero el mecanismo que la produce ya existe: cualquiera con Google entra, queda
+en `auth.users` **y en ninguna otra tabla**. No ensucia datos de negocio —no hay
+condominio, ni empresa, ni cliente— pero sí infla el padrón de identidad, y con
+`not_after: null` (P-3) esas sesiones **no caducan nunca**.
+
+### Recomendación, en orden de retorno
+
+1. **Cambiar el motor del Convertidor a Haiku.** Una variable de entorno,
+   **×7 de margen**, 0,7 puntos de lectura. Es la única acción de esta lista que
+   cambia el negocio hoy.
+2. **Tope de cantidad en el plan gratis del Convertidor** (p. ej. N conversiones
+   al mes). Cierra el cómputo ilimitado; hoy es lo único abierto.
+3. **Que la membresía nazca en el registro**, como ya hace JustiRed. Es lo que
+   permite endurecer el portero después, y sin eso el punto 4 no se puede hacer.
+4. **Recién entonces**, que `sin_entidad` deje de devolver `active: true`.
+5. **Caducar las sesiones del portero** (P-3).
+
+**No recomiendo empezar por 4.** Hoy encerraría a todo recién registrado de
+DomusCRM y CondoManager — el problema que el comentario del código ya
+documenta.
