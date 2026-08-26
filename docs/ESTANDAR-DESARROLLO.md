@@ -265,6 +265,41 @@ Es la misma exigencia de *fuente única de verdad* de la parte I, aplicada
 antes de que exista el problema: si dos componentes tienen que saber lo
 mismo, eso es una tabla, no una constante ni una inferencia.
 
+## Regla 5-bis — Si tuviste que leer OTRO repo para saberlo, va a la arquitectura
+
+**Vigente desde el 23-ago-2026.** Gina, después de un mes: *"ya te he dicho
+cientos de veces en el mes: documenta la arquitectura cuando sales con estas
+mismas preguntas, y dices que sí registras y no lo cumples"*.
+
+Tiene razón, y el mismo día se repitió tres veces: el nombre del repo de
+DomusCRM en GitHub, dónde vive el grafo del Convertidor, y cómo registra un
+usuario un producto del ecosistema. Las tres respuestas existían — en el código
+de otro repo, no en un documento— así que hubo que ir a buscarlas de nuevo. Una
+de las tres terminó en un hallazgo falso publicado en una auditoría.
+
+**La regla, con su disparador:**
+
+> Si para responder una pregunta de arquitectura tuviste que **abrir el código
+> de otro producto**, esa respuesta va a `ARQUITECTURA-ECOSISTEMA.md` **antes de
+> seguir con la tarea**. No al final, no "cuando cierre esto".
+
+Por qué antes y no después: al final ya funcionó, la urgencia se fue, y el
+documento no se escribe. Es exactamente lo que pasó las cientos de veces.
+
+**Cómo se reconoce el disparador.** Cualquiera de estas es la señal:
+
+- Estás por correr `grep` sobre un repo que **no es** en el que trabajás.
+- Vas a preguntar *"¿cómo lo hace \<otro producto\>?"*.
+- La respuesta empieza con *"CondoManager usa…"* o *"en agente24siete está…"*.
+
+**Qué se escribe:** la regla, quién la cumple hoy y quién no, y el archivo de
+referencia real. No un resumen del código — un resumen envejece; la regla y el
+puntero, no.
+
+**Y lo que NO alcanza:** anotarlo en la auditoría del producto, en PENDIENTES o
+en un comentario. Son documentos que se leen cuando ya sabés que existen. La
+arquitectura es la que se abre para preguntar.
+
 ## Regla 6 — La deuda que se retira se escribe
 
 La pregunta 15 —*"¿qué código debería eliminarse?"*— necesita **un lugar
