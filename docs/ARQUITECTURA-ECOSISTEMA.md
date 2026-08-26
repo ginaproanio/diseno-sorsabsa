@@ -991,6 +991,79 @@ de mapas sin pantallas propias (1 solo `.tsx` en todo el repo).
 > **nunca verían el cambio**. Flujo: `npm version patch` y luego
 > `git push --follow-tags`.
 
+### Cómo se REGISTRA alguien en un producto — la regla, para no volver a buscarla
+
+**Esta sección existe porque no existía.** Cada vez que hizo falta saber cómo
+funciona el registro hubo que ir a leer el código de CondoManager, y esa
+pregunta se repitió tantas veces que Gina la marcó: *"esta misma pregunta haces
+100 veces"*. La respuesta vive acá desde el 23-ago-2026.
+
+**La cuenta SIEMPRE nace en identity** (`sorsabsa-identity`,
+`gyqgorgfstffbgazhbnb`). Nunca en el proyecto de un producto. Es lo que hace que
+la misma cuenta sirva para los seis productos.
+
+**Lo que cambia es QUIÉN muestra el formulario:**
+
+| | quién registra | cómo |
+|---|---|---|
+| Producto **con** onboarding propio | el producto | declara `registerUrl` en `auth-sorsabsa/src/lib/apps.ts` y el portero **se aparta** |
+| Producto **sin** onboarding propio | el portero | su formulario genérico `/auth/register` (nombre, apellido, correo, contraseña) |
+
+Lo dice el propio portero en `auth/register/page.tsx`: *"el registro real del
+producto (crea la empresa/condominio, no solo la cuenta) vive en el producto;
+este formulario genérico queda solo para apps sin onboarding propio"*.
+
+**Quién lo declara hoy (verificado 23-ago-2026):**
+
+| producto | `registerUrl` |
+|---|---|
+| DomusCRM | `https://domuscrm.app/register` |
+| CondoManager | `https://www.condomanager.vip/register` |
+| JustiRed · agente24siete · Convertidor · IoT | **no lo declaran** |
+
+> ⚠️ **Un producto que tiene su propio formulario y NO declara `registerUrl`
+> termina con DOS registros para un mismo acto**: el suyo y el genérico del
+> portero, pidiendo el nombre dos veces. Le pasó a JustiRed el 23-ago-2026.
+
+#### El patrón, cuando el producto registra
+
+Referencia real: `condomanager/app/api/registro-admin/route.ts`.
+
+1. **`identity.auth.admin.createUser({ email, password, email_confirm: false })`**
+   — la cuenta nace en identity, con la `service_role` **de ese proyecto**.
+2. **`identity.auth.admin.generateLink({ type: 'signup' })`** — la API
+   administrativa **NO manda el correo de confirmación sola**, a diferencia del
+   `signUp()` público. Sin este paso la cuenta queda bloqueada para siempre
+   (*"Email not confirmed"*, sin forma de reenviarlo desde ninguna pantalla).
+3. **Las filas del producto** (condominio y perfil; abogado o cliente; lo que
+   corresponda), en la misma operación.
+4. **Rollback** si algo falla después del paso 1: media cuenta es peor que
+   ninguna.
+
+#### El destino del correo de confirmación: SIEMPRE al portero
+
+`redirectTo` va a **`https://auth.sorsabsa.com/auth/login?app=<producto>`**,
+nunca al `/auth/callback` del producto.
+
+Motivo, y costó un bug real el 09-ago-2026: el enlace de confirmación trae
+**tokens de identity en crudo**, que nunca pasaron por la federación OIDC. El
+`/auth/callback` de un producto instala la sesión con el cliente **de su propio
+proyecto** y no sabe qué hacer con ellos. Solo `auth.sorsabsa.com/auth/login`
+sabe instalar una sesión de identity cruda **antes** de arrancar la federación.
+
+#### La dependencia que hay que dejar puesta
+
+El producto necesita la **`service_role` del proyecto de identidad**, que es un
+proyecto distinto del suyo:
+
+- En un producto Next.js va como variable de entorno (CondoManager:
+  `lib/supabase-admin-identity.ts`).
+- En un producto sin servidor propio —una SPA como JustiRed— va como **secreto
+  de sus Edge Functions**, porque no hay otro lugar donde pueda vivir sin quedar
+  expuesta al navegador.
+
+---
+
 ### El grafo de conocimiento — **consúmelo ANTES de investigar**
 
 Cada repo publica `graphify-out/graph.json`, reconstruido por su workflow
