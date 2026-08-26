@@ -34,7 +34,6 @@
 - compilerOptions
 - 🟠 IMPORTANTE
 - Auditoría — CondoManager como aplicación (más allá del portero)
-- Almacenamiento del ecosistema: modelo, costos y cómo lo hacen otros
 - devDependencies
 - Grafo de conocimiento (graphify) generado por CI
 - Auditoría — DomusCRM, el portero y el alta de cuenta
@@ -45,7 +44,9 @@
 - Auditoría del portero — ¿valida por dónde entra?
 - Costeo del Convertidor — la prueba de Miraflores
 - package.json
+- DomusLanding.tsx
 - 4-bis. Georreferenciación y R2 — estado real (verificado 2026-08-08)
+- Plan de desoldado del ecosistema SORSABSA
 - @sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA
 - AppShell.tsx
 - NotificationBell.tsx
@@ -69,6 +70,7 @@
 - 28. ⬜ PENDIENTE DE GINA — las pruebas en vivo que quedaron del 22-ago-2026
 - 31. 🔵 El "quién soy" está escrito dos veces, y las copias ya divergieron — 23-ago-2026
 - vercel.json
+- 8 · Lo que la decisión de "no guardar" NO resuelve
 - 2. Los dos planos
 - 6-bis. Plano de DNS y correo ✅ verificado 2026-07-26
 - 9. Pendientes, en orden
@@ -103,8 +105,6 @@
   src/components/StatusBadge.tsx → src/icons/icon-paths.ts
 - `App()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
   showcase/src/App.tsx → showcase/src/resolveColors.ts
-- `ColorPalette()` --calls--> `resolveEffectiveColors()`  [EXTRACTED]
-  showcase/src/components/ColorPalette.tsx → showcase/src/resolveColors.ts
 
 ## Import Cycles
 - None detected.
@@ -118,6 +118,10 @@ Nodes (38): App(), BRAND_KEYS, AtomShowcase(), ButtonMatrix(), SHADOW, VARIANTS,
 ### Community 1 - "BrandProvider.tsx"
 Cohesion: 0.07
 Nodes (37): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandContext, BrandProvider(), brandToCssVars(), contrastRatio() (+29 more)
+
+### Community 1 - "BrandProvider.tsx"
+Cohesion: 0.07
+Nodes (40): TokenAudit(), TOKENS, BRAND_FONT_IMPORTS, BrandColors, BrandContext, BrandProvider(), brandToCssVars(), contrastRatio() (+32 more)
 
 ### Community 2 - "Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)"
 Cohesion: 0.05
@@ -187,11 +191,7 @@ Nodes (21): 🟠-1 — ✅ CORREGIDO 10-ago-2026, commit `agente24siete@c6f2578`
 Cohesion: 0.09
 Nodes (22): 🔵-1 — ✅ Artefactos compilados (`scratch/dist/**/*.js`) commiteados al repo — RESUELTO 09-ago-2026, 🟠-1 — ✅ Chequeo de rol/autorización reimplementado en al menos 13 rutas, sin fuente única — RESUELTO 09-ago-2026, 🟠-2 — ✅ `resolverPostLogin`: un error de consulta se trata igual que "usuario sin perfiles todavía" — RESUELTO 09-ago-2026, 🔵-2 — ✅ Unidad fantasma auto-creada en cada registro de admin — RESUELTO 09-ago-2026, 🔵-3 — ✅ `codigo_predial` sin garantía de unicidad — RESUELTO 09-ago-2026, 🔴-3 — ✅ `registros_pendientes` y `campanas_masivas` sin GRANT ni RLS — service_role no podía usarlas — RESUELTO 09-ago-2026, 🟠-3 — ✅ Ubicación y Contacto escribían las mismas columnas sin saberlo — pérdida de datos real — RESUELTO 09-ago-2026, 🔵-4 — ✅ `deudas.rubro_id`: UI decía "opcional", la base exigía `NOT NULL`, y un `LEFT JOIN` faltante lo hacía peor — RESUELTO 09-ago-2026 (+14 more)
 
-### Community 19 - "Almacenamiento del ecosistema: modelo, costos y cómo lo hacen otros"
-Cohesion: 0.10
-Nodes (21): 0 · Lo primero, porque cambia el planteo, 1 · Los tres tipos de almacenamiento — la pregunta de Gina, 2 · Método: dónde va cada cosa, y por qué, 3 · Cuánto cuesta — las cuentas hechas, 4 · Lo que sí puede doler: el que paga un mes y se va, 5 · Lo que hay que decidir, 6 · Qué hay que construir, en orden, 7 · El riesgo que no es de costo, y es el más grande (+13 more)
-
-### Community 20 - "devDependencies"
+### Community 19 - "devDependencies"
 Cohesion: 0.10
 Nodes (21): devDependencies, jest, @testing-library/jest-dom, @testing-library/react, @testing-library/user-event, ts-jest, @types/jest, @types/node (+13 more)
 
@@ -227,15 +227,23 @@ Nodes (14): Auditoría del portero — ¿valida por dónde entra?, El desacuerdo
 Cohesion: 0.13
 Nodes (14): 1 · Qué se probó, 2 · El problema de negocio, en una línea, 3-bis · Lo que la prueba sintética NO mostraba, 3 · Qué se midió, y cómo, 4 · Lo que NO cuesta, 5 · Las opciones de precio, 6 · El detalle que no es de costeo pero salió de la misma prueba, A · Cambiar el modelo de visión (+6 more)
 
-### Community 29 - "package.json"
+### Community 28 - "package.json"
 Cohesion: 0.13
 Nodes (14): dependencies, motion, description, exports, ./preset, ./tokens.css, motion, license (+6 more)
+
+### Community 29 - "DomusLanding.tsx"
+Cohesion: 0.13
+Nodes (8): DomusLanding(), FEATURES, SOCIAL, StatusBadge(), StatusBadgeProps, StatusTone, TONE_CLASS, TONE_ICON
 
 ### Community 30 - "4-bis. Georreferenciación y R2 — estado real (verificado 2026-08-08)"
 Cohesion: 0.15
 Nodes (13): 4-bis. Georreferenciación y R2 — estado real (verificado 2026-08-08), API tokens de R2 activos — ✅ dados por Gina 08-ago-2026, Auditoría del inventario de Railway, 10-ago-2026, Cómo conectarse a Cloudflare/R2 desde una sesión de Claude Code — ✅ SÍ SE PUEDE, verificado 15-ago-2026, El proyecto de Google Cloud (`sorsabsaecosystem`) — ✅ confirmado por Gina: Calendar de agente24siete, Geo: NO usa la API de Google Maps (la que factura), Herramientas de una sesión: qué se puede ejecutar y por dónde — verificado 19-ago-2026, Lo que wrangler NO puede hacer: crear el token que necesita un contenedor (+5 more)
 
-### Community 31 - "@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA"
+### Community 31 - "Plan de desoldado del ecosistema SORSABSA"
+Cohesion: 0.15
+Nodes (13): auth-sorsabsa reapuntado — commit `212f8b9`, 07-ago-2026, ✅ Cerrado el 07-ago-2026 — login OIDC real, de punta a punta, token verificado, ✅ Cerrado el 07-ago-2026 — probado en proyecto vacío real, con dos bugs reales encontrados y arreglados, Estado — 07-ago-2026: la federación funciona; el criterio de "hecho" hay que leerlo con matices, Estado — hecho el 07-ago-2026, con un pendiente real, Lo que NO se hace (decidido, con razón escrita), Paso 0 — Sacar el plano ⛔ BLOQUEANTE, va primero, Paso 1 — Identity como emisor OIDC (+5 more)
+
+### Community 32 - "@sorsabsa/ui — Sistema de diseño whitelabel de SORSABSA"
 Cohesion: 0.15
 Nodes (12): ⚠️ Bumpear la versión en cada cambio real (16 jul 2026, incidente real), ⚠️ Checklist del consumidor — Tailwind v3 vs v4 (incidente real, 16 jul 2026), Cómo funciona (la arquitectura de tokens), Instalación en un producto, ⚠️ La etiqueta tiene que ser ANOTADA, La regla ya NO depende de la memoria: hook pre-push, Pruebas, Publicar una versión (flujo desde 16 jul 2026 — sin copiar hashes) (+4 more)
 
@@ -275,11 +283,11 @@ Nodes (8): 1. Prohibidos los diálogos del NAVEGADOR, 2. La campana de notificac
 Cohesion: 0.25
 Nodes (8): 4-quater. Mapa de repos y el grafo — ✅ levantado 22-ago-2026, Cómo se REGISTRA alguien en un producto — la regla, para no volver a buscarla, Dónde vive el grafo de cada repo, y qué lo regenera, El destino del correo de confirmación: SIEMPRE al portero, El grafo de conocimiento — **consúmelo ANTES de investigar**, El patrón, cuando el producto registra, La dependencia que hay que dejar puesta, Producto ↔ carpeta ↔ repo ↔ rama
 
-### Community 41 - "4-ter. El cobro y el portero — ✅ verificado en vivo 22-ago-2026"
+### Community 42 - "4-ter. El cobro y el portero — ✅ verificado en vivo 22-ago-2026"
 Cohesion: 0.25
 Nodes (8): 4-ter. El cobro y el portero — ✅ verificado en vivo 22-ago-2026, El catálogo de productos ✅ y lo que sigue pendiente, El circuito completo, cerrado el 22-ago-2026 ✅, El portero: `/auth/login` es un pasillo, no una pantalla, PayPhone: los cuatro hechos que cuestan un día si no están escritos, Quién cobra a quién — modelo fijado por Gina, 22-ago-2026, Railway: las variables selladas no se leen, ni desde la sesión, Un cobro fallido ya deja rastro — antes se evaporaba
 
-### Community 42 - "7. Decisión de arquitectura (2026-07-26)"
+### Community 43 - "7. Decisión de arquitectura (2026-07-26)"
 Cohesion: 0.25
 Nodes (8): 7. Decisión de arquitectura (2026-07-26), Objetivo de capacidad: ~3000 usuarios (no "por el momento"), Orden de migración, por urgencia, Por qué R2 y dos cubos, Railway y no un VPS pelado, Riesgos aceptados, Se elimina, Verificado 2026-07-28: qué base va a Railway y qué se queda en Supabase
 
@@ -347,7 +355,7 @@ Nodes (4): 26. 🔴 ¿Puede un usuario comprar y recibir lo que compró? (22-ago
 Cohesion: 0.50
 Nodes (4): files, src, README.md, tailwind-preset.cjs
 
-### Community 60 - "framer-motion"
+### Community 64 - "framer-motion"
 Cohesion: 0.67
 Nodes (3): framer-motion, framer-motion, framer-motion
 
