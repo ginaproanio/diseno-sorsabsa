@@ -211,11 +211,18 @@ computadora el día de la pericia**.
 Abierto el 26-ago-2026. **Una fila por máquina probada.** Se llena corriendo el
 bloque del §4-ter en cada equipo, como administrador.
 
-| # | Máquina | SO / build | Firmware | Secure Boot | BitLocker | RAM | Veredicto |
-|---|---|---|---|---|---|---|---|
-| **1** | *(equipo del análisis, se entrega ~15-sep-2026)* | Windows 11 Pro, build **22631** | UEFI | ⚠️ sin verificar | ⚠️ sin verificar | ? | ❌ **Descartada** — se entrega en septiembre |
-| **2** | **"Lenovo azul"** — Core i5 | Windows 8 Pro | ? | ? | ? | ? | ⬜ **Por verificar** |
-| **3** | *(pendiente)* | ? | ? | ? | ? | ? | ⬜ **Por verificar** |
+| # | Máquina | SO / build | Firmware | Secure Boot | BitLocker | Veredicto |
+|---|---|---|---|---|---|---|
+| **1** | *(equipo del análisis)* | Windows 11 **Pro**, build **22631** | UEFI | ⚠️ sin admin | ⚠️ sin admin | ❌ **Descartada** — se entrega ~15-sep-2026 |
+| **2** | **"Lenovo azul"** | Windows 10 **Home**, build **19045** | UEFI ✅ | ⚠️ sin admin | ⚠️ sin admin | ⬜ **Pendiente** — falta correr §5.1 elevado. Detalle en §5.1.a |
+| **3** | *(por identificar)* | ? | ? | ? | ? | ⬜ **Por verificar** |
+
+> **Discrepancia sin resolver, anotada para que Gina la corrija:** en la sesión del
+> 26-ago se habló de un equipo **Windows 8 Pro, Core i5** llamándolo "la Lenovo
+> azul", pero la verificación registrada en §5.1.a dice **Windows 10 Home build
+> 19045**. O son dos máquinas distintas, o el nombre está mal asignado. **No se
+> resuelve por suposición:** correr el bloque del §4-ter en cada equipo y llenar la
+> fila con lo que devuelva.
 
 **Ojo — desambiguación obligatoria:** la "Lenovo" que aparece en
 `caso-quitumbe/05_varios/peritaje quitumbe/` **NO es una máquina de Gina**. Es la
