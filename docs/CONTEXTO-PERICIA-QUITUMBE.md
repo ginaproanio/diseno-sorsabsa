@@ -296,8 +296,63 @@ evidencia. Se describe en el acta junto con la identificación del equipo.
   para la BIOS, **F12** para el menú de arranque.
 - ⬜ **3 puertos USB** (arranque + indicio + destino) o lectora de DVD.
 - ⬜ **Cargador**: en un equipo de 2013 la batería suele estar agotada.
-- ⬜ **Disco destino**: externo, vacío, formateado **exFAT o NTFS** (nunca FAT32: un
-  `.E01` puede pasar los 4 GB).
+- ✅ **Disco destino** — resuelto, ver §4-quater.
+
+## 4-quater. Los tres dispositivos (26-ago-2026)
+
+**Origen, arranque y destino son SIEMPRE tres dispositivos distintos.** Nunca dos
+funciones en el mismo.
+
+| Rol | Dispositivo | Formato | Estado |
+|---|---|---|---|
+| 🧪 **Ensayo** | Pendrive **`PRUEBA`**, 3,74 GB | FAT32 | ✅ Listo. Es el conejillo de indias: sobre él se comprueba el bloqueo. No es evidencia de nada |
+| 💿 **Arranque CAINE** | Pendrive de **28,6 GB** | exFAT *(se sobrescribe)* | ⬜ Falta grabar la ISO |
+| 💾 **Destino `.E01`** | **`DESTINO-PER`**, 115 GB (Kingston) | exFAT | ✅ 82,1 GB libres. **No se formateó ni se borró** |
+| 🔴 **Indicio** | Kingston DTSE9G2, 8 GB, cadena 7984-2025 | — | 🚫 Aún no entregado |
+
+**Por qué la etiqueta `DESTINO-PER` y no "KINGSTON":** el disco destino era un
+Kingston y **el indicio también es un Kingston**. En una terminal Linux, donde los
+dispositivos son `/dev/sdb`, `/dev/sdc`…, "el Kingston" habría sido ambiguo el día de
+la diligencia. Confundir origen con destino en una adquisición no tiene vuelta atrás.
+(El nombre quedó en 11 caracteres porque **exFAT y FAT32 limitan la etiqueta del
+volumen a 11**; no es un error.)
+
+### Dato que evita repetir un intento fallido
+
+**El pendrive de 3,74 GB NO puede arrancar CAINE.** Verificado con el tamaño real del
+archivo por HTTP:
+
+```
+caine14.0.iso           4.169.138.176 bytes
+Pendrive de 3,74 GB     4.016.156.672 bytes (capacidad TOTAL)
+                        ────────────────────
+                        faltan 152.981.504 bytes (~146 MB)
+```
+
+Tampoco sirve de destino: el indicio es de 8 GB y no se sabe cuán lleno está.
+
+### Deuda anotada, no bloqueante
+
+`DESTINO-PER` tiene **33,1 GB de datos previos**. Técnicamente no afecta al `.E01`
+—el hash lo protege esté donde esté—, pero lo prolijo para la adquisición **real** es
+un medio vacío y de uso exclusivo, que se declara así en el acta. Para el **ensayo**
+da igual: ahí nada es evidencia.
+
+**Decisión: no se borra nada sin respaldo.** Si antes de la diligencia hay un pendrive
+limpio de 16–32 GB, se usa ese. Si no, se usa `DESTINO-PER` con carpeta dedicada y se
+documenta qué contenía. Funciona igual.
+
+### Cómo se graba el USB de CAINE
+
+1. Descargar `https://www.caine-live.net/Downloads/caine14.0.iso` (4,17 GB).
+2. **Verificar el SHA256** contra `https://cfitaly.net/caine/caine14.0_sha256.txt`:
+   `Get-FileHash -Algorithm SHA256 .\caine14.0.iso`. No es opcional — esta pericia
+   impugna a un perito por no documentar su método; verificar la integridad de la
+   propia herramienta es parte del método y va al informe.
+3. Grabar con **Rufus en modo DD / Imagen** (no "modo ISO") sobre el pendrive de
+   28,6 GB. El formato exFAT previo se sobrescribe: es esperado.
+4. Después de grabar, Windows muestra una partición diminuta y el resto "no
+   asignado". **Es normal en un ISO híbrido grabado en crudo — no reformatear.**
 
 **Ojo — desambiguación obligatoria:** la "Lenovo" que aparece en
 `caso-quitumbe/05_varios/peritaje quitumbe/` **NO es una máquina de Gina**. Es la
