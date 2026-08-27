@@ -401,10 +401,10 @@ funciones en el mismo.
 |---|---|---|---|
 | 🧪 **Ensayo** | Pendrive **`PRUEBA`**, 3,74 GB | FAT32 | ✅ Listo. Es el conejillo de indias: sobre él se comprueba el bloqueo. No es evidencia de nada |
 | 💿 **Arranque CAINE** | Pendrive de **28,6 GB** | exFAT *(se sobrescribe)* | ⬜ Falta grabar la ISO |
-| 💾 **Destino `.E01`** | **`DESTINO-PER`**, 115 GB (Kingston) | exFAT | ✅ 82,1 GB libres. **No se formateó ni se borró** |
+| 💾 **Destino `.E01`** | **`CF7984-2025`**, 115,3 GB (Kingston) | exFAT | ✅ **Formateado y vacío** (27-ago-2026) |
 | 🔴 **Indicio** | Kingston DTSE9G2, 8 GB, cadena 7984-2025 | — | 🚫 Aún no entregado |
 
-**Por qué la etiqueta `DESTINO-PER` y no "KINGSTON":** el disco destino era un
+**Por qué la etiqueta `CF7984-2025` y no "KINGSTON":** el disco destino era un
 Kingston y **el indicio también es un Kingston**. En una terminal Linux, donde los
 dispositivos son `/dev/sdb`, `/dev/sdc`…, "el Kingston" habría sido ambiguo el día de
 la diligencia. Confundir origen con destino en una adquisición no tiene vuelta atrás.
@@ -425,16 +425,28 @@ Pendrive de 3,74 GB     4.016.156.672 bytes (capacidad TOTAL)
 
 Tampoco sirve de destino: el indicio es de 8 GB y no se sabe cuán lleno está.
 
-### Deuda anotada, no bloqueante
+### Deuda SALDADA (27-ago-2026)
 
-`DESTINO-PER` tiene **33,1 GB de datos previos**. Técnicamente no afecta al `.E01`
-—el hash lo protege esté donde esté—, pero lo prolijo para la adquisición **real** es
-un medio vacío y de uso exclusivo, que se declara así en el acta. Para el **ensayo**
-da igual: ahí nada es evidencia.
+Quedaba anotado que el destino tenía **33,1 GB de datos previos**, y que lo prolijo
+para la diligencia real era un medio vacío y de uso exclusivo.
 
-**Decisión: no se borra nada sin respaldo.** Si antes de la diligencia hay un pendrive
-limpio de 16–32 GB, se usa ese. Si no, se usa `DESTINO-PER` con carpeta dedicada y se
-documenta qué contenía. Funciona igual.
+**Resuelto:** Gina respaldó su contenido y lo formateó. Verificado en vivo:
+
+```
+Letra  Etiqueta      Sistema  Total       Libre
+D      CF7984-2025   exFAT    115,3 GB    115,3 GB   <- vacio
+```
+
+**El rótulo también cambió, y por una razón táctica.** La primera propuesta fue
+`CFNOVACERO`, aludiendo a que el indicio fue entregado a la Fiscalía por NOVACERO
+—dato documentado en `peritaje quitumbe/005-1.md` línea 246—. Se descartó: **NOVACERO
+es el denunciante**, y rotular el producto de trabajo propio con el nombre de una parte
+le regala a la defensa la frase *"la perito rotuló su copia con el nombre del
+denunciante"*. No prueba nada, pero es un anzuelo gratuito.
+
+`CF7984-2025` = copia forense + **número de cadena de custodia**, identificador oficial
+y neutral del indicio. Desambigua igual frente a "KINGSTON", y además identifica *esta*
+copia y no el origen del dispositivo.
 
 ### Cómo se graba el USB de CAINE
 
