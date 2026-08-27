@@ -324,12 +324,47 @@ propia BIOS, no de suposición.
    sellan con el reloj de la estación, y esa hora va al acta. **Verificarla otra vez
    el día de la diligencia.**
 
-### Lo que falta para cerrar la estación
+### Estación CERRADA — Secure Boot desactivado (26-ago-2026)
 
-- ⬜ **Poner `Security → Secure Boot` en `Disabled`**, guardar con `F10` (*Exit Saving
-  Changes*) y confirmar en Windows que `Confirm-SecureBootUEFI` da **`False`**.
-  **Sin entrar a `Advanced → System Configuration`.**
+`Security → Secure Boot` → **`Disabled`**, guardado con `F10`. **Verificado al
+reiniciar: `Confirm-SecureBootUEFI` → `False`.** No se entró a
+`Advanced → System Configuration`, así que el Boot Mode sigue en UEFI y Windows 8.1
+arranca normal.
+
+**La Toshiba Satellite C45-A queda confirmada como estación de adquisición.**
+
+### Integridad de la herramienta: ISO de CAINE VERIFICADA (26-ago-2026)
+
+```
+SHA-256 obtenido : 2702226CF9EE131EE54E9649D6D90008F3FE851BA35939F43AE8CB614A00D564
+SHA-256 oficial  : 2702226cf9ee131ee54e9649d6d90008f3fe851ba35939f43ae8cb614a00d564
+Archivo          : caine14.0.iso · 4.169.138.176 bytes
+Resultado        : ✅ COINCIDE
+```
+
+Contrastado contra **tres fuentes independientes**, las tres con el mismo valor:
+`cfitaly.net/caine/caine14.0_sha256.txt`,
+`caine-live.net/page5/caine14.0.iso.sha256.txt` y
+`caine-live.net/Downloads/caine14.0_sha256.txt`.
+
+> **Esto va al informe.** La pericia impugna al perito contraparte por no documentar
+> su método de bloqueo (`auditoria.md` §4.11). Acreditar la integridad de la propia
+> herramienta —con hash, fuente y fecha— es la contracara de ese hallazgo y sostiene
+> la solidez del método propio.
+
+Comando reproducible por un tercero:
+
+```powershell
+$esperado = "2702226cf9ee131ee54e9649d6d90008f3fe851ba35939f43ae8cb614a00d564"
+$obtenido = (Get-FileHash -Algorithm SHA256 .\caine14.0.iso).Hash
+if ($obtenido -ieq $esperado) { "COINCIDE" } else { "NO COINCIDE" }
+```
+
+### Lo que falta
+
+- ⬜ **Grabar la ISO** con Rufus en **modo DD** sobre el pendrive de 28,6 GB.
 - ⬜ **Comprobar que arranca desde USB de verdad**, no suponerlo. **F12** al encender.
+- ⬜ **El ensayo** sobre el pendrive `PRUEBA` (§3.1).
 
 ### Nota sobre la descarga de la ISO
 
