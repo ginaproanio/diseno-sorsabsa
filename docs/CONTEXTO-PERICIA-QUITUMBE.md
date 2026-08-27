@@ -211,21 +211,45 @@ computadora el día de la pericia**.
 Abierto el 26-ago-2026. **Una fila por máquina probada.** Se llena corriendo el
 bloque del §4-ter en cada equipo, como administrador.
 
-**Gina tiene tres equipos: dos Lenovo y una HP** (confirmado 26-ago-2026).
+**Los nombres coloquiales no coinciden con la marca real.** Lo que sigue es lo
+**medido** con el bloque del §4-ter, no lo conversado.
 
-| # | Máquina | SO / build | Firmware | Secure Boot | BitLocker | Veredicto |
-|---|---|---|---|---|---|---|
-| **1** | **HP** — *"la Pro"* | Windows 11 **Pro**, build **22631** | UEFI | ⚠️ sin admin | ⚠️ sin admin | ⬜ **Pendiente** — falta §4-ter elevado |
-| **2** | **Lenovo azul** | Windows 10 **Home**, build **19045** | UEFI ✅ | ⚠️ sin admin | ⚠️ sin admin | ⬜ **Pendiente** — falta §4-ter elevado. Detalle en §5.1.a |
-| **3** | **Lenovo #2** | Windows 8 Pro, **Core i5** *(por confirmar)* | ? | ? | ? | ⬜ **Sin verificar** — es la que sigue |
+| # | Máquina (marca real) | SO / build | CPU | RAM | Firmware | Secure Boot | BitLocker | Veredicto |
+|---|---|---|---|---|---|---|---|---|
+| **1** | **TOSHIBA Satellite C45-A** · serie `ZD045061C` | Windows **8.1 Pro** build 9600 | i5-3230M | 5,89 GB | UEFI | ⚠️ sin admin | ⚠️ sin admin | 🟢 **FAVORITA** — ver abajo |
+| **2** | **LENOVO 20HMA17F01** (ThinkPad E570) · serie `PC0UKTCE` | Windows 11 Pro build 22631 | i5-7200U | 15,9 GB | UEFI | **desactivado** (`UEFISecureBootEnabled = 0`) | ⚠️ sin admin | 🟡 Técnicamente la mejor, pero **confirmar si es la que se entrega ~15-sep** |
+| **3** | **"Lenovo azul"** | Windows 10 **Home** build 19045 | ? | ? | UEFI | ⚠️ sin admin | ⚠️ sin admin | 🟡 Pendiente. Detalle en §5.1.a |
+| **4** | **HP** | *sin identificar* | ? | ? | ? | ? | ? | ⬜ Sin correr el bloque |
 
-**Nota sobre la #1 (HP):** el análisis original se hizo en ella. Antes de elegirla
-como estación, confirmar si es el equipo que se entrega alrededor del **15-sep-2026**
-— si lo es, queda descartada: la estación tiene que sobrevivir a las pericias.
+### Por qué gana la Toshiba, y no es por potencia
 
-**Favorita a priori: la #3.** Un equipo de la era Windows 8 es el que menos
-probabilidad tiene de traer BitLocker activo, y puede ser Legacy BIOS — en cuyo caso
-Secure Boot ni se plantea. Pero **se confirma corriendo el bloque, no suponiendo.**
+1. **Es de 2013, con i5-3230M y disco mecánico.** El cifrado automático de Windows
+   8.1 exigía hardware *InstantGo / Connected Standby*, que una Satellite C45-A no
+   tiene. BitLocker casi con seguridad está apagado — **igual hay que confirmarlo.**
+2. **Windows 8 obligaba a que Secure Boot se pudiera desactivar** (requisito de
+   certificación de Microsoft para equipos x86). En los equipos modernos eso ya no
+   está garantizado.
+3. **5,89 GB de RAM alcanzan.** CAINE pide 2 GB mínimo, 4 recomendados. **Con esa RAM
+   no usar `toram`** — el ISO ronda los 4 GB y quedaría al límite; arrancar en modo
+   normal.
+4. **La adquisición es trabajo de disco, no de CPU.** Aun a USB 2.0 (~30 MB/s), los
+   8 GB del indicio se copian en **unos 5 minutos**. El procesador es indiferente.
+5. **El Windows instalado es irrelevante**: CAINE lo reemplaza entero al arrancar.
+   Que Windows no esté activado (caso de esta Toshiba) **no afecta en nada**.
+
+> **La conclusión que ordena el inventario: para esta tarea, vieja es una virtud.**
+> Los equipos modernos son los que traen el riesgo (BitLocker automático, Secure Boot
+> no desactivable), y además son los que Gina usa a diario o va a entregar.
+
+### Lo que falta y no sale del bloque
+
+- **`manage-bde -status C:` COMO ADMINISTRADOR.** En las corridas del 26-ago devolvió
+  *"se denegó un intento por tener acceso"* en las tres máquinas: la consola no era
+  elevada. Es el único dato que decide.
+- **Comprobar que arranca desde USB de verdad**, no suponerlo. Toshiba: **F2** para
+  la BIOS, **F12** para el menú de arranque.
+- **3 puertos USB** (arranque + indicio + destino) o lectora de DVD.
+- **Cargador**: en un equipo de 2013 la batería suele estar agotada.
 
 **Ojo — desambiguación obligatoria:** la "Lenovo" que aparece en
 `caso-quitumbe/05_varios/peritaje quitumbe/` **NO es una máquina de Gina**. Es la
