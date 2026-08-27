@@ -137,8 +137,22 @@ consta en el acta/cadena de custodia"*.
 
 - **Verificar el bloqueo ANTES de leer un solo byte**, no después. Si se verifica
   después, no se puede demostrar que la lectura previa estaba bloqueada.
-- **Arrancar CAINE con el indicio desconectado**, y conectarlo recién con el sistema
-  ya arriba y comprobado.
+- 🚨 **CORREGIDO 26-ago-2026 tras el ensayo — la regla anterior era PELIGROSA.**
+  Decía *"arrancar CAINE con el indicio desconectado y conectarlo con el sistema ya
+  arriba"*. **Es al revés.** Medido en la Toshiba: los dispositivos presentes **al
+  arrancar** quedan en `RO=1` automáticamente; los conectados **en caliente** entran
+  con **`RO=0`, escribibles**. Seguir la regla vieja habría dejado el indicio conectado
+  en modo escritura durante toda la diligencia.
+
+  **Regla nueva, fácil de recordar:**
+
+  | Dispositivo | Cuándo se conecta | Cómo entra |
+  |---|---|---|
+  | **Indicio** | **ANTES** de encender | `RO=1` — bloqueado |
+  | **Destino de la imagen** | **DESPUÉS** de arrancar | `RO=0` — escribible, que es lo que se necesita |
+
+  Y en ambos casos: **verificar con `blockdev --getro` antes de usar.** Si el indicio
+  diera `0`, aplicar `blockdev --setro` y volver a verificar.
 - **Fotografiar el indicio sellado antes de abrir nada.** `preservacion.fotos` está
   en `[]` y `04_imagenes/` vacía. El propio `TODO_procesador_imagen.md` §11.2
   advierte que en un caso real *"se perdió una fotografía de preservación"*.
