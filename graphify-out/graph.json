@@ -12309,7 +12309,7 @@
       "node_kind": "heading",
       "norm_label": "3.1 el ensayo \u2014 se puede hacer hoy, sobre un usb propio",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L166"
+      "source_location": "L180"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_3_2_la_adquisici\u00f3n_solo_ese_d\u00eda_en_este_orden",
@@ -12321,7 +12321,7 @@
       "node_kind": "heading",
       "norm_label": "3.2 la adquisicion \u2014 solo ese dia, en este orden",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L183"
+      "source_location": "L197"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_3_los_tres_momentos_qu\u00e9_es_manipulaci\u00f3n_y_qu\u00e9_no",
@@ -12333,7 +12333,7 @@
       "node_kind": "heading",
       "norm_label": "3. los tres momentos \u2014 que es manipulacion y que no",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L150"
+      "source_location": "L164"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_4_bis_inventario_de_m\u00e1quinas_candidatas",
@@ -12345,7 +12345,7 @@
       "node_kind": "heading",
       "norm_label": "4-bis. inventario de maquinas candidatas",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L209"
+      "source_location": "L223"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_4_el_riesgo_abierto_secure_boot_bitlocker",
@@ -12357,7 +12357,7 @@
       "node_kind": "heading",
       "norm_label": "4. el riesgo abierto: secure boot + bitlocker",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L197"
+      "source_location": "L211"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_4_quater_los_tres_dispositivos_26_ago_2026",
@@ -12369,7 +12369,7 @@
       "node_kind": "heading",
       "norm_label": "4-quater. los tres dispositivos (26-ago-2026)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L381"
+      "source_location": "L395"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_4_ter_bloque_para_llenar_una_fila_del_inventario",
@@ -12381,7 +12381,7 @@
       "node_kind": "heading",
       "norm_label": "4-ter. bloque para llenar una fila del inventario",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L461"
+      "source_location": "L475"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_5_1_a_verificaci\u00f3n_registrada_equipo_lenovo_azul_26_ago_2026",
@@ -12393,7 +12393,7 @@
       "node_kind": "heading",
       "norm_label": "5.1.a verificacion registrada \u2014 equipo \"lenovo azul\" (26-ago-2026)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L533"
+      "source_location": "L547"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_5_1_verificar_la_m\u00e1quina_de_adquisici\u00f3n_lo_primero",
@@ -12405,7 +12405,7 @@
       "node_kind": "heading",
       "norm_label": "5.1 verificar la maquina de adquisicion \u2b1c \u2014 **lo primero**",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L519"
+      "source_location": "L533"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_5_2_decidir_camino_a_vs_camino_b_del_procesador_de_imagen",
@@ -12417,7 +12417,7 @@
       "node_kind": "heading",
       "norm_label": "5.2 decidir camino a vs camino b del procesador de imagen \u2b1c",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L557"
+      "source_location": "L571"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_5_3_escribir_docs_protocolo_adquisicion_indicios_md",
@@ -12429,7 +12429,7 @@
       "node_kind": "heading",
       "norm_label": "5.3 escribir `docs/protocolo-adquisicion-indicios.md` \u2b1c",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L572"
+      "source_location": "L586"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_5_pendientes",
@@ -12441,7 +12441,7 @@
       "node_kind": "heading",
       "norm_label": "5. pendientes",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L517"
+      "source_location": "L531"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_6_hueco_de_dise\u00f1o_detectado_26_ago_2026",
@@ -12453,7 +12453,7 @@
       "node_kind": "heading",
       "norm_label": "6. hueco de diseno detectado (26-ago-2026)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L580"
+      "source_location": "L594"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_7_c\u00f3mo_trabajar_sobre_esto",
@@ -12465,7 +12465,7 @@
       "node_kind": "heading",
       "norm_label": "7. como trabajar sobre esto",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L597"
+      "source_location": "L611"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_8_fuentes_consultadas_26_ago_2026",
@@ -12477,7 +12477,7 @@
       "node_kind": "heading",
       "norm_label": "8. fuentes consultadas (26-ago-2026)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L606"
+      "source_location": "L620"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_bitlocker_en_la_toshiba_verificado_y_apagado_26_ago_2026",
@@ -12489,7 +12489,7 @@
       "node_kind": "heading",
       "norm_label": "bitlocker en la toshiba: verificado y apagado (26-ago-2026)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L244"
+      "source_location": "L258"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_conclusi\u00f3n_no_tiene_que_ser_esa_m\u00e1quina",
@@ -12501,7 +12501,7 @@
       "node_kind": "heading",
       "norm_label": "conclusion: no tiene que ser esa maquina",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L499"
+      "source_location": "L513"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_contexto_pericia_quitumbe_adquisici\u00f3n_del_indicio_usb",
@@ -12525,7 +12525,7 @@
       "node_kind": "heading",
       "norm_label": "como se graba el usb de caine",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L425"
+      "source_location": "L439"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_c\u00f3mo_se_lee_el_veredicto",
@@ -12537,7 +12537,7 @@
       "node_kind": "heading",
       "norm_label": "como se lee el veredicto",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L443"
+      "source_location": "L457"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_dato_que_evita_repetir_un_intento_fallido",
@@ -12549,7 +12549,7 @@
       "node_kind": "heading",
       "norm_label": "dato que evita repetir un intento fallido",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L400"
+      "source_location": "L414"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_deuda_anotada_no_bloqueante",
@@ -12561,7 +12561,7 @@
       "node_kind": "heading",
       "norm_label": "deuda anotada, no bloqueante",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L414"
+      "source_location": "L428"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_estaci\u00f3n_cerrada_secure_boot_desactivado_26_ago_2026",
@@ -12573,7 +12573,7 @@
       "node_kind": "heading",
       "norm_label": "estacion cerrada \u2014 secure boot desactivado (26-ago-2026)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L327"
+      "source_location": "L341"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_estado_detallado_de_la_m\u00e1quina_1_26_ago_2026_verificado",
@@ -12585,7 +12585,7 @@
       "node_kind": "heading",
       "norm_label": "estado detallado de la maquina 1 (26-ago-2026, verificado)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L487"
+      "source_location": "L501"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_estado_verificado_del_expediente_26_ago_2026",
@@ -12609,7 +12609,7 @@
       "node_kind": "heading",
       "norm_label": "ficha completa de la bios \u2014 leida en pantalla (26-ago-2026, 20:58)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L292"
+      "source_location": "L306"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_integridad_de_la_herramienta_iso_de_caine_verificada_26_ago_2026",
@@ -12621,7 +12621,7 @@
       "node_kind": "heading",
       "norm_label": "integridad de la herramienta: iso de caine verificada (26-ago-2026)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L336"
+      "source_location": "L350"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_lo_que_falta",
@@ -12633,7 +12633,7 @@
       "node_kind": "heading",
       "norm_label": "lo que falta",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L363"
+      "source_location": "L377"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_nota_sobre_la_descarga_de_la_iso",
@@ -12645,7 +12645,7 @@
       "node_kind": "heading",
       "norm_label": "nota sobre la descarga de la iso",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L369"
+      "source_location": "L383"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_por_qu\u00e9_gana_la_toshiba_y_no_es_por_potencia",
@@ -12657,7 +12657,7 @@
       "node_kind": "heading",
       "norm_label": "por que gana la toshiba, y no es por potencia",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L224"
+      "source_location": "L238"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_secure_boot_en_la_toshiba_activado_hay_que_desactivarlo_26_ago_2026",
@@ -12669,7 +12669,7 @@
       "node_kind": "heading",
       "norm_label": "secure boot en la toshiba: activado \u2014 hay que desactivarlo (26-ago-2026)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L267"
+      "source_location": "L281"
     },
     {
       "id": "showcase_tailwind_config",
@@ -21733,7 +21733,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L166",
+      "source_location": "L180",
       "weight": 1.0
     },
     {
@@ -21744,7 +21744,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L183",
+      "source_location": "L197",
       "weight": 1.0
     },
     {
@@ -21755,7 +21755,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L224",
+      "source_location": "L238",
       "weight": 1.0
     },
     {
@@ -21766,7 +21766,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L244",
+      "source_location": "L258",
       "weight": 1.0
     },
     {
@@ -21777,7 +21777,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L267",
+      "source_location": "L281",
       "weight": 1.0
     },
     {
@@ -21788,7 +21788,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L292",
+      "source_location": "L306",
       "weight": 1.0
     },
     {
@@ -21799,7 +21799,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L327",
+      "source_location": "L341",
       "weight": 1.0
     },
     {
@@ -21810,7 +21810,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L336",
+      "source_location": "L350",
       "weight": 1.0
     },
     {
@@ -21821,7 +21821,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L363",
+      "source_location": "L377",
       "weight": 1.0
     },
     {
@@ -21832,7 +21832,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L369",
+      "source_location": "L383",
       "weight": 1.0
     },
     {
@@ -21843,7 +21843,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L400",
+      "source_location": "L414",
       "weight": 1.0
     },
     {
@@ -21854,7 +21854,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L414",
+      "source_location": "L428",
       "weight": 1.0
     },
     {
@@ -21865,7 +21865,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L425",
+      "source_location": "L439",
       "weight": 1.0
     },
     {
@@ -21876,7 +21876,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L443",
+      "source_location": "L457",
       "weight": 1.0
     },
     {
@@ -21887,7 +21887,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L487",
+      "source_location": "L501",
       "weight": 1.0
     },
     {
@@ -21898,7 +21898,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L499",
+      "source_location": "L513",
       "weight": 1.0
     },
     {
@@ -21909,7 +21909,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L519",
+      "source_location": "L533",
       "weight": 1.0
     },
     {
@@ -21920,7 +21920,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L533",
+      "source_location": "L547",
       "weight": 1.0
     },
     {
@@ -21931,7 +21931,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L557",
+      "source_location": "L571",
       "weight": 1.0
     },
     {
@@ -21942,7 +21942,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L572",
+      "source_location": "L586",
       "weight": 1.0
     },
     {
@@ -21964,7 +21964,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L150",
+      "source_location": "L164",
       "weight": 1.0
     },
     {
@@ -21975,7 +21975,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L197",
+      "source_location": "L211",
       "weight": 1.0
     },
     {
@@ -21986,7 +21986,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L209",
+      "source_location": "L223",
       "weight": 1.0
     },
     {
@@ -21997,7 +21997,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L381",
+      "source_location": "L395",
       "weight": 1.0
     },
     {
@@ -22019,7 +22019,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L461",
+      "source_location": "L475",
       "weight": 1.0
     },
     {
@@ -22030,7 +22030,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L517",
+      "source_location": "L531",
       "weight": 1.0
     },
     {
@@ -22041,7 +22041,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L580",
+      "source_location": "L594",
       "weight": 1.0
     },
     {
@@ -22052,7 +22052,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L597",
+      "source_location": "L611",
       "weight": 1.0
     },
     {
@@ -22063,7 +22063,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L606",
+      "source_location": "L620",
       "weight": 1.0
     },
     {
@@ -29811,5 +29811,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e1711370de27505e924f88d47f51c77f64578daf"
+  "built_at_commit": "77e720e8ae21b634c62a33fbd74534af0119357d"
 }
