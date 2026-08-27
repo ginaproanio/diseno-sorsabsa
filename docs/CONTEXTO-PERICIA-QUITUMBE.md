@@ -289,11 +289,56 @@ Procedimiento:
 **Es reversible y no afecta al indicio.** Es configuración de la estación, no de la
 evidencia. Se describe en el acta junto con la identificación del equipo.
 
+### Ficha completa de la BIOS — leída en pantalla (26-ago-2026, 20:58)
+
+**InsydeH2O Setup Utility Rev. 3.7.** Todo lo siguiente sale de fotografías de la
+propia BIOS, no de suposición.
+
+| Pestaña | Dato | Valor |
+|---|---|---|
+| **Main** | CPU | Intel Core i5-3230M @ 2.60 GHz |
+| | Disco | **TOSHIBA MQ01ABD075 (S1)** — mecánico |
+| | Lectora óptica | **TSSTcorp CDDVDW SU-208DB (PM)** ← existe |
+| | Memoria | 6144 MB |
+| | BIOS / EC | **1.20** / 1.30 |
+| | Fecha y hora | 08/26/2026 20:58 — **correcta** |
+| **Security** | Contraseña BIOS (User / Supervisor) | **Not Registered** (ninguna) |
+| | Contraseña HDD/SSD | **Not Registered** (ninguna) |
+| | **Secure Boot** | **[Enabled]** ← el único cambio a hacer |
+| **Power Mgmt** | SATA Interface | **[Performance]** = AHCI, correcto para Linux |
+| | **Internal USB3.0 Controller** | **[Enabled]** ← adquisición más rápida |
+| **Advanced** | Boot Speed | [Normal] |
+| | USB Legacy Emulation | [Enabled] |
+| | `▶ System Configuration` | **submenú — aquí vive el Boot Mode. NO ENTRAR** |
+| **Boot** | Orden | 1. HDD/SSD · **2. USB** · 3. ODD · 4. LAN |
+| **Exit** | Opciones | Exit Saving Changes · Exit Discarding · Load Setup Defaults |
+
+**Tres consecuencias prácticas:**
+
+1. **El orden de arranque no hace falta cambiarlo.** El disco está primero, pero con
+   **F12** al encender se elige el USB solo para esa vez. Menos cambios permanentes
+   en la estación = menos que explicar.
+2. **Hay lectora de DVD y la ISO cabe** (4,17 GB contra 4,7 GB de un DVD de una
+   capa). Plan B si el USB no arranca, y libera un puerto.
+3. **La hora del equipo es correcta.** Importa: los registros de la adquisición se
+   sellan con el reloj de la estación, y esa hora va al acta. **Verificarla otra vez
+   el día de la diligencia.**
+
 ### Lo que falta para cerrar la estación
 
-- ⬜ **Ejecutar el procedimiento de arriba** y confirmar `False`.
-- ⬜ **Comprobar que arranca desde USB de verdad**, no suponerlo. Toshiba: **F2**
-  para la BIOS, **F12** para el menú de arranque.
+- ⬜ **Poner `Security → Secure Boot` en `Disabled`**, guardar con `F10` (*Exit Saving
+  Changes*) y confirmar en Windows que `Confirm-SecureBootUEFI` da **`False`**.
+  **Sin entrar a `Advanced → System Configuration`.**
+- ⬜ **Comprobar que arranca desde USB de verdad**, no suponerlo. **F12** al encender.
+
+### Nota sobre la descarga de la ISO
+
+El servidor principal de CAINE (`caine-live.net`) es lento y se satura: el 26-ago el
+estimado saltó de 6 minutos a 6 horas. **Usar un espejo**, el hash es idéntico:
+
+- `https://download.parrot.sh/parrot/iso/caine/caine14.0.iso` (recomendado)
+- `https://cfitaly.net/caine/caine14.0.iso`
+- `https://nannibassetti.com/caine/caine14.0.iso`
 - ⬜ **3 puertos USB** (arranque + indicio + destino) o lectora de DVD.
 - ⬜ **Cargador**: en un equipo de 2013 la batería suele estar agotada.
 - ✅ **Disco destino** — resuelto, ver §4-quater.
