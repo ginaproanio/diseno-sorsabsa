@@ -206,7 +206,68 @@ vuelve a entrar a ese Windows. La doc de CAINE lo advierte explícitamente.
 El escenario malo no es contaminar el indicio: es **quedarse fuera de la propia
 computadora el día de la pericia**.
 
-### Estado de la máquina del análisis original (26-ago-2026)
+## 4-bis. INVENTARIO DE MÁQUINAS CANDIDATAS
+
+Abierto el 26-ago-2026. **Una fila por máquina probada.** Se llena corriendo el
+bloque del §4-ter en cada equipo, como administrador.
+
+| # | Máquina | SO / build | Firmware | Secure Boot | BitLocker | RAM | Veredicto |
+|---|---|---|---|---|---|---|---|
+| **1** | *(equipo del análisis, se entrega ~15-sep-2026)* | Windows 11 Pro, build **22631** | UEFI | ⚠️ sin verificar | ⚠️ sin verificar | ? | ❌ **Descartada** — se entrega en septiembre |
+| **2** | **"Lenovo azul"** — Core i5 | Windows 8 Pro | ? | ? | ? | ? | ⬜ **Por verificar** |
+| **3** | *(pendiente)* | ? | ? | ? | ? | ? | ⬜ **Por verificar** |
+
+**Ojo — desambiguación obligatoria:** la "Lenovo" que aparece en
+`caso-quitumbe/05_varios/peritaje quitumbe/` **NO es una máquina de Gina**. Es la
+laptop del perito contraparte (ThinkBook 14s Yoga ITL, 20WE, Core i7-1165G7, Win 11
+build 26200, **color gris**, serie R9149PHX). Es material del caso, no una
+herramienta disponible. La "Lenovo azul" de Gina es otra máquina.
+
+### Cómo se lee el veredicto
+
+| Resultado | Veredicto |
+|---|---|
+| `Firmware: Legacy` | ✅ **Verde.** No hay Secure Boot, CAINE arranca directo |
+| `Firmware: UEFI` + BitLocker `Protection Off` | ✅ **Verde.** Se desactiva Secure Boot sin consecuencia |
+| BitLocker `Protection On` **con** clave de recuperación a mano | ⚠️ **Ámbar.** Se puede, guardando la clave primero |
+| BitLocker `Protection On` **sin** la clave | ❌ **Descartada.** Riesgo de quedarse fuera del equipo |
+| RAM < 4 GB | ⚠️ Corre, pero sin `toram` |
+| Se entrega o se vende pronto | ❌ **Descartada.** La estación tiene que sobrevivir a las pericias |
+
+**Requisitos que no salen del script y hay que mirar a ojo:**
+
+- **3 puertos USB** (arranque + indicio + destino), o **lectora de DVD** para arrancar
+  desde ahí y liberar un puerto.
+- **Que arranque desde USB** — comprobarlo de verdad, no suponerlo.
+- **Sin datos personales dentro**, por si la contraparte pide examinar la estación.
+
+## 4-ter. Bloque para llenar una fila del inventario
+
+Correr **como administrador** en cada máquina candidata. Todo es solo lectura.
+
+```powershell
+$os=Get-CimInstance Win32_OperatingSystem
+$cs=Get-CimInstance Win32_ComputerSystem
+$bios=Get-CimInstance Win32_BIOS
+try { $sb = Confirm-SecureBootUEFI } catch { $sb = "no aplica (Legacy) o sin admin" }
+$bl = (manage-bde -status C: 2>&1 | Select-String "Protection Status") -replace '\s+',' '
+$c  = Get-CimInstance Win32_LogicalDisk -Filter "DeviceID='C:'"
+"Marca/Modelo : {0} {1}" -f $cs.Manufacturer, $cs.Model
+"Serie BIOS   : {0}" -f $bios.SerialNumber
+"SO           : {0} build {1} {2}" -f $os.Caption, $os.BuildNumber, $os.OSArchitecture
+"CPU          : {0}" -f (Get-CimInstance Win32_Processor).Name
+"Firmware     : {0}" -f $env:firmware_type
+"SecureBoot   : {0}" -f $sb
+"BitLocker    : {0}" -f $bl
+"RAM          : {0} GB" -f [math]::Round($cs.TotalPhysicalMemory/1GB,1)
+"Disco C:     : {0} GB libres de {1} GB" -f [math]::Round($c.FreeSpace/1GB,1), [math]::Round($c.Size/1GB,1)
+"InicioRapido : {0}" -f (Get-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power').HiberbootEnabled
+```
+
+`Marca`, `Modelo` y `Serie BIOS` son los que van al **acta**: la estación de
+adquisición se identifica.
+
+### Estado detallado de la máquina 1 (26-ago-2026, verificado)
 
 | Qué | Estado | Nota |
 |---|---|---|
@@ -216,7 +277,7 @@ computadora el día de la pericia**.
 | BitLocker | ⚠️ **no verificable** | `Get-BitLockerVolume` → acceso denegado (requiere admin) |
 | Inicio rápido | **ACTIVO** (`HiberbootEnabled = 1`) | Windows hiberna en vez de apagar. Para forense: `Mayús`+Apagar o `shutdown /s /t 0` |
 | Disco | 37,1 GB libres de 166,7 GB | Alcanza para 8 GB, pero **la imagen no va acá** |
-| Entrega del equipo | ~**15-sep-2026** | No montar el procedimiento sobre esta máquina |
+| Entrega del equipo | ~**15-sep-2026** | Por esto queda descartada |
 
 ### Conclusión: no tiene que ser esa máquina
 
