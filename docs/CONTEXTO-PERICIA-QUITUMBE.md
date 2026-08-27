@@ -264,11 +264,34 @@ nada cifrado. Era el dato que bloqueaba la decisión.
 **Dato de paso:** el disco es de **356,56 GB**. Espacio de sobra, pero la imagen va a
 un **disco destino externo y limpio**, no al `C:` de la estación (§2.5).
 
+### Secure Boot en la Toshiba: ACTIVADO — hay que desactivarlo (26-ago-2026)
+
+`Confirm-SecureBootUEFI` elevado → **`True`**. Es UEFI con Secure Boot encendido.
+Como BitLocker está apagado, desactivarlo **no tiene riesgo**.
+
+> 🚨 **Desactivar Secure Boot, NO cambiar el Boot Mode.** En la BIOS de Toshiba, junto
+> a Secure Boot está `Advanced → System Configuration → Boot Mode: UEFI / CSM`.
+> **Dejarlo en UEFI.** Windows 8.1 está instalado en UEFI/GPT: pasarlo a CSM lo deja
+> sin arrancar hasta revertirlo. Y no hace falta — **CAINE 13 arranca en UEFI puro,
+> sin CSM.**
+
+Procedimiento:
+
+1. `powercfg /h off` (elevado) — sin esto el inicio rápido impide entrar a la BIOS.
+   Reversible con `powercfg /h on`.
+2. Apagar de verdad: `Mayús` + *Apagar*. No reiniciar.
+3. Encender manteniendo **F2**. Si no entra, **F3** en el arranque salta el Fast Boot.
+4. **Security** → `Secure Boot` → **Disabled**. *(En algunos modelos está bajo "Boot"
+   o "Authentication".)* **No tocar Boot Mode.**
+5. **F10** guardar y salir.
+6. Confirmar en Windows: `Confirm-SecureBootUEFI` → debe dar **`False`**.
+
+**Es reversible y no afecta al indicio.** Es configuración de la estación, no de la
+evidencia. Se describe en el acta junto con la identificación del equipo.
+
 ### Lo que falta para cerrar la estación
 
-- ⬜ **`Confirm-SecureBootUEFI` elevado.** Si da error *"no compatible"* → es Legacy
-  BIOS y Secure Boot ni existe (mejor todavía). Si da `True`/`False` → es UEFI y ya
-  se sabe si hay que desactivarlo.
+- ⬜ **Ejecutar el procedimiento de arriba** y confirmar `False`.
 - ⬜ **Comprobar que arranca desde USB de verdad**, no suponerlo. Toshiba: **F2**
   para la BIOS, **F12** para el menú de arranque.
 - ⬜ **3 puertos USB** (arranque + indicio + destino) o lectora de DVD.
