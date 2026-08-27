@@ -590,3 +590,103 @@ modales, ninguno"— y el check la aplicó al pie de la letra.
 Queda escrito porque el modo de fallo es general: **una regla mal escrita
 hace daño más rápido cuando se automatiza**, porque deja de depender de
 que alguien la lea con criterio.
+
+---
+
+## 26-ago-2026 — Las tres puertas que no existían, y el estado medido
+
+**Cómo empezó.** Gina, mirando el producto: *«veo 85 leyes pero sé que se han
+descargado más, no hay una interface para el curador, no hay algo que me diga
+tienes 5000 pendientes, necesito pulir la interface del abogado y del cliente
+para ver qué opciones tiene pero no veo que tenga»*.
+
+**Las cuatro cosas estaban construidas menos una. Lo que faltaba era el acceso.**
+Ese es el hallazgo, y es de una familia que esta auditoría no tenía cubierta.
+
+### Hallazgo — una pantalla sin enlace es una pantalla que no existe
+
+| Lo que se veía | Lo que había | Por qué no se llegaba |
+|---|---|---|
+| «no hay interface para el curador» | `/calidad` funciona desde el 15-ago, 43 KB | **`grep` sobre `src/` devolvía CERO enlaces a `/calidad`.** Se llegaba escribiendo la URL de memoria |
+| «no hay algo que me diga tienes 5000 pendientes» | La franja «Estado del sistema» lo dice desde el 19-ago | Vivía sólo dentro de `/calidad`, detrás del gate de staff |
+| «la interface del abogado no la veo» | **No existía.** Ni la ruta | `justired-cuenta` devolvía `destino: '/abogado'` desde el 23-ago hacia una ruta no declarada |
+| «la del cliente tampoco» | **No existía.** Ni la ruta | Ídem con `/mis-casos`. `Alta.tsx` lo sabía y lo esquivaba mandando a la portada |
+
+**La variante cara:** el servidor podía nombrar dos pantallas que el frontend no
+tenía, y **compilaba igual**. El primer abogado aprobado y el primer cliente
+registrado habrían aterrizado en el 404 genérico —*«Oops! Página no
+encontrada»*— en su primer segundo dentro del producto. **No se cobró porque hay
+cero de cada uno**, que es la peor razón por la que un defecto no se nota.
+
+Es la regla 1 de `modelo_justired.md` §10 —*«un script sin modo es un script que
+no se puede ejecutar»*— aplicada a la interfaz, y hubo que aprenderla de nuevo
+por separado. Quedó escrita ahí como §10.8 y §10.9.
+
+### Hallazgo — tres Edge Functions corrían sin fuente en el repo
+
+`justired-cuenta`, `justired-solicitudes` y `justired-registro` estaban
+**desplegadas y en uso desde el 23/24-ago sin una sola línea versionada**: su
+código existía únicamente dentro de Supabase. Son justo las tres que deciden
+quién entra a qué.
+
+Incumple `modelo_justired.md` §10.7 —*«la base ejecuta, el repo explica»*—, que
+valía para el SQL desde el 19-ago y nadie había extendido al código que corre al
+lado. Lo que no está en el repo no se revisa en un diff, no aparece en una
+búsqueda y no se recupera.
+
+**Rescatadas** a `legaltech/supabase/functions/`, con su porqué en el README de
+esa carpeta. `justired-cuenta` y `justired-registro` quedaron idénticas a lo
+desplegado; sólo `justired-solicitudes` cambió.
+
+### Qué se construyó
+
+| Pieza | Dónde |
+|---|---|
+| Vista pública de cobertura, sólo conteos agregados | `supabase/migrations/20260826100000_justired_cobertura_publica.sql` — **aplicada en producción** |
+| Franja «87 de 5.913» en la biblioteca | `src/components/LegalLibrary.tsx` + `src/hooks/useCobertura.ts` |
+| Puerta a Curaduría, con la cola de revisión como insignia | `src/components/Navbar.tsx` |
+| `/abogado` — mesa de trabajo, tres capas | `src/pages/MesaAbogado.tsx` |
+| `/mis-casos` — los casos del cliente | `src/pages/MisCasos.tsx` |
+| Acción `mis-casos` + `cliente_id` al crear | `supabase/functions/justired-solicitudes/index.ts` — **NO desplegada** |
+
+**Dos correcciones que aparecieron de paso, en archivos que había que tocar:**
+
+- `Navbar.tsx`: `onClick={signIn}` le pasaba el `MouseEvent` como parámetro
+  `volverA`. Salía `next=%5Bobject%20Object%5D` y el portero devolvía a la
+  portada en vez de a donde estaba. Corregido a `onClick={() => signIn()}`.
+- `Navbar.tsx`: `import { Link }` estaba **dos veces**. El build de Vite lo
+  toleraba; `tsc` no.
+- `AuthCallback.tsx` tenía una lista blanca de rutas escrita a mano (cambio sin
+  commitear, no de esta sesión) que **no incluía** `/abogado` ni `/mis-casos`.
+  Dejarla así habría sido peor que el defecto original: el abogado aprobado ya
+  no caería en el 404, pero aterrizaría en `/alta` —*«tu cuenta no está
+  registrada»*— siendo que sí lo está. **Un desvío que miente es más difícil de
+  diagnosticar que un 404 que no dice nada.** Ampliada, y anotado que nada la
+  compara con `App.tsx`.
+
+### Estado medido contra producción, 26-ago-2026
+
+| | |
+|---|---|
+| Gacetas procesadas (`justired.leyes`) | **87** |
+| Artículos | **4.781** |
+| Inventariadas | **5.906** |
+| Esperando conversión a texto | **5.822** |
+| Aprobadas por una persona | **0** — publicar sigue sin ser compuerta |
+| **Abogados / clientes / solicitudes** | **0 / 0 / 0** |
+| Staff | 1 |
+
+**El dato que manda sigue siendo el mismo que el 23-ago:** cero abogados y cero
+clientes. La cañería avanza; el lado del producto no arrancó.
+
+### ⬜ Pendiente, en orden
+
+1. **Desplegar `justired-solicitudes`.** Sin eso `/mis-casos` muestra su error
+   —a propósito, falla cerrado— pero no lista nada.
+   `supabase functions deploy justired-solicitudes --project-ref twkuidnjwhopbjnrhnxp`
+2. **Nada de esto se validó en vivo**, y hoy no se puede: ver 🔴-13 de
+   `AUDITORIA-PORTERO-SSO.md` — no queda una sola cuenta en `auth.users` de
+   ningún proyecto del ecosistema, así que ningún login es probable.
+3. Compila limpio (`npm run build` ✅, eslint ✅) y **no agrega ni un error de
+   tipos**; los 21 que quedan son de archivos que no se tocaron.
+4. Sin modales ni diálogos del navegador en lo nuevo — comprobado.

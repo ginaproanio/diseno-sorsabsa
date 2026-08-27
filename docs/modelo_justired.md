@@ -32,7 +32,24 @@ dirigir el trabajo ni para sostenerlo ante nadie.
 | Qué falta y en qué orden | §9 |
 | **Qué se tira, y cuándo** | **§9-bis** |
 
-Última verificación contra la base de producción: **19-ago-2026.**
+Última verificación contra la base de producción: **19-ago-2026**, con una
+remedición parcial el **26-ago-2026** (cifras abajo).
+
+> **Remedición del 26-ago-2026.** Las cifras del cuerpo del documento son del
+> 19-ago y **la mayoría siguen siendo ciertas**. Cambiaron tres, y ninguna
+> cambia una conclusión:
+>
+> | | 19-ago | 26-ago |
+> |---|---|---|
+> | Gacetas procesadas | 82 | **87** |
+> | Artículos | 4.565 | **4.781** |
+> | Esperando proceso | 5.822 | 5.822 |
+> | Publicados (aprobados por una persona) | 0 | **0** |
+>
+> Y aparecieron dos cifras que este documento no tenía porque nunca las había
+> preguntado: **0 abogados, 0 clientes y 0 solicitudes**. La cañería avanza; el
+> lado del producto sigue en cero, que es el dato que manda sobre el orden de
+> §9 y que está desarrollado en `legaltech/docs/mesa-de-trabajo-del-abogado.md`.
 
 ---
 
@@ -60,8 +77,10 @@ dirigir el trabajo ni para sostenerlo ante nadie.
 | Enriquecer | ⚠️ | Clasifica la gaceta, que es justo lo que el modelo prohíbe |
 | Validar | ✅ | Mide forma del texto y estado del sistema |
 | Curar | ⭐ | Mejor que el modelo: motivo, destino y procedencia |
-| **Publicar** | ❌ | **No es compuerta. Los 82 están públicos sin aprobar** |
+| **Publicar** | ❌ | **No es compuerta. Los 87 están públicos sin aprobar** |
 | Vigencia y relaciones | ❌ | Nada. Ni columna |
+| **Llegar al panel** | ✅ | **Corregido el 26-ago. Ver §10.8: durante semanas `/calidad` no tuvo un solo enlace** |
+| Cobertura a la vista | ✅ | La biblioteca dice «87 de 5.913» desde el 26-ago (§8) |
 
 ---
 
@@ -756,6 +775,14 @@ El usuario debería poder:
 | Ver el acto completo + sus artículos | ❌ no hay actos |
 | Ver en qué gaceta se publicó, y el PDF original | ✅ el original está en R2, íntegro |
 | Versión consolidada e historial de reformas | ❌ requiere relaciones y vigencia |
+| **Saber si lo que NO encontró falta o no existe** | ✅ desde el 26-ago: la biblioteca dice «87 de 5.913» y cuántos esperan proceso |
+
+> **Por qué esa última fila importa más de lo que parece.** Las siete de arriba
+> son funciones que faltan; esa es una **afirmación implícita que el producto
+> estaba haciendo sin querer**. Una biblioteca que muestra 87 documentos y no
+> dice nada más está diciendo «esto es el Registro Oficial». Con el 1,5 % de
+> cobertura, eso es falso, y el que lo descubre es un abogado que buscó una
+> norma, no la encontró, y ya decidió que la herramienta no sirve.
 
 Nada de esto es alcanzable mientras la unidad canónica sea la gaceta. **No es
 que falten funciones de búsqueda: falta el objeto sobre el que buscar.**
@@ -858,6 +885,44 @@ No son teoría: cada una nació de algo que se rompió y costó tiempo.
 7. **La base ejecuta, el repo explica.** El SQL se guarda siempre en
    `supabase/migrations/` con su fecha y su porqué, aunque se aplique por otra
    vía.
+
+   > ⚠️ **Incumplida y corregida el 26-ago-2026, del lado de las funciones.**
+   > Tres Edge Functions —`justired-cuenta`, `justired-solicitudes` y
+   > `justired-registro`— corrían en producción **sin una sola línea en el
+   > repo**: se habían creado directamente contra Supabase. Son justo las tres
+   > que deciden quién entra a qué. Rescatadas a
+   > `legaltech/supabase/functions/`, con su porqué en el README de esa carpeta.
+   > La regla valía para el SQL desde el 19-ago y nadie la había extendido al
+   > código que corre al lado.
+
+8. **Una pantalla sin enlace es una pantalla que no existe.** Es la regla 1 de
+   arriba —«un script sin modo es un script que no se puede ejecutar»— aplicada
+   a la interfaz, y hubo que aprenderla de nuevo por separado.
+
+   El 26-ago-2026 Gina dijo: *«no hay una interface para el curador, no hay algo
+   que me diga tienes 5000 pendientes»*. **Las dos cosas existían.** `/calidad`
+   lleva semanas funcionando y su franja «Estado del sistema» dice 5.822 desde
+   el 19-ago. Lo que no existía era **la puerta**: `grep` sobre `src/` devolvía
+   **cero enlaces** hacia `/calidad`. Se llegaba escribiendo la URL de memoria.
+
+   Y la variante más cara del mismo defecto: `justired-cuenta` devolvía
+   `destino: '/abogado'` y `destino: '/mis-casos'` desde el 23-ago hacia **dos
+   rutas que no estaban declaradas**. El primer abogado aprobado y el primer
+   cliente registrado habrían aterrizado en el 404 genérico en su primer
+   segundo dentro del producto. No se cobró porque hay cero de cada uno — que
+   es la peor razón para que un defecto no se note.
+
+   **Lo que hay que comprobar, y no basta con mirar la pantalla:** que cada
+   destino que el servidor puede devolver esté declarado como ruta, y que cada
+   ruta con permiso tenga al menos un enlace desde donde vive quien lo tiene.
+
+9. **Un número que sólo se ve desde adentro no informa a nadie.** El «5.822» era
+   correcto y estaba medido desde el 19-ago; vivía únicamente dentro de
+   `/calidad`, detrás de una comprobación de staff. Para cualquiera fuera de esa
+   pantalla —incluido un abogado buscando una norma— la biblioteca de 87
+   documentos se leía como *«esto es todo lo que hay»* en vez de *«esto es el
+   1,5 % de lo que hay»*. Desde el 26-ago la cobertura se publica agregada en
+   `justired.cobertura_biblioteca` y se muestra en la biblioteca misma.
 
 ---
 
