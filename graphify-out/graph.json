@@ -12802,7 +12802,7 @@
       "node_kind": "heading",
       "norm_label": "4-ter. bloque para llenar una fila del inventario",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L251"
+      "source_location": "L254"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_5_1_a_verificaci\u00f3n_registrada_equipo_lenovo_azul_26_ago_2026",
@@ -12814,7 +12814,7 @@
       "node_kind": "heading",
       "norm_label": "5.1.a verificacion registrada \u2014 equipo \"lenovo azul\" (26-ago-2026)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L323"
+      "source_location": "L326"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_5_1_verificar_la_m\u00e1quina_de_adquisici\u00f3n_lo_primero",
@@ -12826,7 +12826,7 @@
       "node_kind": "heading",
       "norm_label": "5.1 verificar la maquina de adquisicion \u2b1c \u2014 **lo primero**",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L309"
+      "source_location": "L312"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_5_2_decidir_camino_a_vs_camino_b_del_procesador_de_imagen",
@@ -12838,7 +12838,7 @@
       "node_kind": "heading",
       "norm_label": "5.2 decidir camino a vs camino b del procesador de imagen \u2b1c",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L347"
+      "source_location": "L350"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_5_3_escribir_docs_protocolo_adquisicion_indicios_md",
@@ -12850,7 +12850,7 @@
       "node_kind": "heading",
       "norm_label": "5.3 escribir `docs/protocolo-adquisicion-indicios.md` \u2b1c",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L362"
+      "source_location": "L365"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_5_pendientes",
@@ -12862,7 +12862,7 @@
       "node_kind": "heading",
       "norm_label": "5. pendientes",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L307"
+      "source_location": "L310"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_6_hueco_de_dise\u00f1o_detectado_26_ago_2026",
@@ -12874,7 +12874,7 @@
       "node_kind": "heading",
       "norm_label": "6. hueco de diseno detectado (26-ago-2026)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L370"
+      "source_location": "L373"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_7_c\u00f3mo_trabajar_sobre_esto",
@@ -12886,7 +12886,7 @@
       "node_kind": "heading",
       "norm_label": "7. como trabajar sobre esto",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L387"
+      "source_location": "L390"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_8_fuentes_consultadas_26_ago_2026",
@@ -12898,7 +12898,7 @@
       "node_kind": "heading",
       "norm_label": "8. fuentes consultadas (26-ago-2026)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L396"
+      "source_location": "L399"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_conclusi\u00f3n_no_tiene_que_ser_esa_m\u00e1quina",
@@ -12910,7 +12910,7 @@
       "node_kind": "heading",
       "norm_label": "conclusion: no tiene que ser esa maquina",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L289"
+      "source_location": "L292"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_contexto_pericia_quitumbe_adquisici\u00f3n_del_indicio_usb",
@@ -12934,7 +12934,7 @@
       "node_kind": "heading",
       "norm_label": "como se lee el veredicto",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L233"
+      "source_location": "L236"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_estado_detallado_de_la_m\u00e1quina_1_26_ago_2026_verificado",
@@ -12946,7 +12946,7 @@
       "node_kind": "heading",
       "norm_label": "estado detallado de la maquina 1 (26-ago-2026, verificado)",
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L277"
+      "source_location": "L280"
     },
     {
       "id": "docs_contexto_pericia_quitumbe_estado_verificado_del_expediente_26_ago_2026",
@@ -21611,7 +21611,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L233",
+      "source_location": "L236",
       "weight": 1.0
     },
     {
@@ -21622,7 +21622,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L277",
+      "source_location": "L280",
       "weight": 1.0
     },
     {
@@ -21633,7 +21633,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L289",
+      "source_location": "L292",
       "weight": 1.0
     },
     {
@@ -21644,7 +21644,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L309",
+      "source_location": "L312",
       "weight": 1.0
     },
     {
@@ -21655,7 +21655,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L323",
+      "source_location": "L326",
       "weight": 1.0
     },
     {
@@ -21666,7 +21666,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L347",
+      "source_location": "L350",
       "weight": 1.0
     },
     {
@@ -21677,7 +21677,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L362",
+      "source_location": "L365",
       "weight": 1.0
     },
     {
@@ -21732,7 +21732,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L251",
+      "source_location": "L254",
       "weight": 1.0
     },
     {
@@ -21743,7 +21743,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L307",
+      "source_location": "L310",
       "weight": 1.0
     },
     {
@@ -21754,7 +21754,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L370",
+      "source_location": "L373",
       "weight": 1.0
     },
     {
@@ -21765,7 +21765,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L387",
+      "source_location": "L390",
       "weight": 1.0
     },
     {
@@ -21776,7 +21776,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CONTEXTO-PERICIA-QUITUMBE.md",
-      "source_location": "L396",
+      "source_location": "L399",
       "weight": 1.0
     },
     {
@@ -29535,5 +29535,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "1c225aa7a9af3433207b029b095b852b51dc36d8"
+  "built_at_commit": "7e113c20e48b4ce03057b1d4a5b11a4bff6131e4"
 }
