@@ -216,7 +216,7 @@ bloque del §4-ter en cada equipo, como administrador.
 
 | # | Máquina (marca real) | SO / build | CPU | RAM | Firmware | Secure Boot | BitLocker | Veredicto |
 |---|---|---|---|---|---|---|---|---|
-| **1** | **TOSHIBA Satellite C45-A** · serie `ZD045061C` | Windows **8.1 Pro** build 9600 | i5-3230M | 5,89 GB | UEFI | ⚠️ sin admin | ⚠️ sin admin | 🟢 **FAVORITA** — ver abajo |
+| **1** | **TOSHIBA Satellite C45-A** · serie `ZD045061C` | Windows **8.1 Pro** build 9600 | i5-3230M | 5,89 GB | UEFI | ⬜ falta elevado | ✅ **APAGADO** (verificado elevado) | 🟢 **ESTACIÓN ELEGIDA** |
 | **2** | **LENOVO 20HMA17F01** (ThinkPad E570) · serie `PC0UKTCE` | Windows 11 Pro build 22631 | i5-7200U | 15,9 GB | UEFI | **desactivado** (`UEFISecureBootEnabled = 0`) | ⚠️ sin admin | 🟡 Técnicamente la mejor, pero **confirmar si es la que se entrega ~15-sep** |
 | **3** | **"Lenovo azul"** | Windows 10 **Home** build 19045 | ? | ? | UEFI | ⚠️ sin admin | ⚠️ sin admin | 🟡 Pendiente. Detalle en §5.1.a |
 | **4** | **HP** | *sin identificar* | ? | ? | ? | ? | ? | ⬜ Sin correr el bloque |
@@ -241,15 +241,40 @@ bloque del §4-ter en cada equipo, como administrador.
 > Los equipos modernos son los que traen el riesgo (BitLocker automático, Secure Boot
 > no desactivable), y además son los que Gina usa a diario o va a entregar.
 
-### Lo que falta y no sale del bloque
+### BitLocker en la Toshiba: VERIFICADO Y APAGADO (26-ago-2026)
 
-- **`manage-bde -status C:` COMO ADMINISTRADOR.** En las corridas del 26-ago devolvió
-  *"se denegó un intento por tener acceso"* en las tres máquinas: la consola no era
-  elevada. Es el único dato que decide.
-- **Comprobar que arranca desde USB de verdad**, no suponerlo. Toshiba: **F2** para
-  la BIOS, **F12** para el menú de arranque.
-- **3 puertos USB** (arranque + indicio + destino) o lectora de DVD.
-- **Cargador**: en un equipo de 2013 la batería suele estar agotada.
+`manage-bde -status C:` en consola **elevada**:
+
+```
+Volumen C: []  [Volumen del sistema operativo]
+    Tamaño:                   356,56 GB
+    Versión de BitLocker:     Ninguno
+    Estado de conversión:     Descifrado completo
+    Porcentaje cifrado:       0,0%
+    Método de cifrado:        Ninguno
+    Estado de protección:     Protección desactivada
+    Estado de bloqueo:        Desbloqueado
+    Protectores de clave:     ninguno
+```
+
+**Consecuencia: se puede entrar a la BIOS y desactivar Secure Boot sin ningún riesgo
+de quedar fuera del equipo.** No hay clave de recuperación que rescatar porque no hay
+nada cifrado. Era el dato que bloqueaba la decisión.
+
+**Dato de paso:** el disco es de **356,56 GB**. Espacio de sobra, pero la imagen va a
+un **disco destino externo y limpio**, no al `C:` de la estación (§2.5).
+
+### Lo que falta para cerrar la estación
+
+- ⬜ **`Confirm-SecureBootUEFI` elevado.** Si da error *"no compatible"* → es Legacy
+  BIOS y Secure Boot ni existe (mejor todavía). Si da `True`/`False` → es UEFI y ya
+  se sabe si hay que desactivarlo.
+- ⬜ **Comprobar que arranca desde USB de verdad**, no suponerlo. Toshiba: **F2**
+  para la BIOS, **F12** para el menú de arranque.
+- ⬜ **3 puertos USB** (arranque + indicio + destino) o lectora de DVD.
+- ⬜ **Cargador**: en un equipo de 2013 la batería suele estar agotada.
+- ⬜ **Disco destino**: externo, vacío, formateado **exFAT o NTFS** (nunca FAT32: un
+  `.E01` puede pasar los 4 GB).
 
 **Ojo — desambiguación obligatoria:** la "Lenovo" que aparece en
 `caso-quitumbe/05_varios/peritaje quitumbe/` **NO es una máquina de Gina**. Es la
