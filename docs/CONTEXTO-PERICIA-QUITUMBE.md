@@ -252,6 +252,30 @@ manage-bde -status C:
   (`account.microsoft.com/devices/recoverykey`, o
   `manage-bde -protectors -get C:`).
 
+### 5.1.a Verificación registrada — equipo "Lenovo azul" (26-ago-2026)
+
+Chequeo corrido **sin privilegios de administrador** (limitación real, no se simuló
+nada). Resultado parcial:
+
+| Qué | Estado | Nota |
+|---|---|---|
+| SO | Windows 10 **Home**, build 19045 | Distinto de la máquina del análisis original (Win11 Pro 22631) |
+| Firmware | **UEFI** | ✅ compatible con boot de CAINE |
+| Secure Boot | ⚠️ **no verificable** | `Confirm-SecureBootUEFI` → "Acceso denegado" (requiere admin) |
+| BitLocker | ⚠️ **no verificable** | `manage-bde -status` y `Get-BitLockerVolume` → "Acceso denegado" (requiere admin) |
+| Python | ✅ 3.12.8 instalado | — |
+| `pytsk3` | ❌ no instalado | No descarta la máquina, se instala aparte (ver §5.2) |
+| `libewf-python` | ❌ no instalado | No descarta la máquina, se instala aparte (ver §5.2) |
+
+**Veredicto: PENDIENTE, no "sirve" ni "no sirve" todavía.** Falta exactamente lo que
+pide este §5.1: correr `Confirm-SecureBootUEFI` y `manage-bde -status C:` **como
+administrador** en este equipo. Windows 10 Home además tiene BitLocker más limitado
+que Pro (normalmente "Device Encryption" en vez de BitLocker completo) — otro motivo
+para no asumir el resultado sin correrlo elevado.
+
+Siguiente paso: repetir §5.1 en este equipo desde una terminal con "Ejecutar como
+administrador" y registrar aquí `Protection Off` / `Protection On`.
+
 ### 5.2 Decidir Camino A vs Camino B del procesador de imagen ⬜
 
 Probar si **`pytsk3`** y **`libewf-python`** instalan en el entorno real.
