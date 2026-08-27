@@ -872,6 +872,84 @@ era (b), un problema de configuración, no vencimiento natural.
 
 ---
 
+### 🔴-13 — ⬜ NO QUEDA UNA SOLA CUENTA EN `auth.users` DE NINGÚN PROYECTO DEL ECOSISTEMA — encontrado 26-ago-2026
+
+**Cómo apareció.** No se estaba auditando esto. Gina preguntó, a raíz de un
+fallo no relacionado de VS Code: *«me dijiste que borraste cuentas y es lo único
+que se me ocurre que fue por eso, dime qué encontraste»*. La comprobación se
+hizo para descartarlo. **No se descartó.**
+
+**El dato, medido el 26-ago-2026:**
+
+| Proyecto | `auth.users` | `auth.identities` | `auth.refresh_tokens` | `auth.audit_log_entries` |
+|---|---|---|---|---|
+| `sorsabsa-identity` (gyqgorgfstffbgazhbnb) | **0** | **0** | **0** | **0** |
+| `verticales_sorsabsa` (twkuidnjwhopbjnrhnxp) | **0** | **0** | **0** | **0** |
+| `agente24siete` (nwcqaginlnzjlkgwifas) | **0** | **0** | — | — |
+
+Una sola organización (`SORSABSA_Corp`), tres proyectos, los tres en cero.
+
+**Verificado en tres pasos antes de afirmarlo**, porque un cero puede ser una
+lectura bloqueada y no un dato — es la regla de `CLAUDE.md`, «verificar antes de
+afirmar»:
+
+1. *¿La conexión puede leer el esquema `auth`?* **Sí.**
+   `auth.schema_migrations` devuelve **77 filas** en los tres proyectos.
+2. *¿RLS está filtrando?* **No.** La consulta corre como `postgres`, y
+   `pg_roles` confirma `rolbypassrls = true` para ese rol.
+3. *¿La bitácora respalda o contradice?* `auth.audit_log_entries` está **vacía**
+   en los dos proyectos consultados. Esa tabla se llena sola con cada login: que
+   esté en cero no es neutral, indica que se fue junto con el resto.
+
+**Los datos de producto están intactos.** `justired.leyes` 87, `justired
+.inventario` 5.906, `justired.staff` 1 fila. No fue un reseteo de base: se vació
+`auth`, y sólo `auth`.
+
+**Contra qué se contrasta.** `legaltech/docs/mesa-de-trabajo-del-abogado.md`,
+fechado el **23-ago-2026**, registra dos mediciones de ese día: *«comprobado el
+23-ago-2026: viene vacío en las 6 cuentas»* y *«3 de 7 cuentas del ecosistema no
+traen nombre»*. Es decir: **entre el 23 y el 26 de agosto pasaron de ~7 a 0.**
+
+**Lo que NO se sabe, y no se va a suponer:** quién, cuándo y con qué comando. El
+único rastro que lo habría dicho —la bitácora de auth— también está vacío. Anotar
+aquí una causa probable sería exactamente el error que originó la regla de
+memoria de este ecosistema.
+
+**Lo que sí consta:** la sesión del 26-ago que encontró esto no ejecutó ninguna
+operación de borrado; su registro completo contra la base son consultas de
+lectura y un `create view` de sólo conteos (`justired.cobertura_biblioteca`).
+
+**Precedente en este mismo documento:** 🟡-1 registra que ya se borraron cuentas
+reales por SQL directo el 09-ago-2026, y lo cierra con *«es exactamente lo que la
+regla de desarrollo prohíbe… no debería volver a ser necesario»*. **Volvió a
+pasar, y esta vez completo.**
+
+**Consecuencias inmediatas, para que nadie las descubra probando:**
+
+- **Ningún login funciona en ningún producto del ecosistema.** No es un fallo de
+  federación: no hay contra qué autenticar.
+- Toda validación en vivo pendiente queda bloqueada — incluida la de
+  `AUDITORIA-JUSTIRED.md` §26-ago, y 🔴-11 de este documento en la parte de
+  JustiRed, que sigue esperando confirmación de Gina.
+- Las filas de membresía de cada producto (`justired.staff`, `justired.abogados`,
+  `perfiles` de CondoManager, `clientes` de agente24siete) **sobrevivieron**,
+  porque son tablas propias y se resuelven por correo. Al recrear una cuenta con
+  el mismo correo, la membresía se vuelve a enganchar sola. Eso es una propiedad
+  del diseño, no una casualidad — y hoy es lo único que abarata la recuperación.
+
+**Qué hace falta, en orden:**
+
+1. **Averiguar qué lo hizo.** Mientras no se sepa, recrear cuentas es reponer
+   agua en un balde agujereado. El registro de actividad del dashboard de
+   Supabase (fuera del alcance de las herramientas de sesión) es la única fuente
+   que queda.
+2. Recrear la cuenta de acceso de Gina —`gina.proanio76@gmail.com`, que ya tiene
+   su fila en `justired.staff` esperando— para desbloquear cualquier validación.
+3. Recrear las cuentas de clientes reales de agente24siete, que es donde esto
+   deja de ser una molestia de desarrollo.
+4. Decidir si `auth.users` debe tener respaldo propio. Hoy la respuesta a *«si
+   esto vuelve a pasar mañana, ¿de dónde se restaura?»* es **de ningún lado**.
+
 ## 🟠 ALTO
 
 ### 🟠-1 — ✅ Excepción hardcodeada `app === 'iot'` en /auth/complete — RESUELTO 08-ago-2026
@@ -1342,6 +1420,14 @@ cadena de "parche sobre parche" que ya costó caro hoy.
 ---
 
 ## Próximo paso
+
+> 🔴 **26-ago-2026 — lo primero, por encima de todo lo de abajo: 🔴-13.**
+> No queda una sola cuenta en `auth.users` de ninguno de los tres proyectos.
+> Ningún login del ecosistema funciona, y toda la lista que sigue —que se cierra
+> validando en vivo— está bloqueada hasta que eso se resuelva. Antes de recrear
+> nada hay que averiguar **qué lo hizo**, porque la bitácora de auth también se
+> borró y hoy no hay de dónde restaurar.
+
 
 🔴-1, 🔴-2/3, 🔴-4/🟠-1, 🔴-5, 🔴-7 (completado por 🔴-10, ver nota de
 auto-auditoría en 🔴-7), 🔴-9, 🔴-10, 🟠-3, 🟠-5 y 🔵-3 cerrados y
