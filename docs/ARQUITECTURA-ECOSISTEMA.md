@@ -557,6 +557,47 @@ vivo, responde `404` de la propia Railway (ninguna app con ese nombre). O
 se dio de baja y el código quedó con la referencia vieja, o vive en otra
 cuenta — sin confirmar, no se asume ninguna de las dos.
 
+### Inventario de repositorios — dónde vive cada uno · levantado 29-ago-2026
+
+Faltaba y se pidió varias veces. **Medido**, no recordado: `remote.origin.url`
+de cada carpeta y acceso comprobado con `gh api repos/…`.
+
+| Carpeta local | Remoto en GitHub | Visibilidad |
+|---|---|---|
+| `c:/diseno-sorsabsa` | `ginaproanio/diseno-sorsabsa` | pública |
+| `c:/iot/iot` | `ginaproanio/iot` | **privada** |
+| `c:/sorsabsa/SorsabsaForensic` | `ginaproanio/sorsabsaforensic` | **privada** |
+| `c:/legaltech` | `ginaproanio/legaltech` | — |
+| `c:/condomanager` | `ginaproanio/condomanager` | — |
+| `c:/crm_inmobiliario` | **`ginaproanio/domuscrm`** ← el nombre local NO coincide | — |
+| `c:/agente24siete` | `ginaproanio/agente24siete` | — |
+| `c:/auth-sorsabsa` | `ginaproanio/auth-sorsabsa` | — |
+| `c:/convertidor` | `ginaproanio/convertidor` | — |
+| `c:/geo-sorsabsa` | `ginaproanio/geo-sorsabsa` | — |
+| `c:/pagos-sorsabsa` | `ginaproanio/pagos-sorsabsa` | — |
+| `c:/notificaciones-sorsabsa` | `ginaproanio/notificaciones-sorsabsa` | — |
+| `c:/qa_sorsabsa` | `ginaproanio/qa_sorsabsa` | — |
+
+**Dos trampas que costaron tiempo el 29-ago-2026:**
+
+1. **`crm_inmobiliario` se llama `domuscrm` en GitHub.** La carpeta y el repo no
+   coinciden; buscar por el nombre de la carpeta no lo encuentra.
+2. **Los tokens de acceso personal *fine-grained* se conceden repo por repo.**
+   El token en uso alcanzaba diez repos pero no `iot` ni `sorsabsaforensic` —los
+   dos privados—, y `git push` moría con `403 Write access not granted` mientras
+   `gh api` devolvía `404 Not Found`. **Un 404 sobre un repo que existe no
+   significa que no exista: significa que el token no lo alcanza**, porque
+   GitHub oculta los privados fuera de alcance. Resuelto el 29-ago poniendo
+   ambos tokens (`analisis` y `token-IA-acciones`) en *All repositories*.
+
+**Qué comprueba el acceso, sin adivinar:**
+
+```
+gh api repos/ginaproanio/<repo> --jq '.permissions.push'
+```
+
+`true` = se puede empujar · `404` = el token no alcanza ese repo.
+
 ### R2: quién ya migró y quién no
 
 El §7 documenta la DECISIÓN (R2 reemplaza Supabase Storage). Esto es el
