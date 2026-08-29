@@ -486,7 +486,31 @@ no arreglaba su login.
   (agente24siete, JustiRed, IOT, Convertidor) porque su único punto de
   entrada por correo nunca tuvo el problema.
 
-### 🔴-8 — ⬜ El Send Email Hook de `sorsabsa-identity` NUNCA existió — todo correo automático de identity llega sin marca
+### 🔴-8 — ✅ El Send Email Hook de `sorsabsa-identity` NUNCA existió — RESUELTO 29-ago-2026
+
+> ✅ **RESUELTO el 29-ago-2026 por Gina**, creando el hook en el panel de
+> Supabase (`sorsabsa-identity` → Authentication → Auth Hooks → Send Email →
+> `https://auth.sorsabsa.com/api/auth-hook/send-email`). El
+> `SEND_EMAIL_HOOK_SECRET` que ya existía en Vercel era el correcto y no hubo
+> que rotarlo.
+>
+> **Comprobado con un envío real, no con una lectura de configuración.** Se
+> reinvitó a `patricio.marmol@hotmail.com` para `iot` a las 11:10:10 UTC:
+>
+> - `auth_logs` de identity, 11:10:14 → **`msg: "Hook ran successfully"`**, y
+>   **ya no aparece** el `mail_from: noreply@mail.app.supabase.io` que era la
+>   firma del fallo.
+> - Panel de Resend, 11:10:14 → asunto **«Confirma tu solicitud en IOT»**,
+>   destinatario correcto, estado **`delivered`**.
+>
+> Es decir: el correo salió por Resend, con la marca del producto, y llegó.
+> Contrastar con la medición de 19 días antes en la misma entrada.
+>
+> **Lo que esto desbloquea:** todo correo automático de identity —altas,
+> reseteos, y la recuperación de cuentas de 🔴-13— ya viaja por el canal con
+> marca. Era el último impedimento técnico para recrear cuentas.
+
+**Historial del hallazgo, se conserva:**
 
 - **Síntoma real (Gina, 09-ago-2026):** el correo de "recuperar contraseña"
   llegó con remitente/plantilla de Supabase, no de Resend/marca del producto.
@@ -525,6 +549,18 @@ no arreglaba su login.
   veces:** si `verticales_sorsabsa` (el proyecto de producto) SÍ tiene el
   hook configurado. No hay evidencia real de ninguno de los dos lados
   todavía — pendiente de otra captura de pantalla antes de afirmar nada.
+
+- **SIGUE ABIERTO, reconfirmado el 28-ago-2026 con un envío real** (no con una
+  lectura de código): al reinvitar a `patricio.marmol@hotmail.com` para `iot`,
+  los `auth_logs` de `sorsabsa-identity` registran a las 03:10:30 UTC
+  `msg: mail.send`, `mail_type: invite`, **`mail_from:
+  noreply@mail.app.supabase.io`**. Y el panel de Resend no muestra ningún envío
+  desde el 26-ago. Es exactamente el patrón de esta entrada, 19 días después:
+  el hook sigue sin existir y el correo sale por el SMTP genérico de Supabase.
+  **Consecuencia práctica:** el correo llega sin marca, por un remitente que
+  Hotmail y Outlook suelen mandar a spam, y bajo el límite de envíos del SMTP
+  por defecto. Mientras 🔴-8 siga abierto, toda alta o reseteo de identity
+  —incluida la recuperación de cuentas de 🔴-13— viaja por ese canal.
 
 ### 🔴-9 — ✅ El registro de admin creaba una fila de residente que nadie pidió — RESUELTO 09-ago-2026
 
@@ -901,6 +937,15 @@ afirmar»:
    en los dos proyectos consultados. Esa tabla se llena sola con cada login: que
    esté en cero no es neutral, indica que se fue junto con el resto.
 
+   > ⚠️ **Este paso 3 queda RETIRADO como evidencia — 28-ago-2026.** Se recreó
+   > la cuenta de Patricio en `sorsabsa-identity` con el Admin API (invite real,
+   > `auth.users` pasó de 0 a 1 filas, comprobado). **`auth.audit_log_entries`
+   > siguió en 0.** O sea: en este proyecto la bitácora no se llena, y su vacío
+   > no prueba que hubiera algo antes. Los pasos 1 y 2 siguen en pie y el
+   > hallazgo principal —cero cuentas— no cambia; lo que cae es el tercer
+   > respaldo. Se corrige acá y no en una nota aparte porque un argumento que ya
+   > no se sostiene, dejado como estaba, vuelve a citarse.
+
 **Los datos de producto están intactos.** `justired.leyes` 87, `justired
 .inventario` 5.906, `justired.staff` 1 fila. No fue un reseteo de base: se vació
 `auth`, y sólo `auth`.
@@ -949,6 +994,19 @@ pasar, y esta vez completo.**
    deja de ser una molestia de desarrollo.
 4. Decidir si `auth.users` debe tener respaldo propio. Hoy la respuesta a *«si
    esto vuelve a pasar mañana, ¿de dónde se restaura?»* es **de ningún lado**.
+
+**Avance registrado el 28-ago-2026.** Se recreó **una** cuenta, no todas:
+`patricio.marmol@hotmail.com` en `sorsabsa-identity`, con
+`auth-sorsabsa/scripts/invite-user.mjs` (`inviteUserByEmail`, app `iot`,
+`via=identity`) — **no con SQL contra `auth.users`**, que es lo que 🟡-1 dejó
+prohibido. Motivo: el caso Miraflores está por entregarse y sin cuenta nadie
+entra a corregir el informe. Estado: `invited_at` puesto, `confirmed_at` nulo —
+falta que Patricio abra el enlace y ponga su clave, y ese enlace viaja por el
+canal roto de 🔴-8.
+
+Sigue pendiente todo lo demás: **el punto 1 (qué lo causó) no se avanzó**, así
+que esta cuenta se repone sin saber si el balde sigue agujereado; y siguen sin
+recrearse la de Gina (punto 2) y las de clientes de agente24siete (punto 3).
 
 ## 🟠 ALTO
 
