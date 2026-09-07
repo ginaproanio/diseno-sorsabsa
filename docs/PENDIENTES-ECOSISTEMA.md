@@ -2686,3 +2686,58 @@ no una función que sepa de ambos productos.
 **Prioridad baja a propósito:** son 162 líneas entre los dos y hoy funcionan.
 Se anota para que la deriva no siga creciendo en silencio, no porque haya que
 hacerlo ya.
+
+---
+
+## 32. ⬜ DECISIÓN DE ARQUITECTURA — ¿la app de IoT escribe sola en R2, o el respaldo es manual? (29-ago-2026)
+
+**Planteado por Gina** al terminar el respaldo del expediente Miraflores:
+*"deja pendiente lo de que escriba sola en r2 es una decision de arquitectura"*.
+
+### Lo que HOY existe, y sus límites
+
+El 29-ago-2026 se creó el cubo **`iot-expedientes`** (privado, ENAM) y se subió
+el caso Miraflores: 212 archivos, 572 MB — los 15 cuerpos del expediente
+digitalizado, los 9 videos de la dinámica de reconstrucción, y el texto
+convertido con su análisis. Costo: **$0,0084/mes ≈ $0,10 al año**.
+
+**Se hizo con `wrangler` desde una sesión, a mano.** Eso tiene dos consecuencias
+que hay que mirar de frente:
+
+1. **Es una foto, no un respaldo vivo.** Refleja el estado del 29-ago. Cuando
+   Patricio corrija el informe, R2 no se entera. Un respaldo que no se actualiza
+   envejece hasta volverse engañoso — es el mismo problema que
+   `PENDIENTES-ECOSISTEMA.md` #7 documenta en `sorsabsa-expedientes`, cuyo
+   backup de 1,62 GB está desactualizado desde hace semanas.
+2. **No hizo falta token S3**, porque `wrangler` ya está autenticado con la
+   cuenta de Gina. En el momento en que la app escriba sola, sí hace falta —
+   y ahí entra la regla del ecosistema: **cada producto usa su propia
+   credencial, acotada a su propio cubo** (§7, y el precedente de que Gina paró
+   que un producto usara el token de otro).
+
+### Las tres opciones, con lo que cuesta cada una
+
+| | Qué es | A favor | En contra |
+|---|---|---|---|
+| **A. Manual** (hoy) | Alguien corre el respaldo cuando se acuerda | Cero código, cero credenciales nuevas | Envejece; depende de que alguien se acuerde. Ya pasó con `sorsabsa-expedientes` |
+| **B. Programado** | Un cron en Railway sincroniza el volumen a R2 | Sin tocar la app; el volumen sigue siendo la fuente | Necesita token S3 con alcance a `iot-expedientes`; hay que decidir cada cuánto |
+| **C. La app escribe sola** | IoT sube a R2 al guardar (como CondoManager con `unidad_fotos`) | Siempre al día; el volumen deja de ser único punto de pérdida | Cambia el código de `editor.py`; hay que decidir qué es fuente de verdad, volumen o R2, y qué pasa si R2 no responde |
+
+### Lo que hay que decidir antes de escribir una línea
+
+1. **¿Cuál es la fuente de verdad?** Hoy es el volumen de Railway. Si la app
+   escribe en los dos, ¿cuál manda cuando difieren?
+2. **¿Qué se respalda?** El expediente fuente no cambia nunca; el informe y las
+   fotos sí. No es lo mismo respaldar material inmutable que estado vivo.
+3. **¿Qué pasa si R2 falla al guardar?** Si el guardado del informe depende de
+   R2, una caída de Cloudflare deja al perito sin poder trabajar. Falla abierta
+   (guarda local y reintenta) o falla cerrada (no guarda) — hay que elegir.
+4. **¿El volumen sigue existiendo?** Railway cuesta $0,00216/GB-mes contra
+   $0,015 de R2 — el volumen es **7× más barato**. R2 no se paga por precio, se
+   paga por estar en otro sitio.
+
+### Lo que NO hay que discutir
+
+**El precio.** 572 MB son diez centavos al año. Cualquiera de las tres opciones
+cuesta lo mismo en almacenamiento. La decisión es de riesgo y de operación, no
+de costo.

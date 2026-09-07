@@ -636,6 +636,37 @@ wrangler r2 object get <bucket>/<key> --file=<ruta-destino> --remote
 wrangler r2 object delete <bucket>/<key> --remote
 ```
 
+> ### 🔴 `--remote` NO ES OPCIONAL, y olvidarlo FALLA EN SILENCIO — 29-ago-2026
+>
+> Los ejemplos de arriba ya lo llevaban, pero no decían qué pasa al omitirlo, y
+> eso es lo peligroso:
+>
+> ```
+> $ wrangler r2 object put iot-expedientes/miraflores/texto/README.md --file texto/README.md
+> Use --remote if you want to access the remote instance.
+> Creating object "miraflores/texto/README.md" in bucket "iot-expedientes".
+> Upload complete.          ← MENTIRA: no salió nada de la máquina
+> ```
+>
+> **Sin `--remote`, wrangler escribe en un cubo LOCAL simulado (Miniflare) y
+> responde `Upload complete` igual.** El aviso va en la primera línea, se pierde
+> entre la salida, y el mensaje de éxito es idéntico al de una subida real.
+>
+> **Cómo se comprueba que algo se subió de verdad** — no con `bucket_info`, que
+> se actualiza con retraso y marcaba `0 B` con objetos ya dentro:
+>
+> ```bash
+> wrangler r2 object get <bucket>/<key> --remote --pipe | head -3
+> ```
+>
+> Si devuelve el contenido, está en R2. Si no, no está. Y un `get` **sin**
+> `--remote` tampoco sirve como prueba: lee del cubo local y devuelve
+> exactamente lo mismo que acabas de escribir ahí.
+>
+> Se descubrió respaldando el expediente Miraflores. De no haberlo verificado,
+> se habría reportado un respaldo que no existía — el mismo patrón de fallo
+> silencioso que `AUDITORIA-CONVERTIDOR.md` 🔴-3 documenta en el Convertidor.
+
 **Límite real, no cosmético:** `wrangler r2 object` NO tiene subcomando
 `list` (solo `get`/`put`/`delete`, confirmado con `--help`) — para saber
 qué claves existen dentro de un cubo hay que conocerlas de antes (por
