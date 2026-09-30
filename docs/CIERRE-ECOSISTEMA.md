@@ -75,6 +75,40 @@ y **una sola llave de API activa**, `sorsabsa`, repartida en las variables de
 entorno de los servicios. Al ser la única, todo correo del ecosistema sale por
 ella, incluido el reseteo de contraseña del portero.
 
+### 1.3 · Railway — lo que cobra, proyecto por proyecto (medido el 29-sep)
+
+Con `railway usage`, no estimado. **La factura depende del consumo, no del
+precio del plan**: el plan más barato (Hobby, $5) incluye $5 de uso y el resto
+se paga aparte.
+
+| Proyecto | Qué es | 17-ago → 17-sep | 17-sep → 29-sep |
+|---|---|---|---|
+| `CONVERTIDOR` | motor del Convertidor — lo necesita el scraper de JustiRed | **$11,49** | $4,68 |
+| `PERITAJES-IOT` | IoT, con el volumen de los casos | $4,32 | $0,56 |
+| `Sorsabsa Foresics` | API web de SorsabsaForensic | $3,74 | $1,30 |
+| `SORSABSA-DATA` | Postgres de pagos y notificaciones | $1,09 | $0,49 |
+| `contenido-sorsabsa` | generador de contenido Facebook/YouTube (`ginaproanio/news`) + su Postgres | $0,99 | $0,41 |
+| `ALTITUD-WEB` | **el sitio de un cliente** (altitud.group) | $0,57 | $0,23 |
+| `geo-sorsabsa` | servicio de geolocalización | $0,40 | $0,16 |
+| **Total** | | **$22,59** | **$7,84** — Railway estima $14,25 al 17-oct |
+
+Al cancelar, Railway mantiene el plan hasta el fin del período ya pagado (su
+política publicada). El período en curso termina el **17-oct-2026**; después
+no hay garantía de que sigan los servicios ni sus datos.
+
+**Lo que se pierde si Railway se corta, además de IoT (§1.1):**
+
+- ⚠️ **`ALTITUD-WEB` es la web de un cliente.** Si Railway se corta, se cae el
+  sitio de Altitud. El código está en GitHub (`ginaproanio/Altitudweb`, una
+  app Vite); probablemente se puede mover a un hosting estático gratuito, pero
+  no se verificó ni se tocó. **Decisión de Gina.**
+- **`SORSABSA-DATA` guarda los registros de pagos y suscripciones** (incluido
+  el pago real de $9 del 22-ago). No se respaldó: hace falta un `pg_dump` con
+  su cadena de conexión, que no se leyó desde la sesión.
+- `contenido-sorsabsa` tiene su propio Postgres. Según
+  `ARQUITECTURA-ECOSISTEMA.md` no guarda los guiones; no se revisó su
+  contenido. El código está en GitHub.
+
 **Decisiones de Gina, 29-sep-2026:**
 
 1. **R2 se mantiene** (~$0,22 al mes).
@@ -218,8 +252,9 @@ gh auth login -h github.com
   recibir lo que compró? Retomar es tomar **un** producto y recorrerlo de punta
   a punta con un cliente real antes de construir nada más.
 - **Lo mínimo para devolverle el acceso a IoT:** saldar la factura de Supabase y
-  reactivar `sorsabsa-identity` y `verticales_sorsabsa`. IoT no necesita el
-  tercero (`agente24siete`).
+  reactivar `sorsabsa-identity` y `verticales_sorsabsa` (IoT no necesita el
+  tercero, `agente24siete`). Y, pasado el 17-oct, mantener Railway: IoT
+  consumió $4,32 entre el 17-ago y el 17-sep (§1.3).
 - El orden de lectura para retomar: este documento, `ARQUITECTURA-ECOSISTEMA.md`,
   `PENDIENTES-ECOSISTEMA.md` #26 y #8, `ESTANDAR-DESARROLLO.md`.
 
@@ -235,7 +270,7 @@ es lo que hace falta para que vuelva a trabajar sola.
 | Sitio público `www.justired.com` | Vercel | ✅ responde |
 | PDFs del Registro Oficial (`archivo.justired.com`) | R2 | ✅ responde — se sigue pagando (§1.2) |
 | Base de datos: biblioteca, inventario, cuentas | Supabase `verticales_sorsabsa` | ❌ **no responde** — pausada, factura impaga |
-| Motor del Convertidor (PDF → texto, OCR) | Railway | ✅ responde **por ahora** — Railway mantiene el plan hasta el fin del período pagado, y después no hay garantía |
+| Motor del Convertidor (PDF → texto, OCR) | Railway | ✅ responde **por ahora** — el período en curso termina el 17-oct, y después no hay garantía (§1.3) |
 | El scraper | GitHub Actions, todos los días a las 03:00 de Ecuador | ⚠️ encendido, pero falla en la prueba de conexión |
 
 **Lo mínimo para que el scraper vuelva a capturar leyes solo:**
@@ -243,10 +278,15 @@ es lo que hace falta para que vuelva a trabajar sola.
 1. **Supabase:** saldar la factura impaga y reactivar `verticales_sorsabsa`. La
    organización ya está en el plan gratuito, así que después de saldar no
    debería cobrar mensualidad.
-2. **Railway, solo el servicio del Convertidor:** el plan más barato es Hobby,
-   $5 al mes con $5 de uso incluido (precio oficial, 29-sep). El gratuito da
-   0,5 GB por servicio; casi seguro no alcanza para el OCR, que carga torch.
-   No se probó.
+2. **Railway, el servicio del Convertidor: ~$11,50 al mes tal como corre
+   hoy** — medido, $11,49 entre el 17-ago y el 17-sep (§1.3). *Corrección del
+   mismo día: una versión anterior de este punto decía "$5", que es el precio
+   del plan, no lo que consume el servicio.* Se podría bajar hacia ese piso de
+   $5 activando el modo *serverless* de Railway (el servicio duerme a los 5–10
+   minutos sin actividad), pero la primera petición a un servicio dormido
+   puede devolver 502, y hoy `scraper/test_conexion.py` le pega primero al
+   Convertidor: fallaría. Hace falta que el scraper lo despierte y reintente
+   antes. No está hecho ni probado.
 3. **R2:** ya se mantiene.
 4. **GitHub Actions:** gratis.
 
