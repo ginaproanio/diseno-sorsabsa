@@ -29,7 +29,7 @@ Los documentos se pueden reconstruir; esto no.
 | **Casos de IoT** — 4 casos, 1.102 archivos, 1,4 GB, incluida la *Causa Penal 17294-2026-00142 (Tumbaco)*, el caso activo de Patricio | Volumen `iot-volume` de Railway (servicio **aún en línea** el 29-sep) | Railway sin pago → el volumen se puede perder. **La copia local en `c:/iot/iot/cases/` NO alcanzaba**: al caso de Tumbaco le faltaban 42 de sus 61 archivos, y dos casos (`caso-26-01-vh-7089035` y el de María Susana) no tenían ninguna copia fuera de Railway | Volumen descargado entero — ver §1.1 | Sacar la copia de esta máquina |
 | **Expedientes forenses** — 30 GB | `c:/sorsabsa/expedientes_forenses`, **solo esta máquina**, fuera de git | Si la máquina se entrega o falla, se pierden. El respaldo en R2 (`sorsabsa-expedientes`, 1,62 GB) está desactualizado desde agosto (#7) | Nada — no cabe en GitHub | **Copiar a un disco externo** |
 | **Biblioteca procesada de JustiRed** (leyes, artículos, inventario) y las cuentas de Patricio y Susana | Supabase `verticales_sorsabsa` y `sorsabsa-identity`, **pausados** | Hay facturas impagas: `restore_project` devolvió `PaymentRequiredException` el 25-sep. Sin reactivar, no se puede exportar desde una sesión | — | Si se quiere conservar: Supabase → Billing. Verificar ahí si el backup de un proyecto pausado se puede descargar sin saldar |
-| PDFs del Registro Oficial (JustiRed), Miraflores al 29-ago, expedientes viejos | Cloudflare R2 (`archivo.justired.com`, `iot-expedientes`, `sorsabsa-expedientes`) | Bajo mientras la cuenta de Cloudflare exista. No se verificó el uso total contra la capa gratuita | — | — |
+| PDFs del Registro Oficial (JustiRed), Miraflores al 29-ago, expedientes viejos | Cloudflare R2 — 4 cubos, 24,7 GB (§1.2) | **Sigue cobrando** (~$0,22/mes). Guarda respaldos de expedientes reales: si se deja de pagar Cloudflare, también se pueden perder | Medido el 29-sep | Decidir si se mantiene (§1.2) |
 | El **esquema** de las tres bases | Commiteado en cada repo como migración base (Paso 0 de `PLAN-DESOLDADO.md`, probado en un proyecto vacío real el 07-ago) | Ninguno | — | — |
 
 ### 1.1 · El respaldo de IoT del 29-sep
@@ -48,6 +48,45 @@ copia.
 
 ⚠️ **Está en la misma máquina que se va a entregar.** No es un respaldo hasta
 que esté en otro lado.
+
+### 1.2 · R2 y Resend — lo que siguen costando y guardando (medido el 29-sep)
+
+**Cloudflare R2 — 24,7 GB en 4 cubos.** Los primeros 10 GB son gratis y el
+resto cuesta $0,015 por GB-mes (precio oficial, verificado ese día): **~$0,22
+por mes, ~$2,65 por año.** Es lo más barato de todo el ecosistema, y es donde
+viven respaldos de expedientes reales.
+
+| Cubo | Qué guarda | Objetos | Tamaño |
+|---|---|---|---|
+| `justired-registros-oficiales` | PDFs del Registro Oficial que bajó el scraper de JustiRed | 5.926 | 22,4 GB |
+| `sorsabsa-expedientes` | respaldo parcial y viejo de los 30 GB de `expedientes_forenses` | 2.335 | 1,73 GB |
+| `iot-expedientes` | caso Miraflores, foto del 29-ago | 212 | 600 MB |
+| `condomanager-inmuebles` | nada — nunca se usó | 0 | 0 |
+
+El scraper es lo único que hace crecer R2. Su corrida diaria (modo `full`)
+arranca leyendo su inventario de la base; con Supabase pausado casi seguro
+falla antes de subir nada. **No confirmado**: los registros de Actions
+necesitan el token de `gh`, que está vencido.
+
+**Resend — plan gratuito, $0.** Cuatro correos enviados en septiembre, cero
+contactos (no guarda datos de personas), cero webhooks. Queda configurado el
+dominio verificado `auth.sorsabsa.com` —sus registros DNS viven en Hostinger—
+y **una sola llave de API activa**, `sorsabsa`, repartida en las variables de
+entorno de los servicios. Al ser la única, todo correo del ecosistema sale por
+ella, incluido el reseteo de contraseña del portero.
+
+**Decisiones abiertas, de Gina — ninguna se ejecutó:**
+
+1. ¿Mantener R2? Recomendación: sí. Cuesta $0,22 al mes y protege respaldos
+   reales; si se deja de pagar, se arriesgan junto con todo lo demás.
+2. ¿Subir el respaldo de IoT (1,27 GB, §1.1) a `iot-expedientes`? Sería la
+   copia fuera de esta máquina que hoy falta. Suma ~$0,02 al mes.
+3. ¿Apagar el scraper de JustiRed? Quedó encendido por decisión de Gina en
+   `PLAN-DESOLDADO.md` —*"es lo único del ecosistema que genera contenido
+   solo"*—, pero con Supabase pausado esa razón ya no se cumple, y si falla
+   cada día, GitHub avisa por correo cada día.
+4. ¿Revocar la llave de Resend? Solo si no se va a reactivar IoT: sin ella no
+   sale el correo de reseteo de contraseña, y reactivar obligaría a crear otra.
 
 ---
 
