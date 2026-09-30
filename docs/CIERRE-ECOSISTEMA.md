@@ -97,7 +97,7 @@ Se deja escrito porque quien retome esto necesita saber qué no hay que rehacer.
 | 12 | Fotos de unidades a R2 | 🗄️ Funciona por script (presign → PUT → GET). Nunca se probó con el clic de un residente |
 | 13–14 | geo-sorsabsa, IoT al portero central | ✅ Hechos |
 | 15 | WhatsApp de agente24siete | 🗄️ **Todas** las cuentas del portafolio siguen baneadas por Meta. Sin canal, agente24siete no puede entregar lo que vende |
-| 16 | Pagos/suscripciones/referidos en todos los productos | 🗄️ CondoManager hecho. DomusCRM sin página de pago. JustiRed: el `sujeto` estable del pago se corrigió en código el 25-sep (`legaltech@e67cb49`) — **sin subir y sin probar en vivo**. El modelo de negocio de JustiRed (persona natural/jurídica, créditos de IA) nunca se definió |
+| 16 | Pagos/suscripciones/referidos en todos los productos | 🗄️ CondoManager hecho. DomusCRM sin página de pago. JustiRed: el `sujeto` estable del pago se corrigió en código el 25-sep (`legaltech@c170913`, subido el 29-sep) — **nunca probado en vivo**: Supabase ya estaba pausado. El modelo de negocio de JustiRed (persona natural/jurídica, créditos de IA) nunca se definió |
 | 17 | Correo masivo por tenant | 🗄️ Diseñado con Gina, nunca construido |
 | 18 | Patrón visual de los onboarding | ✅ Hecho |
 | 19 | Guard README/TODO de qa_sorsabsa | 🗄️ No construido — la decisión de alcance nunca se tomó |
@@ -141,13 +141,16 @@ geo-sorsabsa y qa_sorsabsa cerraron **todos** sus hallazgos.
 
 ## 7 · Repositorios al 29-sep
 
-- **Todo lo de este cierre está commiteado localmente**, repo por repo.
-- **Nada se pudo subir**: el token de GitHub de esta máquina está vencido
-  (`gh auth status`: *"The token in keyring is invalid"*). No es por el pago:
-  **GitHub Free sigue guardando repos privados sin costo.** Ver §8.
-- **Tareas programadas apagadas en código** (se aplica al subir): el QA cada 2
-  horas y los avisos diarios de vencimiento. Ambas iban a fallar sin parar
-  contra servicios caídos — el QA abriendo issues y mandando correo cada vez.
+- **Los 13 repos quedaron subidos a GitHub el 29-sep, cero commits
+  pendientes** (comprobado con `git rev-list @{u}..HEAD` en cada uno). Incluye
+  el fix de JustiRed del 25-sep, que no se había podido subir ese día.
+  **GitHub Free sigue guardando repos privados sin costo.**
+- Lo que sí está vencido es el token de la herramienta `gh` (*"The token in
+  keyring is invalid"*); `git push` funciona con la credencial que guarda
+  Windows. Solo importa para comandos `gh` — ver §8.
+- **Tareas programadas apagadas** (ya aplicado, se subió): el QA cada 2 horas
+  y los avisos diarios de vencimiento. Ambas iban a fallar sin parar contra
+  servicios caídos — el QA abriendo issues y mandando correo cada vez.
   **Se dejó encendido a propósito el scraper de JustiRed**: `PLAN-DESOLDADO.md`
   dice explícitamente "no apagarlo" y esa decisión es de Gina.
 - **Archivos que quedaron fuera de git, a propósito:**
@@ -158,20 +161,15 @@ geo-sorsabsa y qa_sorsabsa cerraron **todos** sus hallazgos.
     system, y todo lo que se commitea acá lo descarga cada `npm install` de cada
     producto.
 
-## 8 · Para subir todo a GitHub
+## 8 · GitHub, de acá en adelante
+
+Todo está subido (§7). Si más adelante hay algo nuevo que subir, `git push`
+desde cada repo alcanza. Para usar la herramienta `gh` (issues, workflows,
+estado de Actions) hay que renovar su token una vez:
 
 ```bash
 gh auth login -h github.com
-for r in agente24siete auth-sorsabsa condomanager convertidor crm_inmobiliario \
-         diseno-sorsabsa geo-sorsabsa legaltech notificaciones-sorsabsa \
-         pagos-sorsabsa qa_sorsabsa iot/iot; do
-  (cd "/c/$r" && echo "== $r" && git push)
-done
 ```
-
-Para cortar ya las tareas programadas sin esperar el push: en github.com, cada
-repo → **Actions** → el workflow → **⋯** → **Disable workflow**
-(`qa_sorsabsa/qa.yml`, `pagos-sorsabsa/avisos.yml`).
 
 ## 9 · Si algún día se retoma
 
