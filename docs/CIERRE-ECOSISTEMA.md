@@ -63,10 +63,10 @@ viven respaldos de expedientes reales.
 | `iot-expedientes` | caso Miraflores, foto del 29-ago | 212 | 600 MB |
 | `condomanager-inmuebles` | nada — nunca se usó | 0 | 0 |
 
-El scraper es lo único que hace crecer R2. Su corrida diaria (modo `full`)
-arranca leyendo su inventario de la base; con Supabase pausado casi seguro
-falla antes de subir nada. **No confirmado**: los registros de Actions
-necesitan el token de `gh`, que está vencido.
+El scraper es lo único que hace crecer R2, y **hoy no sube nada**. Antes de
+escanear corre `scraper/test_conexion.py`, que prueba Supabase, R2 y el
+Convertidor. El 29-sep Supabase no respondía a una petición real, así que esa
+prueba falla y el escaneo no arranca. Ver §10.
 
 **Resend — plan gratuito, $0.** Cuatro correos enviados en septiembre, cero
 contactos (no guarda datos de personas), cero webhooks. Queda configurado el
@@ -75,18 +75,15 @@ y **una sola llave de API activa**, `sorsabsa`, repartida en las variables de
 entorno de los servicios. Al ser la única, todo correo del ecosistema sale por
 ella, incluido el reseteo de contraseña del portero.
 
-**Decisiones abiertas, de Gina — ninguna se ejecutó:**
+**Decisiones de Gina, 29-sep-2026:**
 
-1. ¿Mantener R2? Recomendación: sí. Cuesta $0,22 al mes y protege respaldos
-   reales; si se deja de pagar, se arriesgan junto con todo lo demás.
-2. ¿Subir el respaldo de IoT (1,27 GB, §1.1) a `iot-expedientes`? Sería la
-   copia fuera de esta máquina que hoy falta. Suma ~$0,02 al mes.
-3. ¿Apagar el scraper de JustiRed? Quedó encendido por decisión de Gina en
-   `PLAN-DESOLDADO.md` —*"es lo único del ecosistema que genera contenido
-   solo"*—, pero con Supabase pausado esa razón ya no se cumple, y si falla
-   cada día, GitHub avisa por correo cada día.
-4. ¿Revocar la llave de Resend? Solo si no se va a reactivar IoT: sin ella no
-   sale el correo de reseteo de contraseña, y reactivar obligaría a crear otra.
+1. **R2 se mantiene** (~$0,22 al mes).
+2. **El respaldo de IoT no se sube a R2.** La única copia fuera de Railway
+   queda en esta máquina (§1.1).
+3. **El scraper de JustiRed sigue encendido**, *"por si algún día decido seguir
+   por mi cuenta"*. Mientras Supabase esté pausado, falla cada día y GitHub
+   avisa por correo. Ver §10.
+4. **La llave de Resend no se revoca.**
 
 ---
 
@@ -194,8 +191,9 @@ geo-sorsabsa y qa_sorsabsa cerraron **todos** sus hallazgos.
 - **Tareas programadas apagadas** (ya aplicado, se subió): el QA cada 2 horas
   y los avisos diarios de vencimiento. Ambas iban a fallar sin parar contra
   servicios caídos — el QA abriendo issues y mandando correo cada vez.
-  **Se dejó encendido a propósito el scraper de JustiRed**: `PLAN-DESOLDADO.md`
-  dice explícitamente "no apagarlo" y esa decisión es de Gina.
+  **El scraper de JustiRed sigue encendido**, por decisión de Gina: estaba en
+  `PLAN-DESOLDADO.md` y la reconfirmó el 29-sep para poder retomar JustiRed por
+  su cuenta (§1.2, §10).
 - **Archivos que quedaron fuera de git, a propósito:**
   - `camara-sorsabsa/tv-server.js` y lo que lo acompaña — tiene una **contraseña
     de cámara escrita en el código**. Commitearlo la dejaría en el historial
@@ -224,3 +222,40 @@ gh auth login -h github.com
   tercero (`agente24siete`).
 - El orden de lectura para retomar: este documento, `ARQUITECTURA-ECOSISTEMA.md`,
   `PENDIENTES-ECOSISTEMA.md` #26 y #8, `ESTANDAR-DESARROLLO.md`.
+
+## 10 · JustiRed — lo que necesita para seguir trabajando
+
+Gina decidió dejarla encendida para poder retomarla por su cuenta (§1.2). Esto
+es lo que hace falta para que vuelva a trabajar sola.
+
+**Estado el 29-sep, con peticiones reales:**
+
+| Pieza | Dónde | Estado |
+|---|---|---|
+| Sitio público `www.justired.com` | Vercel | ✅ responde |
+| PDFs del Registro Oficial (`archivo.justired.com`) | R2 | ✅ responde — se sigue pagando (§1.2) |
+| Base de datos: biblioteca, inventario, cuentas | Supabase `verticales_sorsabsa` | ❌ **no responde** — pausada, factura impaga |
+| Motor del Convertidor (PDF → texto, OCR) | Railway | ✅ responde **por ahora** — Railway mantiene el plan hasta el fin del período pagado, y después no hay garantía |
+| El scraper | GitHub Actions, todos los días a las 03:00 de Ecuador | ⚠️ encendido, pero falla en la prueba de conexión |
+
+**Lo mínimo para que el scraper vuelva a capturar leyes solo:**
+
+1. **Supabase:** saldar la factura impaga y reactivar `verticales_sorsabsa`. La
+   organización ya está en el plan gratuito, así que después de saldar no
+   debería cobrar mensualidad.
+2. **Railway, solo el servicio del Convertidor:** el plan más barato es Hobby,
+   $5 al mes con $5 de uso incluido (precio oficial, 29-sep). El gratuito da
+   0,5 GB por servicio; casi seguro no alcanza para el OCR, que carga torch.
+   No se probó.
+3. **R2:** ya se mantiene.
+4. **GitHub Actions:** gratis.
+
+Con esas cuatro piezas, el scraper debería retomar solo en su próxima corrida
+diaria: el cron sigue encendido y no hay que tocar código. Para que abogados,
+clientes y el curador puedan **entrar** hace falta además
+`sorsabsa-identity`, el segundo proyecto de Supabase.
+
+**Dónde está todo para retomarla:** código en el repo `legaltech` (GitHub
+`ginaproanio/legaltech`). Scraper en `scraper/`, con su `README.md`; qué
+comprueba antes de escanear, en `scraper/test_conexion.py`. Modelo de datos en
+`docs/modelo_justired.md` de este repo. Hallazgos en `AUDITORIA-JUSTIRED.md`.
