@@ -131,9 +131,13 @@ Se deja escrito porque quien retome esto necesita saber qué no hay que rehacer.
 Contados el 29-sep por encabezado con `⬜` y sin `✅`. CondoManager, DomusCRM,
 geo-sorsabsa y qa_sorsabsa cerraron **todos** sus hallazgos.
 
-- **`AUDITORIA-PORTERO-SSO.md` (9):** 🔴-13 — *las ~7 cuentas de los tres
-  proyectos desaparecieron entre el 23 y el 26-ago; la causa nunca se
-  estableció*; 🟠-4, 🟠-6, 🟠-10; 🟡-2, 🟡-3; 🔵-1, 🔵-2, 🔵-4.
+- **`AUDITORIA-PORTERO-SSO.md` (9):** 🔴-13 — las ~7 cuentas de los tres
+  proyectos desaparecieron entre el 23 y el 26-ago. **Causa, contada por Gina
+  al cierre (29-sep):** le pidió a una sesión de Claude *«borra los datos
+  basura»* y la sesión borró todo, incluidas las cuentas reales; después hubo
+  que recrear a mano la de Patricio y las de Gina. Casi todas eran de prueba,
+  porque el producto nunca tuvo usuarios reales. · 🟠-4, 🟠-6, 🟠-10; 🟡-2,
+  🟡-3; 🔵-1, 🔵-2, 🔵-4.
 - **`AUDITORIA-CONVERTIDOR.md` (3):** 🔴-1 (el párrafo no vuelve a fluir), 🔴-3
   (el motor descarta páginas en silencio), 🟡-2.
 - **`AUDITORIA-AGENTE24SIETE.md` (3):** 🟠-5, 🟡-1, 🟡-3.

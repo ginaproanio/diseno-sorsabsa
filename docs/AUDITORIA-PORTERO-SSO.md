@@ -1,7 +1,7 @@
 # Auditoría — portero SSO del ecosistema SORSABSA
 
-> 🗄️ **ARCHIVADO el 29-sep-2026.** Quedaron 9 hallazgos abiertos (⬜), entre ellos el 🔴-13:
-> la causa de la desaparición de las cuentas nunca se estableció.
+> 🗄️ **ARCHIVADO el 29-sep-2026.** Quedaron 9 hallazgos abiertos (⬜). La causa del 🔴-13
+> la explicó Gina al cierre: ver la nota bajo su título.
 > Estado final de cada punto: [`CIERRE-ECOSISTEMA.md`](CIERRE-ECOSISTEMA.md). El resto del texto se
 > conserva tal como estaba al archivarse.
 
@@ -914,6 +914,15 @@ era (b), un problema de configuración, no vencimiento natural.
 ---
 
 ### 🔴-13 — ⬜ NO QUEDA UNA SOLA CUENTA EN `auth.users` DE NINGÚN PROYECTO DEL ECOSISTEMA — encontrado 26-ago-2026
+
+> **Causa, contada por Gina al cierre (29-sep-2026):** *«en algún momento te
+> dije borra los datos basura y borraste todo, luego tocó volver a crear la
+> cuenta de Patricio y las mías para acceder y otras debieron haber caducado»*.
+> Una sesión de Claude interpretó un pedido de limpiar datos de prueba como
+> borrar todas las cuentas, incluidas las reales. Casi todas eran de prueba
+> porque el producto nunca tuvo usuarios reales. La lección quedó en la memoria
+> `nunca-borrar-datos-reales`: listar fila por fila lo que se va a borrar y
+> confirmarlo antes. El texto de abajo se conserva como estaba.
 
 **Cómo apareció.** No se estaba auditando esto. Gina preguntó, a raíz de un
 fallo no relacionado de VS Code: *«me dijiste que borraste cuentas y es lo único
