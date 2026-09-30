@@ -2563,7 +2563,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-10 \u2014 \u2b1c condomanager muestra un rechazo de negocio cuando lo que fallo es la red \u2014 encontrado 16-ago-2026",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1222"
+      "source_location": "L1231"
     },
     {
       "id": "docs_auditoria_portero_sso_1_excepci\u00f3n_hardcodeada_app_iot_en_auth_complete_resuelto_08_ago_2026",
@@ -2575,7 +2575,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-1 \u2014 \u2705 excepcion hardcodeada `app === 'iot'` en /auth/complete \u2014 resuelto 08-ago-2026",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1018"
+      "source_location": "L1027"
     },
     {
       "id": "docs_auditoria_portero_sso_2_resuelto_15_ago_2026_commit_auth_sorsabsa_bc38ca1_bypass_de_entitlements_hardcodeado_por_nombre_de_producto",
@@ -2587,7 +2587,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-2 \u2014 \u2705 resuelto 15-ago-2026, commit `auth-sorsabsa@bc38ca1` \u2014 bypass de entitlements hardcodeado por nombre de producto",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1032"
+      "source_location": "L1041"
     },
     {
       "id": "docs_auditoria_portero_sso_3_autorizaci\u00f3n_duplicada_en_dos_archivos_de_iot_corregido_09_ago_2026",
@@ -2599,7 +2599,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-3 \u2014 \u2705 autorizacion duplicada en dos archivos de iot \u2014 corregido 09-ago-2026",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1328"
+      "source_location": "L1337"
     },
     {
       "id": "docs_auditoria_portero_sso_4_identidades_por_email_hardcodea_dos_emails_en_c\u00f3digo_fuente",
@@ -2611,7 +2611,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-4 \u2014 \u2b1c `identidades_por_email` hardcodea dos emails en codigo fuente",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1339"
+      "source_location": "L1348"
     },
     {
       "id": "docs_auditoria_portero_sso_5_condomanager_ten\u00eda_dos_logouts_locales_ambos_corregidos",
@@ -2623,7 +2623,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-5 \u2014 \u2705 condomanager tenia dos logouts locales \u2014 ambos corregidos",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1353"
+      "source_location": "L1362"
     },
     {
       "id": "docs_auditoria_portero_sso_6_el_logout_de_condomanager_calcula_el_destino_correcto_y_el_portero_lo_descarta_en_silencio_encontrado_16_ago_2026",
@@ -2635,7 +2635,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-6 \u2014 \u2b1c el logout de condomanager calcula el destino correcto y el portero lo descarta en silencio \u2014 encontrado 16-ago-2026",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1068"
+      "source_location": "L1077"
     },
     {
       "id": "docs_auditoria_portero_sso_7_el_portero_no_ten\u00eda_est\u00e1ndar_del_lado_del_consumidor_el_mismo_rechazo_terminaba_de_seis_maneras_encontrado_16_ago_2026",
@@ -2647,7 +2647,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-7 \u2014 \ud83d\udd27 el portero no tenia estandar del lado del consumidor: el mismo rechazo terminaba de seis maneras \u2014 encontrado 16-ago-2026",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1113"
+      "source_location": "L1122"
     },
     {
       "id": "docs_auditoria_portero_sso_8_corregido_16_ago_2026_commit_iot_4400bee_iot_trataba_esta_cuenta_no_opera_iot_como_no_hay_sesi\u00f3n",
@@ -2659,7 +2659,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-8 \u2014 \u2705 corregido 16-ago-2026, commit `iot@4400bee` \u2014 iot trataba \"esta cuenta no opera iot\" como \"no hay sesion\"",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1243"
+      "source_location": "L1252"
     },
     {
       "id": "docs_auditoria_portero_sso_9_el_salir_de_convertidor_no_pasaba_por_el_logout_central_corregido_16_ago_2026",
@@ -2671,7 +2671,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0-9 \u2014 \u2705 el \"salir\" de convertidor no pasaba por el logout central \u2014 corregido 16-ago-2026",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1283"
+      "source_location": "L1292"
     },
     {
       "id": "docs_auditoria_portero_sso_alto",
@@ -2683,7 +2683,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe0 alto",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1016"
+      "source_location": "L1025"
     },
     {
       "id": "docs_pendientes_ecosistema_18_resuelto_09_ago_2026_sin_patr\u00f3n_visual_compartido_entre_los_onboarding_propios_condomanager_domuscrm",
@@ -8002,7 +8002,7 @@
       "node_kind": "heading",
       "norm_label": "7 \u00b7 repositorios al 29-sep",
       "source_file": "docs/CIERRE-ECOSISTEMA.md",
-      "source_location": "L142"
+      "source_location": "L146"
     },
     {
       "id": "docs_cierre_ecosistema_8_github_de_ac\u00e1_en_adelante",
@@ -8014,7 +8014,7 @@
       "node_kind": "heading",
       "norm_label": "8 \u00b7 github, de aca en adelante",
       "source_file": "docs/CIERRE-ECOSISTEMA.md",
-      "source_location": "L164"
+      "source_location": "L168"
     },
     {
       "id": "docs_cierre_ecosistema_9_si_alg\u00fan_d\u00eda_se_retoma",
@@ -8026,7 +8026,7 @@
       "node_kind": "heading",
       "norm_label": "9 \u00b7 si algun dia se retoma",
       "source_file": "docs/CIERRE-ECOSISTEMA.md",
-      "source_location": "L174"
+      "source_location": "L178"
     },
     {
       "id": "docs_cierre_ecosistema_cierre_del_ecosistema_sorsabsa_29_sep_2026",
@@ -13235,7 +13235,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe1-1 \u2014 \u2705 eliminacion manual de cuentas reales via sql directo \u2014 reconocido, no repetir",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1372"
+      "source_location": "L1381"
     },
     {
       "id": "docs_auditoria_portero_sso_1_iot_redirecturl_es_una_url_cruda_de_railway_no_dominio_propio",
@@ -13247,7 +13247,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udd35-1 \u2014 \u2b1c `iot.redirecturl` es una url cruda de railway, no dominio propio",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1424"
+      "source_location": "L1433"
     },
     {
       "id": "docs_auditoria_portero_sso_2_3_fallback_que_trata_no_configurado_como_estado_v\u00e1lido_en_el_motor_de_cobros_pagos_api_key_rotada_y_verificada",
@@ -13271,7 +13271,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udd35-2 \u2014 \u2b1c fallback basado en el texto de un error de un proveedor externo",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1427"
+      "source_location": "L1436"
     },
     {
       "id": "docs_auditoria_portero_sso_2_profile_choices_con_nombres_reales_hardcodeados_en_editor_py",
@@ -13283,7 +13283,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe1-2 \u2014 \u2b1c `profile_choices` con nombres reales hardcodeados en editor.py",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1380"
+      "source_location": "L1389"
     },
     {
       "id": "docs_auditoria_portero_sso_3_reset_dual_via_identity_via_producto_normaliza_el_problema_en_vez_de_resolverlo",
@@ -13295,7 +13295,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe1-3 \u2014 \u2b1c reset dual (via=identity/via=producto) normaliza el problema en vez de resolverlo",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1414"
+      "source_location": "L1423"
     },
     {
       "id": "docs_auditoria_portero_sso_3_url_del_sso_escrita_a_mano_y_repetida_4_veces_en_condomanager_resuelto_09_ago_2026",
@@ -13307,7 +13307,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udd35-3 \u2014 \u2705 url del sso escrita a mano y repetida 4 veces en condomanager \u2014 resuelto 09-ago-2026",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1431"
+      "source_location": "L1440"
     },
     {
       "id": "docs_auditoria_portero_sso_4_corregido_15_ago_2026_el_registro_del_portero_ped\u00eda_nombre_completo_el_arreglo_se_hizo_en_un_producto_y_no_en_el_compartido",
@@ -13319,7 +13319,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe1-4 \u2014 \u2705 corregido 15-ago-2026 \u2014 el registro del portero pedia \"nombre completo\": el arreglo se hizo en un producto y no en el compartido",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1384"
+      "source_location": "L1393"
     },
     {
       "id": "docs_auditoria_portero_sso_4_funciona_por_casualidad_admitido_en_el_propio_c\u00f3digo_resuelto_08_ago_2026",
@@ -13343,7 +13343,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udd35-4 \u2014 \u2b1c traduccion de errores de supabase duplicada entre repos, a proposito, con seguimiento",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1442"
+      "source_location": "L1451"
     },
     {
       "id": "docs_auditoria_portero_sso_5_agente24siete_nadie_puede_loguearse_la_federaci\u00f3n_con_identity_nunca_se_registr\u00f3_ah\u00ed_resuelto_09_ago_2026",
@@ -13367,7 +13367,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udd35-5 \u2014 \u2705 importar residentes insertaba fila por fila \u2014 inviable a la escala real de punta blanca \u2014 resuelto 09-ago-2026",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1458"
+      "source_location": "L1467"
     },
     {
       "id": "docs_auditoria_portero_sso_6_resuelto_09_ago_2026_falta_solo_probar_en_vivo_un_mensaje_real_el_bypass_de_5_desconecta_el_\u00fanico_uso_real_de_pagos_suscripciones_los_d\u00edas_ganados_por_el_programa_de_referidos",
@@ -13439,7 +13439,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udd35 bajo",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1422"
+      "source_location": "L1431"
     },
     {
       "id": "docs_auditoria_portero_sso_cr\u00edtico",
@@ -13475,7 +13475,7 @@
       "node_kind": "heading",
       "norm_label": "\ud83d\udfe1 medio",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1370"
+      "source_location": "L1379"
     },
     {
       "id": "docs_auditoria_portero_sso_pr\u00f3ximo_paso",
@@ -13487,7 +13487,7 @@
       "node_kind": "heading",
       "norm_label": "proximo paso",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1485"
+      "source_location": "L1494"
     },
     {
       "id": "showcase_src_lib_card",
@@ -24327,7 +24327,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1018",
+      "source_location": "L1027",
       "weight": 1.0
     },
     {
@@ -24338,7 +24338,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1032",
+      "source_location": "L1041",
       "weight": 1.0
     },
     {
@@ -24349,7 +24349,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1068",
+      "source_location": "L1077",
       "weight": 1.0
     },
     {
@@ -24360,7 +24360,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1113",
+      "source_location": "L1122",
       "weight": 1.0
     },
     {
@@ -24371,7 +24371,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1222",
+      "source_location": "L1231",
       "weight": 1.0
     },
     {
@@ -24382,7 +24382,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1243",
+      "source_location": "L1252",
       "weight": 1.0
     },
     {
@@ -24393,7 +24393,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1283",
+      "source_location": "L1292",
       "weight": 1.0
     },
     {
@@ -24404,7 +24404,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1328",
+      "source_location": "L1337",
       "weight": 1.0
     },
     {
@@ -24415,7 +24415,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1339",
+      "source_location": "L1348",
       "weight": 1.0
     },
     {
@@ -24426,7 +24426,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1353",
+      "source_location": "L1362",
       "weight": 1.0
     },
     {
@@ -24437,7 +24437,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1016",
+      "source_location": "L1025",
       "weight": 1.0
     },
     {
@@ -24448,7 +24448,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1370",
+      "source_location": "L1379",
       "weight": 1.0
     },
     {
@@ -24459,7 +24459,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1422",
+      "source_location": "L1431",
       "weight": 1.0
     },
     {
@@ -24470,7 +24470,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1485",
+      "source_location": "L1494",
       "weight": 1.0
     },
     {
@@ -24503,7 +24503,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1424",
+      "source_location": "L1433",
       "weight": 1.0
     },
     {
@@ -24514,7 +24514,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1427",
+      "source_location": "L1436",
       "weight": 1.0
     },
     {
@@ -24525,7 +24525,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1431",
+      "source_location": "L1440",
       "weight": 1.0
     },
     {
@@ -24536,7 +24536,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1442",
+      "source_location": "L1451",
       "weight": 1.0
     },
     {
@@ -24547,7 +24547,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1458",
+      "source_location": "L1467",
       "weight": 1.0
     },
     {
@@ -24690,7 +24690,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1372",
+      "source_location": "L1381",
       "weight": 1.0
     },
     {
@@ -24701,7 +24701,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1380",
+      "source_location": "L1389",
       "weight": 1.0
     },
     {
@@ -24712,7 +24712,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1384",
+      "source_location": "L1393",
       "weight": 1.0
     },
     {
@@ -24723,7 +24723,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1414",
+      "source_location": "L1423",
       "weight": 1.0
     },
     {
@@ -24855,7 +24855,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CIERRE-ECOSISTEMA.md",
-      "source_location": "L142",
+      "source_location": "L146",
       "weight": 1.0
     },
     {
@@ -24866,7 +24866,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CIERRE-ECOSISTEMA.md",
-      "source_location": "L164",
+      "source_location": "L168",
       "weight": 1.0
     },
     {
@@ -24877,7 +24877,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CIERRE-ECOSISTEMA.md",
-      "source_location": "L174",
+      "source_location": "L178",
       "weight": 1.0
     },
     {
@@ -33496,7 +33496,7 @@
       "confidence_score": 0.95,
       "context": "Footer",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1307",
+      "source_location": "L1316",
       "weight": 1.0
     },
     {
@@ -33652,7 +33652,7 @@
       "confidence_score": 0.95,
       "context": "SinAcceso",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1237",
+      "source_location": "L1246",
       "weight": 1.0
     },
     {
@@ -33664,7 +33664,7 @@
       "confidence_score": 0.95,
       "context": "SinAcceso",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1198",
+      "source_location": "L1207",
       "weight": 1.0
     },
     {
@@ -33676,7 +33676,7 @@
       "confidence_score": 0.95,
       "context": "SinAcceso",
       "source_file": "docs/AUDITORIA-PORTERO-SSO.md",
-      "source_location": "L1299",
+      "source_location": "L1308",
       "weight": 1.0
     },
     {
@@ -34077,5 +34077,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "eb1fc28e2bb601fb49c5b0465eee24552921fd2d"
+  "built_at_commit": "9e1598c74c3b1ff4328e9973c1a8616598bdf3a1"
 }
