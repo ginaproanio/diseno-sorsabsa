@@ -8005,16 +8005,16 @@
       "source_location": "L142"
     },
     {
-      "id": "docs_cierre_ecosistema_8_para_subir_todo_a_github",
-      "label": "8 \u00b7 Para subir todo a GitHub",
+      "id": "docs_cierre_ecosistema_8_github_de_ac\u00e1_en_adelante",
+      "label": "8 \u00b7 GitHub, de ac\u00e1 en adelante",
       "_origin": "ast",
       "community": 36,
       "community_name": "Cierre del ecosistema SORSABSA \u2014 29-sep-2026",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "8 \u00b7 para subir todo a github",
+      "norm_label": "8 \u00b7 github, de aca en adelante",
       "source_file": "docs/CIERRE-ECOSISTEMA.md",
-      "source_location": "L161"
+      "source_location": "L164"
     },
     {
       "id": "docs_cierre_ecosistema_9_si_alg\u00fan_d\u00eda_se_retoma",
@@ -8026,7 +8026,7 @@
       "node_kind": "heading",
       "norm_label": "9 \u00b7 si algun dia se retoma",
       "source_file": "docs/CIERRE-ECOSISTEMA.md",
-      "source_location": "L176"
+      "source_location": "L174"
     },
     {
       "id": "docs_cierre_ecosistema_cierre_del_ecosistema_sorsabsa_29_sep_2026",
@@ -24860,13 +24860,13 @@
     },
     {
       "source": "docs_cierre_ecosistema_cierre_del_ecosistema_sorsabsa_29_sep_2026",
-      "target": "docs_cierre_ecosistema_8_para_subir_todo_a_github",
+      "target": "docs_cierre_ecosistema_8_github_de_ac\u00e1_en_adelante",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CIERRE-ECOSISTEMA.md",
-      "source_location": "L161",
+      "source_location": "L164",
       "weight": 1.0
     },
     {
@@ -24877,7 +24877,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/CIERRE-ECOSISTEMA.md",
-      "source_location": "L176",
+      "source_location": "L174",
       "weight": 1.0
     },
     {
@@ -34077,5 +34077,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "ac3793e692cdecd47518ace50295e0203d459240"
+  "built_at_commit": "eb1fc28e2bb601fb49c5b0465eee24552921fd2d"
 }
