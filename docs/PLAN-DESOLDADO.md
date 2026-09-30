@@ -1,5 +1,10 @@
 # Plan de desoldado del ecosistema SORSABSA
 
+> 🗄️ **ARCHIVADO el 29-sep-2026.** Pasos 0, 1 y 2 hechos y probados. **El Paso 3 nunca se
+> ejecutó**: los tres productos siguen compartiendo una base.
+> Estado final de cada punto: [`CIERRE-ECOSISTEMA.md`](CIERRE-ECOSISTEMA.md). El resto del texto se
+> conserva tal como estaba al archivarse.
+
 Escrito el 31-jul-2026, después de la respuesta de Supabase (soporte,
 Gabriel Claudino, sobre el ticket de JWT signing keys congeladas en
 `twkuidnjwhopbjnrhnxp`): un proyecto Supabase no puede compartir llave/`kid`

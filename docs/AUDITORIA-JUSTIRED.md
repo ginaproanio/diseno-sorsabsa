@@ -1,5 +1,9 @@
 # Auditoría — JustiRed (legaltech)
 
+> 🗄️ **ARCHIVADO el 29-sep-2026.** Quedó abierta la lista "Pendiente, en orden".
+> Estado final de cada punto: [`CIERRE-ECOSISTEMA.md`](CIERRE-ECOSISTEMA.md). El resto del texto se
+> conserva tal como estaba al archivarse.
+
 **Abierta:** 10-ago-2026. **Regla que gobierna esta auditoría:**
 [ESTANDAR-DESARROLLO.md](./ESTANDAR-DESARROLLO.md) — ningún hallazgo se
 corrige sin presentar antes el análisis de 9 puntos (síntoma, causa

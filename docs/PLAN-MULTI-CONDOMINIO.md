@@ -1,5 +1,9 @@
 # Plan — una persona en más de un condominio (CondoManager)
 
+> 🗄️ **ARCHIVADO el 29-sep-2026.** Fases 0–3 hechas. **Fases 4–8 no.**
+> Estado final de cada punto: [`CIERRE-ECOSISTEMA.md`](CIERRE-ECOSISTEMA.md). El resto del texto se
+> conserva tal como estaba al archivarse.
+
 **Abierto:** 09-ago-2026. **Origen:** Gina preguntó si el sistema deja
 elegir a qué condominio entrar cuando una persona tiene propiedades en más
 de uno — la respuesta, verificada contra el esquema real, fue que no: hay

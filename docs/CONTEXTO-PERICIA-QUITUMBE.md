@@ -1,5 +1,8 @@
 # Contexto — Pericia QUITUMBE: adquisición del indicio USB
 
+> 🗄️ **CERRADO el 29-sep-2026 — el juez cambió de perito.** Esta adquisición
+> nunca se ejecutó (Gina). Se conserva como registro. Ver [`CIERRE-ECOSISTEMA.md`](CIERRE-ECOSISTEMA.md).
+
 **Abierto:** 26-ago-2026. **Para qué existe:** retomar este análisis en otra máquina
 sin repetir la investigación. Si el repo está en el equipo nuevo, basta con decir:
 *"Lee `docs/CONTEXTO-PERICIA-QUITUMBE.md` y retomamos desde ahí"*. Si no está, este

@@ -1,5 +1,9 @@
 # Plan — Reordenar Configuración/Parametrización de CondoManager
 
+> 🗄️ **ARCHIVADO el 29-sep-2026.** Hecho. Lo único que quedó sin hacer es la validación en vivo.
+> Estado final de cada punto: [`CIERRE-ECOSISTEMA.md`](CIERRE-ECOSISTEMA.md). El resto del texto se
+> conserva tal como estaba al archivarse.
+
 Nace de una pregunta de Gina sobre si se puede compartir una URL directa a
 un condominio, que llevó a revisar el menú de Configuración completo.
 Confirmado con lectura de código, no supuesto — ver hilo en el chat del

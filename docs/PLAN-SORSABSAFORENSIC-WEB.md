@@ -1,5 +1,9 @@
 # Plan — SorsabsaForensic a la web (herramienta de perito + servicio público)
 
+> 🗄️ **ARCHIVADO el 29-sep-2026.** Fases 0–3 y 4-bis hechas. **Fases 4 y 5 no.**
+> Estado final de cada punto: [`CIERRE-ECOSISTEMA.md`](CIERRE-ECOSISTEMA.md). El resto del texto se
+> conserva tal como estaba al archivarse.
+
 **Abierto:** 15-ago-2026. **Precedente de formato:** `PLAN-DESOLDADO.md`.
 **Tracker que lo referencia:** `PENDIENTES-ECOSISTEMA.md` #7.
 

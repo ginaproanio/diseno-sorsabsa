@@ -1,5 +1,9 @@
 # Auditoría del Convertidor — hallazgos de uso real
 
+> 🗄️ **ARCHIVADO el 29-sep-2026.** Quedaron 3 hallazgos abiertos (⬜): 🔴-1, 🔴-3 y 🟡-2.
+> Estado final de cada punto: [`CIERRE-ECOSISTEMA.md`](CIERRE-ECOSISTEMA.md). El resto del texto se
+> conserva tal como estaba al archivarse.
+
 Abierto el **28-ago-2026**, convirtiendo el expediente Miraflores (15 cuerpos,
 2.666 hojas escaneadas, 100% sin capa de texto) contra
 `api.convertidor.sorsabsa.com` v1.6.0.

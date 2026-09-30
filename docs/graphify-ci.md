@@ -1,5 +1,10 @@
 # Grafo de conocimiento (graphify) generado por CI
 
+> 🗄️ **ARCHIVADO el 29-sep-2026.** Los workflows siguen corriendo en cada push. El 23-ago Gina
+> concluyó que el grafo no se gana el puesto (`PENDIENTES-ECOSISTEMA.md` #30).
+> Estado final de cada punto: [`CIERRE-ECOSISTEMA.md`](CIERRE-ECOSISTEMA.md). El resto del texto se
+> conserva tal como estaba al archivarse.
+
 > Infraestructura del ecosistema SORSABSA. Montado el 18 jul 2026.
 > Reemplaza los hooks locales (dependían de una máquina, se apagaban en
 > silencio) por generación en la nube (GitHub Actions).

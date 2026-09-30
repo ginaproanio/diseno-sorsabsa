@@ -1,11 +1,17 @@
 # Pendientes del ecosistema SORSABSA
 
+> 🗄️ **ARCHIVADO el 29-sep-2026.** Todo ítem que seguía abierto quedó cerrado **sin terminar**, no hecho.
+> Se marcan con 🗄️ en su título; el emoji que sigue es el estado que tenían
+> al archivarse.
+> Estado final de cada punto: [`CIERRE-ECOSISTEMA.md`](CIERRE-ECOSISTEMA.md). El resto del texto se
+> conserva tal como estaba al archivarse.
+
 Lista viva de lo que falta, en orden de prioridad. Se va anotando a medida que
 aparece. Fuente de arquitectura: `ARQUITECTURA-ECOSISTEMA.md`. El plan paso a
 paso del desoldado vive en [`PLAN-DESOLDADO.md`](PLAN-DESOLDADO.md) — este doc
 es la lista de trabajo suelto, no el plan en sí.
 
-Última actualización: 2026-08-22.
+Última actualización: 2026-09-29 — cierre del proyecto.
 
 ## Principio que gobierna (regla dura)
 
@@ -85,7 +91,7 @@ todo. Cerrado 08-ago-2026, aplicado en vivo vía Supabase MCP y verificado con
 real: ya no existe. El org `SORSABSA_Corp` tiene 3 proyectos: `condomanager`,
 `sorsabsa-identity`, `agente24siete`.
 
-## 7. 🟡 SorsabsaForensic → Fase 0 arrancada de verdad, no completa — servicio de correo en Railway, el resto sigue local
+## 7. 🗄️ 🟡 SorsabsaForensic → Fase 0 arrancada de verdad, no completa — servicio de correo en Railway, el resto sigue local
 
 **➡️ El plan completo vive en [`PLAN-SORSABSAFORENSIC-WEB.md`](PLAN-SORSABSAFORENSIC-WEB.md)
 (15-ago-2026) — este punto es el resumen, el plan manda.** Incluye el modelo
@@ -244,7 +250,7 @@ carpeta completa vive donde corresponda (hoy disco, después el servicio
 en Railway de este mismo punto) — no se redujo a un solo PDF porque
 todavía no se entregó.
 
-## 8. Probar CondoManager end-to-end (Punta Blanca)  🔴 SIGUIENTE — 08-ago-2026
+## 8. 🗄️ Probar CondoManager end-to-end (Punta Blanca)  🔴 SIGUIENTE — 08-ago-2026
 
 Nunca se verificó el flujo real: admin entra, crea condominio, carga
 residentes, emite alícuota, residente paga. Es lo que convierte "plomería
@@ -497,7 +503,7 @@ antes, commit `447b1bb`). Los dos puntos que quedaban:
 `next build` verificado en cada paso. Detalle en `agente24siete/README.md` y
 `todo.md` (Fase 3).
 
-## 12. 🟡 R2 desplegado y verificado — falta el clic real de un residente
+## 12. 🗄️ 🟡 R2 desplegado y verificado — falta el clic real de un residente
 
 `unidad_fotos` subía a Supabase Storage en vez de R2 (`ARQUITECTURA-ECOSISTEMA.md`
 dice R2 = objetos; el patrón ya existía y funcionaba en `legaltech/scraper/r2.py`).
@@ -770,7 +776,7 @@ cualquier otro producto.
   patrón de subida ya usado en `legaltech/scraper/r2.py` /
   `condomanager` (pendiente #12) — sin empezar.
 
-## 15. 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas
+## 15. 🗄️ 🔴 WhatsApp de agente24siete: TODAS las cuentas del portafolio, baneadas — dos pistas separadas
 
 Abierto 08-ago-2026. **No volver a preguntar esto — está todo acá.**
 
@@ -857,7 +863,7 @@ prueba a `1771240747588175/phone_numbers` (número de CondoManager) mostró
 Revisar cuándo se destrabe el baneo; hoy no importa porque la cuenta no
 manda ni recibe nada de todos modos.
 
-## 16. 🟡 Estandarizar pagos/suscripciones/referidos en TODOS los productos — JustiRed sin nada, y una idea de "créditos de IA" todavía sin desarrollar
+## 16. 🗄️ 🟡 Estandarizar pagos/suscripciones/referidos en TODOS los productos — JustiRed sin nada, y una idea de "créditos de IA" todavía sin desarrollar
 
 **Decisión de Gina, 09-ago-2026:** suscripciones, pagos y referidos deben
 estar implementados en cada producto vertical del ecosistema (CondoManager,
@@ -1072,7 +1078,7 @@ prueba. No volver a preguntar por esto hasta que #15 se resuelva.
 
 ---
 
-## 17. 🟡 Gobernanza de correo masivo por tenant (activación de residentes, alícuotas) — diseño acordado, infraestructura sin construir
+## 17. 🗄️ 🟡 Gobernanza de correo masivo por tenant (activación de residentes, alícuotas) — diseño acordado, infraestructura sin construir
 
 **Origen:** 09-ago-2026, discutiendo cómo activar los residentes precargados de
 Punta Blanca (censo real, ~3800). Gina identificó el riesgo correcto: si un
@@ -1221,7 +1227,7 @@ Verificado en los 3 repos: `tsc --noEmit` limpio, `eslint` sin errores
 nuevos, `jest` 18/18 en `diseno-sorsabsa`. No se tocó ningún endpoint ni
 payload de submit — solo presentación.
 
-## 19. 🟡 qa_sorsabsa: sin guard automático que impida que README.md y TODO.md se desincronicen — 10-ago-2026
+## 19. 🗄️ 🟡 qa_sorsabsa: sin guard automático que impida que README.md y TODO.md se desincronicen — 10-ago-2026
 
 Auditoría (`AUDITORIA-QA-SORSABSA.md`) encontró y corrigió 3 hallazgos
 reales (conteo de checks mal sumado, TODO.md con 3 semanas de atraso,
@@ -1234,7 +1240,7 @@ falle el build si no coinciden. No se hizo porque es una decisión de
 alcance — ¿vale la pena un guard más para un repo de 4 archivos de
 texto? — que le toca decidir a Gina, no meterla sin que la pida.
 
-## 20. ⏳ Magnific (Freepik) — script listo, falta la API key real
+## 20. 🗄️ ⏳ Magnific (Freepik) — script listo, falta la API key real
 
 Origen: 15-ago-2026, Gina pidió conectar con Magnific (el upscaler de
 imágenes, hoy parte de Freepik) para mejorar/escalar imágenes puntuales. No
@@ -1263,7 +1269,7 @@ API REST.
   uso da 404 en el polling, revisar `docs.magnific.com/api-reference/image-upscaler-creative`
   y ajustar `POLL_URL` en el script.
 
-## 21. 🟡 Convertidor: vuelve a ser producto, con el motor y la web separados — 16-ago-2026
+## 21. 🗄️ 🟡 Convertidor: vuelve a ser producto, con el motor y la web separados — 16-ago-2026
 
 **El estado y la decisión viven en [`ARQUITECTURA-ECOSISTEMA.md`](ARQUITECTURA-ECOSISTEMA.md)
 (§ Convertidor) — este punto es solo la lista de trabajo que quedó.** La
@@ -1292,7 +1298,7 @@ Pendiente, en orden de lo que bloquea a lo que se ve:
 
 ---
 
-## 21-bis. 🟠 Lo que bloquea el cobro del Convertidor — analizado y resuelto a medias, 16-ago-2026
+## 21-bis. 🗄️ 🟠 Lo que bloquea el cobro del Convertidor — analizado y resuelto a medias, 16-ago-2026
 
 Análisis pedido por Gina (*"analiza lo que bloquea el cobro"*), siguiendo
 `ESTANDAR-DESARROLLO.md`.
@@ -1585,7 +1591,7 @@ como un parámetro que el servidor controla, no como una heurística del motor.
 
 ---
 
-## 22. ⬜ SorsabsaForensic y el Convertidor: ¿se están duplicando? — pregunta abierta, 16-ago-2026
+## 22. 🗄️ ⬜ SorsabsaForensic y el Convertidor: ¿se están duplicando? — pregunta abierta, 16-ago-2026
 
 **Pregunta de Gina, sin analizar todavía** (*"anota nada más esto, luego
 analizamos"*): *"me hablas de él en JustiRed, en Convertidor, ¿y qué pasa con
@@ -1630,7 +1636,7 @@ de partida, para que el análisis no arranque de una suposición:
 
 ---
 
-## 23. ⬜ Consola del negocio y CRM de ventas de SORSABSA — anotado 16-ago-2026, aplazado a propósito
+## 23. 🗄️ ⬜ Consola del negocio y CRM de ventas de SORSABSA — anotado 16-ago-2026, aplazado a propósito
 
 **Va en `sorsabsa.com`.** Decisión de Gina el mismo día en que apareció el tema.
 
@@ -1713,7 +1719,7 @@ y lee de `pagos-sorsabsa` con su propia clave (regla de una clave por producto,
 
 ---
 
-## 24. 🟡 El cobro del ecosistema quedó vivo — lo que falta después (21/22-ago-2026)
+## 24. 🗄️ 🟡 El cobro del ecosistema quedó vivo — lo que falta después (21/22-ago-2026)
 
 **Contexto.** Dos días de sesión arrancando de *"me preocupa que ninguno de los
 productos esté cobrando"*. Resultó cierto: **el cobro llevaba semanas muerto y
@@ -1991,7 +1997,7 @@ proyectos Vercel de **Convertidor** y **agente24siete**.
 
 ---
 
-## 26. 🔴 ¿Puede un usuario comprar y recibir lo que compró? (22-ago-2026)
+## 26. 🗄️ 🔴 ¿Puede un usuario comprar y recibir lo que compró? (22-ago-2026)
 
 **Por qué esta sección se escribe así.** Gina, al cerrar el día:
 
@@ -2133,7 +2139,7 @@ apareció al ir a construir la pantalla que faltaba.
 
 ---
 
-## 28. ⬜ PENDIENTE DE GINA — las pruebas en vivo que quedaron del 22-ago-2026
+## 28. 🗄️ ⬜ PENDIENTE DE GINA — las pruebas en vivo que quedaron del 22-ago-2026
 
 **Por qué esta sección existe separada.** Gina agrupa las pruebas en vivo al
 final, no intercaladas, y esa noche cerró cansada: *"qué otra cosa podemos
@@ -2198,7 +2204,7 @@ clase de defecto que todo el 22-ago demostró que ninguna herramienta encuentra.
 
 ---
 
-## 29. 🟡 Lo que queda del barrido de UI del 23-ago-2026 — 18 modales, 8 desvíos y un sistema de avisos sin disparador
+## 29. 🗄️ 🟡 Lo que queda del barrido de UI del 23-ago-2026 — 18 modales, 8 desvíos y un sistema de avisos sin disparador
 
 **Contexto.** El 23-ago se hizo el primer barrido de `ESTANDAR-UI.md` §1 sobre
 todo el ecosistema y la consolidación del design system. Lo hecho está en
@@ -2506,7 +2512,7 @@ quien usa el estándar, no a quien escribe el código.
 
 ---
 
-## 30. 🟡 Las cuatro comprobaciones que sí encuentran cosas — y el grafo, que no (23-ago-2026)
+## 30. 🗄️ 🟡 Las cuatro comprobaciones que sí encuentran cosas — y el grafo, que no (23-ago-2026)
 
 **Gina, al cabo de un día entero corrigiendo el grafo:** *"estoy harta de
 corregir el grafo, no veo que ayude… ¿tú le ves valor?"*. La respuesta honesta
@@ -2628,7 +2634,7 @@ propósito, porque declararla la escondería.
 
 ---
 
-## 31. 🔵 El "quién soy" está escrito dos veces, y las copias ya divergieron — 23-ago-2026
+## 31. 🗄️ 🔵 El "quién soy" está escrito dos veces, y las copias ya divergieron — 23-ago-2026
 
 **De dónde sale.** Al construir la membresía de JustiRed, Gina preguntó cómo
 afectaba eso al portero. La respuesta es que **no lo afecta en nada** —cada
@@ -2689,7 +2695,7 @@ hacerlo ya.
 
 ---
 
-## 32. ⬜ DECISIÓN DE ARQUITECTURA — ¿la app de IoT escribe sola en R2, o el respaldo es manual? (29-ago-2026)
+## 32. 🗄️ ⬜ DECISIÓN DE ARQUITECTURA — ¿la app de IoT escribe sola en R2, o el respaldo es manual? (29-ago-2026)
 
 **Planteado por Gina** al terminar el respaldo del expediente Miraflores:
 *"deja pendiente lo de que escriba sola en r2 es una decision de arquitectura"*.

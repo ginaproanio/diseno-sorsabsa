@@ -1,5 +1,12 @@
 # Arquitectura del ecosistema SORSABSA
 
+> 🗄️ **ARCHIVADO el 29-sep-2026.** Describe la infraestructura **hasta** ese día. El 29-sep:
+> Supabase pausado con facturas impagas; Railway, GitHub y Meta sin pago.
+> Todo lo que acá dice "en producción" ya no es necesariamente cierto —
+> verificar antes de afirmar.
+> Estado final de cada punto: [`CIERRE-ECOSISTEMA.md`](CIERRE-ECOSISTEMA.md). El resto del texto se
+> conserva tal como estaba al archivarse.
+
 Levantado el 2026-07-26 recorriendo repos, bases de datos y despliegues.
 
 **Cada afirmación lleva su origen.** ✅ = comprobado en vivo (consulta SQL,

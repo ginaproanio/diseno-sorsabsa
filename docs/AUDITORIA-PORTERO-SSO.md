@@ -1,5 +1,10 @@
 # Auditoría — portero SSO del ecosistema SORSABSA
 
+> 🗄️ **ARCHIVADO el 29-sep-2026.** Quedaron 9 hallazgos abiertos (⬜), entre ellos el 🔴-13:
+> la causa de la desaparición de las cuentas nunca se estableció.
+> Estado final de cada punto: [`CIERRE-ECOSISTEMA.md`](CIERRE-ECOSISTEMA.md). El resto del texto se
+> conserva tal como estaba al archivarse.
+
 **Abierta:** 09-ago-2026. **Regla que gobierna esta auditoría:**
 [ESTANDAR-DESARROLLO.md](./ESTANDAR-DESARROLLO.md) — ningún hallazgo de
 esta lista se corrige sin presentar antes el análisis de 9 puntos (síntoma,
